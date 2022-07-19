@@ -8,6 +8,10 @@ const routes: Routes = [
     loadChildren: () => import('./web/auth/login/login.module').then(m => m.LoginModule),
   },
   {
+    path: 'forgot-password',
+    loadChildren: () => import('./web/auth/forgot-password/forgot-password.module').then(m => m.ForgotPasswordModule),
+  },
+  {
     path: '',
     component: CustomLayoutComponent,
     children: []
