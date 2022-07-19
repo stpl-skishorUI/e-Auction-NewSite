@@ -1,0 +1,156 @@
+#captcha {
+    background-image: url('../../../../assets/images/Captcha.jpg');
+    opacity: 1;
+}
+
+// login scss
+.upper-body {
+    background-color: var(--main-dark-color);
+    height: 50vh;
+}
+
+.lower-body {
+    background-color: rgba(112, 169, 233, 0.25);
+    height: 50vh;
+}
+      
+.login-box {
+    position: absolute;
+    top: 45%;
+    margin: 0 auto;
+    max-width: 480px;
+    width: 100%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.login-box .logo {
+    margin: 0 auto;
+    text-align: center;
+    display: flex;
+    padding-bottom: 30px;
+}
+
+.login-box .login {
+    background-color: #fff;
+    border-radius: 10px;
+    // height: 414px;
+    height: auto;
+    padding: 30px 50px;
+}
+
+.login-box .login .login-close {
+    text-align: right;
+    font-size: 1.375em;
+    position: absolute;
+    right: 15px;
+    top: 60px;
+}
+
+.login-box .login h6 {
+    color: var(--main-dark-color);
+    font-weight: 700;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    font-size: 1.25em;
+    letter-spacing: 0.51px;
+}
+
+.generate_pwd .btn-link {
+    font-size: 12px;
+    color: var(--blue-color);
+    padding: 0;
+    margin-bottom: 25px;
+}
+
+.bg-main,
+.btn-main {
+    background-color: var(--main-color);
+    color: #fff !important;
+}
+
+.mat-button-ripple.mat-ripple,
+.mat-button-focus-overlay {
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    position: absolute;
+    pointer-events: none;
+    border-radius: inherit;
+}
+
+.mat-button-ripple.mat-ripple,
+.mat-button-focus-overlay {
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    position: absolute;
+    pointer-events: none;
+    border-radius: inherit;
+}
+
+.login-box .login .login-close a {
+    color: #aaa;
+}
+
+.mat-form-field-appearance-fill .mat-form-field-flex {
+    background-color: transparent !important;
+}
+.mat-form-field.mat-focused .mat-form-field-label {
+    color: var(--blue--light-color) !important;
+}
+
+.mat-form-field.mat-form-field-invalid .mat-form-field-label {
+    color: var(--blue--light-color) !important;
+}
+
+.mnw-40{
+    width: 40px;
+}
+
+// login end
+
+.modal-content{
+    border: 1px solid #2BC2FB;
+}
+.modal-content h4 {
+    font-size: 16px;
+    color: #37628F;
+    font-weight: 600;
+    margin-bottom: 0;
+}
+.generate-password {
+    position: absolute;
+    top: calc(50% + 120px);
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 10px;
+    background-color: white;
+    border: solid 1px var(--blue-color);
+    box-shadow: 0 1px 2px #aaa;
+    width: 460px;
+    height: 147px;
+    border-radius: 5px;
+}
+.close_icon{
+    font-size: 20px;
+}
+
+.note_card{
+    font-size:11px;
+    width: 400px;
+    // height: 80px;
+    // margin-top: -5px;
+    margin-left: -10px;
+    // margin-bottom: -7px;
+    padding-block: 0px;
+}
+.new_password{
+    margin-top: -23px;
+}
+.otp_box{
+    margin-top: -30px;
+
+}

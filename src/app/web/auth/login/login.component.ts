@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { fadeInUp400ms } from 'src/@vex/animations/fade-in-up.animation';
 import { DatePipe } from '@angular/common';
-import { ConfigService } from 'src/@vex/config/config.service';
+import { ConfigService } from 'src/app/core/services/config.service';
 import { ApiService } from 'src/app/core/services/api.service';
 import { CommonService } from 'src/app/core/services/common.service';
 import { ErrorsService } from 'src/app/core/services/errors.service';
@@ -47,7 +47,8 @@ export class LoginComponent implements OnInit {
   inputType = 'password';
   visible = false;
 
-  constructor(private fb: FormBuilder,
+  constructor(
+    private fb: FormBuilder,
     private apiService: ApiService,
     public VB: ValidatorService,
     public commonService: CommonService,
@@ -56,7 +57,9 @@ export class LoginComponent implements OnInit {
     private router: Router,
     private localstorageService: LocalstorageService,
     private route: ActivatedRoute,
-    public configService:ConfigService) {}
+    public configService:ConfigService
+    
+    ) {}
 
               ngOnInit(): void {
                 this.defaultLoginForm();
