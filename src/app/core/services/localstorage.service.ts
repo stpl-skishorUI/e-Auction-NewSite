@@ -54,7 +54,7 @@ export class LocalstorageService {
 
   getAllPageName() {
     let getAllPageName = this.getLoggedInLocalstorageData();
-    return getAllPageName.responseData1.pageUrls;
+    return getAllPageName?.responseData1?.pageUrls;
   }
 
   redirectToDashborad() {

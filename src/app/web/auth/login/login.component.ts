@@ -11,7 +11,7 @@ import { ErrorsService } from 'src/app/core/services/errors.service';
 import { LocalstorageService } from 'src/app/core/services/localstorage.service';
 import { TranslateService } from 'src/app/core/services/translate.service';
 import { ValidatorService } from 'src/app/core/services/validator.service';
-import { NgxSpinnerService } from 'ngx-spinner';
+
 
 
 @Component({
@@ -53,7 +53,6 @@ export class LoginComponent implements OnInit {
     public VB: ValidatorService,
     public commonService: CommonService,
     private error: ErrorsService,
-    public spinner: NgxSpinnerService,
     private router: Router,
     private localstorageService: LocalstorageService,
     private route: ActivatedRoute,
