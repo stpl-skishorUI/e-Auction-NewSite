@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { NgxSpinnerService } from 'ngx-spinner';
+
 import { Observable } from 'rxjs';
 import { ApiService } from './api.service';
 import { CommonService } from './common.service';
@@ -10,7 +10,7 @@ import { ErrorsService } from './errors.service';
 })
 export class FileUploadService {
 
-  constructor(private apiService: ApiService, private spinner: NgxSpinnerService, private error: ErrorsService, private commonService: CommonService) { }
+  constructor(private apiService: ApiService, private error: ErrorsService, private commonService: CommonService) { }
 
   uploadDocuments(event: any, folderName?: any, allowedDocTypes?: any, minsize?: any, maxsize?: any) {
     minsize
@@ -34,7 +34,6 @@ export class FileUploadService {
               this.apiService.setHttp('post', 'document/UploadFile', false, formData, false, 'masterUrl');
               this.apiService.getHttp().subscribe({
                 next: (res: any) => {
-                  this.spinner.hide();
                   if (res.statusCode === "200") {
                     obj.next(res);
                   }

@@ -3,11 +3,9 @@ import { Injectable } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { MatSnackBar, } from '@angular/material/snack-bar';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
-import { TranslateService } from '@ngx-translate/core';
 import { Observable, interval } from 'rxjs';
 import { map, pairwise } from 'rxjs/operators';
 import { filter } from 'rxjs';
-import { SuccessDialogComponent } from 'src/app/dialogs/success-dialog/success-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import { ApiService } from './api.service';
 
@@ -23,7 +21,6 @@ export class CommonService {
 
   constructor(
     private SnackBar: MatSnackBar,
-    public translate: TranslateService,
     private datePipe: DatePipe,
     private router: Router,
     private route: ActivatedRoute,
@@ -187,12 +184,7 @@ export class CommonService {
       localStorage.getItem('pagination') ? localStorage.removeItem('pagination') : ''
     }
   }
-  successDialog(p1: any) {
-    this.dialog.open(SuccessDialogComponent, {
-      width: this.apiService.modalSize[1],
-      data: { p1: p1, p2: '', cardTitle: '', successBtnText: 'Ok', dialogIcon: '', cancelBtnText: '' },
-    });
-  }
+
 
   oneMonPrevDate() {
     let prevDate = new Date();
@@ -222,7 +214,7 @@ export class CommonService {
     return array.filter((item: any) => item[key] !== val);
   }
 
-  scrollBar(value:any){
+  scrollBar(value: any) {
     window.scroll({
       top: value,
       behavior: 'smooth'
