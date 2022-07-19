@@ -1,1 +1,247 @@
-<h1>Home</h1>
+<vex-page-layout>
+
+    <vex-page-layout-header class="pb-16 flex flex-col items-start justify-center">
+        <div [class.container]="layoutCtrl.value === 'boxed'" [class.px-gutter]="layoutCtrl.value === 'fullwidth'"
+            class="w-full flex flex-col sm:flex-row justify-between">
+            <div>
+                <h1 class="title mt-0 mb-1">All-In-One Table</h1>
+                <vex-breadcrumbs [crumbs]="['Apps', 'All-In-One Table']"></vex-breadcrumbs>
+            </div>
+
+            <div class="hidden sm:block">
+                <mat-button-toggle-group [formControl]="layoutCtrl" class="mt-4 sm:mt-0">
+                    <!-- <mat-button-toggle value="boxed">Boxed</mat-button-toggle>
+            <mat-button-toggle value="fullwidth">Full-Width</mat-button-toggle> -->
+                </mat-button-toggle-group>
+            </div>
+        </div>
+    </vex-page-layout-header>
+
+    <vex-page-layout-content [class.container]="layoutCtrl.value === 'boxed'"
+        [class.px-gutter]="layoutCtrl.value === 'fullwidth'" class="-mt-6">
+
+        <div class="card overflow-auto -mt-16">
+            <table #table1 mat-table [dataSource]="dataSource" multiTemplateDataRows  @stagger 
+                class="mat-elevation-z8 table border-theme dashboardTable-striped mb-0 shadow-none">
+                <ng-container matColumnDef="srNo">
+                    <th mat-header-cell *matHeaderCellDef> Sr.No </th>
+                    <td mat-cell *matCellDef="let element; let i = dataIndex">{{((pageNo + 1) * 10 + i + 1)-20}}
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="eventLevel">
+                    <th mat-header-cell *matHeaderCellDef> Event Level </th>
+                    <td mat-cell *matCellDef="let element"> {{element.eventLevel | titlecase}} </td>
+                </ng-container>
+                <ng-container matColumnDef="district">
+                    <th mat-header-cell *matHeaderCellDef> District/ SDO/ Tehsil </th>
+                    <td mat-cell *matCellDef="let element"> {{element.district | titlecase}} </td>
+                </ng-container>
+                <ng-container matColumnDef="eventCode">
+                    <th mat-header-cell *matHeaderCellDef> Event Id </th>
+                    <td mat-cell *matCellDef="let element"> {{element.eventCode}} </td>
+                </ng-container>
+                <ng-container matColumnDef="title">
+                    <th mat-header-cell *matHeaderCellDef> Title </th>
+                    <td mat-cell *matCellDef="let element">
+                        <p class="text-ellipsis-100 mb-0"> {{element.title | titlecase}}</p>
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="bidSubmissionEndDate">
+                    <th mat-header-cell *matHeaderCellDef>{{activeTab == 'Upcoming'? "Bid Submission start Date & Time"
+                        : "Bid Submission End Date & Time"}}</th>
+                    <td mat-cell *matCellDef="let element"> {{ activeTab == 'Upcoming' ?(element.bidSubmissionStartDate
+                        | date:'dd/MM/yyyy & h:m:a'):element.bidSubmissionEndDate | date:'dd/MM/yyyy & h:m:a'}}<br>
+
+                        <span class="text-sm-start text-warning small" *ngIf="tabChangeFlag == 'Upcoming'">
+                            {{calculateDiff(element.bidSubmissionStartDate)>0?calculateDiff(element.bidSubmissionStartDate)
+                            + " - Days Remaining": ""}}</span>
+                        <span class="text-sm-start text-warning small" *ngIf="tabChangeFlag != 'Upcoming'">
+                            {{calculateDiff(element.bidSubmissionEndDate)>0?calculateDiff(element.bidSubmissionEndDate)
+                            + " - Days Remaining": ""}}</span>
+                    </td>
+
+                </ng-container>
+                <ng-container matColumnDef="startDateTime">
+                    <th mat-header-cell *matHeaderCellDef>Bid Opening Date & Time </th>
+                    <td mat-cell *matCellDef="let element"> {{ element.bidSubmissionStartDate | date:'dd/MM/yyyy & h:m:a'}}<br>
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="totalItem">
+                    <th mat-header-cell *matHeaderCellDef> Item Count </th>
+                    <td mat-cell *matCellDef="let element"> {{element.totalItem}} </td>
+                </ng-container>
+                <ng-container matColumnDef="download">
+                    <th mat-header-cell *matHeaderCellDef> Actions </th>
+                    <td mat-cell *matCellDef="let element">
+                        <button (click)="$event.stopPropagation()"
+                      
+                        [matMenuTriggerFor]="actionsMenu"
+                        mat-icon-button
+                        type="button">
+                  <mat-icon svgIcon="mat:more_horiz"></mat-icon>
+                </button>
+                <mat-menu #actionsMenu="matMenu" xPosition="before" yPosition="below">
+                    <ng-template let-customer="customer" matMenuContent>
+                      <button mat-menu-item>
+                        <mat-icon svgIcon="mat:edit"></mat-icon>
+                        <span>Modify</span>
+                      </button>
+                      <button mat-menu-item>
+                        <mat-icon svgIcon="mat:delete"></mat-icon>
+                        <span>Delete</span>
+                      </button>
+                      <button mat-menu-item [class.custom-disabled-btn]="element.totalItem <= 0"
+                      (click)="(expandedElement = expandedElement === element ? null : element.totalItem <= 0 ? null : element); expandEventrDetails(element.id, element.totalItem)">
+                        <mat-icon svgIcon="mat:visibility"></mat-icon>
+                        <span>View</span>
+                      </button>
+                    </ng-template>
+                  </mat-menu>
+                        <!-- <div class="mnw-80 d-flex">
+                            <button mat-stroked-button class="text-primary btn-light"
+                                (click)="openEventDetailsDialog(element)">
+                                <mat-icon>remove_red_eye</mat-icon>
+                            </button>
+
+                            <button mat-stroked-button matTooltip="Download Document"
+                                class="text-primary btn-light mx-1">
+                                <a download="event_details" target="_blank" [href]="element.documentPath">
+                                    <mat-icon class="mt-1">save_alt</mat-icon>
+                                </a>
+                            </button>
+                            <button mat-stroked-button class="text-primary btn-light"
+                                [class.custom-disabled-btn]="element.totalItem <= 0"
+                                (click)="(expandedElement = expandedElement === element ? null : element.totalItem <= 0 ? null : element); expandEventrDetails(element.id, element.totalItem)">
+                                <mat-icon>expand_more</mat-icon>
+                            </button>
+                            <ng-container
+                                *ngIf="localstorageService.checkUserIsLoggedIn() == true && localstorageService.userTypeId()==2 && (tabChangeFlag == 'Active')">
+                                <mat-checkbox class="example-margin ms-1" [disabled]="true"
+                                    *ngIf="element?.eventParticipateId == '0' ? false : true"
+                                    [checked]="element?.eventParticipateId == '0' ? false : true">
+                                </mat-checkbox>
+                            </ng-container>
+                        </div> -->
+                    </td>
+                </ng-container>
+                <!------------------------ -------- inside hided  Data  ------------- -------------->
+                <ng-container matColumnDef="expandedDetail">
+                    <td mat-cell *matCellDef="let element" [attr.colspan]="activecolumnsToDisplay.length" class="p-0">
+                        <div class="example-element-detail"
+                            [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
+                            <div class="card border-0 card-body p-2">
+                                <table #table4 mat-table [dataSource]="eventDetails"
+                                    class="table table-bordered border-top mb-0 shadow-none inner-table">
+
+                                    <ng-container matColumnDef="srNo">
+                                        <th mat-header-cell *matHeaderCellDef> Sr.No </th>
+                                        <td mat-cell *matCellDef="let element; let i= index">{{i+1}}</td>
+                                    </ng-container>
+                                    <ng-container matColumnDef="itemName">
+                                        <th mat-header-cell *matHeaderCellDef> Item Number And Name </th>
+                                        <td mat-cell *matCellDef="let element"> {{element.itemName | titlecase }}</td>
+                                    </ng-container>
+                                    <ng-container matColumnDef="material">
+                                        <th mat-header-cell *matHeaderCellDef> Mineral </th>
+                                        <td mat-cell *matCellDef="let element"> {{element.material | titlecase}} </td>
+                                    </ng-container>
+                                    <ng-container matColumnDef="taluka">
+                                        <th mat-header-cell *matHeaderCellDef> Taluka / CTSO </th>
+                                        <td mat-cell *matCellDef="let element">{{element.taluka | titlecase}}</td>
+                                    </ng-container>
+                                    <ng-container matColumnDef="village">
+                                        <th mat-header-cell *matHeaderCellDef> Village </th>
+                                        <td mat-cell *matCellDef="let element"> {{element.village | titlecase}} </td>
+                                    </ng-container>
+                                    <!-- <ng-container matColumnDef="latitude">
+                        <th mat-header-cell *matHeaderCellDef> Latitude / Longitude </th>
+                        <td mat-cell *matCellDef="let element"> {{element.latitude + '/' +
+                            element.longitude}}</td>
+                    </ng-container> -->
+                                    <ng-container matColumnDef="area">
+                                        <th mat-header-cell *matHeaderCellDef> Area </th>
+                                        <td mat-cell *matCellDef="let element">{{element.area | titlecase}}</td>
+                                    </ng-container>
+                                    <ng-container matColumnDef="quantity">
+                                        <th mat-header-cell *matHeaderCellDef> Allowed Quantity
+                                            <small>(InBrass)</small>
+                                        </th>
+                                        <td mat-cell *matCellDef="let element"> {{element.quantity}} </td>
+                                    </ng-container>
+                                    <ng-container matColumnDef="tender_ApplicationFee">
+                                        <th mat-header-cell *matHeaderCellDef> Tender / Application Fee </th>
+                                        <td mat-cell *matCellDef="let element"> {{element.tender_ApplicationFee |
+                                            currency: 'INR':true}}</td>
+                                    </ng-container>
+                                    <ng-container matColumnDef="offsetValue">
+                                        <th mat-header-cell *matHeaderCellDef> Offset Value </th>
+                                        <td mat-cell *matCellDef="let element"> {{element.offsetValue | currency:
+                                            'INR':true}} </td>
+                                    </ng-container>
+                                    <ng-container matColumnDef="emD_SecurityDeposit">
+                                        <th mat-header-cell *matHeaderCellDef> EMD </th>
+                                        <td mat-cell *matCellDef="let element"> {{element.emD_SecurityDeposit |
+                                            currency: 'INR':true}}</td>
+                                    </ng-container>
+                                    <ng-container matColumnDef="ViewItem">
+                                        <th mat-header-cell *matHeaderCellDef> View Item Details </th>
+                                        <td mat-cell *matCellDef="let element">
+                                            <div class="d-flex align-items-center">
+                                                <button (click)="plotProfile(element.id)" mat-stroked-button
+                                                    class="btn-sm mnw-auto text-primary">
+                                                    <mat-icon svgIcon="mat:visibility"></mat-icon>
+                                                </button>
+                                                <ng-container *ngIf="localstorageService.checkUserIsLoggedIn() == true">
+                                                    <mat-checkbox
+                                                        *ngIf="localstorageService.userTypeId()==2 && tabChangeFlag == 'Active' &&  element.eventParticipateId == 0"
+                                                        (click)="$event.stopPropagation()"
+                                                        (change)="isparticipateEvent($event,element)" class="ms-2"
+                                                        [checked]="element?.isparticipateflag">
+                                                    </mat-checkbox>
+                                                    <!-- <button mat-raised-button type="button"
+                                                class="btn btn-main p-0 img-upload-btn mat-raised-button mat-button-base ms-2"
+                                                *ngIf="localstorageService.userTypeId()==2 && tabChangeFlag == 'Active' &&  element.eventParticipateId >=1"
+                                                (click)="commonService.routerLinkRedirect('event-details')">
+                                                Participated 
+                                            </button> -->
+                                                </ng-container>
+
+                                            </div>
+                                        </td>
+                                    </ng-container>
+                                    <tr class="mat-row p-2 w-100" *matNoDataRow col>
+                                        <td class="text-center m-2 mt-2" colspan="12">
+                                            <div class="alert alert-danger mb-0 p-2" role="alert">
+                                                No data found
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr mat-header-row *matHeaderRowDef="eventColumns"></tr>
+                                    <tr mat-row *matRowDef="let row; columns: eventColumns;"></tr>
+                                </table>
+                            </div>
+                        </div>
+                    </td>
+                </ng-container>
+                <!-------------------------- inside table code end ------------------ -->
+                <tr class="mat-row p-2 w-100" *matNoDataRow col>
+                    <td class="text-center border-bottom p-2 mt-2" colspan="12">
+                        <div class="alert alert-danger mb-0 p-2" role="alert">
+                            No data found
+                        </div>
+                    </td>
+                </tr>
+                <tr mat-header-row *matHeaderRowDef="activecolumnsToDisplay"></tr>
+                <tr mat-row *matRowDef="let element; columns: activecolumnsToDisplay;" class="example-element-row">
+                </tr>
+                <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></tr>
+
+            </table>
+
+            <mat-paginator [pageSizeOptions]="pageSizeOptions" [pageSize]="pageSize" class="sticky left-0">
+            </mat-paginator>
+        </div>
+
+    </vex-page-layout-content>
+
+</vex-page-layout>

@@ -1,0 +1,107 @@
+table {
+    width: 100%;
+   
+  }
+  
+  .dashboardTable-striped{
+    // min-height: calc(100vh - 350px) !important;
+    overflow-y: scroll !important;
+  }
+  // .dashboardTable-striped{
+  //   height: 450px !important;
+  //   overflow-y: scroll !important;
+  // }
+  // th.mat-header-cell, td.mat-cell, td.mat-footer-cell {
+  //   padding: 0;
+  //   border-bottom-width: 1px;
+  //   border-bottom-style: solid;
+  //   vertical-align: middle;
+  // }
+  
+  
+  .Outer_dashboardTableHome{
+    min-height: calc(100vh - 350px);
+  }
+  
+  
+  .dashboardTopbar {
+    background: #DAEBF9;
+    padding: 7px 12px;
+    border-radius: 4px;
+    margin-bottom: 15px;
+  }
+  
+  .dashboardTopbar p {
+    font-weight: 500;
+    font-size: .8rem;
+    margin-bottom: 0;
+    margin-right: 25px;
+    margin-top: 1px;
+  }
+  
+  ul.dashLinks {
+    list-style: none;
+    text-align: right;
+    margin-bottom: 0;
+  }
+  
+  ul.dashLinks li {
+    display: inline-block;
+    margin-left: 15px;
+  }
+  
+  ul.dashLinks li a {
+    padding: 5px;
+    text-decoration: none;
+    font-size: .75rem;
+    margin-bottom: 0 !important;
+    letter-spacing: .51px;
+    transition: .3s;
+    color: #335F8E;
+  }
+  
+  ul.dashLinks li a:hover,
+  ul.dashLinks li a.active {
+    color: #ED7629;
+  }
+  
+  ::ng-deep .white.mat-form-field-appearance-outline .mat-form-field-outline-start,
+  ::ng-deep .white.mat-form-field-appearance-outline .mat-form-field-outline-gap,
+  ::ng-deep .white.mat-form-field-appearance-outline .mat-form-field-outline-end {
+    background: #ffffff !important;
+  }
+  
+  .date_time_label {
+    color: #3E3E3E;
+    // opacity: 0.64;
+    text-align: left;
+    font-weight: 500 !important;
+  }
+  
+  .date_time_data {
+    color: #225387;
+    text-align: left;
+    // opacity: 0.85;
+    font-weight: 600 !important;
+  
+  }
+  
+  .refresh{
+    position: absolute;
+    right: 0;
+    top: 7px;
+    z-index: 10;
+  }
+  
+  .participate_btn{
+    position: absolute;
+    top: -40px;
+    right: 0;
+  }
+  
+  .text-ellipsis-100{
+    overflow: hidden !important;
+    width:100px !important;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }

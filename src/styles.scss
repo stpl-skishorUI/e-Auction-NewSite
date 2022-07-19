@@ -28,3 +28,12 @@
   // --color-warn: yellow;
   // --color-warn-contrast: black;
 }
+
+.example-element-detail {
+  overflow: hidden;
+  display: flex;
+}
+
+tr.example-detail-row {
+  height: 0 !important;
+}
