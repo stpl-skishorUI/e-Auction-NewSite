@@ -26,7 +26,7 @@ import { AngularMaterialModule } from 'src/app/shared/angular-material/angular-m
     MatButtonModule,
     MatCheckboxModule,
     ReactiveFormsModule,
-    AngularMaterialModule
+    AngularMaterialModule,
   ]
 })
 export class LoginModule {
