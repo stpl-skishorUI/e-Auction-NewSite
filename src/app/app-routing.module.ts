@@ -4,9 +4,18 @@ import { CustomLayoutComponent } from './custom-layout/custom-layout.component';
 
 const routes: Routes = [
   {
+    path: 'login',
+    loadChildren: () => import('./web/auth/login/login.module').then(m => m.LoginModule),
+  },
+  {
     path: '',
     component: CustomLayoutComponent,
     children: []
+  },
+  { path: 'home', loadChildren: () => import('./web/home/home.module').then(m => m.HomeModule) },
+  {
+    path: '**',
+    loadChildren: () => import('./web/errors/error-404/error-404.module').then(m => m.Error404Module)
   }
 ];
 
