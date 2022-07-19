@@ -25,8 +25,8 @@ const defaultConfig: VexConfig = {
   layout: 'horizontal',
   boxed: false,
   sidenav: {
-    title: 'VEX',
-    imageUrl: 'assets/img/demo/logo.svg',
+    title: 'e-Auction',
+    imageUrl: 'assets/img/RevenueDeptLogo.png',
     showCollapsePin: true,
     user: {
       visible: true

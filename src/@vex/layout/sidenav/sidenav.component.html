@@ -5,7 +5,7 @@
      class="sidenav flex flex-col">
   <div class="vex-sidenav-toolbar__container">
     <div class="sidenav-toolbar flex-none flex items-center">
-      <img [src]="imageUrl$ | async" alt="Logo" class="w-6 select-none flex-none"/>
+      <img src="assets/img/favicon.ico" alt="Logo" class="w-10 select-none flex-none"/>
       <h2 class="vex-sidenav-toolbar__headline flex-auto">{{ title$ | async }}</h2>
       <button (click)="toggleCollapse()"
               *ngIf="showCollapsePin$ | async"
@@ -42,9 +42,9 @@
                         [level]="0"></vex-sidenav-item>
     </div>
 
-    <div class="vex-sidenav-footer flex items-center justify-center opacity-20 px-6 py-6 select-none flex-none">
+    <!-- <div class="vex-sidenav-footer flex items-center justify-center opacity-20 px-6 py-6 select-none flex-none">
       <img [src]="imageUrl$ | async" alt="Logo" class="w-8 select-none"/>
-    </div>
+    </div> -->
   </vex-scrollbar>
 
   <div *ngIf="userVisible$ | async"
