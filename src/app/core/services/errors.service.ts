@@ -1,6 +1,5 @@
 
 import { Injectable } from '@angular/core';
-import { NgxSpinnerService } from 'ngx-spinner';
 import { CommonService } from './common.service';
 
 @Injectable({
@@ -8,10 +7,9 @@ import { CommonService } from './common.service';
 })
 export class ErrorsService {
 
-  constructor(private spinner: NgxSpinnerService, private commonService: CommonService) { }
+  constructor(private commonService: CommonService) { }
 
   handelError(error: any) {
-    this.spinner.hide();
     let msg: string = '';
     switch (Number(error)) {
       case 0: msg += "No Date Found"; break;
