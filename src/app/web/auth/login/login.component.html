@@ -1,8 +1,8 @@
 <div class="w-full h-full bg-pattern flex flex-col items-center justify-center">
-  <div @fadeInUp class="card overflow-hidden w-full max-w-xs">
+  <div @fadeInUp class="card overflow-hidden w-full max-w-md">
     <div class="p-6 pb-0 flex flex-col items-center justify-center">
       <div class="fill-current text-center">
-        <img class="w-16" src="assets/img/demo/logo.svg">
+        <img class="w-52" src="assets/img/RevenueDeptLogo.png">
       </div>
     </div>
 
@@ -38,11 +38,6 @@
       <button (click)="send()" color="primary" mat-raised-button type="button">
         SIGN IN
       </button>
-
-      <p class="text-secondary text-center">
-        Don't have an account?<br/>
-        <a [routerLink]="['/register']">Click here to create one</a>
-      </p>
     </div>
   </div>
 </div>
