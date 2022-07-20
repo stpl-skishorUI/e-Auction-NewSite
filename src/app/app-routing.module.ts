@@ -23,13 +23,37 @@ const routes: Routes = [
       //----------------------------------------------------------------for admin routing start heare-----------------------------------------//
       {
         path: 'dashboard', loadChildren: () => import('./partial/admin/admin-dashboard/admin-dashboard.module').then(m => m.AdminDashboardModule),
-        data: { breadcrumb: [{ title: 'Event Section', active: true }, { title: 'Event Upload', active: true }] },
+        data: { breadcrumb: [{ title: 'Dashboard', active: true }] },
+        canActivate: [ExpenseGuard]
+      },
+      {
+        path: 'user-registration', loadChildren: () => import('./partial/admin/Master/user-registration/user-registration.module').then(m => m.UserRegistrationModule),
+        data: { breadcrumb: [{ title: 'Master', active: true }, { title: 'User Register', active: true }] },
+        canActivate: [ExpenseGuard]
+      },
+      {
+        path: 'page-list', loadChildren: () => import('./partial/admin/Master/page-list/page-list.module').then(m => m.PageListModule),
+        data: { breadcrumb: [{ title: 'Master', active: true }, { title: 'Page List', active: true }] },
+        canActivate: [ExpenseGuard]
+      },
+      {
+        path: 'bidder-list', loadChildren: () => import('./partial/admin/Master/bidder-list/bidder-list.module').then(m => m.BidderListModule),
+        data: { breadcrumb: [{ title: 'Master', active: true }, { title: 'Bidder Registration', active: true }] },
+        canActivate: [ExpenseGuard]
+      },
+      {
+        path: 'user-right-access', loadChildren: () => import('./partial/admin/user-right-access/user-right-access.module').then(m => m.UserRightAccessModule),
+        data: { breadcrumb: [{ title: 'User Right Access', active: true }] },
         canActivate: [ExpenseGuard]
       },
       //----------------------------------------------------------------for admin routing end heare-----------------------------------------//
     ]
   },
   { path: 'home', loadChildren: () => import('./web/home/home.module').then(m => m.HomeModule) },
+
+
+
+
 
   {
     path: '**',
