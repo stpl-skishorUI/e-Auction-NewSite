@@ -43,8 +43,6 @@ export class LoginComponent implements OnInit {
   get mobileNoControls() { return this.mobileNo.controls }
   get otpNoControls() { return this.otp.controls }
 
-  // form: UntypedFormGroup;
-
   inputType = 'password';
   visible = false;
 
