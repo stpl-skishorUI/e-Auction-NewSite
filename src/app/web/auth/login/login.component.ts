@@ -14,6 +14,7 @@ import { ValidatorService } from 'src/app/core/services/validator.service';
 
 
 
+
 @Component({
   selector: 'vex-login',
   templateUrl: './login.component.html',
@@ -53,7 +54,7 @@ export class LoginComponent implements OnInit {
     public VB: ValidatorService,
     public commonService: CommonService,
     private error: ErrorsService,
-   
+  
     private router: Router,
     private localstorageService: LocalstorageService,
     private route: ActivatedRoute,
@@ -153,6 +154,7 @@ export class LoginComponent implements OnInit {
   // send OTP to mobile number 
 
   sentOtpMobile() {
+
     if (this.mobileNo.value.length != 10) {
       this.commonService.snackBar('Please enter Valid Mobile Number', 1);
       return
@@ -178,9 +180,10 @@ export class LoginComponent implements OnInit {
       this.apiService.setHttp('POST', 'otp-tran', false, JSON.stringify(obj), false, 'masterUrl');
       this.apiService.getHttp().subscribe((res: any) => {
         if (res.statusCode == "200") {
-          this.commonService.snackBar(res.statusMessage, 0);
           this.genPasswordFlag = false;
+          this.commonService.snackBar(res.statusMessage, 0);
           this.otpFlag = true;
+          
         } else {
           this.commonService.snackBar(res.statusMessage, 1);
         }
@@ -217,7 +220,6 @@ export class LoginComponent implements OnInit {
         if (res.statusCode == "200") {
           this.otpFlag = false;
           this.setPasswodPage = true;
-          // this.mobileNo.setValue('');
           this.otp.setValue('');
           this.commonService.snackBar(res.statusMessage, 0);
           this.genPasswordFlag = false;

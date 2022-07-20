@@ -1,231 +1,239 @@
 <div class="w-full h-full bg-pattern flex flex-col items-center justify-center">
-  <div @fadeInUp class="card overflow-hidden w-full max-w-[24rem]">
-    <div class="p-6 pb-0 flex flex-col items-center justify-center">
-      <div class="fill-current text-center">
-        <img class="w-52" src="assets/img/RevenueDeptLogo.png">
-      </div>
-    </div>
+    <div @fadeInUp class="card overflow-hidden w-full max-w-[24rem]">
+        <div class="p-6 pb-0 flex flex-col items-center justify-center">
+            <div class="fill-current text-center">
+                <img class="w-52" src="assets/img/RevenueDeptLogo.png">
+            </div>
+        </div>
+        <div class="text-center mt-4">
+            <h2 class="title m-0">Welcome back</h2>
+            <h4 class="body-2 text-secondary m-0">Sign in with your credentials below.</h4>
+        </div>
 
-    <div class="text-center mt-4">
-      <h2 class="title m-0">Welcome back</h2>
-      <h4 class="body-2 text-secondary m-0">Sign in with your credentials below.</h4>
-    </div>
+        <div class="login" *ngIf="!setPasswodPage">
+            <div class="p-6 flex flex-col gap-4">
+                <form [formGroup]="loginForm" (ngSubmit)="loginFormSubmit()">
+                    <div class="flex flex-col">
+                        <mat-form-field class="flex-1" [appearance]=configService?.matFormField>
+                            <mat-label>User Name</mat-label>
+                            <input type="text" matInput placeholder="User Name " formControlName="UserName"
+                                class="w-100" maxlength="20" (keypress)="VB.alphaNumericWithSpacesAndSpecChars($event)"
+                                (keyup)="VB.removeSpaceAtBegining($event)" autocomplete="off">
+                            <mat-error *ngIf="loginFormControls.UserName.errors">
+                                <span class="text-danger" *ngIf="loginFormControls.UserName.hasError('required')"> User
+                                    Name is required</span>
+                                <span class="text-danger"
+                                    *ngIf="loginFormControls.UserName.hasError('minlength')">Minimum 5 characters
+                                    required</span>
+                                <span class="text-danger"
+                                    *ngIf="!loginFormControls.UserName.hasError('minlength') && loginFormControls.UserName.hasError('pattern')">Only
+                                    alphanumeric characters and special symbol @ and .(dot) are allowed</span>
+                            </mat-error>
+                        </mat-form-field>
 
-    <div class="login" *ngIf="setPasswodPage==false">
-    <div class="p-6 flex flex-col gap-4">
-      <form [formGroup]="loginForm"  (ngSubmit)="loginFormSubmit()">
-      <div class="flex flex-col">
-        <mat-form-field class="flex-1" [appearance]=configService?.matFormField>
-          <mat-label>User Name</mat-label>
-                <input type="text" matInput placeholder="User Name " formControlName="UserName" class="w-100"
-                    maxlength="20"  (keypress)="VB.alphaNumericWithSpacesAndSpecChars($event)"
-                    (keyup)="VB.removeSpaceAtBegining($event)"  autocomplete="off">
-                <mat-error *ngIf="loginFormControls.UserName.errors"> 
-                    <span class="text-danger" *ngIf="loginFormControls.UserName.hasError('required')"> User Name is required</span>
-                    <span class="text-danger" *ngIf="loginFormControls.UserName.hasError('minlength')">Minimum 5 characters  required</span>
-                    <span class="text-danger" *ngIf="!loginFormControls.UserName.hasError('minlength') && loginFormControls.UserName.hasError('pattern')">Only alphanumeric characters and special symbol @ and .(dot) are allowed</span>
-                </mat-error>
-        </mat-form-field>
+                        <mat-form-field class="flex-1" [appearance]=configService?.matFormField>
+                            <mat-label>Password</mat-label>
+                            <input matInput [type]="hide ? 'password' : 'text'" formControlName="Password"
+                                maxlength="20" (keypress)="VB.noSpaces($event)" autocomplete="off">
+                            <mat-error *ngIf="loginFormControls.Password.errors">
+                                <span class="text-danger"
+                                    *ngIf="loginFormControls.Password.hasError('required')">Password is required</span>
+                                <span class="text-danger"
+                                    *ngIf="loginFormControls.Password.hasError('maxLength') || loginFormControls.Password.hasError('pattern')">It
+                                    must contain 8 or more characters that are of at least one number, and
+                                    one special characters, and one uppercase and lowercase letter.</span>
+                            </mat-error>
 
-        <mat-form-field class="flex-1" [appearance]=configService?.matFormField>
-           <mat-label>Password</mat-label>
-                <input matInput [type]="hide ? 'password' : 'text'" formControlName="Password" maxlength="20"
-                    (keypress)="VB.noSpaces($event)" autocomplete="off">
-                <mat-error *ngIf="loginFormControls.Password.errors">
-                    <span class="text-danger" *ngIf="loginFormControls.Password.hasError('required')">Password is required</span>
-                    <span class="text-danger"
-                        *ngIf="loginFormControls.Password.hasError('maxLength') || loginFormControls.Password.hasError('pattern')">It
-                        must contain 8 or more characters that are of at least one number, and
-                        one special characters, and one uppercase and lowercase letter.</span>
-                </mat-error>
+                            <button type="button" mat-icon-button matSuffix (click)="hide = !hide"
+                                [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+                                <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+                            </button>
+                        </mat-form-field>
 
-                <button type="button" mat-icon-button matSuffix (click)="hide = !hide"
-                    [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
-                    <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
-                </button>
-        </mat-form-field>
+                        <div class="flex-1">
 
-        <div class="flex-1">
+                            <div class="col-md-auto d-flex align-items-center justify-content-end">
+                                <div class="row">
+                                    <div class="col-md-auto pe-0 px-0">
+                                        <div class="input-group mt-0">
+                                            <!-- <img src="Captcha.ashx" id="imgCaptcha" class="captcha-image" alt="" /> -->
+                                            <div class="input-group-append">
 
-          <div class="col-md-auto d-flex align-items-center justify-content-end">
-              <div class="row">
-                  <div class="col-md-auto pe-0 px-0">
-                      <div class="input-group mt-0">
-                          <!-- <img src="Captcha.ashx" id="imgCaptcha" class="captcha-image" alt="" /> -->
-                          <div class="input-group-append">
+                                            </div>
+                                        </div>
 
-                          </div>
-                      </div>
-
-                  </div>
-                  <div class="col-md d-flex align-items-center justify-content-center mb-1 pe-0 ">
-                      <div class="ps-4 w-100" id="captcha"></div>
-                      <button type="button" mat-button class="btn-main mnw-auto px-1 refresh rounded-0"
-                          (click)="this.loginForm.controls['recaptchaReactive'].reset();this.commonService.createCaptchaCarrerPage()">
-                          <mat-icon>refresh</mat-icon>
-                      </button>
-                  </div>
+                                    </div>
+                                    <div class="col-md d-flex align-items-center justify-content-center mb-1 pe-0 ">
+                                        <div class="ps-4 w-100" id="captcha"></div>
+                                        <button type="button" mat-button
+                                            class="btn-main mnw-auto px-1 refresh rounded-0"
+                                            (click)="this.loginForm.controls['recaptchaReactive'].reset();this.commonService.createCaptchaCarrerPage()">
+                                            <mat-icon>refresh</mat-icon>
+                                        </button>
+                                    </div>
 
 
-              </div>
-          </div>
-          <div class="col-md">
-              <mat-form-field [appearance]=configService?.matFormField class="d-block">
-                  <mat-label>Enter Captcha</mat-label>
-                  <input type="text" maxlength="4" matInput placeholder="Enter Captcha"
-                      (keypress)="this.VB.noSpaces($event)" formControlName="recaptchaReactive" class="w-100"
-                      autocomplete="off">
-                  <mat-error *ngIf="loginForm.controls.recaptchaReactive.errors?.required">Captcha is required
-                  </mat-error>
-              </mat-form-field>
-          </div>
-      </div>
-      </div>
-      <div class="flex items-center justify-between">
-        <button type="button" class="btn btn-link text-decoration-none shadow-none"
-            routerLink="../bidder-registration">New Bidder
-            Registration</button>
-        <button type="button" class="btn btn-link text-decoration-none shadow-none"
-            (click)="genPasswordFlag = true">
-            Generate Password
-        </button>
-    </div>
+                                </div>
+                            </div>
+                            <div class="col-md">
+                                <mat-form-field [appearance]=configService?.matFormField class="d-block">
+                                    <mat-label>Enter Captcha</mat-label>
+                                    <input type="text" maxlength="4" matInput placeholder="Enter Captcha"
+                                        (keypress)="this.VB.noSpaces($event)" formControlName="recaptchaReactive"
+                                        class="w-100" autocomplete="off">
+                                    <mat-error *ngIf="loginForm.controls.recaptchaReactive.errors?.required">Captcha is
+                                        required
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <button type="button" class="btn btn-link text-decoration-none shadow-none"
+                            routerLink="../bidder-registration">New Bidder
+                            Registration</button>
+                        <button type="button" class="btn btn-link text-decoration-none shadow-none"
+                            (click)="genPasswordFlag = true">
+                            Generate Password
+                        </button>
+                    </div>
 
-      <!-- <div class="flex items-center justify-between">
+                    <!-- <div class="flex items-center justify-between">
         <button type="button" class="btn btn-link text-decoration-none shadow-none"
             routerLink="../bidder-registration">New Bidder
             Registration</button>
         <a [routerLink]="['/forgot-password']" class="caption"> Generate Password?</a>
       </div> -->
 
-      <button color="primary" mat-raised-button type="submit">
-        LOGIN
-      </button>
-    </form>
+                    <button color="primary" mat-raised-button type="submit">
+                        LOGIN
+                    </button>
+                </form>
+            </div>
+
+        </div>
+
+        <div class="login" *ngIf="setPasswodPage">
+            <div class="d-flex justify-content-between">
+                <h4>Set Password</h4>
+                <mat-icon type="button" (click)="closeSetPassword()">
+                    close</mat-icon>
+            </div>
+            <form [formGroup]="setPasswordForm" (ngSubmit)="setPasswordSubmit()">
+                <mat-form-field [appearance]=configService?.matFormField class="d-block">
+                    <mat-label>User Name</mat-label>
+                    <input type="text" matInput placeholder="User Name" formControlName="UserName" class="w-100"
+                        maxlength="20" (keypress)="VB.alphaNumericWithSpacesAndSpecChars($event)"
+                        (keyup)="VB.removeSpaceAtBegining($event)" autocomplete="off">
+                    <!-- <mat-error *ngIf="changePasswordForm.UserName.errors?.required">User Name is required</mat-error> -->
+                    <mat-error *ngIf="changePasswordForm.UserName.errors">
+                        <span class="text-danger" *ngIf="changePasswordForm.UserName.hasError('required')"> User Name is
+                            required</span>
+                        <span class="text-danger" *ngIf="changePasswordForm.UserName.hasError('minlength')">Minimum 8
+                            characters required</span>
+                        <span class="text-danger"
+                            *ngIf="!changePasswordForm.UserName.hasError('minlength') && changePasswordForm.UserName.hasError('pattern')">Only
+                            alphanumeric characters and special symbol @ and .(dot) are allowed</span>
+                    </mat-error>
+                </mat-form-field>
+                <mat-form-field [appearance]=configService?.matFormField class="d-block">
+                    <input [type]="newPassShow ? 'password' : 'text'" matInput placeholder="newPassword"
+                        formControlName="newPassword" class="w-100" (keypress)="this.VB.noSpaces($event)"
+                        autocomplete="off" placeholder="Please enter new password" maxlength="20">
+                    <mat-error *ngIf="changePasswordForm.newPassword.errors">
+                        <span class="text-danger" *ngIf="changePasswordForm.newPassword.errors?.required">New Password
+                            is
+                            required</span>
+                        <span class="text-danger" *ngIf="changePasswordForm.newPassword.errors?.pattern"> Please Check
+                            for instructions </span>
+                    </mat-error>
+                    <button type="button" mat-icon-button matSuffix (click)="newPassShow = !newPassShow"
+                        [attr.aria-label]="'Hide password'" [attr.aria-pressed]="newPassShow">
+                        <mat-icon>{{newPassShow ? 'visibility_off' : 'visibility'}}</mat-icon>
+                    </button>
+                </mat-form-field>
+                <mat-form-field [appearance]=configService?.matFormField class="d-block">
+                    <input matInput [type]="confirmPassShow ? 'password' : 'text'" formControlName="confirmPassword"
+                        maxlength="20" (keypress)="this.VB.noSpaces($event)" autocomplete="off"
+                        placeholder="Please enter confirm password">
+                    <mat-error *ngIf="changePasswordForm.confirmPassword.errors">
+                        <span class="text-danger" *ngIf="changePasswordForm.confirmPassword.errors?.required">Confirm
+                            Password is required</span>
+                        <span class="text-danger" *ngIf="changePasswordForm.confirmPassword.errors?.pattern">
+                            Please Check for instructions </span>
+                    </mat-error>
+
+                    <button type="button" mat-icon-button matSuffix (click)="confirmPassShow = !confirmPassShow"
+                        [attr.aria-label]="'Hide password'" [attr.aria-pressed]="confirmPassShow">
+                        <mat-icon>{{confirmPassShow? 'visibility_off' : 'visibility'}}</mat-icon>
+                    </button>
+                </mat-form-field>
+                <div class="card note_card">
+                    <p class="mb-0 small ms-2">Note:</p>
+                    <ol class="mb-0">
+                        <li>Your password must be in between 8 to 20 characters.</li>
+                        <li>Your password must contain atleast 1 capital letter (eg. A,B etc).</li>
+                        <li>Your password must contain atleast 1 special letter (eg. @,!,#,$,%,&,*,? etc).</li>
+                    </ol>
+                </div>
+                <br>
+                <div class="form-group text-center">
+                    <button type="submit" mat-raised-button style="margin-right:10px;"
+                        class="btn-main lh-4 px-3 ">Save</button>
+                    <button type="button" mat-raised-button class="btn-main lh-4 px-3"
+                        (click)="clearSetPassword()">Clear</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- Generate Password Modal -->
+<div class="generate-password" @fadeInUp *ngIf="genPasswordFlag">
+    <div class="d-flex justify-content-between">
+        <h4 class="text-main fw-bold">Generate Password</h4>
+        <mat-icon type="button" data-bs-dismiss="modal" (click)="genPasswordFlag = false; this.mobileNo.setValue('')"
+            class="close_icon text-muted">
+            highlight_off</mat-icon>
+    </div>
+    <div class="new_password">
+
+        <mat-form-field class="" appearance="outline">
+            <mat-label>Mobile Number</mat-label>
+            <input ty matInput placeholder="Enter mobile number" [formControl]="mobileNo" type="text"
+                (keypress)="VB.noSpaces($event); VB.onlyDigitsExcludeZeroAtStart($event)" [maxLength]="10"
+                autocomplete="off">
+        </mat-form-field>
+    </div>
+    <div class="border-0 d-flex align-items-center justify-content-center">
+        <button mat-stroked-button type="button" class="btn btn-main align-items-center mt-2"
+            (click)="sentOtpMobile()">Send
+            SMS</button>
     </div>
 
-   </div>
-
-    <div class="login" *ngIf="setPasswodPage==true">
-      <div class="d-flex justify-content-between">
-          <h4>Set Password</h4>
-          <mat-icon type="button" (click)="closeSetPassword()">
-              close</mat-icon>
-      </div>
-      <form [formGroup]="setPasswordForm" (ngSubmit)="setPasswordSubmit()">
-          <mat-form-field [appearance]=configService?.matFormField class="d-block">
-              <mat-label>User Name</mat-label>
-              <input type="text" matInput placeholder="User Name" formControlName="UserName" class="w-100"
-                  maxlength="20"  (keypress)="VB.alphaNumericWithSpacesAndSpecChars($event)"
-                  (keyup)="VB.removeSpaceAtBegining($event)" autocomplete="off">
-              <!-- <mat-error *ngIf="changePasswordForm.UserName.errors?.required">User Name is required</mat-error> -->
-              <mat-error *ngIf="changePasswordForm.UserName.errors"> 
-                  <span class="text-danger" *ngIf="changePasswordForm.UserName.hasError('required')"> User Name is required</span>
-                  <span class="text-danger" *ngIf="changePasswordForm.UserName.hasError('minlength')">Minimum 8 characters  required</span>
-                  <span class="text-danger" *ngIf="!changePasswordForm.UserName.hasError('minlength') && changePasswordForm.UserName.hasError('pattern')">Only alphanumeric characters and special symbol @ and .(dot) are allowed</span>
-              </mat-error>
-          </mat-form-field>
-          <mat-form-field [appearance]=configService?.matFormField class="d-block">
-              <input [type]="newPassShow ? 'password' : 'text'" matInput placeholder="newPassword"
-                  formControlName="newPassword" class="w-100" (keypress)="this.VB.noSpaces($event)" autocomplete="off"
-                  placeholder="Please enter new password" maxlength="20">
-              <mat-error *ngIf="changePasswordForm.newPassword.errors">
-                  <span class="text-danger" *ngIf="changePasswordForm.newPassword.errors?.required">New Password is
-                      required</span>
-                  <span class="text-danger" *ngIf="changePasswordForm.newPassword.errors?.pattern"> Please Check for instructions </span>
-              </mat-error>
-              <button type="button" mat-icon-button matSuffix (click)="newPassShow = !newPassShow"
-                  [attr.aria-label]="'Hide password'" [attr.aria-pressed]="newPassShow">
-                  <mat-icon>{{newPassShow ? 'visibility_off' : 'visibility'}}</mat-icon>
-              </button>
-          </mat-form-field>
-          <mat-form-field [appearance]=configService?.matFormField class="d-block">
-              <input matInput [type]="confirmPassShow ? 'password' : 'text'" formControlName="confirmPassword"
-                  maxlength="20" (keypress)="this.VB.noSpaces($event)" autocomplete="off"
-                  placeholder="Please enter confirm password">
-              <mat-error *ngIf="changePasswordForm.confirmPassword.errors">
-                  <span class="text-danger" *ngIf="changePasswordForm.confirmPassword.errors?.required">Confirm
-                      Password is required</span>
-                  <span class="text-danger" *ngIf="changePasswordForm.confirmPassword.errors?.pattern">
-                     Please Check for instructions </span>
-              </mat-error>
-            
-              <button type="button" mat-icon-button matSuffix (click)="confirmPassShow = !confirmPassShow"
-                  [attr.aria-label]="'Hide password'" [attr.aria-pressed]="confirmPassShow">
-                  <mat-icon>{{confirmPassShow? 'visibility_off' : 'visibility'}}</mat-icon>
-              </button>
-          </mat-form-field>
-          <div class="card note_card">
-              <p class="mb-0 small ms-2">Note:</p>
-              <ol class="mb-0">
-                  <li>Your password must be in between 8 to 20 characters.</li>
-                  <li>Your password must contain atleast 1 capital letter (eg. A,B etc).</li>
-                  <li>Your password must contain atleast 1 special letter (eg. @,!,#,$,%,&,*,? etc).</li>
-              </ol>
-          </div>
-          <br>
-          <div class="form-group text-center">
-              <button type="submit" mat-raised-button style="margin-right:10px;"
-                  class="btn-main lh-4 px-3 ">Save</button>
-              <button type="button" mat-raised-button class="btn-main lh-4 px-3"
-                  (click)="clearSetPassword()">Clear</button>
-          </div>
-      </form>
-  </div>
-
-  </div>
-
-  <!-- Generate Password Modal -->
-
-<div class="generate-password" *ngIf="genPasswordFlag">
-  <div class="d-flex justify-content-between">
-      <h4 class="text-main fw-bold">Generate Password</h4>
-      <mat-icon type="button" data-bs-dismiss="modal" (click)="genPasswordFlag = false; this.mobileNo.setValue('')"
-          class="close_icon text-muted">
-          highlight_off</mat-icon>
-  </div>
-  <div class="new_password">
-
-      <mat-form-field class="" appearance="outline">
-          <mat-label>Mobile Number</mat-label>
-          <input ty matInput placeholder="Enter mobile number" [formControl]="mobileNo" type="text"
-              (keypress)="VB.noSpaces($event); VB.onlyDigitsExcludeZeroAtStart($event)" [maxLength]="10"
-              autocomplete="off">
-      </mat-form-field>
-  </div>
-  <div class="border-0 d-flex align-items-center justify-content-center">
-      <button mat-raised-button color="primary" type="button" class="btn btn-main align-items-center mt-2"
-          (click)="sentOtpMobile()">Send
-          SMS</button>
-  </div>
 </div>
-
 <!-- OTP Modal -->
-<div class="generate-password" *ngIf="otpFlag">
-  <div class="d-flex">
-      <div class="me-auto p-2">
-          <h4 class="text-main fw-bold">OTP</h4>
-      </div>
-      <div class="p-2">
-          <!-- <mat-icon type="button" class="me-1" (click)="otpFlag = false; genPasswordFlag = true">  keyboard_double_arrow_left</mat-icon> -->
-          <a  (click)="otpFlag = false; genPasswordFlag = true" class="text-decoration-none"><small>Back</small></a>
-      </div>
-      <div class="p-2 close_icon text-muted">
-          <mat-icon type="button" (click)="otpFlag = false; this.otp.setValue('')"> highlight_off</mat-icon>
-      </div>
-  </div>
-  <div class="otp_box">
-      <mat-form-field class="" appearance="outline">
-          <input ty matInput placeholder="Enter OTP" [formControl]="otp" type="text"
-              (keypress)="VB.noSpaces($event); VB.onlyDigitsExcludeZeroAtStart($event)" [maxLength]="5"
-              autocomplete="off">
-      </mat-form-field>
-  </div>
-  <div class="border-0 d-flex align-items-center justify-content-center mt-1">
-      <button mat-stroked-button type="button" class="btn btn-main align-items-center"
-          (click)="otpSubmit()">Submit</button>
-  </div>
+<div class="generate-password" @fadeInUp *ngIf="otpFlag">
+    <div class="d-flex">
+        <div class="me-auto p-2">
+            <h4 class="text-main fw-bold">OTP</h4>
+        </div>
+        <div class="p-2">
+            <!-- <mat-icon type="button" class="me-1" (click)="otpFlag = false; genPasswordFlag = true">  keyboard_double_arrow_left</mat-icon> -->
+            <a (click)="otpFlag = false; genPasswordFlag = true" class="text-decoration-none"><small>Back</small></a>
+        </div>
+        <div class="p-2 close_icon text-muted">
+            <mat-icon type="button" (click)="otpFlag = false; this.otp.setValue('')"> highlight_off</mat-icon>
+        </div>
+    </div>
+    <div class="otp_box">
+        <mat-form-field class="" appearance="outline">
+            <input ty matInput placeholder="Enter OTP" [formControl]="otp" type="text"
+                (keypress)="VB.noSpaces($event); VB.onlyDigitsExcludeZeroAtStart($event)" [maxLength]="5"
+                autocomplete="off">
+        </mat-form-field>
+    </div>
+    <div class="border-0 d-flex align-items-center justify-content-center mt-1">
+        <button mat-stroked-button type="button" class="btn btn-main align-items-center"
+            (click)="otpSubmit()">Submit</button>
+    </div>
 </div>
-</div>
-
-
