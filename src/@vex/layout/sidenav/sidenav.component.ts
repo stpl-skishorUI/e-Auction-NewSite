@@ -1,8 +1,8 @@
-import {  Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { NavigationService } from '../../services/navigation.service';
 import { LayoutService } from '../../services/layout.service';
 import { ConfigService } from '../../config/config.service';
-import {  map, startWith, switchMap } from 'rxjs/operators';
+import { map, startWith, switchMap } from 'rxjs/operators';
 import { NavigationLink } from '../../interfaces/navigation-item.interface';
 import { PopoverService } from '../../components/popover/popover.service';
 import { Observable, of } from 'rxjs';
@@ -36,16 +36,12 @@ export class SidenavComponent implements OnInit {
   constructor(private navigationService: NavigationService,
     private layoutService: LayoutService,
     private configService: ConfigService,
-    private readonly popoverService: PopoverService,
-  
-   ) {
-
+    private readonly popoverService: PopoverService) {
   }
 
   ngOnInit() {
-  }
 
- 
+  }
 
   collapseOpenSidenav() {
     this.layoutService.collapseOpenSidenav();
