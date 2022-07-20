@@ -44,7 +44,7 @@ export class SidenavComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
-    this.items = this.navigationService.items;
+    this.addSideMenuInSidebar();
   }
 
   ngAfterViewInit() {
@@ -72,9 +72,9 @@ export class SidenavComponent implements OnInit, AfterViewInit {
     }
   }
 
-  addSideMenuInSidebar(getAllPageName:any) {
+  addSideMenuInSidebar(getAllPageName?:any) {
       let loginPages = [];
-      let data = getAllPageName;
+      let data = this.commonService.checkDataType(getAllPageName) == false ? this.localstorageService.getAllPageName() : getAllPageName;
       let items: any = data.filter((ele: any) => {
         if (ele.isSideBarMenu == true) {
           return ele;
@@ -123,7 +123,8 @@ export class SidenavComponent implements OnInit, AfterViewInit {
           return ele
         }
       })
-      this.items = pageDataTransform;
+      this.navigationService.items= pageDataTransform;
+      this.items = this.navigationService.items;
   }
 
 
