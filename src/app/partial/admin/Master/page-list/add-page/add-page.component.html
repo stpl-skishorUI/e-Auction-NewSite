@@ -1,1 +1,37 @@
-<p>add-page works!</p>
+<div mat-dialog-title class="flex items-center justify-between">
+    <div>Question</div>
+    <button type="button" mat-icon-button (click)="close('No answer')" tabindex="-1">
+      <mat-icon svgIcon="mat:close"></mat-icon>
+    </button>
+  </div>
+
+  <mat-dialog-content>
+    <div @fadeInUp class="card flex-auto">
+        <div class="px-6 py-4 border-b flex items-center">
+          <h2 class="title m-0">Standard Input Style</h2>
+        </div>
+  
+        <div class="px-6 pt-4 pb-0 flex flex-col">
+          <mat-form-field [appearance]=configService?.matFormField class="vex-flex-form-field" color="primary">
+            <mat-label>Primary Color</mat-label>
+            <input matInput>
+          </mat-form-field>
+  
+          <mat-form-field appearance="standard" class="vex-flex-form-field" color="accent">
+            <mat-label>Accent Color</mat-label>
+            <input matInput>
+          </mat-form-field>
+  
+          <mat-form-field appearance="standard" class="vex-flex-form-field" color="warn">
+            <mat-label>Warn Color</mat-label>
+            <input matInput>
+          </mat-form-field>
+        </div>
+      </div>
+  </mat-dialog-content>
+
+
+  <mat-dialog-actions align="end">
+    <button mat-button (click)="close('No')">No</button>
+    <button mat-button color="primary" (click)="close('Yes')">Yes</button>
+  </mat-dialog-actions>

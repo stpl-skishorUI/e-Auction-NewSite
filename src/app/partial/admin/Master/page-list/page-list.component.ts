@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { AddPageComponent } from './add-page/add-page.component';
 
 @Component({
   selector: 'vex-page-list',
@@ -7,9 +9,17 @@ import { Component, OnInit } from '@angular/core';
 })
 export class PageListComponent implements OnInit {
 
-  constructor() { }
+  constructor(public dialog: MatDialog) { }
 
   ngOnInit(): void {
+  }
+
+  openDialog(): void {
+    const dialogRef = this.dialog.open(AddPageComponent, {
+      width: '400px',
+      disableClose: true,
+      data: '',
+    });
   }
 
 }
