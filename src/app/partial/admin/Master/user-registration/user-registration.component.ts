@@ -20,7 +20,6 @@ export class UserRegistrationComponent implements OnInit {
       disableClose: false,
       data: '',
     });
-   
   }
 
 }
