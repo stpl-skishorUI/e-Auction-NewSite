@@ -23,9 +23,9 @@ const routes: Routes = [
     children: [
       //----------------------------------------------------------------for admin routing start heare-----------------------------------------//
       { path: 'dashboard', loadChildren: () => import('./partial/admin/admin-dashboard/admin-dashboard.module').then(m => m.AdminDashboardModule), data: { breadcrumb: [{ title: 'Dashboard', active: true }] }, canActivate: [ExpenseGuard] },
-      { path: 'user-registration', loadChildren: () => import('./partial/admin/Master/user-registration/user-registration.module').then(m => m.UserRegistrationModule), data: { breadcrumb: [{ title: 'Master', active: true }, { title: 'User Register', active: true }] }, canActivate: [ExpenseGuard] },
-      { path: 'page-list', loadChildren: () => import('./partial/admin/Master/page-list/page-list.module').then(m => m.PageListModule), data: { breadcrumb: [{ title: 'Master', active: true }, { title: 'Page List', active: true }] }, canActivate: [ExpenseGuard] },
-      { path: 'bidder-list', loadChildren: () => import('./partial/admin/Master/bidder-list/bidder-list.module').then(m => m.BidderListModule), data: { breadcrumb: [{ title: 'Master', active: true }, { title: 'Bidder Registration', active: true }] }, canActivate: [ExpenseGuard] },
+      { path: 'user-registration', loadChildren: () => import('./partial/admin/master/user-registration/user-registration.module').then(m => m.UserRegistrationModule), data: { breadcrumb: [{ title: 'Master', active: true }, { title: 'User Register', active: true }] }, canActivate: [ExpenseGuard] },
+      { path: 'page-list', loadChildren: () => import('./partial/admin/master/page-list/page-list.module').then(m => m.PageListModule), data: { breadcrumb: [{ title: 'Master', active: true }, { title: 'Page List', active: true }] }, canActivate: [ExpenseGuard] },
+      { path: 'bidder-list', loadChildren: () => import('./partial/admin/master/bidder-list/bidder-list.module').then(m => m.BidderListModule), data: { breadcrumb: [{ title: 'Master', active: true }, { title: 'Bidder Registration', active: true }] }, canActivate: [ExpenseGuard] },
       { path: 'user-right-access', loadChildren: () => import('./partial/admin/user-right-access/user-right-access.module').then(m => m.UserRightAccessModule), data: { breadcrumb: [{ title: 'User Right Access', active: true }] }, canActivate: [ExpenseGuard] },
       //----------------------------------------------------------------for admin routing end heare-----------------------------------------//
 
@@ -52,9 +52,18 @@ const routes: Routes = [
       { path: 'bidder-agreement-report', loadChildren: () => import('./partial/approver/auction-reports/bidder-agreement-report/bidder-agreement-report.module').then(m => m.BidderAgreementReportModule) },
 
       //----------------------------------------------------------------for approver routing end heare-----------------------------------------//
+
+      //----------------------------------------------------------------for bidder routing start heare-----------------------------------------//
+     
+      { path: 'bidder-dashboard', loadChildren: () => import('./partial/bidder/bidder-dashboard/bidder-dashboard.module').then(m => m.BidderDashboardModule) },
+      { path: 'event-details', loadChildren: () => import('./partial/bidder/event-details/event-details.module').then(m => m.EventDetailsModule) },
+      { path: 'live_auction_bidding', loadChildren: () => import('./partial/bidder/live-auction-bidding/live-auction-bidding.module').then(m => m.LiveAuctionBiddingModule) },
+      { path: 'account-details', loadChildren: () => import('./partial/bidder/account-details/account-details.module').then(m => m.AccountDetailsModule) },
+    
+      //----------------------------------------------------------------for bidder routing end heare-----------------------------------------//
     ]
   },
-
+ 
 
 
 
