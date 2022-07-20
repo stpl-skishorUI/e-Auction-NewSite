@@ -38,6 +38,7 @@ export class AppComponent {
     private readonly matIconRegistry: MatIconRegistry,
     private titleService: Title,
     private readonly domSanitizer: DomSanitizer) {
+
     Settings.defaultLocale = this.localeId;
 
     if (this.platform.BLINK) {
@@ -167,7 +168,7 @@ export class AppComponent {
     this.router.events.pipe(filter(event => event instanceof NavigationEnd),  // set title dynamic
     ).subscribe(() => {
       var rt = this.getActivatedRoute(this.activatedRoute);
-      let titleName = rt.data._value.breadcrumb[rt.data._value.breadcrumb?.length - 1].title;
+      let titleName = rt.data._value.breadcrumb[rt?.data._value?.breadcrumb?.length - 1].title;
       rt.data.subscribe(() => {
         this.titleService.setTitle(titleName)
       })
