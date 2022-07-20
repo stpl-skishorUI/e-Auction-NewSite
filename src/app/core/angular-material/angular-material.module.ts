@@ -32,6 +32,8 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import {MatStepperModule} from '@angular/material/stepper';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import {MatBadgeModule} from '@angular/material/badge';
+import {MatButtonToggleModule} from '@angular/material/button-toggle';
+
 @NgModule({
   declarations: [],
   imports: [
@@ -46,7 +48,7 @@ import {MatBadgeModule} from '@angular/material/badge';
     MatIconModule,
     MatDatepickerModule,
     MatCardModule,
-    MatChipsModule,
+    MatChipsModule,MatButtonToggleModule,
     MatExpansionModule,
     MatFormFieldModule,
     MatIconModule,
@@ -86,7 +88,7 @@ import {MatBadgeModule} from '@angular/material/badge';
     MatExpansionModule,
     MatFormFieldModule,
     MatIconModule,
-    MatInputModule,
+    MatInputModule,MatButtonToggleModule,
     MatMenuModule,
     MatPaginatorModule,
     MatRippleModule,

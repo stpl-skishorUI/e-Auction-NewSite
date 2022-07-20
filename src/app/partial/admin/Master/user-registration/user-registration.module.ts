@@ -8,6 +8,7 @@ import { AngularMaterialModule } from 'src/app/core/angular-material/angular-mat
 import { PageLayoutModule } from 'src/@vex/components/page-layout/page-layout.module';
 import { SecondaryToolbarModule } from 'src/@vex/components/secondary-toolbar/secondary-toolbar.module';
 import { BreadcrumbsModule } from 'src/@vex/components/breadcrumbs/breadcrumbs.module';
+import { ReactiveFormsModule } from '@angular/forms';
 
 
 @NgModule({
@@ -21,7 +22,8 @@ import { BreadcrumbsModule } from 'src/@vex/components/breadcrumbs/breadcrumbs.m
     AngularMaterialModule,
     PageLayoutModule,
     SecondaryToolbarModule,
-    BreadcrumbsModule
+    BreadcrumbsModule,
+    ReactiveFormsModule
   ]
 })
 export class UserRegistrationModule { }
