@@ -1,14 +1,17 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { AfterViewInit, Component, Input, OnInit } from '@angular/core';
 import { NavigationService } from '../../services/navigation.service';
 import { LayoutService } from '../../services/layout.service';
 import { ConfigService } from '../../config/config.service';
-import { map, startWith, switchMap } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, filter, map, startWith, switchMap } from 'rxjs/operators';
 import { NavigationLink } from '../../interfaces/navigation-item.interface';
 import { PopoverService } from '../../components/popover/popover.service';
 import { Observable, of } from 'rxjs';
 import { UserMenuComponent } from '../../components/user-menu/user-menu.component';
 import { MatDialog } from '@angular/material/dialog';
 import { SearchModalComponent } from '../../components/search-modal/search-modal.component';
+import { CommonService } from 'src/app/core/services/common.service';
+import { LocalstorageService } from 'src/app/core/services/localstorage.service';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'vex-sidenav',
@@ -16,6 +19,7 @@ import { SearchModalComponent } from '../../components/search-modal/search-modal
   styleUrls: ['./sidenav.component.scss']
 })
 export class SidenavComponent implements OnInit {
+  searchFilter = new FormControl('');
 
   @Input() collapsed: boolean;
   collapsedOpen$ = this.layoutService.sidenavCollapsedOpen$;
@@ -30,13 +34,18 @@ export class SidenavComponent implements OnInit {
   items = this.navigationService.items;
 
   constructor(private navigationService: NavigationService,
-              private layoutService: LayoutService,
-              private configService: ConfigService,
-              private readonly popoverService: PopoverService,
-              private readonly dialog: MatDialog) { }
+    private layoutService: LayoutService,
+    private configService: ConfigService,
+    private readonly popoverService: PopoverService,
+    private commonService: CommonService,
+    private localstorageService: LocalstorageService) {
+
+  }
 
   ngOnInit() {
   }
+
+ 
 
   collapseOpenSidenav() {
     this.layoutService.collapseOpenSidenav();
@@ -76,11 +85,4 @@ export class SidenavComponent implements OnInit {
     );
   }
 
-  openSearch(): void {
-    this.dialog.open(SearchModalComponent, {
-      panelClass: 'vex-dialog-glossy',
-      width: '100%',
-      maxWidth: '600px'
-    });
-  }
 }
