@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { ComponentsDialogsComponent } from 'src/app/components/ui/components-dialogs/components-dialogs.component';
 import { PopoverRef } from '../popover/popover-ref';
 
 @Component({
@@ -21,12 +20,11 @@ export class UserMenuComponent implements OnInit {
   }
 
   openDialog() {
-    this.dialog.open(ComponentsDialogsComponent, {
-      disableClose: false,
-      width: '400px'
-    }).afterClosed().subscribe(result => {
-      this.result = result;
-    });
-
+    // this.dialog.open(ComponentsDialogsComponent, {
+    //   disableClose: false,
+    //   width: '400px'
+    // }).afterClosed().subscribe(result => {
+    //   this.result = result;
+    // });
   }
 }

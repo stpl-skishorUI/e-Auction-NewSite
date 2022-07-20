@@ -15,8 +15,8 @@ import { MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { BreadcrumbsModule } from 'src/@vex/components/breadcrumbs/breadcrumbs.module';
 import { PageLayoutModule } from 'src/@vex/components/page-layout/page-layout.module';
-import { AngularMaterialModule } from 'src/app/shared/angular-material/angular-material.module';
 import { CommonService } from 'src/app/core/services/common.service';
+import { AngularMaterialModule } from 'src/app/core/angular-material/angular-material.module';
 
 
 @NgModule({
