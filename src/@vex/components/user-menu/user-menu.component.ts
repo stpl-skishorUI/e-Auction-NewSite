@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
+import { Router } from '@angular/router';
 import { PopoverRef } from '../popover/popover-ref';
 
 @Component({
@@ -8,8 +8,9 @@ import { PopoverRef } from '../popover/popover-ref';
   styleUrls: ['./user-menu.component.scss']
 })
 export class UserMenuComponent implements OnInit {
-  result: any;
-  constructor(private readonly popoverRef: PopoverRef, private dialog: MatDialog) { }
+
+
+  constructor(private readonly popoverRef: PopoverRef, private router:Router) { }
 
   ngOnInit(): void {
   }
@@ -19,12 +20,9 @@ export class UserMenuComponent implements OnInit {
     setTimeout(() => this.popoverRef.close(), 250);
   }
 
-  openDialog() {
-    // this.dialog.open(ComponentsDialogsComponent, {
-    //   disableClose: false,
-    //   width: '400px'
-    // }).afterClosed().subscribe(result => {
-    //   this.result = result;
-    // });
+  signOut() {
+    sessionStorage.clear();
+    localStorage.clear();
+    this.router.navigate(['../login']);
   }
 }
