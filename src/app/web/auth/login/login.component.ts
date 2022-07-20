@@ -159,11 +159,11 @@ export class LoginComponent implements OnInit {
       this.commonService.snackBar('Please enter Valid Mobile Number', 1);
       return
     }
-    // else {
-    //   this.genPasswordFlag = false;
-    //   this.otpFlag = true;
-    // }
-    if (this.commonService.checkDataType(this.mobileNo.value) == true) {
+    else {
+      this.genPasswordFlag = false;
+      this.otpFlag = true;
+    }
+    if (this.commonService.checkDataType(this.mobileNo.value)) {
       let obj = {
         "createdBy": 0,
         "modifiedBy": 0,
@@ -180,10 +180,7 @@ export class LoginComponent implements OnInit {
       this.apiService.setHttp('POST', 'otp-tran', false, JSON.stringify(obj), false, 'masterUrl');
       this.apiService.getHttp().subscribe((res: any) => {
         if (res.statusCode == "200") {
-          this.genPasswordFlag = false;
           this.commonService.snackBar(res.statusMessage, 0);
-          this.otpFlag = true;
-          
         } else {
           this.commonService.snackBar(res.statusMessage, 1);
         }

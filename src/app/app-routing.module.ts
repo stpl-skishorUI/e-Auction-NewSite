@@ -1,5 +1,8 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { AuthGuard } from './core/auth/auth.guard';
+import { AuthorizationGuard } from './core/auth/authorization.guard';
+import { ExpenseGuard } from './core/auth/expense.guard';
 import { CustomLayoutComponent } from './custom-layout/custom-layout.component';
 
 const routes: Routes = [
@@ -13,10 +16,21 @@ const routes: Routes = [
   },
   {
     path: '',
+    canActivate: [AuthGuard],
+    canActivateChild: [AuthorizationGuard],
     component: CustomLayoutComponent,
-    children: []
+    children: [
+      //----------------------------------------------------------------for admin routing start heare-----------------------------------------//
+      {
+        path: 'dashboard', loadChildren: () => import('./partial/admin/admin-dashboard/admin-dashboard.module').then(m => m.AdminDashboardModule),
+        data: { breadcrumb: [{ title: 'Event Section', active: true }, { title: 'Event Upload', active: true }] },
+        canActivate: [ExpenseGuard]
+      },
+      //----------------------------------------------------------------for admin routing end heare-----------------------------------------//
+    ]
   },
   { path: 'home', loadChildren: () => import('./web/home/home.module').then(m => m.HomeModule) },
+
   {
     path: '**',
     loadChildren: () => import('./web/errors/error-404/error-404.module').then(m => m.Error404Module)

@@ -10,7 +10,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
-import { AngularMaterialModule } from 'src/app/shared/angular-material/angular-material.module';
+import { AngularMaterialModule } from 'src/app/core/angular-material/angular-material.module';
 
 
 @NgModule({
