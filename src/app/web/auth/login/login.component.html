@@ -6,7 +6,7 @@
             </div>
         </div>
         <div class="text-center mt-4">
-            <h2 class="title m-0">Welcome back</h2>
+            <h2 class="title m-0">Welcome back {{genPasswordFlag}}{{otpFlag}}</h2>
             <h4 class="body-2 text-secondary m-0">Sign in with your credentials below.</h4>
         </div>
 
@@ -97,14 +97,6 @@
                             Generate Password
                         </button>
                     </div>
-
-                    <!-- <div class="flex items-center justify-between">
-        <button type="button" class="btn btn-link text-decoration-none shadow-none"
-            routerLink="../bidder-registration">New Bidder
-            Registration</button>
-        <a [routerLink]="['/forgot-password']" class="caption"> Generate Password?</a>
-      </div> -->
-
                     <button color="primary" mat-raised-button type="submit">
                         LOGIN
                     </button>
