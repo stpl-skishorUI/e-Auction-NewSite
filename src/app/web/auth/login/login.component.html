@@ -50,45 +50,26 @@
                             </button>
                         </mat-form-field>
 
-                        <div class="flex-1">
-
-                            <div class="col-md-auto d-flex align-items-center justify-content-end">
-                                <div class="row">
-                                    <div class="col-md-auto pe-0 px-0">
-                                        <div class="input-group mt-0">
-                                            <!-- <img src="Captcha.ashx" id="imgCaptcha" class="captcha-image" alt="" /> -->
-                                            <div class="input-group-append">
-
-                                            </div>
-                                        </div>
-
-                                    </div>
-                                    <div class="col-md d-flex align-items-center justify-content-center mb-1 pe-0 ">
-                                        <div class="ps-4 w-100" id="captcha"></div>
-                                        <button type="button" mat-button
-                                            class="btn-main mnw-auto px-1 refresh rounded-0"
-                                            (click)="this.loginForm.controls['recaptchaReactive'].reset();this.commonService.createCaptchaCarrerPage()">
-                                            <mat-icon>refresh</mat-icon>
-                                        </button>
-                                    </div>
 
 
-                                </div>
-                            </div>
-                            <div class="col-md">
-                                <mat-form-field [appearance]=configService?.matFormField class="d-block">
-                                    <mat-label>Enter Captcha</mat-label>
-                                    <input type="text" maxlength="4" matInput placeholder="Enter Captcha"
-                                        (keypress)="this.VB.noSpaces($event)" formControlName="recaptchaReactive"
-                                        class="w-100" autocomplete="off">
-                                    <mat-error *ngIf="loginForm.controls.recaptchaReactive.errors?.required">Captcha is
-                                        required
-                                    </mat-error>
-                                </mat-form-field>
-                            </div>
-                        </div>
                     </div>
-                    <div class="flex items-center justify-between">
+                    <div class="flex gap-2">
+                        <div id="captcha" class="h-14"></div>
+                        <button type="button" class="p-2 border bg-gray-50 h-14"
+                            (click)="this.loginForm.controls['recaptchaReactive'].reset();this.commonService.createCaptchaCarrerPage()">
+                            <mat-icon>refresh</mat-icon>
+                        </button>
+                        <mat-form-field [appearance]="configService?.matFormField">
+                            <mat-label>Enter Captcha</mat-label>
+                            <input type="text" maxlength="4" matInput placeholder="Enter Captcha" class="w-40"
+                                (keypress)="this.VB.noSpaces($event)" formControlName="recaptchaReactive"
+                                autocomplete="off">
+                            <mat-error *ngIf="loginForm.controls.recaptchaReactive.errors?.required">Captcha is
+                                required
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                    <div class="flex items-center justify-between mb-3">
                         <button type="button" class="btn btn-link text-decoration-none shadow-none"
                             routerLink="../bidder-registration">New Bidder
                             Registration</button>
@@ -97,9 +78,11 @@
                             Generate Password
                         </button>
                     </div>
-                    <button color="primary" mat-raised-button type="submit">
-                        LOGIN
-                    </button>
+                    <div class="text-center">
+                        <button color="primary" mat-raised-button type="submit">
+                            LOGIN
+                        </button>
+                    </div>
                 </form>
             </div>
 
