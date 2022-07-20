@@ -13,6 +13,7 @@ import { ColorSchemeName } from '../@vex/config/colorSchemeName';
 import { MatIconRegistry, SafeResourceUrlWithIconOptions } from '@angular/material/icon';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { ColorVariable, colorVariables } from '../@vex/components/config-panel/color-variables';
+import { LocalstorageService } from './core/services/localstorage.service';
 
 @Component({
   selector: 'vex-root',
@@ -21,16 +22,17 @@ import { ColorVariable, colorVariables } from '../@vex/components/config-panel/c
 })
 export class AppComponent {
   constructor(private configService: ConfigService,
-              private renderer: Renderer2,
-              private platform: Platform,
-              @Inject(DOCUMENT) private document: Document,
-              @Inject(LOCALE_ID) private localeId: string,
-              private layoutService: LayoutService,
-              private route: ActivatedRoute,
-              private navigationService: NavigationService,
-              private splashScreenService: SplashScreenService,
-              private readonly matIconRegistry: MatIconRegistry,
-              private readonly domSanitizer: DomSanitizer) {
+    private renderer: Renderer2,
+    private platform: Platform,
+    @Inject(DOCUMENT) private document: Document,
+    @Inject(LOCALE_ID) private localeId: string,
+    private layoutService: LayoutService,
+    private route: ActivatedRoute,
+    private navigationService: NavigationService,
+    private splashScreenService: SplashScreenService,
+    private LocalstorageService: LocalstorageService,
+    private readonly matIconRegistry: MatIconRegistry,
+    private readonly domSanitizer: DomSanitizer) {
     Settings.defaultLocale = this.localeId;
 
     if (this.platform.BLINK) {
@@ -118,20 +120,60 @@ export class AppComponent {
     /**
      * Add your own routes here
      */
-    this.navigationService.items = [
-      {
-        type: 'subheading',
-        label: 'Dashboards',
-        children: [
-          {
-            type: 'link',
-            label: 'Dashboard',
-            route: '/',
-            icon: 'mat:insights',
-            routerLinkActiveOptions: { exact: true }
+    if (this.LocalstorageService.checkUserIsLoggedIn()) {
+      let loginPages = [];
+      let data = this.LocalstorageService.getAllPageName();
+      let items: any = data.filter((ele: any) => {
+        if (ele.isSideBarMenu == true) {
+          return ele;
+        }
+      });
+
+      items.forEach((item: any) => {
+        let existing: any = loginPages.filter((v: any) => {
+          return v.module == item.module;
+        });
+        if (existing.length) {
+          let existingIndex: any = loginPages.indexOf(existing[0]);
+          loginPages[existingIndex].pageURL = loginPages[existingIndex].pageURL.concat(item.pageURL);
+          loginPages[existingIndex].pageName = loginPages[existingIndex].pageName.concat(item.pageName);
+        } else {
+          if (typeof item.pageName == 'string')
+            item.pageURL = [item.pageURL];
+          item.pageName = [item.pageName];
+          loginPages.push(item);
+        }
+      });
+
+      let pageDataTransform = loginPages;
+
+      pageDataTransform.map((ele: any) => {
+        if (ele.isSideBarMenu == true) {
+          if (ele.pageURL.length > 1) {
+            ele['type'] = 'dropdown',
+              ele['label'] = ele?.module,
+              ele['icon'] = 'mat:' + ele?.menuIcon
+            ele['children'] = [];
+            ele.pageURL.find((item: any, i: any) => {
+              ele['children'].push(
+                {
+                  type: 'link',
+                  label: ele?.pageName[i],
+                  route: item
+                })
+            })
+          } else {
+            ele['type'] = 'link',
+              ele['label'] = ele?.pageName,
+              ele['route'] = '/' + ele?.pageURL,
+              ele['icon'] = 'mat:' + ele?.menuIcon
           }
-        ]
-      }
-    ];
+          return ele
+        }
+      })
+
+      this.navigationService.items = pageDataTransform;
+    }
+
   }
 }
