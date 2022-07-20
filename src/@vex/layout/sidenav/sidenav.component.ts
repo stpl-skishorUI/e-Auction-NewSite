@@ -29,15 +29,12 @@ export class SidenavComponent implements OnInit, AfterViewInit {
   imageUrl$ = this.configService.config$.pipe(map(config => config.sidenav.imageUrl));
   showCollapsePin$ = this.configService.config$.pipe(map(config => config.sidenav.showCollapsePin));
   userVisible$ = this.configService.config$.pipe(map(config => config.sidenav.user.visible));
-
-
   userMenuOpen$: Observable<boolean> = of(false);
-
-  items:any;
+  items: any;
 
   constructor(private navigationService: NavigationService,
     private layoutService: LayoutService,
-    private commonService:CommonService,
+    private commonService: CommonService,
     private localstorageService: LocalstorageService,
     private configService: ConfigService,
     private readonly popoverService: PopoverService) {
@@ -60,7 +57,6 @@ export class SidenavComponent implements OnInit, AfterViewInit {
 
   search(value: any) {
     let val = value.toLowerCase();
-    let data: any = this.localstorageService.getAllPageName();
     if (this.commonService.checkDataType(val == false)) {
       this.ngOnInit();
     } else {
@@ -68,63 +64,63 @@ export class SidenavComponent implements OnInit, AfterViewInit {
       let result = data.filter((res: any) => {
         return res.pageName?.toLowerCase().includes(val) || res.module?.toLowerCase().includes(val);
       });
-     this.addSideMenuInSidebar(result);
+      this.addSideMenuInSidebar(result);
     }
   }
 
-  addSideMenuInSidebar(getAllPageName?:any) {
-      let loginPages = [];
-      let data = this.commonService.checkDataType(getAllPageName) == false ? this.localstorageService.getAllPageName() : getAllPageName;
-      let items: any = data.filter((ele: any) => {
-        if (ele.isSideBarMenu == true) {
-          return ele;
-        }
-      });
+  addSideMenuInSidebar(getAllPageName?: any) {
+    let loginPages = [];
+    let data = this.commonService.checkDataType(getAllPageName) == false ? this.localstorageService.getAllPageName() : getAllPageName;
+    let items: any = data.filter((ele: any) => {
+      if (ele.isSideBarMenu == true) {
+        return ele;
+      }
+    });
 
-      items.forEach((item: any) => {
-        let existing: any = loginPages.filter((v: any) => {
-          return v.module == item.module;
-        });
-        if (existing.length) {
-          let existingIndex: any = loginPages.indexOf(existing[0]);
-          loginPages[existingIndex].pageURL = loginPages[existingIndex].pageURL.concat(item.pageURL);
-          loginPages[existingIndex].pageName = loginPages[existingIndex].pageName.concat(item.pageName);
+    items.forEach((item: any) => {
+      let existing: any = loginPages.filter((v: any) => {
+        return v.module == item.module;
+      });
+      if (existing.length) {
+        let existingIndex: any = loginPages.indexOf(existing[0]);
+        loginPages[existingIndex].pageURL = loginPages[existingIndex].pageURL.concat(item.pageURL);
+        loginPages[existingIndex].pageName = loginPages[existingIndex].pageName.concat(item.pageName);
+      } else {
+        if (typeof item.pageName == 'string')
+          item.pageURL = [item.pageURL];
+        item.pageName = [item.pageName];
+        loginPages.push(item);
+      }
+    });
+
+    let pageDataTransform = loginPages;
+
+    pageDataTransform.map((ele: any) => {
+      if (ele.isSideBarMenu == true) {
+        if (ele.pageURL.length > 1) {
+          ele['type'] = 'dropdown',
+            ele['label'] = ele?.module,
+            ele['icon'] = 'mat:' + ele?.menuIcon
+          ele['children'] = [];
+          ele.pageURL.find((item: any, i: any) => {
+            ele['children'].push(
+              {
+                type: 'link',
+                label: ele?.pageName[i],
+                route: item
+              })
+          })
         } else {
-          if (typeof item.pageName == 'string')
-            item.pageURL = [item.pageURL];
-          item.pageName = [item.pageName];
-          loginPages.push(item);
+          ele['type'] = 'link',
+            ele['label'] = ele?.pageName,
+            ele['route'] = '/' + ele?.pageURL,
+            ele['icon'] = 'mat:' + ele?.menuIcon
         }
-      });
-
-      let pageDataTransform = loginPages;
-
-      pageDataTransform.map((ele: any) => {
-        if (ele.isSideBarMenu == true) {
-          if (ele.pageURL.length > 1) {
-            ele['type'] = 'dropdown',
-              ele['label'] = ele?.module,
-              ele['icon'] = 'mat:' + ele?.menuIcon
-            ele['children'] = [];
-            ele.pageURL.find((item: any, i: any) => {
-              ele['children'].push(
-                {
-                  type: 'link',
-                  label: ele?.pageName[i],
-                  route: item
-                })
-            })
-          } else {
-            ele['type'] = 'link',
-              ele['label'] = ele?.pageName,
-              ele['route'] = '/' + ele?.pageURL,
-              ele['icon'] = 'mat:' + ele?.menuIcon
-          }
-          return ele
-        }
-      })
-      this.navigationService.items= pageDataTransform;
-      this.items = this.navigationService.items;
+        return ele
+      }
+    })
+    this.navigationService.items = pageDataTransform;
+    this.items = this.navigationService.items;
   }
 
 
@@ -165,5 +161,4 @@ export class SidenavComponent implements OnInit, AfterViewInit {
       startWith(true),
     );
   }
-
 }
