@@ -89,7 +89,7 @@
         </div>
 
         <div class="login" *ngIf="setPasswodPage">
-            <div class="d-flex justify-content-between">
+            <div class="flex justify-between mb-10">
                 <h4>Set Password</h4>
                 <mat-icon type="button" (click)="closeSetPassword()">
                     close</mat-icon>
@@ -102,11 +102,11 @@
                         (keyup)="VB.removeSpaceAtBegining($event)" autocomplete="off">
                     <!-- <mat-error *ngIf="changePasswordForm.UserName.errors?.required">User Name is required</mat-error> -->
                     <mat-error *ngIf="changePasswordForm.UserName.errors">
-                        <span class="text-danger" *ngIf="changePasswordForm.UserName.hasError('required')"> User Name is
+                        <span class="text-red" *ngIf="changePasswordForm.UserName.hasError('required')"> User Name is
                             required</span>
-                        <span class="text-danger" *ngIf="changePasswordForm.UserName.hasError('minlength')">Minimum 8
+                        <span class="text-red" *ngIf="changePasswordForm.UserName.hasError('minlength')">Minimum 8
                             characters required</span>
-                        <span class="text-danger"
+                        <span class="text-red"
                             *ngIf="!changePasswordForm.UserName.hasError('minlength') && changePasswordForm.UserName.hasError('pattern')">Only
                             alphanumeric characters and special symbol @ and .(dot) are allowed</span>
                     </mat-error>
@@ -116,10 +116,10 @@
                         formControlName="newPassword" class="w-100" (keypress)="this.VB.noSpaces($event)"
                         autocomplete="off" placeholder="Please enter new password" maxlength="20">
                     <mat-error *ngIf="changePasswordForm.newPassword.errors">
-                        <span class="text-danger" *ngIf="changePasswordForm.newPassword.errors?.required">New Password
+                        <span class="text-red" *ngIf="changePasswordForm.newPassword.errors?.required">New Password
                             is
                             required</span>
-                        <span class="text-danger" *ngIf="changePasswordForm.newPassword.errors?.pattern"> Please Check
+                        <span class="text-red" *ngIf="changePasswordForm.newPassword.errors?.pattern"> Please Check
                             for instructions </span>
                     </mat-error>
                     <button type="button" mat-icon-button matSuffix (click)="newPassShow = !newPassShow"
@@ -132,9 +132,9 @@
                         maxlength="20" (keypress)="this.VB.noSpaces($event)" autocomplete="off"
                         placeholder="Please enter confirm password">
                     <mat-error *ngIf="changePasswordForm.confirmPassword.errors">
-                        <span class="text-danger" *ngIf="changePasswordForm.confirmPassword.errors?.required">Confirm
+                        <span class="text-red" *ngIf="changePasswordForm.confirmPassword.errors?.required">Confirm
                             Password is required</span>
-                        <span class="text-danger" *ngIf="changePasswordForm.confirmPassword.errors?.pattern">
+                        <span class="text-red" *ngIf="changePasswordForm.confirmPassword.errors?.pattern">
                             Please Check for instructions </span>
                     </mat-error>
 
@@ -144,7 +144,7 @@
                     </button>
                 </mat-form-field>
                 <div class="card note_card">
-                    <p class="mb-0 small ms-2">Note:</p>
+                    <p class="mb-0 small ml-2">Note:</p>
                     <ol class="mb-0">
                         <li>Your password must be in between 8 to 20 characters.</li>
                         <li>Your password must contain atleast 1 capital letter (eg. A,B etc).</li>
@@ -164,23 +164,20 @@
 </div>
 <!-- Generate Password Modal -->
 <div class="generate-password" @fadeInUp *ngIf="genPasswordFlag">
-    <div class="d-flex justify-content-between">
-        <h4 class="text-main fw-bold">Generate Password</h4>
+    <div class="flex justify-between mb-6">
+        <h4>Generate Password</h4>
         <mat-icon type="button" data-bs-dismiss="modal" (click)="genPasswordFlag = false; this.mobileNo.setValue('')"
             class="close_icon text-muted">
             highlight_off</mat-icon>
     </div>
-    <div class="new_password">
-
-        <mat-form-field class="" appearance="outline">
+    <div class="flex items-center">
+        <mat-form-field class="w-80" appearance="outline">
             <mat-label>Mobile Number</mat-label>
             <input ty matInput placeholder="Enter mobile number" [formControl]="mobileNo" type="text"
                 (keypress)="VB.noSpaces($event); VB.onlyDigitsExcludeZeroAtStart($event)" [maxLength]="10"
                 autocomplete="off">
         </mat-form-field>
-    </div>
-    <div class="border-0 d-flex align-items-center justify-content-center">
-        <button mat-stroked-button type="button" class="btn btn-main align-items-center mt-2"
+        <button mat-stroked-button type="button" class="mat-focus-indicator mat-raised-button mat-button-base mat-primary"
             (click)="sentOtpMobile()">Send
             SMS</button>
     </div>
@@ -188,8 +185,8 @@
 </div>
 <!-- OTP Modal -->
 <div class="generate-password" @fadeInUp *ngIf="otpFlag">
-    <div class="d-flex">
-        <div class="me-auto p-2">
+    <div class="flex">
+        <div class="mr-auto p-2">
             <h4 class="text-main fw-bold">OTP</h4>
         </div>
         <div class="p-2">
@@ -200,15 +197,13 @@
             <mat-icon type="button" (click)="otpFlag = false; this.otp.setValue('')"> highlight_off</mat-icon>
         </div>
     </div>
-    <div class="otp_box">
-        <mat-form-field class="" appearance="outline">
+    <div class="flex items-center">
+        <mat-form-field class="w-80" appearance="outline">
             <input ty matInput placeholder="Enter OTP" [formControl]="otp" type="text"
                 (keypress)="VB.noSpaces($event); VB.onlyDigitsExcludeZeroAtStart($event)" [maxLength]="5"
                 autocomplete="off">
         </mat-form-field>
-    </div>
-    <div class="border-0 d-flex align-items-center justify-content-center mt-1">
-        <button mat-stroked-button type="button" class="btn btn-main align-items-center"
+        <button mat-stroked-button type="button" class="mat-focus-indicator mat-raised-button mat-button-base mat-primary"
             (click)="otpSubmit()">Submit</button>
     </div>
 </div>
