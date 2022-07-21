@@ -1,3 +1,5 @@
+
+// @ts-ignore
 export interface TableColumn<T> {
   label: string;
   property: string;

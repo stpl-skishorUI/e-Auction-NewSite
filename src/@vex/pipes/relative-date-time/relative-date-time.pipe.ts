@@ -6,7 +6,7 @@ import { DateTime } from 'luxon';
 })
 export class RelativeDateTimePipe implements PipeTransform {
 
-  transform(value: DateTime | null | string, ...args: any[]): any {
+  transform(value: DateTime | null | string): any {
     if (!value) {
       return;
     }

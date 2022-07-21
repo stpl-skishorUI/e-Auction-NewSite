@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, UntypedFormBuilder, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+
 import { ApiService } from 'src/app/core/services/api.service';
 import { CommonService } from 'src/app/core/services/common.service';
 import { ConfigService } from 'src/app/core/services/config.service';
@@ -20,7 +20,6 @@ export class ForgotPasswordComponent implements OnInit {
   
 
   constructor(
-    private router: Router,
     private fb: FormBuilder,
     private apiService: ApiService,
     public commonService: CommonService,

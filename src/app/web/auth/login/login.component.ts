@@ -1,19 +1,13 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, FormGroupDirective, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { ChangeDetectionStrategy, Component, OnInit, ViewChild } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup, FormGroupDirective, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { fadeInUp400ms } from 'src/@vex/animations/fade-in-up.animation';
-import { DatePipe } from '@angular/common';
 import { ConfigService } from 'src/app/core/services/config.service';
 import { ApiService } from 'src/app/core/services/api.service';
 import { CommonService } from 'src/app/core/services/common.service';
 import { ErrorsService } from 'src/app/core/services/errors.service';
 import { LocalstorageService } from 'src/app/core/services/localstorage.service';
-import { TranslateService } from 'src/app/core/services/translate.service';
 import { ValidatorService } from 'src/app/core/services/validator.service';
-
-
-
 
 @Component({
   selector: 'vex-login',
@@ -25,13 +19,11 @@ import { ValidatorService } from 'src/app/core/services/validator.service';
   ]
 })
 export class LoginComponent implements OnInit {
-
   @ViewChild(FormGroupDirective) formGroupDirective!: FormGroupDirective;
-
-  hide = true;
+  hide: boolean = true;
   newPassShow: boolean = true;
   confirmPassShow: boolean = true;
-  loginForm!: FormGroup | any;
+  loginForm!: FormGroup;
   genPasswordFlag: boolean = false;
   setPasswordForm!: FormGroup | any;
   setPasswordFlag: boolean = false;
@@ -39,7 +31,7 @@ export class LoginComponent implements OnInit {
   otp: any = new FormControl('');
   setPasswodPage: boolean = false;
   otpFlag: boolean = false;
-
+  ipAddress:string;
   get mobileNoControls() { return this.mobileNo.controls }
   get otpNoControls() { return this.otp.controls }
 
@@ -52,25 +44,22 @@ export class LoginComponent implements OnInit {
     public VB: ValidatorService,
     public commonService: CommonService,
     private error: ErrorsService,
-  
     private router: Router,
     private localstorageService: LocalstorageService,
     private route: ActivatedRoute,
     public configService: ConfigService
-
   ) { }
 
   ngOnInit(): void {
     this.defaultLoginForm();
     this.getIPAddress();
   }
-  ipAddress: any;
-
+ 
   getIPAddress() {
-    this.apiService.setHttp('get', "https://api.ipify.org?format=json", false, false, false, false);
+    this.apiService.setHttp('get', this.configService.ipAddressUrl, false, false, false, false);
     this.apiService.getHttp().subscribe({
       next: (res: any) => {
-        this.ipAddress = res.ip;
+        this.ipAddress = res.ip; 
       }
     })
   }
@@ -79,13 +68,13 @@ export class LoginComponent implements OnInit {
     this.setPasswodPage == false ? this.commonService.createCaptchaCarrerPage() : '';
   }
 
+  // ---------------------getting controls of form----------------------------------------//
   get loginFormControls() { return this.loginForm.controls }
-
   get changePasswordForm() { return this.setPasswordForm.controls }
+  // --------------------------login form and set password form -------------------------//
 
   defaultLoginForm() {
     this.loginForm = this.fb.group({
-
       UserName: ['', [Validators.required, Validators.pattern(this.VB.valUserName), Validators.minLength(5)]],
       Password: ['', [Validators.required, Validators.pattern(this.VB.valPassword)]],
       recaptchaReactive: ['', [Validators.required]],
@@ -95,8 +84,9 @@ export class LoginComponent implements OnInit {
       newPassword: ['', [Validators.required, Validators.pattern(this.VB.valPassword)]],
       confirmPassword: ['', [Validators.required, Validators.pattern(this.VB.valPassword)]]
     });
-
   }
+
+  //-------------------Login Credential for User-------------------------------//
 
   loginFormSubmit() {
     const formValue = this.loginForm.value;
@@ -124,6 +114,8 @@ export class LoginComponent implements OnInit {
     })
   }
 
+  // -------------Give Access to User for Page -------------------------------------//
+
   getPageAccessByUserId(data: any) {
     this.apiService.setHttp('get', "user-type/GetbyUserTypeId?UserId=" + data.responseData.id + '&pagesize=' + this.apiService.pagesize, false, false, false, 'masterUrl');
     this.apiService.getHttp().subscribe({
@@ -142,17 +134,14 @@ export class LoginComponent implements OnInit {
         } else {
           this.commonService.checkDataType(res.statusMessage) == false ? this.error.handelError(res.statusCode) : this.commonService.snackBar(res.statusMessage, 1);
         }
-
       },
       error: (error: any) => { this.error.handelError(error.status) }
     })
   }
 
-
-  // send OTP to mobile number 
+  //-------------------- send OTP to mobile number ------------------------//
 
   sentOtpMobile() {
-
     if (this.mobileNo.value.length != 10) {
       this.commonService.snackBar('Please enter Valid Mobile Number', 1);
       return
@@ -190,7 +179,7 @@ export class LoginComponent implements OnInit {
     }
   }
 
-  // submit OTP to varify the user to change password
+  //-------------------- submit OTP to varify the user to change password------------------------//
 
   otpSubmit() {
     if (this.otp.value.length != 5) {
@@ -226,11 +215,10 @@ export class LoginComponent implements OnInit {
       }, (error: any) => {
         this.error.handelError(error.status);
       });
-
     }
   }
 
-  // set new password for user
+  //-----------------Give access to set new password for user--------------------------------//
 
   setPasswordSubmit() {
     if (this.setPasswordForm.invalid) {
@@ -262,10 +250,14 @@ export class LoginComponent implements OnInit {
     }
   }
 
+  // ---------------------------clear form field-------------------------//
+
   clearSetPassword() {
     this.formGroupDirective.resetForm();
     // this.setPasswordForm.reset();
   }
+
+  // ----------------------close set password form------------------------//
 
   closeSetPassword() {
     this.setPasswodPage = false;
