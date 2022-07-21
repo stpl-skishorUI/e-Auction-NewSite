@@ -63,6 +63,7 @@ const routes: Routes = [
       //----------------------------------------------------------------for bidder routing end heare-----------------------------------------//
     ]
   },
+  { path: 'add-bidder', loadChildren: () => import('./partial/admin/master/bidder-list/add-bidder/add-bidder.module').then(m => m.AddBidderModule) },
  
 
 

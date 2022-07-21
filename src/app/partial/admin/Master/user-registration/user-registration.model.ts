@@ -1,6 +1,6 @@
 export interface UserRegistration {
 
-    approverId: number | null;
+    approverId: number | null | undefined;
     bidderId: number | null;
     designation: string;
     designationId: number;
@@ -37,8 +37,6 @@ export interface UserRegistration {
     villageName: null | string;
     labels: any;
     action:any;
-//     constructor(userRegistration) {
-// this.approverId=userRegistration.approverId
 
-//     }
+  
 }
