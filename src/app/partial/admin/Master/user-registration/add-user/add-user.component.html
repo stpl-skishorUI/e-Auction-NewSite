@@ -1,16 +1,107 @@
-<div mat-dialog-title class="flex items-center justify-between">
-    <div>Question</div>
+<div mat-dialog-title class="flex items-center justify-between mb-0">
+    <div class="mx-2">Add User</div>
     <button type="button" mat-icon-button (click)="close('No answer')" tabindex="-1">
       <mat-icon svgIcon="mat:close"></mat-icon>
     </button>
   </div>
 
   <mat-dialog-content>
-    <p>Do you like Pizza?</p>
+   <div class="my-3 card p-3 border-0 shadow-none">
+      <div class="flex gap-x-3 my-3">
+         <div>
+            <mat-form-field appearance="outline">
+               <mat-label>Select Project <sup class="text-red">*</sup></mat-label>
+               <mat-select>
+                  <mat-option>None</mat-option>
+                  <mat-option value="option1">Option 1</mat-option>
+                  <mat-option value="option2">Option 2</mat-option>
+                  <mat-option value="option3">Option 3</mat-option>
+               </mat-select>
+            </mat-form-field>
+         </div>
+         <div>
+            <mat-form-field appearance="outline">
+               <mat-label>Select User Type</mat-label>
+               <mat-select>
+                  <mat-option>None</mat-option>
+                  <mat-option value="option1">Option 1</mat-option>
+                  <mat-option value="option2">Option 2</mat-option>
+                  <mat-option value="option3">Option 3</mat-option>
+               </mat-select>
+            </mat-form-field>
+         </div>
+         <div>
+            <mat-form-field appearance="outline">
+               <mat-label>Select Sub User</mat-label>
+               <mat-select>
+                  <mat-option>None</mat-option>
+                  <mat-option value="option1">Option 1</mat-option>
+                  <mat-option value="option2">Option 2</mat-option>
+                  <mat-option value="option3">Option 3</mat-option>
+               </mat-select>
+            </mat-form-field>
+         </div>
+         <div>
+            <mat-form-field appearance="outline">
+               <mat-label>Select Role</mat-label>
+               <mat-select>
+                  <mat-option>None</mat-option>
+                  <mat-option value="option1">Option 1</mat-option>
+                  <mat-option value="option2">Option 2</mat-option>
+                  <mat-option value="option3">Option 3</mat-option>
+               </mat-select>
+            </mat-form-field>
+         </div>
+      </div>
+      <div class="flex gap-x-3 my-3">
+         <div>
+   
+            <mat-form-field  appearance="outline">
+               <mat-label>Bidder Name <sup class="text-red">*</sup></mat-label>
+               <input ty matInput placeholder="Bidder Name">
+            </mat-form-field>
+         </div>
+         <div>
+            <mat-form-field appearance="outline">
+               <mat-label>Mobile Number <sup class="text-red">*</sup></mat-label>
+               <input ty matInput placeholder="Mobile Number">
+            </mat-form-field>
+         </div>
+         <div>
+            <mat-form-field appearance="outline">
+               <mat-label>User Name <sup class="text-red">*</sup></mat-label>
+               <input ty matInput placeholder="User Name">
+            </mat-form-field>
+         </div>
+         <div>
+            <mat-form-field appearance="outline">
+               <mat-label>Designation <sup class="text-red">*</sup></mat-label>
+               <input ty matInput placeholder="Designation">
+            </mat-form-field>
+         </div>
+      </div>
+      <div class="flex gap-x-3 mt-2 w-full">
+         <div>
+   
+            <mat-form-field  appearance="outline">
+               <mat-label>Email ID <sup class="text-red">*</sup></mat-label>
+               <input ty matInput placeholder="Email ID">
+            </mat-form-field>
+         </div>
+         <div class="w-full">
+            <mat-form-field class="w-full" appearance="outline">
+               <mat-label>Address </mat-label>
+               <input ty matInput placeholder="Address">
+            </mat-form-field>
+         </div>
+      </div>
+     
+   </div>
   </mat-dialog-content>
 
 
   <mat-dialog-actions align="end">
-    <button mat-button (click)="close('No')">No</button>
-    <button mat-button color="primary" (click)="close('Yes')">Yes</button>
+    <button mat-stroked-button (click)="close('No')">Clear</button>
+    <button mat-raised-button color="primary" (click)="close('Yes')">Submit</button>
   </mat-dialog-actions>
+

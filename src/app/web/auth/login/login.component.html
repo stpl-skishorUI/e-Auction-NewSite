@@ -10,7 +10,7 @@
             <h4 class="body-2 text-secondary m-0">Sign in with your credentials below.</h4>
         </div>
 
-        <div class="login" *ngIf="setPasswodPage">
+        <div class="login" *ngIf="!setPasswodPage">
             <div class="p-6 flex flex-col gap-4">
                 <form [formGroup]="loginForm" (ngSubmit)="loginFormSubmit()">
                     <div class="flex flex-col">
@@ -93,12 +93,7 @@
 
         </div>
 
-        <div class="login" *ngIf="!setPasswodPage">
-            <div class="flex justify-between mb-10">
-                <h4>Set Password</h4>
-                <mat-icon type="button" (click)="closeSetPassword()">
-                    close</mat-icon>
-            </div>
+        <div class="set-password" *ngIf="setPasswodPage">
             <form [formGroup]="setPasswordForm" (ngSubmit)="setPasswordSubmit()">
                 <div class="mb-3">
                     <mat-form-field [appearance]=configService?.matFormField class="w-full">
@@ -120,6 +115,7 @@
                 </div>
                 <div class="mb-3">
                     <mat-form-field [appearance]=configService?.matFormField class="w-full">
+                        <mat-label>New Password</mat-label>
                         <input [type]="newPassShow ? 'password' : 'text'" matInput placeholder="newPassword"
                             formControlName="newPassword" (keypress)="this.VB.noSpaces($event)"
                             autocomplete="off" placeholder="Please enter new password" maxlength="20">
@@ -138,6 +134,7 @@
                 </div>
                 <div class="mb-3">
                     <mat-form-field [appearance]=configService?.matFormField class="w-full">
+                        <mat-label>Confirm Password</mat-label>
                         <input matInput [type]="confirmPassShow ? 'password' : 'text'" formControlName="confirmPassword"
                             maxlength="20" (keypress)="this.VB.noSpaces($event)" autocomplete="off"
                             placeholder="Please enter confirm password">
@@ -166,7 +163,7 @@
                 <div class="form-group text-center">
                     <button type="submit" color="primary" class="mr-2" mat-raised-button type="submit">Save</button>
                     <button type="button" mat-raised-button class="bg-gray-300"
-                        (click)="clearSetPassword()">Clear</button>
+                        (click)="closeSetPassword()">Clear</button>
                 </div>
             </form>
         </div>
@@ -181,7 +178,7 @@
             highlight_off</mat-icon>
     </div>
     <div class="flex items-center">
-        <mat-form-field class="w-80 mr-3" appearance="outline">
+        <mat-form-field class="w-80 mr-3" [appearance]=configService?.matFormField>
             <mat-label>Mobile Number</mat-label>
             <input ty matInput placeholder="Enter mobile number" [formControl]="mobileNo" type="text"
                 (keypress)="VB.noSpaces($event); VB.onlyDigitsExcludeZeroAtStart($event)" [maxLength]="10"
