@@ -14,48 +14,53 @@
             <div class="p-6 flex flex-col gap-4">
                 <form [formGroup]="loginForm" (ngSubmit)="loginFormSubmit()">
                     <div class="flex flex-col">
-                        <mat-form-field class="flex-1" [appearance]=configService?.matFormField>
-                            <mat-label>User Name</mat-label>
-                            <input type="text" matInput placeholder="User Name " formControlName="UserName"
-                                class="w-100" maxlength="20" (keypress)="VB.alphaNumericWithSpacesAndSpecChars($event)"
-                                (keyup)="VB.removeSpaceAtBegining($event)" autocomplete="off">
-                            <mat-error *ngIf="loginFormControls.UserName.errors">
-                                <span class="text-danger" *ngIf="loginFormControls.UserName.hasError('required')"> User
-                                    Name is required</span>
-                                <span class="text-danger"
-                                    *ngIf="loginFormControls.UserName.hasError('minlength')">Minimum 5 characters
-                                    required</span>
-                                <span class="text-danger"
-                                    *ngIf="!loginFormControls.UserName.hasError('minlength') && loginFormControls.UserName.hasError('pattern')">Only
-                                    alphanumeric characters and special symbol @ and .(dot) are allowed</span>
-                            </mat-error>
-                        </mat-form-field>
+                        <div class="mb-1">
+                            <mat-form-field class="flex-1" [appearance]=configService?.matFormField class="w-full">
+                                <mat-label>User Name</mat-label>
+                                <input type="text" matInput placeholder="User Name " formControlName="UserName"
+                                    class="w-100" maxlength="20"
+                                    (keypress)="VB.alphaNumericWithSpacesAndSpecChars($event)"
+                                    (keyup)="VB.removeSpaceAtBegining($event)" autocomplete="off">
+                                <mat-error *ngIf="loginFormControls.UserName.errors">
+                                    <span class="text-danger" *ngIf="loginFormControls.UserName.hasError('required')">
+                                        User
+                                        Name is required</span>
+                                    <span class="text-danger"
+                                        *ngIf="loginFormControls.UserName.hasError('minlength')">Minimum 5 characters
+                                        required</span>
+                                    <span class="text-danger"
+                                        *ngIf="!loginFormControls.UserName.hasError('minlength') && loginFormControls.UserName.hasError('pattern')">Only
+                                        alphanumeric characters and special symbol @ and .(dot) are allowed</span>
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+                        <div class="mb-3">
+                            <mat-form-field class="flex-1" [appearance]=configService?.matFormField class="w-full">
+                                <mat-label>Password</mat-label>
+                                <input matInput [type]="hide ? 'password' : 'text'" formControlName="Password"
+                                    maxlength="20" (keypress)="VB.noSpaces($event)" autocomplete="off">
+                                <mat-error *ngIf="loginFormControls.Password.errors">
+                                    <span class="text-danger"
+                                        *ngIf="loginFormControls.Password.hasError('required')">Password is
+                                        required</span>
+                                    <span class="text-danger"
+                                        *ngIf="loginFormControls.Password.hasError('maxLength') || loginFormControls.Password.hasError('pattern')">It
+                                        must contain 8 or more characters that are of at least one number, and
+                                        one special characters, and one uppercase and lowercase letter.</span>
+                                </mat-error>
 
-                        <mat-form-field class="flex-1" [appearance]=configService?.matFormField>
-                            <mat-label>Password</mat-label>
-                            <input matInput [type]="hide ? 'password' : 'text'" formControlName="Password"
-                                maxlength="20" (keypress)="VB.noSpaces($event)" autocomplete="off">
-                            <mat-error *ngIf="loginFormControls.Password.errors">
-                                <span class="text-danger"
-                                    *ngIf="loginFormControls.Password.hasError('required')">Password is required</span>
-                                <span class="text-danger"
-                                    *ngIf="loginFormControls.Password.hasError('maxLength') || loginFormControls.Password.hasError('pattern')">It
-                                    must contain 8 or more characters that are of at least one number, and
-                                    one special characters, and one uppercase and lowercase letter.</span>
-                            </mat-error>
-
-                            <button type="button" mat-icon-button matSuffix (click)="hide = !hide"
-                                [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
-                                <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
-                            </button>
-                        </mat-form-field>
-
+                                <button type="button" mat-icon-button matSuffix (click)="hide = !hide"
+                                    [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+                                    <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+                                </button>
+                            </mat-form-field>
+                        </div>
 
 
                     </div>
-                    <div class="flex gap-2">
-                        <div id="captcha" class="h-11"></div>
-                        <button type="button" class="p-2 border bg-gray-50 h-11"
+                    <div class="flex gap-2 mb-3">
+                        <div id="captcha" class="h-9"></div>
+                        <button type="button" class="px-2 text-xs rounded py-0"
                             (click)="this.loginForm.controls['recaptchaReactive'].reset();this.commonService.createCaptchaCarrerPage()">
                             <mat-icon>refresh</mat-icon>
                         </button>
@@ -69,7 +74,7 @@
                             </mat-error>
                         </mat-form-field>
                     </div>
-                    <div class="flex items-center justify-between mb-3">
+                    <div class="flex items-center justify-between mb-4">
                         <button type="button" class="btn btn-link text-decoration-none shadow-none"
                             routerLink="../bidder-registration">New Bidder
                             Registration</button>
@@ -171,14 +176,14 @@
             highlight_off</mat-icon>
     </div>
     <div class="flex items-center">
-        <mat-form-field class="w-80" appearance="outline">
+        <mat-form-field class="w-80 mr-3" appearance="outline">
             <mat-label>Mobile Number</mat-label>
             <input ty matInput placeholder="Enter mobile number" [formControl]="mobileNo" type="text"
                 (keypress)="VB.noSpaces($event); VB.onlyDigitsExcludeZeroAtStart($event)" [maxLength]="10"
                 autocomplete="off">
         </mat-form-field>
-        <button mat-stroked-button type="button" class="mat-focus-indicator mat-raised-button mat-button-base mat-primary"
-            (click)="sentOtpMobile()">Send
+        <button mat-stroked-button type="button"
+            class="mat-focus-indicator mat-raised-button mat-button-base mat-primary" (click)="sentOtpMobile()">Send
             SMS</button>
     </div>
 
@@ -199,11 +204,13 @@
     </div>
     <div class="flex items-center">
         <mat-form-field class="w-80" appearance="outline">
-            <input ty matInput placeholder="Enter OTP" [formControl]="otp" type="text"
+            <mat-label>Enter OTP</mat-label>
+            <input class="mr-2" ty matInput placeholder="Enter OTP" [formControl]="otp" type="text"
                 (keypress)="VB.noSpaces($event); VB.onlyDigitsExcludeZeroAtStart($event)" [maxLength]="5"
                 autocomplete="off">
         </mat-form-field>
-        <button mat-stroked-button type="button" class="mat-focus-indicator mat-raised-button mat-button-base mat-primary"
+        <button mat-stroked-button type="button"
+            class="mat-focus-indicator mat-raised-button mat-button-base mat-primary"
             (click)="otpSubmit()">Submit</button>
     </div>
 </div>
