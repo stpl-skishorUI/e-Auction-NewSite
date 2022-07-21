@@ -55,8 +55,8 @@ export class UserRegistrationComponent implements OnInit {
     { label: 'Role', property: 'roleType', type: 'text', visible: true },
     { label: 'Mobile', property: 'mobileNo', type: 'text', visible: true },
     { label: 'User Type', property: 'userType', type: 'text', visible: true },
-    { label: 'Sub User Type', property: 'subUserType', type: 'text', visible: true},
-    { label: 'DSC Status', property: 'isDsc', type: 'button', visible: true ,cssClasses:['text-center'] },
+    { label: 'Sub User Type', property: 'subUserType', type: 'text', visible: true },
+    { label: 'DSC Status', property: 'isDsc', type: 'button', visible: true, cssClasses: ['text-center'] },
     { label: 'Block /Unblock', property: 'isBlock', type: 'button', visible: true },
     { label: 'Actions', property: 'actions', type: 'button', visible: true },
   ];
@@ -67,7 +67,7 @@ export class UserRegistrationComponent implements OnInit {
   constructor(public dialog: MatDialog,
     private apiService: ApiService, private fb: FormBuilder,
     public commonService: CommonService,
-    private localstorageService:LocalstorageService,
+    private localstorageService: LocalstorageService,
     private error: ErrorsService) { }
 
   get visibleColumns() {
@@ -108,30 +108,28 @@ export class UserRegistrationComponent implements OnInit {
     const numRows = this.dataSource.data.length;
     return numSelected === numRows;
   }
-  
+
   masterToggle() {
     this.isAllSelected() ?
       this.selection.clear() :
       this.dataSource.data.forEach(row => this.selection.select(row));
   }
 
-  trackByProperty<T>(_index: number, column: TableColumn<T>) {
-    return column.property;
-  }
+
 
   onLabelChange(change: MatSelectChange, row: UserRegistration) {
     const index = this.userRegistration.findIndex(c => c === row);
     this.userRegistration[index].labels = change.value;
     this.subject$.next(this.userRegistration);
   }
-  
+
   toggleColumnVisibility(column, event) {
     event.stopPropagation();
     event.stopImmediatePropagation();
     column.visible = !column.visible;
   }
 
-  getData(){
+  getData() {
     let formValue = this.filterForm.value;
     let paramList: string = "?StateId=" + 0 + "&DivisionId=" + 0 + "&SubDivisionId=0&DistrictId=" + 0 + "&TalukaId=" + 0 + "&pageno=" + this.pageNumber + "&pagesize=" + this.pageSize
     this.commonService.checkDataType(formValue.search) == true ? paramList += "&Textsearch=" + formValue.search : '';
@@ -143,7 +141,7 @@ export class UserRegistrationComponent implements OnInit {
           this.dataSource.sort = this.sort;
           this.totalRows = res.responseData.responseData2.pageCount;
 
-          this.totalRows > 10 && this.pageNumber==1 ? this.paginator?.firstPage() : '';
+          this.totalRows > 10 && this.pageNumber == 1 ? this.paginator?.firstPage() : '';
         } else {
           this.dataSource = null;
           if (res.statusCode != "404") {
@@ -160,26 +158,61 @@ export class UserRegistrationComponent implements OnInit {
     this.getData();
   }
 
-  // ---------------------- delete code start here ----------//
-  takeConfiramation(ele:UserRegistration[]) {
+  //**  Confiramation for delete and block and unblock user */
+  takeConfiramation(ele: UserRegistration[], flag: string, event?: any) {
+    let title: string = 'Delete';
+    let dialogText: string = 'Are you sure you want to delete this record ?';
+    flag == 'block' ? event.checked == true ? (title = 'User Block', dialogText = 'Do you want to User Block') : (title = 'User Unblock', dialogText = 'Do you want to User Unblock') : ''
     const dialog = this.dialog.open(ConfirmationDialogComponent, {
       width: '400px',
-      data: { p1: 'Are you sure you want to delete this record ?', p2: '', cardTitle: 'Delete', successBtnText: 'Delete', dialogIcon: '', cancelBtnText: 'Cancel' },
+      data: { p1: dialogText, p2: '', cardTitle: title, successBtnText: 'Yes', dialogIcon: '', cancelBtnText: 'No' },
       disableClose: this.apiService.disableCloseFlag,
     })
     dialog.afterClosed().subscribe(res => {
       if (res == 'Yes') {
-        this.deleteUser(ele)
+        flag == 'block' ? this.userBlockUnBlock(ele, event.checked) : this.deleteUser(ele)
+      } else {
+        flag == 'block' ? !event.checked ? event.source.checked = true : event.source.checked = false : ''
       }
     })
   }
 
-  deleteUser(ele:any) {
+  // ---------------------- delete code start here ----------//
+  deleteUser(ele: any) {
     let obj = {
       "id": ele.id,
       'deletedBy': this.localstorageService.userId(),
     }
     this.apiService.setHttp('DELETE', "user-registration", false, JSON.stringify(obj), false, 'masterUrl');
+    this.apiService.getHttp().subscribe({
+      next: (res: any) => {
+        if (res.statusCode === "200") {
+          this.commonService.snackBar(res.statusMessage, 0);
+          this.getData();
+        } else {
+          if (res.statusCode != "404") {
+            this.commonService.checkDataType(res.statusMessage) == false ? this.error.handelError(res.statusCode) : this.commonService.snackBar(res.statusMessage, 1);
+          }
+        }
+      },
+      error: (err: any) => { this.error.handelError(err) }
+    })
+
+    this.selection.deselect(ele);
+    this.subject$.next(this.userRegistration);
+  }
+  //------------- delete code end here ------------------//
+
+  // ------------- user block and unblock -----------------//
+  userBlockUnBlock(element: any, event: any) {
+    let obj = {
+      "id": element?.id,
+      "isBlock": event == true ? true : false,
+      "blockDate": new Date(),
+      "blockBy": this.localstorageService.userId(),
+      "blockRemark": ""
+    }
+    this.apiService.setHttp('PUT', "user-registration/BlockUnblockUser", false, JSON.stringify(obj), false, 'masterUrl');
     this.apiService.getHttp().subscribe({
       next: (res: any) => {
         if (res.statusCode === "200") {
@@ -193,10 +226,6 @@ export class UserRegistrationComponent implements OnInit {
       },
       error: (err: any) => { this.error.handelError(err) }
     })
-    
-    this.selection.deselect(ele);
-    this.subject$.next(this.userRegistration);
   }
-  //------------- delete code end here ------------------//
-
+  // ------------- user block and unblock End  -----------------//
 }
