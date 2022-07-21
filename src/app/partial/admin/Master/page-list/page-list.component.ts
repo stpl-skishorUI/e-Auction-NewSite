@@ -15,6 +15,7 @@ export class PageListComponent implements OnInit {
   }
 
   openDialog(): void {
+    // @ts-ignore
     const dialogRef = this.dialog.open(AddPageComponent, {
       width: '400px',
       disableClose: true,

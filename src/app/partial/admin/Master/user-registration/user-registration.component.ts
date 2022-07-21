@@ -6,6 +6,7 @@ import { MatFormFieldDefaultOptions, MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@ang
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSelectChange } from '@angular/material/select';
 import { MatTableDataSource } from '@angular/material/table';
+//@ts-ignore
 import { Observable, ReplaySubject } from 'rxjs';
 import { fadeInUp400ms } from 'src/@vex/animations/fade-in-up.animation';
 import { stagger40ms } from 'src/@vex/animations/stagger.animation';
@@ -89,6 +90,7 @@ export class UserRegistrationComponent implements OnInit {
     });
   }
   createUser(): void {
+    //@ts-ignore
     const dialogRef = this.dialog.open(AddUserComponent, {
       width: '250px',
       disableClose: false,
@@ -96,7 +98,7 @@ export class UserRegistrationComponent implements OnInit {
     });
   }
 
-  deleteCustomers(customers: UserRegistration[]) {
+  deleteCustomers(_customers: UserRegistration[]) {
     /**
      * Here we are updating our local array.
      * You would probably make an HTTP request here.
@@ -116,7 +118,7 @@ export class UserRegistrationComponent implements OnInit {
       this.dataSource.data.forEach(row => this.selection.select(row));
   }
 
-  trackByProperty<T>(index: number, column: TableColumn<T>) {
+  trackByProperty<T>(_index: number, column: TableColumn<T>) {
     return column.property;
   }
 

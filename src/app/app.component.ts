@@ -33,9 +33,11 @@ export class AppComponent {
     private layoutService: LayoutService,
     private route: ActivatedRoute,
     private activatedRoute: ActivatedRoute,
+     //@ts-ignore
     private navigationService: NavigationService,
      //@ts-ignore
     private splashScreenService: SplashScreenService,
+     //@ts-ignore
     private LocalstorageService: LocalstorageService,
     private readonly matIconRegistry: MatIconRegistry,
     private titleService: Title,
