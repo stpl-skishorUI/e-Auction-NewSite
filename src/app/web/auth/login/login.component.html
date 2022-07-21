@@ -93,64 +93,67 @@
 
         </div>
 
-        <div class="login" *ngIf="setPasswodPage">
-            <div class="flex justify-between mb-10">
-                <h4>Set Password</h4>
-                <mat-icon type="button" (click)="closeSetPassword()">
-                    close</mat-icon>
-            </div>
+        <div class="set-password" *ngIf="setPasswodPage">
             <form [formGroup]="setPasswordForm" (ngSubmit)="setPasswordSubmit()">
-                <mat-form-field [appearance]=configService?.matFormField class="d-block">
-                    <mat-label>User Name</mat-label>
-                    <input type="text" matInput placeholder="User Name" formControlName="UserName" class="w-100"
-                        maxlength="20" (keypress)="VB.alphaNumericWithSpacesAndSpecChars($event)"
-                        (keyup)="VB.removeSpaceAtBegining($event)" autocomplete="off">
-                    <!-- <mat-error *ngIf="changePasswordForm.UserName.errors?.required">User Name is required</mat-error> -->
-                    <mat-error *ngIf="changePasswordForm.UserName.errors">
-                        <span class="text-red" *ngIf="changePasswordForm.UserName.hasError('required')"> User Name is
-                            required</span>
-                        <span class="text-red" *ngIf="changePasswordForm.UserName.hasError('minlength')">Minimum 8
-                            characters required</span>
-                        <span class="text-red"
-                            *ngIf="!changePasswordForm.UserName.hasError('minlength') && changePasswordForm.UserName.hasError('pattern')">Only
-                            alphanumeric characters and special symbol @ and .(dot) are allowed</span>
-                    </mat-error>
-                </mat-form-field>
-                <mat-form-field [appearance]=configService?.matFormField class="d-block">
-                    <input [type]="newPassShow ? 'password' : 'text'" matInput placeholder="newPassword"
-                        formControlName="newPassword" class="w-100" (keypress)="this.VB.noSpaces($event)"
-                        autocomplete="off" placeholder="Please enter new password" maxlength="20">
-                    <mat-error *ngIf="changePasswordForm.newPassword.errors">
-                        <span class="text-red" *ngIf="changePasswordForm.newPassword.errors?.required">New Password
-                            is
-                            required</span>
-                        <span class="text-red" *ngIf="changePasswordForm.newPassword.errors?.pattern"> Please Check
-                            for instructions </span>
-                    </mat-error>
-                    <button type="button" mat-icon-button matSuffix (click)="newPassShow = !newPassShow"
-                        [attr.aria-label]="'Hide password'" [attr.aria-pressed]="newPassShow">
-                        <mat-icon>{{newPassShow ? 'visibility_off' : 'visibility'}}</mat-icon>
-                    </button>
-                </mat-form-field>
-                <mat-form-field [appearance]=configService?.matFormField class="d-block">
-                    <input matInput [type]="confirmPassShow ? 'password' : 'text'" formControlName="confirmPassword"
-                        maxlength="20" (keypress)="this.VB.noSpaces($event)" autocomplete="off"
-                        placeholder="Please enter confirm password">
-                    <mat-error *ngIf="changePasswordForm.confirmPassword.errors">
-                        <span class="text-red" *ngIf="changePasswordForm.confirmPassword.errors?.required">Confirm
-                            Password is required</span>
-                        <span class="text-red" *ngIf="changePasswordForm.confirmPassword.errors?.pattern">
-                            Please Check for instructions </span>
-                    </mat-error>
-
-                    <button type="button" mat-icon-button matSuffix (click)="confirmPassShow = !confirmPassShow"
-                        [attr.aria-label]="'Hide password'" [attr.aria-pressed]="confirmPassShow">
-                        <mat-icon>{{confirmPassShow? 'visibility_off' : 'visibility'}}</mat-icon>
-                    </button>
-                </mat-form-field>
-                <div class="card note_card">
-                    <p class="mb-0 small ml-2">Note:</p>
-                    <ol class="mb-0">
+                <div class="mb-3">
+                    <mat-form-field [appearance]=configService?.matFormField class="w-full">
+                        <mat-label>User Name</mat-label>
+                        <input type="text" matInput placeholder="User Name" formControlName="UserName"
+                            maxlength="20" (keypress)="VB.alphaNumericWithSpacesAndSpecChars($event)"
+                            (keyup)="VB.removeSpaceAtBegining($event)" autocomplete="off">
+                        <!-- <mat-error *ngIf="changePasswordForm.UserName.errors?.required">User Name is required</mat-error> -->
+                        <mat-error *ngIf="changePasswordForm.UserName.errors">
+                            <span class="text-red" *ngIf="changePasswordForm.UserName.hasError('required')"> User Name is
+                                required</span>
+                            <span class="text-red" *ngIf="changePasswordForm.UserName.hasError('minlength')">Minimum 8
+                                characters required</span>
+                            <span class="text-red"
+                                *ngIf="!changePasswordForm.UserName.hasError('minlength') && changePasswordForm.UserName.hasError('pattern')">Only
+                                alphanumeric characters and special symbol @ and .(dot) are allowed</span>
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="mb-3">
+                    <mat-form-field [appearance]=configService?.matFormField class="w-full">
+                        <mat-label>New Password</mat-label>
+                        <input [type]="newPassShow ? 'password' : 'text'" matInput placeholder="newPassword"
+                            formControlName="newPassword" (keypress)="this.VB.noSpaces($event)"
+                            autocomplete="off" placeholder="Please enter new password" maxlength="20">
+                        <mat-error *ngIf="changePasswordForm.newPassword.errors">
+                            <span class="text-red" *ngIf="changePasswordForm.newPassword.errors?.required">New Password
+                                is
+                                required</span>
+                            <span class="text-red" *ngIf="changePasswordForm.newPassword.errors?.pattern"> Please Check
+                                for instructions </span>
+                        </mat-error>
+                        <button type="button" mat-icon-button matSuffix (click)="newPassShow = !newPassShow"
+                            [attr.aria-label]="'Hide password'" [attr.aria-pressed]="newPassShow">
+                            <mat-icon>{{newPassShow ? 'visibility_off' : 'visibility'}}</mat-icon>
+                        </button>
+                    </mat-form-field>
+                </div>
+                <div class="mb-3">
+                    <mat-form-field [appearance]=configService?.matFormField class="w-full">
+                        <mat-label>Confirm Password</mat-label>
+                        <input matInput [type]="confirmPassShow ? 'password' : 'text'" formControlName="confirmPassword"
+                            maxlength="20" (keypress)="this.VB.noSpaces($event)" autocomplete="off"
+                            placeholder="Please enter confirm password">
+                        <mat-error *ngIf="changePasswordForm.confirmPassword.errors">
+                            <span class="text-red" *ngIf="changePasswordForm.confirmPassword.errors?.required">Confirm
+                                Password is required</span>
+                            <span class="text-red" *ngIf="changePasswordForm.confirmPassword.errors?.pattern">
+                                Please Check for instructions </span>
+                        </mat-error>
+    
+                        <button type="button" mat-icon-button matSuffix (click)="confirmPassShow = !confirmPassShow"
+                            [attr.aria-label]="'Hide password'" [attr.aria-pressed]="confirmPassShow">
+                            <mat-icon>{{confirmPassShow? 'visibility_off' : 'visibility'}}</mat-icon>
+                        </button>
+                    </mat-form-field>
+                </div>
+                <div class="note_card">
+                    <p class="mb-0 text-xs font-bold">Note:</p>
+                    <ol class="mb-0 text-xs">
                         <li>Your password must be in between 8 to 20 characters.</li>
                         <li>Your password must contain atleast 1 capital letter (eg. A,B etc).</li>
                         <li>Your password must contain atleast 1 special letter (eg. @,!,#,$,%,&,*,? etc).</li>
@@ -158,10 +161,9 @@
                 </div>
                 <br>
                 <div class="form-group text-center">
-                    <button type="submit" mat-raised-button style="margin-right:10px;"
-                        class="btn-main lh-4 px-3 ">Save</button>
-                    <button type="button" mat-raised-button class="btn-main lh-4 px-3"
-                        (click)="clearSetPassword()">Clear</button>
+                    <button type="submit" color="primary" class="mr-2" mat-raised-button type="submit">Save</button>
+                    <button type="button" mat-raised-button class="bg-gray-300"
+                        (click)="closeSetPassword()">Clear</button>
                 </div>
             </form>
         </div>
@@ -176,7 +178,7 @@
             highlight_off</mat-icon>
     </div>
     <div class="flex items-center">
-        <mat-form-field class="w-80 mr-3" appearance="outline">
+        <mat-form-field class="w-80 mr-3" [appearance]=configService?.matFormField>
             <mat-label>Mobile Number</mat-label>
             <input ty matInput placeholder="Enter mobile number" [formControl]="mobileNo" type="text"
                 (keypress)="VB.noSpaces($event); VB.onlyDigitsExcludeZeroAtStart($event)" [maxLength]="10"
