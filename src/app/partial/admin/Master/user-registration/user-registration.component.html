@@ -7,68 +7,65 @@
 
   <vex-page-layout-content [class.container]="layoutCtrl.value === 'boxed'"
     [class.px-gutter]="layoutCtrl.value === 'fullwidth'" class="-mt-6">
-
-    <div class="my-3 card p-3 border-0 shadow-none">
-      <div class="flex gap-x-3">
-        <div>
-          <mat-form-field appearance="outline">
-            <mat-label>Select State</mat-label>
-            <mat-select>
-              <mat-option>None</mat-option>
-              <mat-option value="option1">Option 1</mat-option>
-              <mat-option value="option2">Option 2</mat-option>
-              <mat-option value="option3">Option 3</mat-option>
-            </mat-select>
-          </mat-form-field>
-        </div>
-        <div>
-          <mat-form-field appearance="outline">
-            <mat-label>Select Division</mat-label>
-            <mat-select>
-              <mat-option>None</mat-option>
-              <mat-option value="option1">Option 1</mat-option>
-              <mat-option value="option2">Option 2</mat-option>
-              <mat-option value="option3">Option 3</mat-option>
-            </mat-select>
-          </mat-form-field>
-        </div>
-        <div>
-          <mat-form-field appearance="outline">
-            <mat-label>Select District</mat-label>
-            <mat-select>
-              <mat-option>None</mat-option>
-              <mat-option value="option1">Option 1</mat-option>
-              <mat-option value="option2">Option 2</mat-option>
-              <mat-option value="option3">Option 3</mat-option>
-            </mat-select>
-          </mat-form-field>
-        </div>
-        <div>
-          <mat-form-field appearance="outline">
-            <mat-label>Select Taluka</mat-label>
-            <mat-select>
-              <mat-option>None</mat-option>
-              <mat-option value="option1">Option 1</mat-option>
-              <mat-option value="option2">Option 2</mat-option>
-              <mat-option value="option3">Option 3</mat-option>
-            </mat-select>
-          </mat-form-field>
-        </div>
-        <div class="flex-auto">
-          <mat-form-field class="w-60" appearance="outline">
-            <mat-label>Search by Name/Mob. No.</mat-label>
-            <input ty matInput placeholder="Search by Name/Mob. No.">
-          </mat-form-field>
-        </div>
-        <div>
-          <button class="rounded-full bg-gray-300 text-black" mat-raised-button type="button">
-            <mat-icon class="ltr:-ml-1 rtl:-mr-1 ltr:mr-2 rtl:ml-2" svgIcon="mat:search"></mat-icon>
-            <span>Search</span>
-          </button>
-        </div>
-
+<form  [formGroup]="filterForm" (ngSubmit)="filterData()">
+  <div class="my-3 card p-3 border-0 shadow-none">
+    <div class="flex gap-x-3">
+      <div>
+        <mat-form-field [appearance]=configService.matFormFieldFilter>
+          <mat-label>Select State</mat-label>
+          <mat-select formControlName="stateId"
+          (selectionChange)="getDivision(filterForm.value.stateId);clearDropdown('state')">
+          <mat-option *ngFor="let state of stateArray" [value]="state.id">{{ state.state }}
+          </mat-option>
+      </mat-select>
+        </mat-form-field>
       </div>
+      <div>
+        <mat-form-field  [appearance]=configService.matFormFieldFilter>
+          <mat-label>Select Division</mat-label>
+          <mat-select formControlName="divisionId" [disabled]='!filterForm.value.stateId'
+          (selectionChange)="getDistrict(filterForm.value.divisionId);clearDropdown('division');">
+          <mat-option *ngFor="let division of divisionArray;" [value]="division.id">{{
+              division.division}}</mat-option>
+      </mat-select>
+        </mat-form-field>
+      </div>
+      <div>
+        <mat-form-field  [appearance]=configService.matFormFieldFilter>
+          <mat-label>Select District</mat-label>
+          <mat-select formControlName="districtId" [disabled]="!filterForm.value.divisionId"
+          (selectionChange)="getTaluka(filterForm.value.districtId);clearDropdown('district');">
+          <mat-option *ngFor="let district of districtArray" [value]="district.id">
+              {{district.district}}</mat-option>
+      </mat-select>
+        </mat-form-field>
+      </div>
+      <div>
+        <mat-form-field  [appearance]=configService.matFormFieldFilter>
+          <mat-label>Select Taluka</mat-label>
+          <mat-select formControlName="talukaId" [disabled]='!filterForm.value.districtId'>
+            <mat-option *ngFor="let taluka of talukaArray" [value]="taluka.id">{{taluka.taluka}}
+            </mat-option>
+        </mat-select>
+        </mat-form-field>
+      </div>
+      <div class="flex-auto">
+        <mat-form-field class="w-60"  [appearance]=configService.matFormFieldFilter>
+          <mat-label>Search by Name/Mob. No.</mat-label>
+          <input ty matInput placeholder="Search by Name/Mob. No." formControlName="search">
+        </mat-form-field>
+      </div>
+      <div>
+        <button type="submit" class="rounded-full bg-gray-300 text-black" mat-raised-button type="button">
+          <mat-icon class="ltr:-ml-1 rtl:-mr-1 ltr:mr-2 rtl:ml-2" svgIcon="mat:search"></mat-icon>
+          <span>Search</span>
+        </button>
+      </div>
+
     </div>
+  </div>
+</form>
+  
 
     <div class="card overflow-auto">
       <div class="bg-app-bar px-6 h-16 border-b sticky left-0 flex items-center">     

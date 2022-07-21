@@ -8,15 +8,17 @@ import { MatSelectChange } from '@angular/material/select';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 //@ts-ignore
-import { Observable, ReplaySubject } from 'rxjs';
+import { Observable, ReplaySubject, Subscription } from 'rxjs';
 import { fadeInUp400ms } from 'src/@vex/animations/fade-in-up.animation';
 import { stagger40ms } from 'src/@vex/animations/stagger.animation';
 import { TableColumn } from 'src/@vex/interfaces/table-column.interface';
 import { ConfirmationDialogComponent } from 'src/app/core/dialogs/confirmation-dialog/confirmation-dialog.component';
 import { ApiService } from 'src/app/core/services/api.service';
 import { CommonService } from 'src/app/core/services/common.service';
+import { ConfigService } from 'src/app/core/services/config.service';
 import { ErrorsService } from 'src/app/core/services/errors.service';
 import { LocalstorageService } from 'src/app/core/services/localstorage.service';
+import { MasterService } from 'src/app/core/services/master.service';
 import { AddUserComponent } from './add-user/add-user.component';
 import { UserRegistration } from './user-registration.model';
 
@@ -63,12 +65,19 @@ export class UserRegistrationComponent implements OnInit {
 
   filterForm!: FormGroup;
   totalRows: number;
-
+  subscription!: Subscription;
+  divisionArray= [];
+  stateArray=[];
+  districtArray=[];
+  dropDownSelFlag: boolean = true;
+  talukaArray: any[];
   constructor(public dialog: MatDialog,
     private apiService: ApiService, private fb: FormBuilder,
     public commonService: CommonService,
     private localstorageService: LocalstorageService,
-    private error: ErrorsService) { }
+    private error: ErrorsService,
+    private masterService:MasterService,
+    public configService:ConfigService) { }
 
   get visibleColumns() {
     return this.columns.filter(column => column.visible).map(column => column.property);
@@ -90,6 +99,7 @@ export class UserRegistrationComponent implements OnInit {
       talukaId: [0],
       search: [''],
     });
+    this.getstateData()
   }
   createUser(): void {
     //@ts-ignore
@@ -228,4 +238,84 @@ export class UserRegistrationComponent implements OnInit {
     })
   }
   // ------------- user block and unblock End  -----------------//
+  // --------- filter code  start------------------//
+  filterData() {
+    this.pageNumber = 1;
+    this.getData();
+  }
+
+    //........ get state Array .....//
+    getstateData() {
+      this.stateArray = [];
+      this.subscription = this.masterService.getState().subscribe({
+        next: (response: any) => {
+          let stateArray = response;
+          stateArray.length > 1 ? this.stateArray.push({ state: "All State", id: 0 }, ...response) : this.stateArray = response;
+          stateArray.length == 1 || this.dropDownSelFlag ? (this.filterForm.controls['stateId'].setValue(this.apiService.stateId), this.getDivision(this.apiService.stateId)) : '';
+        },
+        error: (err => { this.error.handelError(err) })
+      })
+    }
+  
+    //........ Division Array ......//
+    getDivision(stateId: number) {
+      this.divisionArray = [];
+      this.subscription =  this.masterService.getDivisionByStateId(stateId || 0).subscribe({
+        next: (response: any) => {
+          let divisionArray = response;
+          divisionArray.length > 1 ? this.divisionArray.push({ id: 0, division: "All Division" }, ...response) : this.divisionArray = response;
+          divisionArray.length == 1 || this.dropDownSelFlag ? (this.filterForm.controls['divisionId'].setValue(this.divisionArray[0].id), this.getDistrict(this.divisionArray[0].id)) : '';
+        },
+        error: (err => { this.error.handelError(err) })
+      })
+    }
+  
+    //....... get distrcit  array ..... //
+    getDistrict(divId: any) {
+      console.log(divId)
+      this.districtArray = [];
+      this.subscription =  this.masterService.getDistrictByDivisionId(divId || 0).subscribe({
+        next: (response: any) => {
+          let districtArray = response;
+          districtArray.length > 1 ? this.districtArray.push({ id: 0, district: "All District" }, ...response) : this.districtArray = response;
+          districtArray.length == 1 || this.dropDownSelFlag ? (this.filterForm.controls['districtId'].setValue(this.districtArray[0].id), this.getTaluka(this.districtArray[0].id)) : '';
+        },
+        error: (err => { this.error.handelError(err) })
+      })
+    }
+  
+    //......... get taluka Array ......//
+  
+    getTaluka(districtId: any) {
+      console.log(districtId)
+      this.talukaArray = [];
+      this.subscription =  this.masterService.getTaluka(districtId || 0).subscribe({
+        next: (response: any) => {
+          let talukaArray = response;
+          talukaArray.length > 1 ? this.talukaArray.push({ id: 0, taluka: "All Taluka" }, ...response) : this.talukaArray = response;
+          talukaArray.length == 1 || this.dropDownSelFlag ? (this.filterForm.controls['districtId'].setValue(this.talukaArray[0].id)) : '';
+        },
+        error: (err => { this.error.handelError(err) })
+      })
+    }
+    //...... Drop Down clear  ........//
+    clearDropdown(flag: string) {
+      // this.defaultCallTableFlag = false;
+      // this.dropDownSelFlag = false;
+      switch (flag) {
+        case 'state':
+          this.filterForm.controls['divisionId'].setValue(0);
+          this.filterForm.controls['districtId'].setValue(0);
+          this.filterForm.controls['talukaId'].setValue(0);
+          break;
+        case 'division':
+          this.filterForm.controls['districtId'].setValue(0);
+          this.filterForm.controls['talukaId'].setValue(0);
+          break;
+        case 'district':
+          this.filterForm.controls['talukaId'].setValue(0);
+          break;
+        default:
+      }
+    }
 }
