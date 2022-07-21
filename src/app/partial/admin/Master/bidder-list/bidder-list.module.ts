@@ -8,11 +8,13 @@ import { PageLayoutModule } from 'src/@vex/components/page-layout/page-layout.mo
 import { ReactiveFormsModule } from '@angular/forms';
 import { BreadcrumbsModule } from 'src/@vex/components/breadcrumbs/breadcrumbs.module';
 import { SecondaryToolbarModule } from 'src/@vex/components/secondary-toolbar/secondary-toolbar.module';
+import { DashPipe } from 'src/app/core/pipes/dash.pipe';
 
 
 @NgModule({
   declarations: [
-    BidderListComponent
+    BidderListComponent,
+    DashPipe
   ],
   imports: [
     CommonModule,
