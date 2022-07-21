@@ -37,7 +37,8 @@
             ],
             "styles": [
               "src/styles.scss",
-              "src/@vex/styles/tailwind.scss"
+              "src/@vex/styles/tailwind.scss",
+              "src/assets/css/global.css"
             ],
             "scripts": [],
             "allowedCommonJsDependencies": [

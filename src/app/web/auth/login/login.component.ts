@@ -31,8 +31,12 @@ export class LoginComponent implements OnInit {
   otp: any = new FormControl('');
   setPasswodPage: boolean = false;
   otpFlag: boolean = false;
-  visible: boolean = false;
-  ipAddress: string;
+
+  get mobileNoControls() { return this.mobileNo.controls }
+  get otpNoControls() { return this.otp.controls }
+
+  inputType = 'password';
+  visible = false;
 
   constructor(
     private fb: FormBuilder,

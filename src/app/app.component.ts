@@ -5,15 +5,16 @@ import { DOCUMENT } from '@angular/common';
 import { Platform } from '@angular/cdk/platform';
 import { NavigationService } from '../@vex/services/navigation.service';
 import { LayoutService } from '../@vex/services/layout.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
 import { SplashScreenService } from '../@vex/services/splash-screen.service';
 import { VexConfigName } from '../@vex/config/config-name.model';
 import { ColorSchemeName } from '../@vex/config/colorSchemeName';
 import { MatIconRegistry, SafeResourceUrlWithIconOptions } from '@angular/material/icon';
-import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { DomSanitizer, SafeResourceUrl, Title } from '@angular/platform-browser';
 import { ColorVariable, colorVariables } from '../@vex/components/config-panel/color-variables';
 import { LocalstorageService } from './core/services/localstorage.service';
+import { filter } from 'rxjs';
 
 @Component({
   selector: 'vex-root',
@@ -21,20 +22,25 @@ import { LocalstorageService } from './core/services/localstorage.service';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
+
   constructor(private configService: ConfigService,
     private renderer: Renderer2,
+    private router: Router,
     private platform: Platform,
     @Inject(DOCUMENT) private document: Document,
     @Inject(LOCALE_ID) private localeId: string,
     //@ts-ignore
     private layoutService: LayoutService,
     private route: ActivatedRoute,
+    private activatedRoute: ActivatedRoute,
     private navigationService: NavigationService,
      //@ts-ignore
     private splashScreenService: SplashScreenService,
     private LocalstorageService: LocalstorageService,
     private readonly matIconRegistry: MatIconRegistry,
+    private titleService: Title,
     private readonly domSanitizer: DomSanitizer) {
+
     Settings.defaultLocale = this.localeId;
 
     if (this.platform.BLINK) {
@@ -65,26 +71,6 @@ export class AppComponent {
       }
     );
 
-    /**
-     * Customize the template to your needs with the ConfigService
-     * Example:
-     *  this.configService.updateConfig({
-     *    sidenav: {
-     *      title: 'Custom App',
-     *      imageUrl: '//placehold.it/100x100',
-     *      showCollapsePin: false
-     *    },
-     *    footer: {
-     *      visible: false
-     *    }
-     *  });
-     */
-
-    /**
-     * Config Related Subscriptions
-     * You can remove this if you don't need the functionality of being able to enable specific configs with queryParams
-     * Example: example.com/?layout=apollo&style=default
-     */
     this.route.queryParamMap.subscribe(queryParamMap => {
       if (queryParamMap.has('layout')) {
         this.configService.setConfig(queryParamMap.get('layout') as VexConfigName);
@@ -118,64 +104,26 @@ export class AppComponent {
         });
       }
     });
+    this.setTitle(); // set web page Tilte
+  }
 
-    /**
-     * Add your own routes here
-     */
-    if (this.LocalstorageService.checkUserIsLoggedIn()) {
-      let loginPages = [];
-      let data = this.LocalstorageService.getAllPageName();
-      let items: any = data.filter((ele: any) => {
-        if (ele.isSideBarMenu == true) {
-          return ele;
-        }
-      });
 
-      items.forEach((item: any) => {
-        let existing: any = loginPages.filter((v: any) => {
-          return v.module == item.module;
-        });
-        if (existing.length) {
-          let existingIndex: any = loginPages.indexOf(existing[0]);
-          loginPages[existingIndex].pageURL = loginPages[existingIndex].pageURL.concat(item.pageURL);
-          loginPages[existingIndex].pageName = loginPages[existingIndex].pageName.concat(item.pageName);
-        } else {
-          if (typeof item.pageName == 'string')
-            item.pageURL = [item.pageURL];
-          item.pageName = [item.pageName];
-          loginPages.push(item);
-        }
-      });
-
-      let pageDataTransform = loginPages;
-
-      pageDataTransform.map((ele: any) => {
-        if (ele.isSideBarMenu == true) {
-          if (ele.pageURL.length > 1) {
-            ele['type'] = 'dropdown',
-              ele['label'] = ele?.module,
-              ele['icon'] = 'mat:' + ele?.menuIcon
-            ele['children'] = [];
-            ele.pageURL.find((item: any, i: any) => {
-              ele['children'].push(
-                {
-                  type: 'link',
-                  label: ele?.pageName[i],
-                  route: item
-                })
-            })
-          } else {
-            ele['type'] = 'link',
-              ele['label'] = ele?.pageName,
-              ele['route'] = '/' + ele?.pageURL,
-              ele['icon'] = 'mat:' + ele?.menuIcon
-          }
-          return ele
-        }
+  setTitle() {
+    this.router.events.pipe(filter(event => event instanceof NavigationEnd),  // set title dynamic
+    ).subscribe(() => {
+      var rt = this.getActivatedRoute(this.activatedRoute);
+      let titleName = rt.data._value.breadcrumb[rt?.data._value?.breadcrumb?.length - 1].title;
+      rt.data.subscribe(() => {
+        this.titleService.setTitle(titleName)
       })
+    });
+  }
 
-      this.navigationService.items = pageDataTransform;
+  getActivatedRoute(activatedRoute: ActivatedRoute): any {
+    if (activatedRoute.firstChild) {
+      return this.getActivatedRoute(activatedRoute.firstChild);
+    } else {
+      return activatedRoute;
     }
-
   }
 }
