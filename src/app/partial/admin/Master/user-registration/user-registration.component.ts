@@ -66,7 +66,8 @@ export class UserRegistrationComponent implements OnInit {
   constructor(public dialog: MatDialog,
     private apiService: ApiService, private fb: FormBuilder,
     public commonService: CommonService,
-    private error: ErrorsService) { }
+    private error: ErrorsService) { 
+    }
 
   get visibleColumns() {
     return this.columns.filter(column => column.visible).map(column => column.property);
@@ -92,7 +93,7 @@ export class UserRegistrationComponent implements OnInit {
   createUser(): void {
     //@ts-ignore
     const dialogRef = this.dialog.open(AddUserComponent, {
-      width: '250px',
+      width: 'auto',
       disableClose: false,
       data: '',
     });
