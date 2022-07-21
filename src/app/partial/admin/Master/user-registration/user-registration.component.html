@@ -63,28 +63,8 @@
         <!--- Note that these columns can be defined in any order.
                 The actual rendered columns are set as a property on the row definition" -->
 
-        <!-- Checkbox Column -->
-        <ng-container matColumnDef="checkbox">
-          <th *matHeaderCellDef mat-header-cell>
-            <mat-checkbox (change)="$event ? masterToggle() : null" [checked]="selection.hasValue() && isAllSelected()"
-              [indeterminate]="selection.hasValue() && !isAllSelected()" color="primary">
-            </mat-checkbox>
-          </th>
-          <td *matCellDef="let row" class="w-4" mat-cell>
-            <mat-checkbox (change)="$event ? selection.toggle(row) : null" (click)="$event.stopPropagation()"
-              [checked]="selection.isSelected(row)" color="primary">
-            </mat-checkbox>
-          </td>
-        </ng-container>
+        
 
-        <!-- Image Column -->
-        <ng-container matColumnDef="image">
-          <th *matHeaderCellDef mat-header-cell></th>
-          <td *matCellDef="let row" class="w-8 min-w-8 pr-0" mat-cell>
-            {{row?.imageSrc}}
-            <img [src]="row['imageSrc']" class="avatar h-8 w-8 align-middle">
-          </td>
-        </ng-container>
 
         <!-- Text Columns -->
         <ng-container *ngFor="let column of columns; trackBy: trackByProperty">
@@ -94,31 +74,7 @@
           </ng-container>
         </ng-container>
 
-        <!-- Contact Column -->
-        <!-- <ng-container matColumnDef="contact">
-            <th *matHeaderCellDef mat-header-cell mat-sort-header></th>
-            <td *matCellDef="let row" mat-cell>
-              <div class="flex">
-                <a (click)="$event.stopPropagation()"
-                   class="w-8 h-8 leading-none flex items-center justify-center hover:bg-hover text-primary bg-primary/10"
-                   mat-icon-button>
-                  <mat-icon class="icon-sm" svgIcon="mat:phone"></mat-icon>
-                </a>
-  
-                <a (click)="$event.stopPropagation()"
-                   class="w-8 h-8 leading-none flex items-center justify-center ml-1 hover:bg-hover text-teal bg-teal-light"
-                   mat-icon-button>
-                  <mat-icon class="icon-sm" svgIcon="mat:mail"></mat-icon>
-                </a>
-  
-                <a (click)="$event.stopPropagation()"
-                   class="w-8 h-8 leading-none flex items-center justify-center ml-1 hover:bg-hover text-green bg-green-light"
-                   mat-icon-button>
-                  <mat-icon class="icon-sm" svgIcon="mat:map"></mat-icon>
-                </a>
-              </div>
-            </td>
-          </ng-container> -->
+      
 
         <!-- Label Column -->
         <ng-container matColumnDef="labels">
@@ -129,24 +85,17 @@
                 class="rounded px-2 py-1 font-medium text-xs flex-none">
                 {{ label.text }}
               </div>
-              <div (click)="labelSelect.open()"
+              <div 
                 class="text-secondary bg-base text-hint cursor-pointer hover:bg-hover flex-none flex items-center justify-center">
                 <mat-icon class="icon-sm" svgIcon="mat:add"></mat-icon>
               </div>
-              <mat-select #labelSelect="matSelect" (selectionChange)="onLabelChange($event, row)" [value]="row.labels"
-                class="invisible w-0 h-0 text-sm shrink" multiple>
-                <!-- <mat-option *ngFor="let label of labels" [value]="label">
-                    <div [ngClass]="label.previewClass"
-                         class="h-6 w-6 align-middle ltr:mr-2 rtl:ml-2 rounded inline-block"></div>
-                    <span>{{ label.text }}</span>
-                  </mat-option> -->
-              </mat-select>
+              
             </div>
           </td>
         </ng-container>
 
         <!-- Action Column -->
-        <ng-container matColumnDef="actions">
+        <ng-container matColumnDef="Action">
           <th *matHeaderCellDef mat-header-cell mat-sort-header></th>
           <td *matCellDef="let row" class="w-10 text-secondary" mat-cell>
             <button (click)="$event.stopPropagation()" [matMenuTriggerData]="{ customer: row }"
