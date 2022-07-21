@@ -11,7 +11,7 @@ import { DatePipe, TitleCasePipe } from '@angular/common';
 import { AngularMaterialModule } from './core/angular-material/angular-material.module';
 import { ConfirmationDialogComponent } from './core/dialogs/confirmation-dialog/confirmation-dialog.component';
 import { SuccessDialogComponent } from './core/dialogs/success-dialog/success-dialog.component';
-
+import { PipeModule } from './core/pipes/pipe.module';
 @NgModule({
   declarations: [AppComponent, ConfirmationDialogComponent, SuccessDialogComponent],
   imports: [
@@ -22,7 +22,8 @@ import { SuccessDialogComponent } from './core/dialogs/success-dialog/success-di
     AngularMaterialModule,
     // Vex
     VexModule,
-    CustomLayoutModule
+    PipeModule,
+    CustomLayoutModule,
   ],
   providers: [DatePipe, TitleCasePipe],
   bootstrap: [AppComponent]

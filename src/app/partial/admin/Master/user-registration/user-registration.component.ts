@@ -94,7 +94,7 @@ export class UserRegistrationComponent implements OnInit {
   createUser(): void {
     //@ts-ignore
     const dialogRef = this.dialog.open(AddUserComponent, {
-      width: '250px',
+      width: 'auto',
       disableClose: false,
       data: '',
     });
