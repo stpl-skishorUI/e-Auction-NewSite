@@ -163,5 +163,6 @@ export class BidderListComponent implements OnInit {
 
   createBidder() {
 
+    
   }
 }
