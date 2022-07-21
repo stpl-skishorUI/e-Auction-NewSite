@@ -1,6 +1,5 @@
 import {
   ChangeDetectionStrategy,
-  ChangeDetectorRef,
   Component,
   ElementRef,
   Input,
@@ -53,8 +52,7 @@ export class ChartComponent implements OnInit, OnChanges {
   public chart: ApexCharts;
   @ViewChild('chart', { static: true }) private chartElement: ElementRef;
 
-  constructor(private cd: ChangeDetectorRef,
-              private ngZone: NgZone) {}
+  constructor( private ngZone: NgZone) {}
 
 
   ngOnInit() {

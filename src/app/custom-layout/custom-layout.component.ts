@@ -3,7 +3,7 @@ import { LayoutService } from '../../@vex/services/layout.service';
 import { filter, map, startWith } from 'rxjs/operators';
 import { NavigationEnd, Router } from '@angular/router';
 import { checkRouterChildsData } from '../../@vex/utils/check-router-childs-data';
-import { BreakpointObserver } from '@angular/cdk/layout';
+// import { BreakpointObserver } from '@angular/cdk/layout';
 import { ConfigService } from '../../@vex/config/config.service';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { SidebarComponent } from '../../@vex/components/sidebar/sidebar.component';
@@ -31,7 +31,7 @@ export class CustomLayoutComponent implements OnInit {
 
   constructor(private layoutService: LayoutService,
               private configService: ConfigService,
-              private breakpointObserver: BreakpointObserver,
+              // private breakpointObserver: BreakpointObserver,
               private router: Router) { }
 
   ngOnInit() {

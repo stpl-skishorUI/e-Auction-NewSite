@@ -1,5 +1,5 @@
 import { DatePipe } from '@angular/common';
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MAT_FORM_FIELD_DEFAULT_OPTIONS, MatFormFieldDefaultOptions } from '@angular/material/form-field';
 import { fadeInUp400ms } from 'src/@vex/animations/fade-in-up.animation';
@@ -9,17 +9,11 @@ import { CommonService } from 'src/app/core/services/common.service';
 import { ConfigService } from 'src/app/core/services/config.service';
 import { ErrorsService } from 'src/app/core/services/errors.service';
 import { LocalstorageService } from 'src/app/core/services/localstorage.service';
-import { TranslateService } from 'src/app/core/services/translate.service';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { UntypedFormControl } from '@angular/forms';
-import { MatDialog } from '@angular/material/dialog';
-import { MatSelectChange } from '@angular/material/select';
-import { filter, Observable, of, ReplaySubject } from 'rxjs';
-import { TableColumn } from 'src/@vex/interfaces/table-column.interface';
 import { SelectionModel } from '@angular/cdk/collections';
-import { untilDestroyed } from '@ngneat/until-destroy';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 
@@ -68,17 +62,11 @@ export class HomeComponent implements OnInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
-
-  constructor(private dialog: MatDialog, private commonService: CommonService, private datePipe: DatePipe,
+  constructor(private commonService: CommonService, private datePipe: DatePipe,
     public localstorageService: LocalstorageService,
     private error: ErrorsService, private apiService: ApiService, private fb: FormBuilder, private configService: ConfigService) {
   }
-  /**
-   * Example on how to get data and pass it to the table - usually you would want a dedicated service with a HTTP request for this
-   * We are simulating this request here.
-   */
-
-
+  
   ngOnInit() {
     this.defulatForm();
     this.bindTable();
@@ -159,7 +147,7 @@ export class HomeComponent implements OnInit {
     return parseInt(Difference_In_Days.toString());
   }
 
-  openEventDetailsDialog(data: object) {
+  openEventDetailsDialog(_data: object) {
 
   }
 
@@ -186,7 +174,6 @@ export class HomeComponent implements OnInit {
               }
             })
           }
-
           this.eventDetails = new MatTableDataSource(tempEventDetailArray);
           // this.spinner.hide();
         } else {
@@ -201,14 +188,13 @@ export class HomeComponent implements OnInit {
     });
   }
 
-  plotProfile(id: any) {
+  plotProfile(_id: any) {
 
   }
 
   isparticipateEvent(event: MatCheckboxChange | any, element: any, isparticipateEvent?: boolean) {
     let checkboxFlag;
     isparticipateEvent == true ? checkboxFlag = true : checkboxFlag = event.source.checked;
-
     let obj: any;
     obj = {
       createdBy: this.checkUserLogFlag == true ? this.localstorageService.userId() : 0,
@@ -225,7 +211,6 @@ export class HomeComponent implements OnInit {
       isEMD_SecurityDepositPaid: false,
       biddingId: ""
     }
-
     let tempobj = {
       createdBy: this.checkUserLogFlag == true ? this.localstorageService.userId() : 0,
       modifiedBy: this.checkUserLogFlag == true ? this.localstorageService.userId() : 0,
@@ -247,7 +232,6 @@ export class HomeComponent implements OnInit {
       } else {
         this.participatedBidderEventlist.push(tempobj);
       }
-
     } else {
       let eventIdIndex = this.commonService.findIndexOfArrayObject(this.participatedBidderEventlist, 'eventId', element.eventId);
       let eventLotIdIdIndex = this.commonService.findIndexOfArrayObject(this.participatedBidderEventlist[eventIdIndex].participatedBidderEventslst, 'eventLotId', element.id);

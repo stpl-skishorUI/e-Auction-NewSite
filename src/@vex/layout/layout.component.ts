@@ -1,5 +1,4 @@
-import { AfterViewInit, ChangeDetectorRef, Component, Inject, Input, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { BreakpointObserver } from '@angular/cdk/layout';
+import { AfterViewInit, Component, Inject, Input, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { LayoutService } from '../services/layout.service';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { MatSidenav, MatSidenavContainer } from '@angular/material/sidenav';
@@ -48,12 +47,11 @@ export class LayoutComponent implements OnInit, AfterViewInit {
   @ViewChild('sidenav', { static: true }) sidenav: MatSidenav;
   @ViewChild(MatSidenavContainer, { static: true }) sidenavContainer: MatSidenavContainer;
 
-  constructor(private cd: ChangeDetectorRef,
-              private breakpointObserver: BreakpointObserver,
-              private layoutService: LayoutService,
-              private configService: ConfigService,
-              private router: Router,
-              @Inject(DOCUMENT) private document: Document) { }
+  constructor(
+    private layoutService: LayoutService,
+    private configService: ConfigService,
+    private router: Router,
+    @Inject(DOCUMENT) private document: Document) { }
 
   ngOnInit() {
     /**
@@ -85,7 +83,7 @@ export class LayoutComponent implements OnInit, AfterViewInit {
     this.router.events.pipe(
       filter(event => event instanceof NavigationEnd),
       withLatestFrom(this.isDesktop$),
-      filter(([event, matches]) => !matches),
+      filter(([_event, matches]) => !matches),
       untilDestroyed(this)
     ).subscribe(() => this.sidenav.close());
   }

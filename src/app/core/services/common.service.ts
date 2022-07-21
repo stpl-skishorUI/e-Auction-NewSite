@@ -6,8 +6,7 @@ import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { Observable, interval } from 'rxjs';
 import { map, pairwise } from 'rxjs/operators';
 import { filter } from 'rxjs';
-import { MatDialog } from '@angular/material/dialog';
-import { ApiService } from './api.service';
+
 
 @Injectable({
   providedIn: 'root'
@@ -24,8 +23,6 @@ export class CommonService {
     private datePipe: DatePipe,
     private router: Router,
     private route: ActivatedRoute,
-    private dialog: MatDialog,
-    private apiService: ApiService,
     public location: Location
   ) {
     this.clock = interval(1000).pipe(map(() => new Date()))

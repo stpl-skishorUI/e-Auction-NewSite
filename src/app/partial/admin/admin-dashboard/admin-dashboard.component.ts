@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { defaultChartOptions } from '../../../../@vex/utils/default-chart-options';
 import { TableColumn } from '../../../../@vex/interfaces/table-column.interface';
 

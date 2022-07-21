@@ -26,9 +26,11 @@ export class AppComponent {
     private platform: Platform,
     @Inject(DOCUMENT) private document: Document,
     @Inject(LOCALE_ID) private localeId: string,
+    //@ts-ignore
     private layoutService: LayoutService,
     private route: ActivatedRoute,
     private navigationService: NavigationService,
+     //@ts-ignore
     private splashScreenService: SplashScreenService,
     private LocalstorageService: LocalstorageService,
     private readonly matIconRegistry: MatIconRegistry,

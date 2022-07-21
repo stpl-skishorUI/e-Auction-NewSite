@@ -22,5 +22,11 @@ export class ConfigService {
   };
 
   //--------------------------------------------------google map setting end heare----------------------------------------------------//
+
+  // ----------------------send the  ip address to api----------------------
+  
+  ipAddressUrl:string="https://api.ipify.org?format=json";
+
+
 }
 

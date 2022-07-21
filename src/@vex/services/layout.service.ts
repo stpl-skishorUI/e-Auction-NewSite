@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { Router } from '@angular/router';
+
 import { map } from 'rxjs/operators';
 import { BreakpointObserver } from '@angular/cdk/layout';
 
@@ -50,7 +50,7 @@ export class LayoutService {
 
   isMobile = () => this.breakpointObserver.isMatched(`(max-width: 599px)`);
 
-  constructor(private router: Router,
+  constructor(
               private breakpointObserver: BreakpointObserver) { }
 
   openQuickpanel() {

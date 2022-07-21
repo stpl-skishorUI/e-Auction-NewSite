@@ -1,12 +1,10 @@
-import { Component, Inject } from '@angular/core';
+import { Component } from '@angular/core';
 import { ConfigService } from '../../config/config.service';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { map } from 'rxjs/operators';
-import { LayoutService } from '../../services/layout.service';
 import { MatRadioChange } from '@angular/material/radio';
 import { VexConfigName } from '../../config/config-name.model';
 import { ColorVariable, colorVariables } from './color-variables';
-import { DOCUMENT } from '@angular/common';
 import { ColorSchemeName } from '../../config/colorSchemeName';
 import { Observable } from 'rxjs';
 import { VexConfig } from '../../config/vex-config.interface';
@@ -80,8 +78,8 @@ export class ConfigPanelComponent {
   roundedButtonValue: CSSValue = defaultRoundedButtonBorderRadius;
 
   constructor(private configService: ConfigService,
-              private layoutService: LayoutService,
-              @Inject(DOCUMENT) private document: Document) { }
+              
+             ) { }
 
   setConfig(layout: VexConfigName, colorScheme: ColorSchemeName): void {
     this.configService.setConfig(layout);
