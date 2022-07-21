@@ -1,8 +1,9 @@
 import { SelectionModel } from '@angular/cdk/collections';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, UntypedFormControl } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatFormFieldDefaultOptions, MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
+import { MatPaginator } from '@angular/material/paginator';
 import { MatSelectChange } from '@angular/material/select';
 import { MatTableDataSource } from '@angular/material/table';
 import { Observable, ReplaySubject } from 'rxjs';
@@ -36,7 +37,7 @@ import { UserRegistration } from './user-registration.model';
   ],
 })
 export class UserRegistrationComponent implements OnInit {
-
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
   layoutCtrl = new UntypedFormControl('boxed');
   selection = new SelectionModel<UserRegistration>(true, []);
   searchCtrl = new UntypedFormControl();
@@ -47,7 +48,7 @@ export class UserRegistrationComponent implements OnInit {
   @Input()
   pageNumber: number = 1;
   columns: TableColumn<UserRegistration>[] = [
-    { label: 'Sr.No', property: '', type: 'checkbox', visible: false },
+    { label: 'Sr.No', property: 'srNo', type: 'button', visible: true },
     { label: 'Name', property: 'name', type: 'text', visible: true, cssClasses: ['font-medium'] },
     { label: 'Role', property: 'roleType', type: 'text', visible: true },
     { label: 'Mobile', property: 'mobileNo', type: 'text', visible: true },
@@ -59,6 +60,7 @@ export class UserRegistrationComponent implements OnInit {
   ];
 
   filterForm: any;
+  totalRows: any;
 
   constructor(public dialog: MatDialog,
     private apiService: ApiService, private fb: FormBuilder,
@@ -132,14 +134,15 @@ export class UserRegistrationComponent implements OnInit {
 
   getData() {
     let formValue = this.filterForm.value;
-    let paramList: string = "?StateId=" + 0 + "&DivisionId=" + 0 + "&SubDivisionId=0&DistrictId=" + 0 + "&TalukaId=" + 0 + "&pageno=" + this.pageNumber + "&pagesize=" + 10
+    let paramList: string = "?StateId=" + 0 + "&DivisionId=" + 0 + "&SubDivisionId=0&DistrictId=" + 0 + "&TalukaId=" + 0 + "&pageno=" + this.pageNumber + "&pagesize=" + this.pageSize
     this.commonService.checkDataType(formValue.search) == true ? paramList += "&Textsearch=" + formValue.search : '';
     this.apiService.setHttp('get', "user-registration/GetAll" + paramList, false, false, false, 'masterUrl');
     this.apiService.getHttp().subscribe({
       next: (res: any) => {
         if (res.statusCode === "200") {
-          console.log(res.responseData.responseData1);
           this.dataSource = new MatTableDataSource(res.responseData.responseData1);
+          this.totalRows = res.responseData.responseData2.pageCount;
+          this.totalRows > 10 && this.pageNumber==1 ? this.paginator?.firstPage() : '';
         } else {
           this.dataSource = [];
           if (res.statusCode != "404") {
@@ -149,6 +152,11 @@ export class UserRegistrationComponent implements OnInit {
       },
       error: ((error: any) => { this.error.handelError(error.status) })
     });
+  }
+  // pagination code start here //
+  pageChanged(event: any) {
+    this.pageNumber = event.pageIndex + 1;
+    this.getData();
   }
 
 }
