@@ -16,6 +16,7 @@ import { ConfirmationDialogComponent } from 'src/app/core/dialogs/confirmation-d
 import { ApiService } from 'src/app/core/services/api.service';
 import { CommonService } from 'src/app/core/services/common.service';
 import { ErrorsService } from 'src/app/core/services/errors.service';
+import { LocalstorageService } from 'src/app/core/services/localstorage.service';
 import { AddUserComponent } from './add-user/add-user.component';
 import { UserRegistration } from './user-registration.model';
 
@@ -66,6 +67,7 @@ export class UserRegistrationComponent implements OnInit {
   constructor(public dialog: MatDialog,
     private apiService: ApiService, private fb: FormBuilder,
     public commonService: CommonService,
+    private localstorageService:LocalstorageService,
     private error: ErrorsService) { }
 
   get visibleColumns() {
@@ -92,17 +94,13 @@ export class UserRegistrationComponent implements OnInit {
   createUser(): void {
     //@ts-ignore
     const dialogRef = this.dialog.open(AddUserComponent, {
-      width: '250px',
+      width: 'auto',
       disableClose: false,
       data: '',
     });
   }
 
-  deleteCustomers(_customers: UserRegistration[]) {
-    // this.userRegistration.splice(this.userRegistration.findIndex((existingCustomer) => existingCustomer.id === customer.id), 1);
-    // this.selection.deselect(customers);
-    this.subject$.next(this.userRegistration);
-  }
+
 
   /** Whether the number of selected elements matches the total number of rows. */
   isAllSelected() {
@@ -163,7 +161,7 @@ export class UserRegistrationComponent implements OnInit {
   }
 
   // ---------------------- delete code start here ----------//
-  takeConfiramation(_id:any) {
+  takeConfiramation(ele:UserRegistration[]) {
     const dialog = this.dialog.open(ConfirmationDialogComponent, {
       width: '400px',
       data: { p1: 'Are you sure you want to delete this record ?', p2: '', cardTitle: 'Delete', successBtnText: 'Delete', dialogIcon: '', cancelBtnText: 'Cancel' },
@@ -171,13 +169,33 @@ export class UserRegistrationComponent implements OnInit {
     })
     dialog.afterClosed().subscribe(res => {
       if (res == 'Yes') {
-       
+        this.deleteUser(ele)
       }
     })
   }
 
-  deleteUser(){
-
+  deleteUser(ele:any) {
+    let obj = {
+      "id": ele.id,
+      'deletedBy': this.localstorageService.userId(),
+    }
+    this.apiService.setHttp('DELETE', "user-registration", false, JSON.stringify(obj), false, 'masterUrl');
+    this.apiService.getHttp().subscribe({
+      next: (res: any) => {
+        if (res.statusCode === "200") {
+          this.getData();
+          this.commonService.snackBar(res.statusMessage, 0);
+        } else {
+          if (res.statusCode != "404") {
+            this.commonService.checkDataType(res.statusMessage) == false ? this.error.handelError(res.statusCode) : this.commonService.snackBar(res.statusMessage, 1);
+          }
+        }
+      },
+      error: (err: any) => { this.error.handelError(err) }
+    })
+    
+    this.selection.deselect(ele);
+    this.subject$.next(this.userRegistration);
   }
   //------------- delete code end here ------------------//
 
