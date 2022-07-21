@@ -33,6 +33,7 @@ import {MatStepperModule} from '@angular/material/stepper';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import {MatBadgeModule} from '@angular/material/badge';
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
+import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 
 @NgModule({
   declarations: [],
@@ -48,7 +49,8 @@ import {MatButtonToggleModule} from '@angular/material/button-toggle';
     MatIconModule,
     MatDatepickerModule,
     MatCardModule,
-    MatChipsModule,MatButtonToggleModule,
+    MatChipsModule,
+    MatButtonToggleModule,
     MatExpansionModule,
     MatFormFieldModule,
     MatIconModule,
@@ -69,7 +71,8 @@ import {MatButtonToggleModule} from '@angular/material/button-toggle';
     MatProgressSpinnerModule,
     MatDividerModule,
     MatStepperModule,
-    MatBadgeModule
+    MatBadgeModule,
+    MatSlideToggleModule
   ],
   exports: [
     CommonModule,
@@ -88,7 +91,9 @@ import {MatButtonToggleModule} from '@angular/material/button-toggle';
     MatExpansionModule,
     MatFormFieldModule,
     MatIconModule,
-    MatInputModule,MatButtonToggleModule,
+    MatInputModule,
+    MatSlideToggleModule,
+    MatButtonToggleModule,
     MatMenuModule,
     MatPaginatorModule,
     MatRippleModule,

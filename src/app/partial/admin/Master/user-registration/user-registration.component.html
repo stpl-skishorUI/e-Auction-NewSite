@@ -63,7 +63,7 @@
         <!--- Note that these columns can be defined in any order.
                 The actual rendered columns are set as a property on the row definition" -->
 
-        
+
 
 
         <!-- Text Columns -->
@@ -74,34 +74,44 @@
           </ng-container>
         </ng-container>
 
-      
-
-        <!-- Label Column -->
-        <ng-container matColumnDef="labels">
-          <th *matHeaderCellDef class="uppercase" mat-header-cell mat-sort-header>Labels</th>
+        <!-- DSC STATUS Columm -->
+        <ng-container matColumnDef="isDsc">
+          <th *matHeaderCellDef class="uppercase" mat-header-cell mat-sort-header>DSC STATUS</th>
           <td *matCellDef="let row" mat-cell>
             <div (click)="$event.stopPropagation()" class="flex items-center gap-1">
-              <div *ngFor="let label of row.labels" [ngClass]="[label.textClass, label.bgClass]"
-                class="rounded px-2 py-1 font-medium text-xs flex-none">
-                {{ label.text }}
-              </div>
-              <div 
-                class="text-secondary bg-base text-hint cursor-pointer hover:bg-hover flex-none flex items-center justify-center">
-                <mat-icon class="icon-sm" svgIcon="mat:add"></mat-icon>
-              </div>
-              
+              <mat-slide-toggle [checked]="row?.isDsc"></mat-slide-toggle>
+            </div>
+          </td>
+        </ng-container>
+
+        <!-- block Column -->
+        <ng-container matColumnDef="isBlock">
+          <th *matHeaderCellDef class="uppercase" mat-header-cell mat-sort-header>Block /Unblock</th>
+          <td *matCellDef="let row" mat-cell>
+            <div (click)="$event.stopPropagation()" class="flex items-center gap-1">
+              <mat-slide-toggle [checked]="row?.isBlock"></mat-slide-toggle>
             </div>
           </td>
         </ng-container>
 
         <!-- Action Column -->
-        <ng-container matColumnDef="Action">
-          <th *matHeaderCellDef mat-header-cell mat-sort-header></th>
+        <ng-container matColumnDef="actions">
+          <th *matHeaderCellDef mat-header-cell mat-sort-header>ACTION</th>
           <td *matCellDef="let row" class="w-10 text-secondary" mat-cell>
-            <button (click)="$event.stopPropagation()" [matMenuTriggerData]="{ customer: row }"
-              [matMenuTriggerFor]="actionsMenu" mat-icon-button type="button">
-              <mat-icon svgIcon="mat:more_horiz"></mat-icon>
-            </button>
+            <div class="flex">
+
+              <a (click)="$event.stopPropagation()"
+                class="w-8 h-8 leading-none flex items-center justify-center ml-1 hover:bg-hover text-teal bg-teal-light"
+                mat-icon-button>
+                <mat-icon class="icon-sm" svgIcon="mat:edit"></mat-icon>
+              </a>
+
+              <a (click)="$event.stopPropagation()"
+                class="w-8 h-8 leading-none flex items-center justify-center ml-1 hover:bg-hover text-red bg-red-light"
+                mat-icon-button>
+                <mat-icon class="icon-sm" svgIcon="mat:delete_outline"></mat-icon>
+              </a>
+            </div>
           </td>
         </ng-container>
 
@@ -125,17 +135,4 @@
       {{ column.label }}
     </mat-checkbox>
   </button>
-</mat-menu>
-
-<mat-menu #actionsMenu="matMenu" xPosition="before" yPosition="below">
-  <ng-template let-customer="customer" matMenuContent>
-    <button mat-menu-item>
-      <mat-icon svgIcon="mat:edit"></mat-icon>
-      <span>Modify</span>
-    </button>
-    <button mat-menu-item>
-      <mat-icon svgIcon="mat:delete"></mat-icon>
-      <span>Delete</span>
-    </button>
-  </ng-template>
 </mat-menu>

@@ -10,8 +10,8 @@ export interface UserRegistration {
     divisionId: number | null
     emailId: string;
     id: number;
-    isBlock: boolean;
-    isDsc: boolean;
+    isBlock: boolean |any;
+    isDsc: boolean | any;
     mobileNo: string;
     name: string;
     password: string;

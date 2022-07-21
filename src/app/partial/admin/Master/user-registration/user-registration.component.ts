@@ -42,42 +42,41 @@ export class UserRegistrationComponent implements OnInit {
   searchCtrl = new UntypedFormControl();
   dataSource: any;
   userRegistration: UserRegistration[];
-  // labels = aioTableLabels;
   subject$: ReplaySubject<UserRegistration[]> = new ReplaySubject<UserRegistration[]>(1);
-  // data$: Observable<Customer[]> = this.subject$.asObservable();
+
   @Input()
   pageNumber: number = 1;
   columns: TableColumn<UserRegistration>[] = [
     { label: 'Sr.No', property: '', type: 'checkbox', visible: false },
-    // { label: 'Image', property: 'image', type: 'image', visible: true },
     { label: 'Name', property: 'name', type: 'text', visible: true, cssClasses: ['font-medium'] },
     { label: 'Role', property: 'roleType', type: 'text', visible: true },
     { label: 'Mobile', property: 'mobileNo', type: 'text', visible: true },
-    // { label: 'Contact', property: 'contact', type: 'button', visible: true },
     { label: 'User Type', property: 'userType', type: 'text', visible: true, cssClasses: ['text-secondary', 'font-medium'] },
-    { label: 'Sub User Type', property: 'subUserType', type: 'text', visible: true, cssClasses: ['text-secondary', 'font-medium'] },
-    { label: 'DSC Status', property: 'isDsc', type: 'text', visible: true, cssClasses: ['text-secondary', 'font-medium'] },
-    { label: 'Block /Unblock', property: 'isBlock', type: 'text', visible: true, cssClasses: ['text-secondary', 'font-medium'] },
-    { label: 'Action', property: 'action', type: 'text', visible: true, cssClasses: ['text-secondary', 'font-medium'] },
-    // { label: 'Labels', property: 'labels', type: 'button', visible: true },
-    // { label: 'Actions', property: 'actions', type: 'button', visible: true }
+    { label: 'Sub User Type', property: 'subUserType', type: 'text', visible: true },
+    { label: 'DSC Status', property: 'isDsc', type: 'button', visible: true },
+    { label: 'Block /Unblock', property: 'isBlock', type: 'button', visible: true },
+    { label: 'Actions', property: 'actions', type: 'button', visible: true },
   ];
 
   filterForm: any;
+
   constructor(public dialog: MatDialog,
     private apiService: ApiService, private fb: FormBuilder,
     public commonService: CommonService,
     private error: ErrorsService) { }
+
   get visibleColumns() {
     return this.columns.filter(column => column.visible).map(column => column.property);
   }
+
   pageSizeOptions: number[] = [5, 10, 20, 50];
   pageSize = 10;
-  ngOnInit(): void {
 
+  ngOnInit(): void {
     this.defultFilterform()
     this.getData();
   }
+
   defultFilterform() {
     this.filterForm = this.fb.group({
       stateId: [],
@@ -124,6 +123,7 @@ export class UserRegistrationComponent implements OnInit {
     this.userRegistration[index].labels = change.value;
     this.subject$.next(this.userRegistration);
   }
+  
   toggleColumnVisibility(column, event) {
     event.stopPropagation();
     event.stopImmediatePropagation();

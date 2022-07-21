@@ -23,7 +23,7 @@ import { ReactiveFormsModule } from '@angular/forms';
     PageLayoutModule,
     SecondaryToolbarModule,
     BreadcrumbsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
   ]
 })
 export class UserRegistrationModule { }
