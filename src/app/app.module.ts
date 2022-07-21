@@ -9,9 +9,11 @@ import { HttpClientModule } from '@angular/common/http';
 import { CustomLayoutModule } from './custom-layout/custom-layout.module';
 import { DatePipe, TitleCasePipe } from '@angular/common';
 import { AngularMaterialModule } from './core/angular-material/angular-material.module';
+import { ConfirmationDialogComponent } from './core/dialogs/confirmation-dialog/confirmation-dialog.component';
+import { SuccessDialogComponent } from './core/dialogs/success-dialog/success-dialog.component';
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [AppComponent, ConfirmationDialogComponent, SuccessDialogComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
