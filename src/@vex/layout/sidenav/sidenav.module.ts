@@ -11,7 +11,7 @@ import { UserMenuModule } from '../../components/user-menu/user-menu.module';
 import { MatDialogModule } from '@angular/material/dialog';
 import { SearchModalComponent } from '../../components/search-modal/search-modal.component';
 import { ReactiveFormsModule } from '@angular/forms';
-
+import {MatInputModule} from '@angular/material/input';
 
 @NgModule({
   declarations: [SidenavComponent],
@@ -26,7 +26,8 @@ import { ReactiveFormsModule } from '@angular/forms';
     MatRippleModule,
     UserMenuModule,
     ReactiveFormsModule,
-    SearchModalComponent
+    SearchModalComponent,
+    MatInputModule
   ],
   exports: [SidenavComponent]
 })
