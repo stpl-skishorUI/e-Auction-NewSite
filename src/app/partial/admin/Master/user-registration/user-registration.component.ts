@@ -13,7 +13,10 @@ import { ApiService } from 'src/app/core/services/api.service';
 import { CommonService } from 'src/app/core/services/common.service';
 import { ErrorsService } from 'src/app/core/services/errors.service';
 import { AddUserComponent } from './add-user/add-user.component';
-import { Customer } from './customer.model';
+import { UserRegistration } from './user-registration.model';
+
+
+
 
 @Component({
   selector: 'vex-user-registration',
@@ -33,30 +36,31 @@ import { Customer } from './customer.model';
   ],
 })
 export class UserRegistrationComponent implements OnInit {
+
   layoutCtrl = new UntypedFormControl('boxed');
-  selection = new SelectionModel<Customer>(true, []);
+  selection = new SelectionModel<UserRegistration>(true, []);
   searchCtrl = new UntypedFormControl();
   dataSource: any;
-  userRegistration: Customer[];
+  userRegistration: UserRegistration[];
   // labels = aioTableLabels;
-  subject$: ReplaySubject<Customer[]> = new ReplaySubject<Customer[]>(1);
+  subject$: ReplaySubject<UserRegistration[]> = new ReplaySubject<UserRegistration[]>(1);
   // data$: Observable<Customer[]> = this.subject$.asObservable();
   @Input()
   pageNumber: number = 1;
-  columns: TableColumn<Customer>[] = [
-    { label: 'Checkbox', property: 'checkbox', type: 'checkbox', visible: false },
-    { label: 'Image', property: 'image', type: 'image', visible: true },
+  columns: TableColumn<UserRegistration>[] = [
+    { label: 'Sr.No', property: '', type: 'checkbox', visible: false },
+    // { label: 'Image', property: 'image', type: 'image', visible: true },
     { label: 'Name', property: 'name', type: 'text', visible: true, cssClasses: ['font-medium'] },
-    { label: 'First Name', property: 'firstName', type: 'text', visible: false },
-    { label: 'Last Name', property: 'lastName', type: 'text', visible: false },
+    { label: 'Role', property: 'roleType', type: 'text', visible: true },
+    { label: 'Mobile', property: 'mobileNo', type: 'text', visible: true },
     // { label: 'Contact', property: 'contact', type: 'button', visible: true },
-    { label: 'Address', property: 'address', type: 'text', visible: true, cssClasses: ['text-secondary', 'font-medium'] },
-    { label: 'Street', property: 'street', type: 'text', visible: false, cssClasses: ['text-secondary', 'font-medium'] },
-    { label: 'Zipcode', property: 'zipcode', type: 'text', visible: false, cssClasses: ['text-secondary', 'font-medium'] },
-    { label: 'City', property: 'city', type: 'text', visible: false, cssClasses: ['text-secondary', 'font-medium'] },
-    { label: 'Phone', property: 'phoneNumber', type: 'text', visible: true, cssClasses: ['text-secondary', 'font-medium'] },
-    { label: 'Labels', property: 'labels', type: 'button', visible: true },
-    { label: 'Actions', property: 'actions', type: 'button', visible: true }
+    { label: 'User Type', property: 'userType', type: 'text', visible: true, cssClasses: ['text-secondary', 'font-medium'] },
+    { label: 'Sub User Type', property: 'subUserType', type: 'text', visible: true, cssClasses: ['text-secondary', 'font-medium'] },
+    { label: 'DSC Status', property: 'isDsc', type: 'text', visible: true, cssClasses: ['text-secondary', 'font-medium'] },
+    { label: 'Block /Unblock', property: 'isBlock', type: 'text', visible: true, cssClasses: ['text-secondary', 'font-medium'] },
+    { label: 'Action', property: 'action', type: 'text', visible: true, cssClasses: ['text-secondary', 'font-medium'] },
+    // { label: 'Labels', property: 'labels', type: 'button', visible: true },
+    // { label: 'Actions', property: 'actions', type: 'button', visible: true }
   ];
 
   filterForm: any;
@@ -91,7 +95,7 @@ export class UserRegistrationComponent implements OnInit {
     });
   }
 
-  deleteCustomers(customers: Customer[]) {
+  deleteCustomers(customers: UserRegistration[]) {
     /**
      * Here we are updating our local array.
      * You would probably make an HTTP request here.
@@ -115,7 +119,7 @@ export class UserRegistrationComponent implements OnInit {
     return column.property;
   }
 
-  onLabelChange(change: MatSelectChange, row: Customer) {
+  onLabelChange(change: MatSelectChange, row: UserRegistration) {
     const index = this.userRegistration.findIndex(c => c === row);
     this.userRegistration[index].labels = change.value;
     this.subject$.next(this.userRegistration);
