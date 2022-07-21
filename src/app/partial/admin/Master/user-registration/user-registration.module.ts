@@ -9,14 +9,14 @@ import { PageLayoutModule } from 'src/@vex/components/page-layout/page-layout.mo
 import { SecondaryToolbarModule } from 'src/@vex/components/secondary-toolbar/secondary-toolbar.module';
 import { BreadcrumbsModule } from 'src/@vex/components/breadcrumbs/breadcrumbs.module';
 import { ReactiveFormsModule } from '@angular/forms';
-import { DashPipe } from 'src/app/core/pipes/dash.pipe';
+import { PipeModule } from 'src/app/core/pipes/pipe.module';
+
 
 
 @NgModule({
   declarations: [
     UserRegistrationComponent,
     AddUserComponent,
-    DashPipe
   ],
   imports: [
     CommonModule,
@@ -26,6 +26,7 @@ import { DashPipe } from 'src/app/core/pipes/dash.pipe';
     SecondaryToolbarModule,
     BreadcrumbsModule,
     ReactiveFormsModule,
+    PipeModule
     
   ]
 })

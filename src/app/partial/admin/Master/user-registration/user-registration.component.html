@@ -71,18 +71,7 @@
     </div>
 
     <div class="card overflow-auto">
-      <div class="bg-app-bar px-6 h-16 border-b sticky left-0 flex items-center">
-
-        <div *ngIf="selection.hasValue()" class="mr-4 pr-4 border-r flex-none">
-          <button (click)="deleteUser(selection.selected)" color="primary" mat-icon-button
-            matTooltip="Delete selected" type="button">
-            <mat-icon svgIcon="mat:delete"></mat-icon>
-          </button>
-
-          <button color="primary" mat-icon-button matTooltip="Another action" type="button">
-            <mat-icon svgIcon="mat:folder"></mat-icon>
-          </button>
-        </div>
+      <div class="bg-app-bar px-6 h-16 border-b sticky left-0 flex items-center">     
 
 
         <span class="flex-1"></span>
@@ -107,11 +96,10 @@
         <ng-container matColumnDef="srNo">
           <th mat-header-cell *matHeaderCellDef mat-sort-header> Sr.No </th>
           <td mat-cell *matCellDef="let element;let i=index"> {{((pageNumber + 1) * 10 + i + 1)-20}}</td>
-          <!-- <td mat-cell *matCellDef="let element;let i=index"> {{ i+1 }}</td> -->
         </ng-container>
 
         <!-- Text Columns -->
-        <ng-container *ngFor="let column of columns; trackBy: trackByProperty">
+        <ng-container *ngFor="let column of columns; trackBy: commonService.trackByProperty">
           <ng-container *ngIf="column.type === 'text'" [matColumnDef]="column.property">
             <th *matHeaderCellDef class="uppercase" mat-header-cell mat-sort-header> {{ column.label }}</th>
             <td *matCellDef="let row" [ngClass]="column.cssClasses" mat-cell>{{ row[column.property] }}</td>
@@ -131,7 +119,7 @@
           <th *matHeaderCellDef class="uppercase" mat-header-cell mat-sort-header>Block /Unblock</th>
           <td *matCellDef="let row" mat-cell>
             <div (click)="$event.stopPropagation()" class="flex items-center gap-1">
-              <mat-slide-toggle [checked]="row?.isBlock"></mat-slide-toggle>
+              <mat-slide-toggle [checked]="row?.isBlock" (change)="takeConfiramation(row,'block',$event)"></mat-slide-toggle>
             </div>
           </td>
         </ng-container>
@@ -151,7 +139,7 @@
               <a (click)="$event.stopPropagation()"
                 class="w-8 h-8 leading-none flex items-center justify-center ml-1 hover:bg-hover text-red bg-red-light"
                 mat-icon-button>
-                <button (click)="takeConfiramation(row)">
+                <button (click)="takeConfiramation(row,'delete')">
                   <mat-icon class="icon-sm" svgIcon="mat:delete_outline"></mat-icon>
                 </button>
               </a>
