@@ -131,7 +131,10 @@
               <a (click)="$event.stopPropagation()"
                 class="w-8 h-8 leading-none flex items-center justify-center ml-1 hover:bg-hover text-teal bg-teal-light"
                 mat-icon-button>
-                <mat-icon class="icon-sm" svgIcon="mat:edit"></mat-icon>
+                <button (click)="userCreateUpdate(row)">
+                  <mat-icon class="icon-sm" svgIcon="mat:edit"></mat-icon>
+                </button>
+                
               </a>
 
               <a (click)="$event.stopPropagation()"

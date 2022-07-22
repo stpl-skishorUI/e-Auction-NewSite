@@ -1,1 +1,17 @@
-<p>success-dialog works!</p>
+<div mat-dialog-title class="flex items-center justify-between ">
+    <!-- {{dialogData?.cardTitle}} -->
+    <button type="button" mat-icon-button (click)=" this.dialogRef.close()" tabindex="-1">
+        <mat-icon svgIcon="mat:close"></mat-icon>
+    </button>
+</div>
+
+<mat-dialog-content>
+    <p class="mb-0" *ngIf="dialogData?.p1">{{dialogData?.p1}}</p>
+    <p class="mb-0" *ngIf="dialogData?.p2">{{dialogData?.p2}}</p>
+   
+</mat-dialog-content>
+
+
+<mat-dialog-actions align="end">
+    <button mat-button color="primary"  (click)=" this.dialogRef.close()">{{dialogData?.successBtnText}}</button>
+</mat-dialog-actions>
