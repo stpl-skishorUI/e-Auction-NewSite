@@ -98,6 +98,7 @@ export class BidderListComponent implements OnInit {
     });
   }
 
+
   getData() {
     let localstorData = this.localstorageService.getLoggedInLocalstorageData().responseData;
     let formValue = this.filterForm.value;
@@ -111,7 +112,7 @@ export class BidderListComponent implements OnInit {
         if (res.statusCode === "200") {
           this.dataSource = new MatTableDataSource(res.responseData.responseData1);
           this.dataSource.sort = this.sort;
-
+        
           this.totalRows = res.responseData.responseData2.pageCount;
           this.totalRows > 10 && this.pageNumber == 1 ? this.paginator?.firstPage() : '';
         } else {
@@ -140,6 +141,7 @@ export class BidderListComponent implements OnInit {
     this.pageNumber = event.pageIndex + 1;
     this.getData();
   }
+
 
 
   createBidder() {
