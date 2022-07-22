@@ -6,6 +6,7 @@ import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { Observable, interval } from 'rxjs';
 import { map, pairwise } from 'rxjs/operators';
 import { filter } from 'rxjs';
+import { TableColumn } from 'src/@vex/interfaces/table-column.interface';
 
 
 @Injectable({
@@ -216,6 +217,10 @@ export class CommonService {
       top: value,
       behavior: 'smooth'
     });
+  }
+
+  trackByProperty<T>(_index: number, column: TableColumn<T>) {
+    return column.property;
   }
 
 }
