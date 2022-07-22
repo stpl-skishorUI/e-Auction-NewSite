@@ -57,8 +57,8 @@ export class UserRegistrationComponent implements OnInit,OnDestroy {
     { label: 'Role', property: 'roleType', type: 'text', visible: true ,cssClasses: ['text-secondary', 'font-medium'] },
     { label: 'Mobile', property: 'mobileNo', type: 'text', visible: true ,cssClasses: ['text-secondary', 'font-medium'] },
     { label: 'User Type', property: 'userType', type: 'text', visible: true ,cssClasses: ['text-secondary', 'font-medium'] },
-    { label: 'Sub User Type', property: 'subUserType', type: 'text', visible: true,cssClasses: ['text-secondary', 'font-medium']  },
-    { label: 'DSC Status', property: 'isDsc', type: 'button', visible: true, cssClasses: ['text-secondary', 'font-medium']  },
+    { label: 'Sub User Type', property: 'subUserType', type: 'text', visible: false,cssClasses: ['text-secondary', 'font-medium']  },
+    { label: 'DSC Status', property: 'isDsc', type: 'button', visible: false, cssClasses: ['text-secondary', 'font-medium']  },
     { label: 'Block /Unblock', property: 'isBlock', type: 'button', visible: true ,cssClasses: ['text-secondary', 'font-medium'] },
     { label: 'Actions', property: 'actions', type: 'button', visible: true ,cssClasses: ['text-secondary', 'font-medium'] },
   ];
@@ -317,7 +317,7 @@ export class UserRegistrationComponent implements OnInit,OnDestroy {
   }
 
 //--------- add update user code start here ----------------//
-  userCreateUpdate(data?:any): void {
+  userCreateUpdate(data?:UserRegistration[]): void {
     //@ts-ignore
     const dialogRef = this.dialog.open(AddUserComponent, {
       width: 'auto',

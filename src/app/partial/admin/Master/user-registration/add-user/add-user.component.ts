@@ -10,6 +10,7 @@ import { ErrorsService } from 'src/app/core/services/errors.service';
 import { LocalstorageService } from 'src/app/core/services/localstorage.service';
 import { MasterService } from 'src/app/core/services/master.service';
 import { ValidatorService } from 'src/app/core/services/validator.service';
+import { UserRegistration } from '../user-registration.model';
 
 @Component({
   selector: 'vex-add-user',
@@ -21,20 +22,21 @@ export class AddUserComponent implements OnInit {
   @ViewChild(FormGroupDirective) formGroupDirective!: FormGroupDirective;
   userRegistrationForm!: FormGroup;
 
-  subUserTypeArray: any = [];
-  roleArray: any = [];
-  userTypeArray: any = [];
-  divisionArray: any = [];
-  stateArray: any = [];
-  districtArray: any = [];
-  talukaArray: any = [];
-  villageArray: any = [];
-  designationArray: any = [];
-  subDivisionArray: any = [];
-  projectTypeArray: any;
+  subUserTypeArray = [];
+  roleArray = [];
+  userTypeArray = [];
+  divisionArray = [];
+  stateArray = [];
+  districtArray = [];
+  talukaArray = [];
+  villageArray = [];
+  designationArray = [];
+  subDivisionArray = [];
+  projectTypeArray=[];
   addUserFormFlag: boolean = false;
-  initalValues: any;
 
+  userRegistration: UserRegistration[];
+  initalValues: UserRegistration[];
   selectedFile: any;
   file: any;
   ImgUrl: any = 'assets/images/user.png';
@@ -401,7 +403,7 @@ export class AddUserComponent implements OnInit {
   close(answer: string) {
     this.dialogRef.close(answer);
   }
-   
+  
   fileUploaded() {
     // let documentUrl: any = this.uploadFilesService.uploadDocuments(this.file, "profile", "png,jpg,jpeg,pdf", 5, 5000);
     // documentUrl.subscribe((ele: any) => {
@@ -428,5 +430,8 @@ export class AddUserComponent implements OnInit {
     this.fileInput.nativeElement.value = '';
   }
   
+ 
+
+
 
 }
