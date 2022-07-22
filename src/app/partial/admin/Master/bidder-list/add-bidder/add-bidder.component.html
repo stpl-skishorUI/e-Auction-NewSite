@@ -1,1 +1,127 @@
-<p>add-bidder works!</p>
+<div class="container">
+    <div class="">
+        Add Bidder
+    </div>
+    <div class="flex  gap-x-3 space-x-28 mt-4">
+        <h4>Bidder Type <sup class="text-red">*</sup></h4>
+        <mat-radio-group aria-label="Select an option">
+            <mat-radio-button class="px-2" value="1">Individual</mat-radio-button>
+            <mat-radio-button value="2">Organization</mat-radio-button>
+        </mat-radio-group>
+
+    </div>
+
+    <div class="grid grid-cols-2 gap-4 py-4">
+        <div class="flex items-center justify-between">
+
+            <div class="pe-3">
+                <mat-label>Individual Name <sup class="text-red">*</sup> </mat-label>
+            </div>
+            <div class="text-end">
+                <mat-form-field class="w-60" appearance="outline">
+                    <mat-label>Individual Name </mat-label>
+                    <input matInput placeholder="Ex. Pizza" value="">
+                </mat-form-field>
+            </div>
+        </div>
+        <div class="flex items-center justify-between">
+
+            <div class="pe-3">
+                <mat-label>Mobile Number <sup class="text-red">*</sup></mat-label>
+            </div>
+            <div class="text-end">
+                <mat-form-field class="w-60" appearance="outline">
+                    <mat-label>Mobile Number </mat-label>
+                    <input matInput placeholder="Mobile number" value="">
+                </mat-form-field>
+            </div>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-2 gap-4 py-4">
+        <div class="flex items-center justify-between">
+
+            <div class="pe-3">
+                <mat-label>District <sup class="text-red">*</sup> </mat-label>
+            </div>
+            <div class="text-end">
+                <mat-form-field class="w-60" appearance="outline">
+                    <mat-label>Select District </mat-label>
+                    <mat-select>
+                        <mat-option>None</mat-option>
+                        <mat-option value="option1">Option 1</mat-option>
+                        <mat-option value="option2">Option 2</mat-option>
+                        <mat-option value="option3">Option 3</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+        </div>
+        <div class="flex items-center justify-between">
+
+            <div class="pe-3">
+                <mat-label>Email ID <sup class="text-red">*</sup></mat-label>
+            </div>
+            <div class="text-end">
+                <mat-form-field class="w-60" appearance="outline">
+                    <mat-label>Email ID </mat-label>
+                    <input matInput placeholder="Email ID" value="">
+                </mat-form-field>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="grid grid-cols-2 gap-4 py-4">
+        <div class="flex items-center justify-between">
+
+            <div class="pe-3">
+                <mat-label>Address <sup class="text-red">*</sup> </mat-label>
+            </div>
+            <div class="text-end">
+                <mat-form-field class="w-60 " appearance="outline">
+                    <mat-label>Address</mat-label>
+                    <textarea matInput class="" placeholder="Address"></textarea>
+                </mat-form-field>
+            </div>
+        </div>
+        <div class="block">
+            <div class="flex items-center justify-between">
+
+                <div class="pe-3">
+                    <mat-label>Designation <sup class="text-red">*</sup></mat-label>
+                </div>
+                <div class="text-end">
+                    <mat-form-field class="w-60" appearance="outline">
+                        <mat-label>Designation </mat-label>
+                        <mat-select>
+                            <mat-option>None</mat-option>
+                            <mat-option value="option1">Option 1</mat-option>
+                            <mat-option value="option2">Option 2</mat-option>
+                            <mat-option value="option3">Option 3</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="flex items-center justify-between">
+
+                <div class="pe-3">
+                    <mat-label>Pin Code <sup class="text-red">*</sup></mat-label>
+                </div>
+                <div class="text-end">
+                    <mat-form-field class="w-60" appearance="outline">
+                        <mat-label>Pin Code </mat-label>
+                        <input matInput placeholder="Pin Code" value="">
+                    </mat-form-field>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="flex justify-end">
+        <button mat-stroked-button class="mx-3">Clear</button>
+        <button mat-raised-button color="primary">Submit</button>
+    </div>
+
+</div>
