@@ -146,7 +146,7 @@ export class BidderListComponent implements OnInit {
 
   createBidder() {
     const dialogRef = this.dialog.open(AddBidderComponent, {
-      width: '400px',
+      width: '60rem',
       disableClose: true,
       data: '',
     });
