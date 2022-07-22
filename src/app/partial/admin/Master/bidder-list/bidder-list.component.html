@@ -93,20 +93,12 @@
           </ng-container>
         </ng-container>
 
-        <!-- DSC STATUS Columm -->
-        <!-- <ng-container matColumnDef="isDsc">
-          <th *matHeaderCellDef class="uppercase" mat-header-cell mat-sort-header>DSC STATUS</th>
-          <td *matCellDef="let row" mat-cell>
-            {{row?.isDsc | dash}}
-          </td>
-        </ng-container> -->
-
         <!-- block Column -->
         <ng-container matColumnDef="isBlock">
           <th *matHeaderCellDef class="uppercase" mat-header-cell mat-sort-header>Block /Unblock</th>
           <td *matCellDef="let row" mat-cell>
             <div (click)="$event.stopPropagation()" class="flex items-center gap-1">
-              <mat-slide-toggle [checked]="row?.isBlock"></mat-slide-toggle>
+              <mat-slide-toggle [checked]="row?.isBlock"  (change)="userBlockUnBlockModal(row,$event)" ></mat-slide-toggle>
             </div>
           </td>
         </ng-container>
