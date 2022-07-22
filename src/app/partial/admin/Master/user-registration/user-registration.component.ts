@@ -13,6 +13,7 @@ import { fadeInUp400ms } from 'src/@vex/animations/fade-in-up.animation';
 import { stagger40ms } from 'src/@vex/animations/stagger.animation';
 import { TableColumn } from 'src/@vex/interfaces/table-column.interface';
 import { ConfirmationDialogComponent } from 'src/app/core/dialogs/confirmation-dialog/confirmation-dialog.component';
+import { SuccessDialogComponent } from 'src/app/core/dialogs/success-dialog/success-dialog.component';
 import { ApiService } from 'src/app/core/services/api.service';
 import { CommonService } from 'src/app/core/services/common.service';
 import { ConfigService } from 'src/app/core/services/config.service';
@@ -316,12 +317,35 @@ export class UserRegistrationComponent implements OnInit,OnDestroy {
   }
 
 //--------- add update user code start here ----------------//
-  userCreateUpdate(): void {
+  userCreateUpdate(data?:any): void {
     //@ts-ignore
     const dialogRef = this.dialog.open(AddUserComponent, {
       width: 'auto',
       disableClose: false,
-      data: '',
+      data:data,
+    });
+    dialogRef.afterClosed().subscribe(result => {     
+      if (result?.statusCode == 200 && result?.formType != 'PUT') {
+        this.successDialog();
+      } else if (result?.statusCode == 200 && result?.formType == 'PUT') {
+        this.getData();
+      }
+    });
+
+  }
+
+  // sucess dialog 
+  successDialog() {
+    const dialogRef = this.dialog.open(SuccessDialogComponent, {      
+      width: this.apiService.modalSize[1],
+      data: { p1: 'Added User Successfully.', p2: '', cardTitle: '', successBtnText: 'Ok', dialogIcon: '', cancelBtnText: '' },
+      disableClose: this.apiService.disableCloseFlag,
+    });
+
+    dialogRef.afterClosed().subscribe((res: any) => {
+      if (res == 'Yes') {
+        this.filterData();
+      }
     });
   }
 }

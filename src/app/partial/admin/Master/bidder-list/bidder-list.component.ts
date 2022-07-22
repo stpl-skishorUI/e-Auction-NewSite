@@ -5,7 +5,6 @@ import { FormBuilder, FormGroup, UntypedFormControl } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatFormFieldDefaultOptions, MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
 import { MatPaginator } from '@angular/material/paginator';
-import { MatSelectChange } from '@angular/material/select';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { ReplaySubject, Subscription } from 'rxjs';
@@ -17,8 +16,8 @@ import { ApiService } from 'src/app/core/services/api.service';
 import { CommonService } from 'src/app/core/services/common.service';
 import { ErrorsService } from 'src/app/core/services/errors.service';
 import { LocalstorageService } from 'src/app/core/services/localstorage.service';
-import { UserRegistration } from '../user-registration/user-registration.model';
 import { AddBidderComponent } from './add-bidder/add-bidder.component';
+import { BidderList } from './bidder-list.model';
 
 @Component({
   selector: 'vex-bidder-list',
@@ -41,16 +40,16 @@ export class BidderListComponent implements OnInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   layoutCtrl = new UntypedFormControl('boxed');
-  selection = new SelectionModel<UserRegistration>(true, []);
+  selection = new SelectionModel<BidderList>(true, []);
   searchCtrl = new UntypedFormControl();
-  dataSource: MatTableDataSource<UserRegistration> | null;
-  userRegistration: UserRegistration[];
-  subject$: ReplaySubject<UserRegistration[]> = new ReplaySubject<UserRegistration[]>(1);
+  dataSource: MatTableDataSource<BidderList> | null;
+  userRegistration: BidderList[];
+  subject$: ReplaySubject<BidderList[]> = new ReplaySubject<BidderList[]>(1);
   subscription!: Subscription;
 
   @Input()
   pageNumber: number = 1;
-  columns: TableColumn<UserRegistration>[] = [
+  columns: TableColumn<BidderList>[] = [
     { label: 'Sr.No', property: 'srNo', type: 'button', visible: true, cssClasses: ['text-secondary', 'font-medium'] },
     { label: 'Name', property: 'name', type: 'text', visible: true },
     { label: 'District', property: 'district', type: 'text', visible: true, cssClasses: ['text-secondary', 'font-medium'] },
@@ -99,24 +98,6 @@ export class BidderListComponent implements OnInit {
     });
   }
 
-  deleteCustomers(_customers: UserRegistration[]) {
-    // this.userRegistration.splice(this.userRegistration.findIndex((existingCustomer) => existingCustomer.id === customer.id), 1);
-    // this.selection.deselect(customers);
-    this.subject$.next(this.userRegistration);
-  }
-
-  /** Whether the number of selected elements matches the total number of rows. */
-  isAllSelected() {
-    const numSelected = this.selection.selected.length;
-    const numRows = this.dataSource.data.length;
-    return numSelected === numRows;
-  }
-
-  masterToggle() {
-    this.isAllSelected() ?
-      this.selection.clear() :
-      this.dataSource.data.forEach(row => this.selection.select(row));
-  }
 
   getData() {
     let localstorData = this.localstorageService.getLoggedInLocalstorageData().responseData;
@@ -150,19 +131,12 @@ export class BidderListComponent implements OnInit {
     return column.property;
   }
 
-  onLabelChange(change: MatSelectChange, row: UserRegistration) {
-    const index = this.userRegistration.findIndex(c => c === row);
-    this.userRegistration[index].labels = change.value;
-    this.subject$.next(this.userRegistration);
-  }
-
   toggleColumnVisibility(column, event) {
     event.stopPropagation();
     event.stopImmediatePropagation();
     column.visible = !column.visible;
   }
 
-  // pagination code start here //
   pageChanged(event: any) {
     this.pageNumber = event.pageIndex + 1;
     this.getData();

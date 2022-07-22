@@ -1,107 +1,215 @@
 <div mat-dialog-title class="flex items-center justify-between mb-0">
-    <div class="mx-2">Add User</div>
-    <button type="button" mat-icon-button (click)="close('No answer')" tabindex="-1">
+   <div class="mx-2">Add User</div>
+   <button type="button" mat-icon-button (click)="close('No answer')" tabindex="-1">
       <mat-icon svgIcon="mat:close"></mat-icon>
-    </button>
-  </div>
+   </button>
+</div>
 
-  <mat-dialog-content>
-   <div class="my-3 card p-3 border-0 shadow-none">
-      <div class="flex gap-x-3 my-3">
-         <div>
-            <mat-form-field appearance="outline">
-               <mat-label>Select Project <sup class="text-red">*</sup></mat-label>
-               <mat-select>
-                  <mat-option>None</mat-option>
-                  <mat-option value="option1">Option 1</mat-option>
-                  <mat-option value="option2">Option 2</mat-option>
-                  <mat-option value="option3">Option 3</mat-option>
-               </mat-select>
-            </mat-form-field>
+<mat-dialog-content>
+   <form [formGroup]="userRegistrationForm">
+      <div class="my-3 card p-3 border-0 shadow-none">
+         <div class="flex gap-x-3 my-3">
+            <div>
+               <mat-form-field [appearance]=configService.matFormField>
+                  <mat-label>Select Project</mat-label>
+                  <mat-select formControlName="projectId"
+                     (selectionChange)="getUserType();clearDropdown('userTypeId');">
+                     <mat-option *ngFor="let project of projectTypeArray" [value]="project.id">
+                        {{project.projectName}}</mat-option>
+                  </mat-select>
+                  <mat-error *ngIf="f.projectId.errors"> Project is required</mat-error>
+               </mat-form-field>
+            </div>
+            <div>
+               <mat-form-field [appearance]=configService.matFormField>
+                  <mat-label>Select User Type</mat-label>
+                  <mat-select formControlName="userTypeId" [disabled]="!userRegistrationForm.value.projectId"
+                     (selectionChange)="getSubuserType(userRegistrationForm.value.userTypeId, userRegistrationForm.value.projectId);clearDropdown('subUserTypeId');;addValSelSubUserType()">
+                     <mat-option *ngFor="let userType of userTypeArray" [value]="userType.userTypeId"
+                        [disabled]="userType.userTypeId == 0">
+                        {{userType.userType}}</mat-option>
+                  </mat-select>
+                  <mat-error *ngIf="f.userTypeId.errors?.required"> User type is required</mat-error>
+               </mat-form-field>
+            </div>
+            <div>
+               <mat-form-field [appearance]=configService.matFormField>
+                  <mat-label>Select Sub User</mat-label>
+                  <mat-select formControlName="subUserTypeId" [disabled]="!userRegistrationForm.value.userTypeId"
+                     (selectionChange)="getRole();clearDropdown('roleId');addValSelSubUserType()">
+                     <mat-option *ngFor="let subUserType of subUserTypeArray" [value]="subUserType.subUserTypeId"
+                        [disabled]="subUserType.subUserTypeId == 0">
+                        {{subUserType.subUserType}}</mat-option>
+                  </mat-select>
+                  <mat-error *ngIf="f.subUserTypeId.errors?.required"> Sub user type is required</mat-error>
+               </mat-form-field>
+            </div>
+            <div>
+               <mat-form-field [appearance]=configService.matFormField>
+                  <mat-label>Select Role</mat-label>
+                  <mat-select formControlName="roleId"
+                     (selectionChange)="clearDropdown('stateId');addValSelSubUserType()"
+                     [disabled]="!userRegistrationForm.value?.subUserTypeId">
+                     <mat-option *ngFor="let role of roleArray" [value]="role?.roleId" [disabled]="role?.roleId == 0">
+                        {{role?.roleType}}
+                     </mat-option>
+                  </mat-select>
+                  <mat-error *ngIf="f.roleId.errors?.required"> Role is required</mat-error>
+               </mat-form-field>
+            </div>
          </div>
-         <div>
-            <mat-form-field appearance="outline">
-               <mat-label>Select User Type</mat-label>
-               <mat-select>
-                  <mat-option>None</mat-option>
-                  <mat-option value="option1">Option 1</mat-option>
-                  <mat-option value="option2">Option 2</mat-option>
-                  <mat-option value="option3">Option 3</mat-option>
-               </mat-select>
-            </mat-form-field>
+         <div class="flex gap-x-3 my-3">
+            <div>
+               <mat-form-field [appearance]=configService.matFormField>
+                  <mat-label>Select State</mat-label>
+                  <mat-select formControlName="stateId"
+                     (selectionChange)="getDivision(userRegistrationForm.value.stateId);clearDropdown('divisionId')">
+                     <mat-option *ngFor="let state of stateArray" [value]="state.id">{{ state.state }}
+                     </mat-option>
+                  </mat-select>
+                  <mat-error *ngIf="f.stateId.errors?.required"> State is required</mat-error>
+               </mat-form-field>
+            </div>
+            <ng-container
+               *ngIf="userRegistrationForm.value.userTypeId == 3 ||  userRegistrationForm.value.subUserTypeId == 3 ">
+               <div *ngIf="userRegistrationForm.value.subUserTypeId !=4">
+                  <mat-form-field [appearance]=configService.matFormField>
+                     <mat-label>Select Division</mat-label>
+                     <mat-select formControlName="divisionId" [disabled]="!userRegistrationForm.value.stateId"
+                        (selectionChange)="getDistrict(userRegistrationForm.value.divisionId);clearDropdown('districtId')">
+                        <mat-option *ngFor="let division of divisionArray" [value]="division.id"
+                           [disabled]="division.id == 0">
+                           {{division.division}}</mat-option>
+                        <!-- <mat-option value="two">Second option</mat-option> -->
+                     </mat-select>
+                     <mat-error *ngIf="f.divisionId.errors?.required"> Division is required</mat-error>
+                  </mat-form-field>
+               </div>
+               <div *ngIf="userRegistrationForm.value.subUserTypeId !=4">
+                  <mat-form-field [appearance]=configService.matFormField>
+                     <mat-label>Select District </mat-label>
+                     <mat-select formControlName="districtId" [disabled]="!userRegistrationForm.value.divisionId"
+                        (selectionChange)="userRegistrationForm.value.subUserTypeId == 7 ? getTaluka(userRegistrationForm.value.districtId): this.getSubDivision() ;clearDropdown('talukaId')">
+                        <mat-option *ngFor="let district of districtArray" [value]="district.id"
+                           [disabled]="district.id == 0">
+                           {{district.district}}</mat-option>
+                     </mat-select>
+                     <mat-error *ngIf="f.districtId.errors?.required"> District is required</mat-error>
+                  </mat-form-field>
+               </div>
+               <div *ngIf="userRegistrationForm.value.subUserTypeId ==7">
+                  <mat-form-field [appearance]=configService.matFormField>
+                     <mat-label>Select Taluka</mat-label>
+                     <mat-select formControlName="talukaId" [disabled]="!userRegistrationForm.value.districtId">
+                        <mat-option *ngFor="let taluka of talukaArray" [value]="taluka.id" [disabled]="taluka.id == 0">
+                           {{taluka.taluka}}</mat-option>
+                     </mat-select>
+                     <mat-error *ngIf="f.talukaId.errors?.required"> Taluka is required</mat-error>
+                  </mat-form-field>
+               </div>
+
+               <div *ngIf="userRegistrationForm.value.subUserTypeId ==6">
+                  <mat-form-field [appearance]=configService.matFormField>
+                     <mat-label>SDO Name</mat-label>
+                     <mat-select formControlName="subDivisionId" [disabled]="!userRegistrationForm.value.districtId">
+                        <mat-option [disabled]="subDivision.id == 0" *ngFor="let subDivision of subDivisionArray"
+                           [value]="subDivision.id">
+                           {{subDivision?.subDivision}}
+                        </mat-option>
+                     </mat-select>
+                     <mat-error *ngIf="f.subDivisionId.errors?.required"> Sub Division is required</mat-error>
+                  </mat-form-field>
+               </div>
+            </ng-container>
+
          </div>
-         <div>
-            <mat-form-field appearance="outline">
-               <mat-label>Select Sub User</mat-label>
-               <mat-select>
-                  <mat-option>None</mat-option>
-                  <mat-option value="option1">Option 1</mat-option>
-                  <mat-option value="option2">Option 2</mat-option>
-                  <mat-option value="option3">Option 3</mat-option>
-               </mat-select>
-            </mat-form-field>
+         <div class="flex gap-x-3 my-3">
+            <div>
+               <mat-form-field [appearance]=configService.matFormField>
+                  <mat-label>Name</mat-label>
+                  <input matInput placeholder="Name" formControlName="name"
+                     (keyup)="validatorService.removeSpaceAtBegining($event)"
+                     (keypress)="validatorService.alphabetsWithSpaces($event)" maxlength="200" autocomplete="off">
+                  <mat-error *ngIf="f.name.errors">
+                     <span class="text-danger" *ngIf="f.name.hasError('required')"> Name is required</span>
+                     <span class="text-danger" *ngIf="f.name.hasError('pattern')"> Please Enter Valid Name</span>
+                  </mat-error>
+               </mat-form-field>
+            </div>
+            <div>
+               <mat-form-field [appearance]=configService.matFormField>
+                  <mat-label>Mobile Number</mat-label>
+                  <input matInput placeholder="Mobile No" (keypress)="validatorService.onlyDigits($event)"
+                     formControlName="mobileNo" maxlength="10" autocomplete="off">
+                  <mat-error *ngIf="f.mobileNo.errors">
+                     <span class="text-danger" *ngIf="f.mobileNo.hasError('required')"> Mobile no is
+                        required</span>
+                     <span class="text-danger"
+                        *ngIf="f.mobileNo.hasError('pattern') || f.mobileNo.hasError('minlength')"> Please enter
+                        valid Mobile no </span>
+                  </mat-error>
+               </mat-form-field>
+            </div>
+            <div>
+               <mat-form-field [appearance]=configService.matFormField>
+                  <mat-label>User Name</mat-label>
+                  <input matInput placeholder="User Name" formControlName="userName" minlength="5" maxlength="20"
+                     (keypress)="validatorService.alphaNumericWithSpacesAndSpecChars($event)"
+                     (keyup)="validatorService.removeSpaceAtBegining($event)" autocomplete="off">
+                  <mat-error *ngIf="f.userName.errors">
+                     <span class="text-danger" *ngIf="f.userName.hasError('required')"> User Name is required</span>
+                     <span class="text-danger" *ngIf="f.userName.hasError('minlength')">Minimum 5 characters
+                        required</span>
+                     <span class="text-danger"
+                        *ngIf="!f.userName.hasError('minlength') && f.userName.hasError('pattern')">Only alphanumeric
+                        characters and special symbol @ and .(dot) are allowed</span>
+                  </mat-error>
+               </mat-form-field>
+            </div>
+            <div>
+               <mat-form-field [appearance]=configService.matFormField>
+                  <mat-label>Designation</mat-label>
+                  <mat-select formControlName="designationId" [compareWith]="commonService.getIdByName">
+                     <mat-option *ngFor="let designation of designationArray" [value]="designation"
+                        [disabled]="designation.id == 0">
+                        {{designation.designation}}</mat-option>
+                  </mat-select>
+                  <mat-error *ngIf="f.designationId.errors?.required"> Designation is required</mat-error>
+               </mat-form-field>
+            </div>
          </div>
-         <div>
-            <mat-form-field appearance="outline">
-               <mat-label>Select Role</mat-label>
-               <mat-select>
-                  <mat-option>None</mat-option>
-                  <mat-option value="option1">Option 1</mat-option>
-                  <mat-option value="option2">Option 2</mat-option>
-                  <mat-option value="option3">Option 3</mat-option>
-               </mat-select>
-            </mat-form-field>
+         <div class="flex gap-x-3 mt-2 w-full">
+            <div>
+               <mat-form-field [appearance]=configService.matFormField>
+                  <mat-label>Email ID</mat-label>
+                  <input type="text" maxlength="150" matInput placeholder="abc@gmail.com" formControlName="emailId"
+                     maxlength="100" (keypress)="validatorService.alphaNumericWithSpacesAndSpecChars($event)"
+                     autocomplete="off">
+                  <mat-error *ngIf="f.emailId.errors">
+                     <span class="text-danger" *ngIf="f.emailId.hasError('pattern')"> Please enter valid email id
+                     </span>
+                  </mat-error>
+               </mat-form-field>
+            </div>
+            <div class="w-full">
+               <mat-form-field class="w-full" [appearance]=configService.matFormField>
+                  <mat-label>Address </mat-label>
+                  <input type="text" maxlength="150" matInput placeholder="Enter address" formControlName="userAddress"
+                     (keyup)="validatorService.removeSpaceAtBegining($event)" autocomplete="off">
+                  <mat-error *ngIf="f.userAddress.errors">
+                     <span class="text-danger" *ngIf="f.userAddress.hasError('required')"> Address is required</span>
+
+                  </mat-error>
+               </mat-form-field>
+            </div>
          </div>
+
       </div>
-      <div class="flex gap-x-3 my-3">
-         <div>
-   
-            <mat-form-field  appearance="outline">
-               <mat-label>Bidder Name <sup class="text-red">*</sup></mat-label>
-               <input ty matInput placeholder="Bidder Name">
-            </mat-form-field>
-         </div>
-         <div>
-            <mat-form-field appearance="outline">
-               <mat-label>Mobile Number <sup class="text-red">*</sup></mat-label>
-               <input ty matInput placeholder="Mobile Number">
-            </mat-form-field>
-         </div>
-         <div>
-            <mat-form-field appearance="outline">
-               <mat-label>User Name <sup class="text-red">*</sup></mat-label>
-               <input ty matInput placeholder="User Name">
-            </mat-form-field>
-         </div>
-         <div>
-            <mat-form-field appearance="outline">
-               <mat-label>Designation <sup class="text-red">*</sup></mat-label>
-               <input ty matInput placeholder="Designation">
-            </mat-form-field>
-         </div>
-      </div>
-      <div class="flex gap-x-3 mt-2 w-full">
-         <div>
-   
-            <mat-form-field  appearance="outline">
-               <mat-label>Email ID <sup class="text-red">*</sup></mat-label>
-               <input ty matInput placeholder="Email ID">
-            </mat-form-field>
-         </div>
-         <div class="w-full">
-            <mat-form-field class="w-full" appearance="outline">
-               <mat-label>Address </mat-label>
-               <input ty matInput placeholder="Address">
-            </mat-form-field>
-         </div>
-      </div>
-     
-   </div>
-  </mat-dialog-content>
+   </form>
+</mat-dialog-content>
 
-
-  <mat-dialog-actions align="end">
-    <button mat-stroked-button (click)="close('No')">Clear</button>
-    <button mat-raised-button color="primary" (click)="close('Yes')">Submit</button>
-  </mat-dialog-actions>
-
+<mat-dialog-actions align="end">
+   <button type="button" mat-stroked-button (click)="clearForm()">Clear</button>
+   <button type="submit" mat-raised-button color="primary" (click)="addUserData()">{{this.data ?
+      'Update':'Submit'}}</button>
+</mat-dialog-actions>
