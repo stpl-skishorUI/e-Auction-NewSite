@@ -4,9 +4,9 @@
       <mat-icon svgIcon="mat:close"></mat-icon>
    </button>
 </div>
-
+<form [formGroup]="userRegistrationForm">
 <mat-dialog-content>
-   <form [formGroup]="userRegistrationForm">
+ 
       <div class="my-3 card p-3 border-0 shadow-none">
          <div class="flex gap-x-3 my-3">
             <div>
@@ -205,7 +205,7 @@
          </div>
 
       </div>
-   </form>
+   
 </mat-dialog-content>
 
 <mat-dialog-actions align="end">
@@ -213,3 +213,4 @@
    <button type="submit" mat-raised-button color="primary" (click)="addUserData()">{{this.data ?
       'Update':'Submit'}}</button>
 </mat-dialog-actions>
+</form>
