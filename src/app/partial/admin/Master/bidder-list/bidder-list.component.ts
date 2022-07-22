@@ -8,7 +8,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSelectChange } from '@angular/material/select';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { ReplaySubject, Subscription } from 'rxjs';
+import { ReplaySubject } from 'rxjs';
 import { fadeInUp400ms } from 'src/@vex/animations/fade-in-up.animation';
 import { stagger40ms } from 'src/@vex/animations/stagger.animation';
 import { TableColumn } from 'src/@vex/interfaces/table-column.interface';
@@ -16,10 +16,7 @@ import { ConfirmationDialogComponent } from 'src/app/core/dialogs/confirmation-d
 import { ApiService } from 'src/app/core/services/api.service';
 import { CommonService } from 'src/app/core/services/common.service';
 import { ErrorsService } from 'src/app/core/services/errors.service';
-import { LocalstorageService } from 'src/app/core/services/localstorage.service';
-import { MasterService } from 'src/app/core/services/master.service';
 import { UserRegistration } from '../user-registration/user-registration.model';
-import { AddBidderComponent } from './add-bidder/add-bidder.component';
 
 @Component({
   selector: 'vex-bidder-list',
@@ -47,8 +44,6 @@ export class BidderListComponent implements OnInit {
   dataSource: MatTableDataSource<UserRegistration> | null;
   userRegistration: UserRegistration[];
   subject$: ReplaySubject<UserRegistration[]> = new ReplaySubject<UserRegistration[]>(1);
-  subscription!: Subscription;
-  districtArray = new Array;
 
   @Input()
   pageNumber: number = 1;
@@ -81,55 +76,46 @@ export class BidderListComponent implements OnInit {
   pageSize = 10;
 
   ngOnInit(): void {
-    this.defultFilterform();
-    this.getDistrict();
+    this.defultFilterform()
     this.getData();
   }
 
   defultFilterform() {
     this.filterForm = this.fb.group({
+      stateId: [],
+      divisionId: [0],
       districtId: [0],
+      talukaId: [0],
       search: [''],
-      bidderType: ['All'],
+    });
+  }
+  createUser(): void {
+    //@ts-ignore
+    const dialogRef = this.dialog.open(AddUserComponent, {
+      width: '250px',
+      disableClose: false,
+      data: '',
     });
   }
 
-  getDistrict() {
-    this.masterService.getDistrict(0).subscribe({
-      next: (response: any) => {
-        this.districtArray.push({ 'district': "All District", 'id': 0 }, ...response);
-        console.log(this.districtArray);
-      },
-      error: (err => { this.error.handelError(err) })
-    })
+  deleteCustomers(_customers: UserRegistration[]) {
+    // this.userRegistration.splice(this.userRegistration.findIndex((existingCustomer) => existingCustomer.id === customer.id), 1);
+    // this.selection.deselect(customers);
+    this.subject$.next(this.userRegistration);
   }
 
-  getData() {
-    let localstorData = this.localstorageService.getLoggedInLocalstorageData().responseData;
-    let formValue = this.filterForm.value;
-    let bidderTy = formValue.bidderType == 'All' ? '' : formValue.bidderType;
-    let obj = "StateId=" + localstorData?.stateId + "&DivisionId=" + localstorData?.divisionId + "&DistrictId=" + formValue.districtId +
-      "&BidderType=" + bidderTy + "&ProjectId=" + localstorData?.projectId + "&pageno=" + this.pageNumber + "&pagesize=" + 10;
-    this.commonService.checkDataType(formValue.search) == true ? obj += "&Textsearch=" + formValue.search : '';
-    this.apiService.setHttp('get', "user-registration/GetBidderUsers?" + obj, false, false, false, 'masterUrl');
-    this.subscription = this.apiService.getHttp().subscribe({
-      next: (res: any) => {
-        if (res.statusCode === "200") {
-          this.dataSource = new MatTableDataSource(res.responseData.responseData1);
-          this.dataSource.sort = this.sort;
-          this.totalRows = res.responseData.responseData2.pageCount;
-          this.totalRows > 10 && this.pageNumber == 1 ? this.paginator?.firstPage() : '';
-        } else {
-          this.totalRows = 0;
-          if (res.statusCode != "404") {
-            this.commonService.checkDataType(res.statusMessage) == false ? this.error.handelError(res.statusCode) : this.commonService.snackBar(res.statusMessage, 1);
-          }
-        }
-      },
-      error: ((error: any) => { this.error.handelError(error.status) })
-    });
+  /** Whether the number of selected elements matches the total number of rows. */
+  isAllSelected() {
+    const numSelected = this.selection.selected.length;
+    const numRows = this.dataSource.data.length;
+    return numSelected === numRows;
   }
 
+  masterToggle() {
+    this.isAllSelected() ?
+      this.selection.clear() :
+      this.dataSource.data.forEach(row => this.selection.select(row));
+  }
 
   trackByProperty<T>(_index: number, column: TableColumn<T>) {
     return column.property;
@@ -146,7 +132,6 @@ export class BidderListComponent implements OnInit {
     event.stopImmediatePropagation();
     column.visible = !column.visible;
   }
-
 
   // pagination code start here //
   pageChanged(event: any) {
