@@ -15,11 +15,13 @@ export class PageListComponent implements OnInit {
   }
 
   openDialog(): void {
-    // @ts-ignore
     const dialogRef = this.dialog.open(AddPageComponent, {
       width: '400px',
       disableClose: true,
       data: '',
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(`Dialog result: ${result}`);
     });
   }
 
