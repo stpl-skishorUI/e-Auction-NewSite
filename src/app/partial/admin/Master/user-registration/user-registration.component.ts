@@ -1,5 +1,5 @@
 import { SelectionModel } from '@angular/cdk/collections';
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, UntypedFormControl } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatFormFieldDefaultOptions, MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
@@ -39,7 +39,7 @@ import { UserRegistration } from './user-registration.model';
     stagger40ms
   ],
 })
-export class UserRegistrationComponent implements OnInit {
+export class UserRegistrationComponent implements OnInit,OnDestroy {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   layoutCtrl = new UntypedFormControl('boxed');
@@ -50,41 +50,43 @@ export class UserRegistrationComponent implements OnInit {
   subject$: ReplaySubject<UserRegistration[]> = new ReplaySubject<UserRegistration[]>(1);
 
   @Input()
-  pageNumber: number = 1;
   columns: TableColumn<UserRegistration>[] = [
-    { label: 'Sr.No', property: 'srNo', type: 'button', visible: true },
-    { label: 'Name', property: 'name', type: 'text', visible: true, cssClasses: ['font-medium'] },
-    { label: 'Role', property: 'roleType', type: 'text', visible: true },
-    { label: 'Mobile', property: 'mobileNo', type: 'text', visible: true },
-    { label: 'User Type', property: 'userType', type: 'text', visible: true },
-    { label: 'Sub User Type', property: 'subUserType', type: 'text', visible: true },
-    { label: 'DSC Status', property: 'isDsc', type: 'button', visible: true, cssClasses: ['text-center'] },
-    { label: 'Block /Unblock', property: 'isBlock', type: 'button', visible: true },
-    { label: 'Actions', property: 'actions', type: 'button', visible: true },
+    { label: 'Sr.No', property: 'srNo', type: 'button', visible: true,cssClasses: ['text-secondary', 'font-medium']  },
+    { label: 'Name', property: 'name', type: 'text', visible: true },
+    { label: 'Role', property: 'roleType', type: 'text', visible: true ,cssClasses: ['text-secondary', 'font-medium'] },
+    { label: 'Mobile', property: 'mobileNo', type: 'text', visible: true ,cssClasses: ['text-secondary', 'font-medium'] },
+    { label: 'User Type', property: 'userType', type: 'text', visible: true ,cssClasses: ['text-secondary', 'font-medium'] },
+    { label: 'Sub User Type', property: 'subUserType', type: 'text', visible: true,cssClasses: ['text-secondary', 'font-medium']  },
+    { label: 'DSC Status', property: 'isDsc', type: 'button', visible: true, cssClasses: ['text-secondary', 'font-medium']  },
+    { label: 'Block /Unblock', property: 'isBlock', type: 'button', visible: true ,cssClasses: ['text-secondary', 'font-medium'] },
+    { label: 'Actions', property: 'actions', type: 'button', visible: true ,cssClasses: ['text-secondary', 'font-medium'] },
   ];
 
   filterForm!: FormGroup;
   totalRows: number;
   subscription!: Subscription;
-  divisionArray= [];
-  stateArray=[];
-  districtArray=[];
+  divisionArray = [];
+  stateArray = [];
+  districtArray = [];
   dropDownSelFlag: boolean = true;
-  talukaArray: any[];
+  talukaArray = [];
+  defaultCallTableFlag: boolean = true;
+  pageSizeOptions: number[] = [5, 10, 20, 50];
+  pageSize = 10;
+  pageNumber: number = 1;
   constructor(public dialog: MatDialog,
     private apiService: ApiService, private fb: FormBuilder,
     public commonService: CommonService,
     private localstorageService: LocalstorageService,
     private error: ErrorsService,
-    private masterService:MasterService,
-    public configService:ConfigService) { }
+    private masterService: MasterService,
+    public configService: ConfigService) { }
 
   get visibleColumns() {
     return this.columns.filter(column => column.visible).map(column => column.property);
   }
 
-  pageSizeOptions: number[] = [5, 10, 20, 50];
-  pageSize = 10;
+
 
   ngOnInit(): void {
     this.defultFilterform()
@@ -101,16 +103,6 @@ export class UserRegistrationComponent implements OnInit {
     });
     this.getstateData()
   }
-  createUser(): void {
-    //@ts-ignore
-    const dialogRef = this.dialog.open(AddUserComponent, {
-      width: 'auto',
-      disableClose: false,
-      data: '',
-    });
-  }
-
-
 
   /** Whether the number of selected elements matches the total number of rows. */
   isAllSelected() {
@@ -125,8 +117,6 @@ export class UserRegistrationComponent implements OnInit {
       this.dataSource.data.forEach(row => this.selection.select(row));
   }
 
-
-
   onLabelChange(change: MatSelectChange, row: UserRegistration) {
     const index = this.userRegistration.findIndex(c => c === row);
     this.userRegistration[index].labels = change.value;
@@ -139,12 +129,13 @@ export class UserRegistrationComponent implements OnInit {
     column.visible = !column.visible;
   }
 
+  // table data //
   getData() {
     let formValue = this.filterForm.value;
     let paramList: string = "?StateId=" + 0 + "&DivisionId=" + 0 + "&SubDivisionId=0&DistrictId=" + 0 + "&TalukaId=" + 0 + "&pageno=" + this.pageNumber + "&pagesize=" + this.pageSize
     this.commonService.checkDataType(formValue.search) == true ? paramList += "&Textsearch=" + formValue.search : '';
     this.apiService.setHttp('get', "user-registration/GetAll" + paramList, false, false, false, 'masterUrl');
-    this.apiService.getHttp().subscribe({
+    this.subscription = this.apiService.getHttp().subscribe({
       next: (res: any) => {
         if (res.statusCode === "200") {
           this.dataSource = new MatTableDataSource(res.responseData.responseData1);
@@ -162,6 +153,7 @@ export class UserRegistrationComponent implements OnInit {
       error: ((error: any) => { this.error.handelError(error.status) })
     });
   }
+
   // pagination code start here //
   pageChanged(event: any) {
     this.pageNumber = event.pageIndex + 1;
@@ -194,7 +186,7 @@ export class UserRegistrationComponent implements OnInit {
       'deletedBy': this.localstorageService.userId(),
     }
     this.apiService.setHttp('DELETE', "user-registration", false, JSON.stringify(obj), false, 'masterUrl');
-    this.apiService.getHttp().subscribe({
+    this.subscription = this.apiService.getHttp().subscribe({
       next: (res: any) => {
         if (res.statusCode === "200") {
           this.commonService.snackBar(res.statusMessage, 0);
@@ -223,7 +215,7 @@ export class UserRegistrationComponent implements OnInit {
       "blockRemark": ""
     }
     this.apiService.setHttp('PUT', "user-registration/BlockUnblockUser", false, JSON.stringify(obj), false, 'masterUrl');
-    this.apiService.getHttp().subscribe({
+    this.subscription = this.apiService.getHttp().subscribe({
       next: (res: any) => {
         if (res.statusCode === "200") {
           this.getData();
@@ -244,78 +236,92 @@ export class UserRegistrationComponent implements OnInit {
     this.getData();
   }
 
-    //........ get state Array .....//
-    getstateData() {
-      this.stateArray = [];
-      this.subscription = this.masterService.getState().subscribe({
-        next: (response: any) => {
-          let stateArray = response;
-          stateArray.length > 1 ? this.stateArray.push({ state: "All State", id: 0 }, ...response) : this.stateArray = response;
-          stateArray.length == 1 || this.dropDownSelFlag ? (this.filterForm.controls['stateId'].setValue(this.apiService.stateId), this.getDivision(this.apiService.stateId)) : '';
-        },
-        error: (err => { this.error.handelError(err) })
-      })
+  //........ get state Array .....//
+  getstateData() {
+    this.stateArray = [];
+    this.subscription = this.masterService.getState().subscribe({
+      next: (response: any) => {
+        let stateArray = response;
+        stateArray.length > 1 ? this.stateArray.push({ state: "All State", id: 0 }, ...response) : this.stateArray = response;
+        stateArray.length == 1 || this.dropDownSelFlag ? (this.filterForm.controls['stateId'].setValue(this.apiService.stateId), this.getDivision(this.apiService.stateId)) : '';
+      },
+      error: (err => { this.error.handelError(err) })
+    })
+  }
+
+  //........ Division Array ......//
+  getDivision(stateId: number) {
+    this.divisionArray = [];
+    this.subscription = this.masterService.getDivisionByStateId(stateId || 0).subscribe({
+      next: (response: any) => {
+        let divisionArray = response;
+        divisionArray.length > 1 ? this.divisionArray.push({ id: 0, division: "All Division" }, ...response) : this.divisionArray = response;
+        divisionArray.length == 1 || this.dropDownSelFlag ? (this.filterForm.controls['divisionId'].setValue(this.divisionArray[0].id), this.getDistrict(this.divisionArray[0].id)) : '';
+      },
+      error: (err => { this.error.handelError(err) })
+    })
+  }
+
+  //....... get distrcit  array ..... //
+  getDistrict(divId: any) {
+    console.log(divId)
+    this.districtArray = [];
+    this.subscription = this.masterService.getDistrictByDivisionId(divId || 0).subscribe({
+      next: (response: any) => {
+        let districtArray = response;
+        districtArray.length > 1 ? this.districtArray.push({ id: 0, district: "All District" }, ...response) : this.districtArray = response;
+        districtArray.length == 1 || this.dropDownSelFlag ? (this.filterForm.controls['districtId'].setValue(this.districtArray[0].id), this.getTaluka(this.districtArray[0].id)) : '';
+      },
+      error: (err => { this.error.handelError(err) })
+    })
+  }
+
+  //......... get taluka Array ......//
+
+  getTaluka(districtId: any) {
+    this.talukaArray = [];
+    this.subscription = this.masterService.getTaluka(districtId || 0).subscribe({
+      next: (response: any) => {
+        let talukaArray = response;
+        talukaArray.length > 1 ? this.talukaArray.push({ id: 0, taluka: "All Taluka" }, ...response) : this.talukaArray = response;
+        talukaArray.length == 1 || this.dropDownSelFlag ? (this.filterForm.controls['districtId'].setValue(this.talukaArray[0].id)) : '';
+
+      },
+      error: (err => { this.error.handelError(err) })
+    })
+  }
+  //...... Drop Down clear  ........//
+  clearDropdown(flag: string) {
+    this.defaultCallTableFlag = false;
+    this.dropDownSelFlag = false;
+    switch (flag) {
+      case 'state':
+        this.filterForm.controls['divisionId'].setValue(0);
+        this.filterForm.controls['districtId'].setValue(0);
+        this.filterForm.controls['talukaId'].setValue(0);
+        break;
+      case 'division':
+        this.filterForm.controls['districtId'].setValue(0);
+        this.filterForm.controls['talukaId'].setValue(0);
+        break;
+      case 'district':
+        this.filterForm.controls['talukaId'].setValue(0);
+        break;
+      default:
     }
-  
-    //........ Division Array ......//
-    getDivision(stateId: number) {
-      this.divisionArray = [];
-      this.subscription =  this.masterService.getDivisionByStateId(stateId || 0).subscribe({
-        next: (response: any) => {
-          let divisionArray = response;
-          divisionArray.length > 1 ? this.divisionArray.push({ id: 0, division: "All Division" }, ...response) : this.divisionArray = response;
-          divisionArray.length == 1 || this.dropDownSelFlag ? (this.filterForm.controls['divisionId'].setValue(this.divisionArray[0].id), this.getDistrict(this.divisionArray[0].id)) : '';
-        },
-        error: (err => { this.error.handelError(err) })
-      })
-    }
-  
-    //....... get distrcit  array ..... //
-    getDistrict(divId: any) {
-      console.log(divId)
-      this.districtArray = [];
-      this.subscription =  this.masterService.getDistrictByDivisionId(divId || 0).subscribe({
-        next: (response: any) => {
-          let districtArray = response;
-          districtArray.length > 1 ? this.districtArray.push({ id: 0, district: "All District" }, ...response) : this.districtArray = response;
-          districtArray.length == 1 || this.dropDownSelFlag ? (this.filterForm.controls['districtId'].setValue(this.districtArray[0].id), this.getTaluka(this.districtArray[0].id)) : '';
-        },
-        error: (err => { this.error.handelError(err) })
-      })
-    }
-  
-    //......... get taluka Array ......//
-  
-    getTaluka(districtId: any) {
-      console.log(districtId)
-      this.talukaArray = [];
-      this.subscription =  this.masterService.getTaluka(districtId || 0).subscribe({
-        next: (response: any) => {
-          let talukaArray = response;
-          talukaArray.length > 1 ? this.talukaArray.push({ id: 0, taluka: "All Taluka" }, ...response) : this.talukaArray = response;
-          talukaArray.length == 1 || this.dropDownSelFlag ? (this.filterForm.controls['districtId'].setValue(this.talukaArray[0].id)) : '';
-        },
-        error: (err => { this.error.handelError(err) })
-      })
-    }
-    //...... Drop Down clear  ........//
-    clearDropdown(flag: string) {
-      // this.defaultCallTableFlag = false;
-      // this.dropDownSelFlag = false;
-      switch (flag) {
-        case 'state':
-          this.filterForm.controls['divisionId'].setValue(0);
-          this.filterForm.controls['districtId'].setValue(0);
-          this.filterForm.controls['talukaId'].setValue(0);
-          break;
-        case 'division':
-          this.filterForm.controls['districtId'].setValue(0);
-          this.filterForm.controls['talukaId'].setValue(0);
-          break;
-        case 'district':
-          this.filterForm.controls['talukaId'].setValue(0);
-          break;
-        default:
-      }
-    }
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
+  }
+
+//--------- add update user code start here ----------------//
+  userCreateUpdate(): void {
+    //@ts-ignore
+    const dialogRef = this.dialog.open(AddUserComponent, {
+      width: 'auto',
+      disableClose: false,
+      data: '',
+    });
+  }
 }
