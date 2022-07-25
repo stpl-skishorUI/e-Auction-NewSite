@@ -5,17 +5,19 @@ import { FormBuilder, FormGroup, UntypedFormControl } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatFormFieldDefaultOptions, MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
 import { MatPaginator } from '@angular/material/paginator';
-import { MatSelectChange } from '@angular/material/select';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { ReplaySubject } from 'rxjs';
+import { ReplaySubject, Subscription } from 'rxjs';
 import { fadeInUp400ms } from 'src/@vex/animations/fade-in-up.animation';
 import { stagger40ms } from 'src/@vex/animations/stagger.animation';
 import { TableColumn } from 'src/@vex/interfaces/table-column.interface';
+import { ConfirmationDialogComponent } from 'src/app/core/dialogs/confirmation-dialog/confirmation-dialog.component';
 import { ApiService } from 'src/app/core/services/api.service';
 import { CommonService } from 'src/app/core/services/common.service';
 import { ErrorsService } from 'src/app/core/services/errors.service';
-import { UserRegistration } from '../user-registration/user-registration.model';
+import { LocalstorageService } from 'src/app/core/services/localstorage.service';
+import { AddBidderComponent } from './add-bidder/add-bidder.component';
+import { BidderList } from './bidder-list.model';
 
 @Component({
   selector: 'vex-bidder-list',
@@ -38,24 +40,25 @@ export class BidderListComponent implements OnInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   layoutCtrl = new UntypedFormControl('boxed');
-  selection = new SelectionModel<UserRegistration>(true, []);
+  selection = new SelectionModel<BidderList>(true, []);
   searchCtrl = new UntypedFormControl();
-  dataSource: MatTableDataSource<UserRegistration> | null;
-  userRegistration: UserRegistration[];
-  subject$: ReplaySubject<UserRegistration[]> = new ReplaySubject<UserRegistration[]>(1);
+  dataSource: MatTableDataSource<BidderList> | null;
+  userRegistration: BidderList[];
+  subject$: ReplaySubject<BidderList[]> = new ReplaySubject<BidderList[]>(1);
+  subscription!: Subscription;
 
   @Input()
   pageNumber: number = 1;
-  columns: TableColumn<UserRegistration>[] = [
-    { label: 'Sr.No', property: 'srNo', type: 'button', visible: true },
-    { label: 'Name', property: 'name', type: 'text', visible: true, cssClasses: ['font-medium'] },
-    { label: 'Role', property: 'roleType', type: 'text', visible: true },
-    { label: 'Mobile', property: 'mobileNo', type: 'text', visible: true },
-    { label: 'User Type', property: 'userType', type: 'text', visible: true },
-    { label: 'Sub User Type', property: 'subUserType', type: 'text', visible: true },
-    { label: 'DSC Status', property: 'isDsc', type: 'button', visible: true, cssClasses: ['text-center'] },
-    { label: 'Block /Unblock', property: 'isBlock', type: 'button', visible: true },
-    { label: 'Actions', property: 'actions', type: 'button', visible: true },
+  columns: TableColumn<BidderList>[] = [
+    { label: 'Sr.No', property: 'srNo', type: 'button', visible: true, cssClasses: ['text-secondary', 'font-medium'] },
+    { label: 'Name', property: 'name', type: 'text', visible: true },
+    { label: 'District', property: 'district', type: 'text', visible: true, cssClasses: ['text-secondary', 'font-medium'] },
+    { label: 'Mobile', property: 'mobile', type: 'text', visible: true, cssClasses: ['text-secondary', 'font-medium'] },
+    { label: 'Bidder Type', property: 'bidderType', type: 'text', visible: true, cssClasses: ['text-secondary', 'font-medium'] },
+
+    { label: 'Dsc Status', property: 'isDsc', type: 'text', visible: true, cssClasses: ['text-secondary', 'font-medium'] },
+    { label: 'Unblock Block', property: 'isBlock', type: 'button', visible: true, cssClasses: ['text-secondary', 'font-medium'] },
+    { label: 'Actions', property: 'actions', type: 'button', visible: true, cssClasses: ['text-secondary', 'font-medium'] },
   ];
 
   filterForm!: FormGroup;
@@ -64,6 +67,7 @@ export class BidderListComponent implements OnInit {
   constructor(public dialog: MatDialog,
     private apiService: ApiService, private fb: FormBuilder,
     public commonService: CommonService,
+    private localstorageService: LocalstorageService,
     private error: ErrorsService) { }
 
   get visibleColumns() {
@@ -76,15 +80,14 @@ export class BidderListComponent implements OnInit {
   ngOnInit(): void {
     this.defultFilterform()
     this.getData();
+    // this.createBidder();
   }
 
   defultFilterform() {
     this.filterForm = this.fb.group({
-      stateId: [],
-      divisionId: [0],
       districtId: [0],
-      talukaId: [0],
       search: [''],
+      bidderType: ['All'],
     });
   }
   createUser(): void {
@@ -96,56 +99,25 @@ export class BidderListComponent implements OnInit {
     });
   }
 
-  deleteCustomers(_customers: UserRegistration[]) {
-    // this.userRegistration.splice(this.userRegistration.findIndex((existingCustomer) => existingCustomer.id === customer.id), 1);
-    // this.selection.deselect(customers);
-    this.subject$.next(this.userRegistration);
-  }
-
-  /** Whether the number of selected elements matches the total number of rows. */
-  isAllSelected() {
-    const numSelected = this.selection.selected.length;
-    const numRows = this.dataSource.data.length;
-    return numSelected === numRows;
-  }
-
-  masterToggle() {
-    this.isAllSelected() ?
-      this.selection.clear() :
-      this.dataSource.data.forEach(row => this.selection.select(row));
-  }
-
-  trackByProperty<T>(_index: number, column: TableColumn<T>) {
-    return column.property;
-  }
-
-  onLabelChange(change: MatSelectChange, row: UserRegistration) {
-    const index = this.userRegistration.findIndex(c => c === row);
-    this.userRegistration[index].labels = change.value;
-    this.subject$.next(this.userRegistration);
-  }
-
-  toggleColumnVisibility(column, event) {
-    event.stopPropagation();
-    event.stopImmediatePropagation();
-    column.visible = !column.visible;
-  }
 
   getData() {
+    let localstorData = this.localstorageService.getLoggedInLocalstorageData().responseData;
     let formValue = this.filterForm.value;
-    let paramList: string = "?StateId=" + 0 + "&DivisionId=" + 0 + "&SubDivisionId=0&DistrictId=" + 0 + "&TalukaId=" + 0 + "&pageno=" + this.pageNumber + "&pagesize=" + this.pageSize
-    this.commonService.checkDataType(formValue.search) == true ? paramList += "&Textsearch=" + formValue.search : '';
-    this.apiService.setHttp('get', "user-registration/GetAll" + paramList, false, false, false, 'masterUrl');
-    this.apiService.getHttp().subscribe({
+    let bidderTy = formValue.bidderType == 'All' ? '' : formValue.bidderType;
+    let obj = "StateId=" + localstorData?.stateId + "&DivisionId=" + localstorData?.divisionId + "&DistrictId=" + formValue.districtId +
+      "&BidderType=" + bidderTy + "&ProjectId=" + localstorData?.projectId + "&pageno=" + this.pageNumber + "&pagesize=" + 10;
+    this.commonService.checkDataType(formValue.search) == true ? obj += "&Textsearch=" + formValue.search : '';
+    this.apiService.setHttp('get', "user-registration/GetBidderUsers?" + obj, false, false, false, 'masterUrl');
+    this.subscription = this.apiService.getHttp().subscribe({
       next: (res: any) => {
         if (res.statusCode === "200") {
           this.dataSource = new MatTableDataSource(res.responseData.responseData1);
           this.dataSource.sort = this.sort;
+        
           this.totalRows = res.responseData.responseData2.pageCount;
-
           this.totalRows > 10 && this.pageNumber == 1 ? this.paginator?.firstPage() : '';
         } else {
-          this.dataSource = null;
+          this.totalRows = 0;
           if (res.statusCode != "404") {
             this.commonService.checkDataType(res.statusMessage) == false ? this.error.handelError(res.statusCode) : this.commonService.snackBar(res.statusMessage, 1);
           }
@@ -154,15 +126,71 @@ export class BidderListComponent implements OnInit {
       error: ((error: any) => { this.error.handelError(error.status) })
     });
   }
-  // pagination code start here //
+
+
+  trackByProperty<T>(_index: number, column: TableColumn<T>) {
+    return column.property;
+  }
+
+  toggleColumnVisibility(column, event) {
+    event.stopPropagation();
+    event.stopImmediatePropagation();
+    column.visible = !column.visible;
+  }
+
   pageChanged(event: any) {
     this.pageNumber = event.pageIndex + 1;
     this.getData();
   }
 
 
-  createBidder() {
 
-    
+  createBidder() {
+    const dialogRef = this.dialog.open(AddBidderComponent, {
+      width: '60rem',
+      disableClose: true,
+      data: '',
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(`Dialog result: ${result}`);
+    });
+  }
+
+  userBlockUnBlockModal(element: any, event: any) {
+    let Title: string, dialogText: string;
+    event.checked == true ? Title = 'User Block' : Title = 'User Unblock';
+    event.checked == true ? dialogText = 'Do you want to User Block' : dialogText = 'Do you want to User Unblock';
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+      width: '340px',
+      data: { p1: dialogText, p2: '', cardTitle: Title, successBtnText: 'Yes', dialogIcon: 'done_outline', cancelBtnText: 'No' },
+      disableClose: this.apiService.disableCloseFlag,
+    });
+    dialogRef.afterClosed().subscribe((res: any) => {
+      res == 'Yes' ? this.userBlockUnBlock(element, event.checked) : !event.checked ? event.source.checked = true : event.source.checked = false;
+    });
+  }
+
+  userBlockUnBlock(element: any, event: any) {
+    let obj = {
+      "id": element?.userId,
+      "isBlock": event == true ? true : false,
+      "blockDate": new Date(),
+      "blockBy": this.localstorageService.userId(),
+      "blockRemark": ""
+    }
+    this.apiService.setHttp('PUT', "user-registration/BlockUnblockUser", false, JSON.stringify(obj), false, 'masterUrl');
+    this.subscription = this.apiService.getHttp().subscribe({
+      next: (res: any) => {
+        if (res.statusCode === "200") {
+          this.getData();
+          this.commonService.snackBar(res.statusMessage, 0);
+        } else {
+          if (res.statusCode != "404") {
+            this.commonService.checkDataType(res.statusMessage) == false ? this.error.handelError(res.statusCode) : this.commonService.snackBar(res.statusMessage, 1);
+          }
+        }
+      },
+      error: (err: any) => { this.error.handelError(err) }
+    })
   }
 }

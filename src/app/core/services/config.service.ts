@@ -12,6 +12,7 @@ export class ConfigService {
   //--------------------------------------------mat table setting  start heare ----------------------------------------------//
   pageSize: number = 10;
   matFormField: string | any = 'outline';
+  matFormFieldFilter:string|any='outline';
   //--------------------------------------------mat table setting  end heare ----------------------------------------------//
 
   //--------------------------------------------------google map setting start here ----------------------------------------------------//
