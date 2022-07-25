@@ -122,7 +122,7 @@ export class LoginComponent implements OnInit {
       next: (res: any) => {
         if (res.statusCode === "200") {
           if (this.commonService.checkDataType(res.responseData.responseData1) == false) {
-            this.commonService.snackBar('Soory you not have right to access page. Please contact admin.', 1);
+            this.commonService.snackBar('sorry you not have right to access page. Please contact admin.', 1);
             return
           } else {
             data.responseData1 = { "pageUrls": res.responseData.responseData1 }
