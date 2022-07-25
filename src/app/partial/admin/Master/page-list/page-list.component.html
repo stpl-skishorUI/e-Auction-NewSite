@@ -1,15 +1,100 @@
 <vex-page-layout>
 
-    <vex-secondary-toolbar current="Page List">
-        <vex-breadcrumbs [crumbs]="['Master', 'Page List']"></vex-breadcrumbs>
-    </vex-secondary-toolbar>
+  <vex-secondary-toolbar current="Page List">
+    <vex-breadcrumbs [crumbs]="['Master', 'Page List']"></vex-breadcrumbs>
+  </vex-secondary-toolbar>
 
-    <vex-page-layout-content class="container">
-        <div class="card overflow-auto">
-            asdf
-          </div>
-    </vex-page-layout-content>
+  <vex-page-layout-content [class.container]="layoutCtrl.value === 'boxed'"
+    [class.px-gutter]="layoutCtrl.value === 'fullwidth'" class="-mt-6">
+    <div class="my-3 card p-3 border-0 shadow-none">
+      <div class="flex gap-x-3">
+        <div class="flex-auto" align="end">
+          <mat-form-field class="w-60" appearance="outline">
+            <mat-label>Search by Page Url/Page Name</mat-label>
+            <input ty matInput placeholder=" Search by Page Url/Page Name" [formControl]="searchFilter">
+          </mat-form-field>
+        </div>
+        <div>
+          <button class="rounded-full bg-gray-300 text-black" mat-raised-button type="button" (click)="getData()">
+            <mat-icon class="ltr:-ml-1 rtl:-mr-1 ltr:mr-2 rtl:ml-2" svgIcon="mat:search"></mat-icon>
+            <span>Search</span>
+          </button>
+        </div>
+      </div>
+    </div>
 
+    <div class="card overflow-auto">
+      <div class="bg-app-bar px-6 h-16 border-b sticky left-0 flex items-center">
+        <span class="flex-1"></span>
+        <button [matMenuTriggerFor]="columnFilterMenu" class="ml-4 flex-none" mat-icon-button
+          matTooltip="Filter Columns" type="button">
+          <mat-icon svgIcon="mat:filter_list"></mat-icon>
+        </button>
+
+        <button (click)="createPage()" class="ml-4 flex-none" color="primary" mat-mini-fab matTooltip="Add Customer"
+          type="button">
+          <mat-icon svgIcon="mat:add"></mat-icon>
+        </button>
+      </div>
+
+      <table @stagger [dataSource]="dataSource" class="w-full" mat-table matSort>
+
+        <!--- Note that these columns can be defined in any order.
+                        The actual rendered columns are set as a property on the row definition" -->
+
+        <!-- sr No column -->
+        <ng-container matColumnDef="srNo">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Sr.No </th>
+          <td mat-cell *matCellDef="let element;let i=index"> {{((pageNumber + 1) * 10 + i + 1)-20}}</td>
+        </ng-container>
+
+        <!-- Text Columns -->
+        <ng-container *ngFor="let column of columns; trackBy: commonService.trackByProperty">
+          <ng-container *ngIf="column.type === 'text'" [matColumnDef]="column.property">
+            <th *matHeaderCellDef class="uppercase" mat-header-cell mat-sort-header> {{ column.label }}</th>
+            <td *matCellDef="let row" [ngClass]="column.cssClasses" mat-cell>{{ row[column.property] }}</td>
+          </ng-container>
+        </ng-container>
+
+        <!-- Action Column -->
+        <ng-container matColumnDef="actions">
+          <th *matHeaderCellDef mat-header-cell mat-sort-header>ACTION</th>
+          <td *matCellDef="let row" class="w-10 text-secondary" mat-cell>
+            <div class="flex">
+              <a (click)="$event.stopPropagation()"
+                class="w-8 h-8 leading-none flex items-center justify-center ml-1 hover:bg-hover text-teal bg-teal-light"
+                mat-icon-button>
+                <mat-icon class="icon-sm" svgIcon="mat:edit"></mat-icon>
+              </a>
+              <a (click)="$event.stopPropagation()"
+                class="w-8 h-8 leading-none flex items-center justify-center ml-1 hover:bg-hover text-red bg-red-light"
+                mat-icon-button>
+                <button (click)="deleteRecord(row.pageId)">
+                  <mat-icon class="icon-sm" svgIcon="mat:delete_outline"></mat-icon>
+                </button>
+              </a>
+            </div>
+          </td>
+        </ng-container>
+
+        <tr *matHeaderRowDef="visibleColumns" mat-header-row></tr>
+        <tr *matRowDef="let row; columns: visibleColumns;" @fadeInUp
+          class="hover:bg-hover trans-ease-out cursor-pointer" mat-row></tr>
+      </table>
+
+      <mat-paginator [pageSizeOptions]="pageSizeOptions" [pageSize]="pageSize" [length]="totalRows"
+        (page)="pageChanged($event)" class="sticky left-0">
+      </mat-paginator>
+
+    </div>
+  </vex-page-layout-content>
 </vex-page-layout>
 
-
+<mat-menu #columnFilterMenu="matMenu" xPosition="before" yPosition="below">
+  <button (click)="toggleColumnVisibility(column, $event)" *ngFor="let column of columns"
+    class="checkbox-item mat-menu-item">
+    <mat-checkbox (click)="$event.stopPropagation()" [(ngModel)]="column.visible" color="primary">
+      {{ column.label }}
+    </mat-checkbox>
+  </button>
+</mat-menu>
