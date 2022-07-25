@@ -123,7 +123,7 @@
   }
   table th, mat-table mat-header-cell{
     font-size: 0.85rem !important;
-    background: var(--sidenav-background);
+    background: rgba(var(--color-primary), 1);
     color: #fff !important;
     text-transform: capitalize !important;
   }
