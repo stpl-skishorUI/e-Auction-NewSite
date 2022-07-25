@@ -1,17 +1,36 @@
-<div mat-dialog-title class="flex items-center justify-between ">
+<div mat-dialog-title class="flex items-center justify-end ">
     <!-- {{dialogData?.cardTitle}} -->
+
+    <p class="mb-0" *ngIf="dialogData?.p2">{{dialogData?.p2}}</p>
     <button type="button" mat-icon-button (click)=" this.dialogRef.close()" tabindex="-1">
         <mat-icon svgIcon="mat:close"></mat-icon>
     </button>
 </div>
 
 <mat-dialog-content>
-    <p class="mb-0" *ngIf="dialogData?.p1">{{dialogData?.p1}}</p>
-    <p class="mb-0" *ngIf="dialogData?.p2">{{dialogData?.p2}}</p>
-   
+    <!-- <p class="mb-0" *ngIf="dialogData?.p1">{{dialogData?.p1}}</p>
+    <p class="mb-0" *ngIf="dialogData?.p2">{{dialogData?.p2}}</p> -->
+    <span class="mb-3" *ngIf="dialogData?.p1">
+
+        <div class="dummy-positioning flex mx-auto mb-3">
+
+            <div class="success-icon">
+                <div class="success-icon__tip"></div>
+                <div class="success-icon__long"></div>
+            </div>
+
+        </div>
+    </span>
+    <h3 class="mb-3 text-center text-lg font-medium text-green-600" *ngIf="dialogData?.p1">{{dialogData?.p1}}</h3>
+
+    <p class="text-center">
+        Demo msg
+    </p>
 </mat-dialog-content>
 
 
-<mat-dialog-actions align="end">
-    <button mat-button color="primary"  (click)=" this.dialogRef.close()">{{dialogData?.successBtnText}}</button>
+<mat-dialog-actions>
+    <div class="mx-auto">
+        <button mat-button color="primary" (click)=" this.dialogRef.close()">{{dialogData?.successBtnText}}</button>
+    </div>
 </mat-dialog-actions>
