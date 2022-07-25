@@ -382,7 +382,7 @@
                                     <mat-form-field appearance="fill">
                                         <mat-label>Incorporation Date</mat-label>
                                         <input matInput [matDatepicker]="picker" [readonly]="true"
-                                            formControl Name="incorporation_Date">
+                                            formControlName="incorporation_Date">
                                         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                                         <mat-datepicker #picker></mat-datepicker>
                                         <mat-error *ngIf="f.incorporation_Date.errors">
