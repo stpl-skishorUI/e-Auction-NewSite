@@ -1,1 +1,63 @@
-<p>publish-event works!</p>
+<div mat-dialog-title class="flex items-center justify-between mb-0">
+    <div class="mx-2"> Publish Event</div>
+</div>
+
+<div class="my-3 card p-3 border-0 shadow-none">
+    <div class="flex gap-x-4">
+        <div>
+            <mat-form-field appearance="outline" class="w-[14rem]">
+                <mat-label>Event Level</mat-label>
+                <mat-select>
+                    <mat-option>None</mat-option>
+                    <mat-option value="option1">Option 1</mat-option>
+                    <mat-option value="option2">Option 2</mat-option>
+                    <mat-option value="option3">Option 3</mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+        <div>
+            <mat-form-field appearance="outline" class="w-[14rem]">
+                <mat-label>Event End Date</mat-label>
+                <input matInput >
+                <mat-hint>MM/DD/YYYY</mat-hint>
+            </mat-form-field>
+        </div>
+        <div>
+            <mat-form-field appearance="outline" class="w-[14rem]">
+                <mat-label>Event End Date</mat-label>
+                <input matInput >
+                <mat-hint>MM/DD/YYYY</mat-hint>
+            </mat-form-field>
+        </div>
+        <div>
+            <mat-form-field class="w-[14rem]" appearance="outline">
+                <mat-label>Event ID</mat-label>
+                <input ty matInput placeholder="Event ID">
+            </mat-form-field>
+        </div>
+        <div>
+            <button class="rounded-full bg-gray-300 text-black" mat-raised-button type="button">
+              <mat-icon class="ltr:-ml-1 rtl:-mr-1 ltr:mr-2 rtl:ml-2"
+                        svgIcon="mat:search"></mat-icon>
+              <span>APPLY</span>
+            </button>
+        </div>
+    </div>
+
+    <div>
+        <mat-tab-group animationDuration="0ms" class="justify-around">
+            <mat-tab label="Not Published" class="">
+                <div>
+                    Not Published Table
+                </div>
+            </mat-tab>
+            <mat-tab label="Published Event">
+                <div>
+                    Published Event Table
+                </div>
+            </mat-tab>
+        </mat-tab-group>
+    </div>
+</div>
+
+
