@@ -80,7 +80,7 @@ export class BidderListComponent implements OnInit {
   ngOnInit(): void {
     this.defultFilterform()
     this.getData();
-    this.createBidder();
+    // this.createBidder();
   }
 
   defultFilterform() {
