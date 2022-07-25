@@ -1,247 +1,503 @@
-<div class="container">
-    <form [formGroup]="bidderRegiForm" #formDirective="ngForm">
-        <div class="">
-            Add Bidder
-        </div>
-        <mat-divider class="-mx-6 text-border"></mat-divider>
-        <div class="flex  gap-x-3 space-x-28 mt-4">
-            <h4>Bidder Type <sup class="text-red">*</sup></h4>     
-    
-            <!-- </mat-radio-group> -->
-            <mat-radio-group aria-label="Select an option" >
-                <mat-radio-button class="px-2" name="bidderType"  *ngFor="let bidderTy of bidderTypeArray" [checked]="bidderTypeName == bidderTy ? true:false" [value]= bidderTy (change)="bidderTypeCheck(bidderTy)">{{bidderTy}}</mat-radio-button>
-            </mat-radio-group>
-    
-    
-        </div>
-    
-        <div class="grid grid-cols-2 gap-4 py-4">
-            <div class="flex items-center justify-between" *ngIf="hideIndividual">    
-                <div class="pe-3">
-                    <mat-label>Individual Name <sup class="text-red">*</sup> </mat-label>
-                </div>
-                <div class="text-end">
-                    <mat-form-field class="w-60" appearance="outline">
-                        <mat-label>Individual Name </mat-label>
-                        <input matInput class="text-capitalize" autocomplete="nope" value=""
-                        (keyup)="valiService.removeSpaceAtBegining($event)" formControlName="name">
-                    <mat-error *ngIf="f.name.errors">
-                        <span class="text-danger" *ngIf="f.name.errors?.required">
-                            Individual Name is required.</span>
-                        <span class="text-danger" *ngIf="f.name.errors?.pattern">
-                            Please enter Valid Individual Name</span>
-                    </mat-error>
-                    </mat-form-field>
-                </div>
+<div mat-dialog-title class="flex items-center justify-between mb-0">
+    <div class="mx-2">Add Bidder</div>
+    <button type="button" mat-icon-button (click)="close('No answer')" tabindex="-1">
+        <mat-icon svgIcon="mat:close"></mat-icon>
+    </button>
+</div>
+<form [formGroup]="bidderRegiForm" #formDirective="ngForm" >
+    <mat-dialog-content>
+        <div class="container">
+
+
+            <div class="flex  gap-x-3 space-x-28 mt-4">
+                <h4>Bidder Type <sup class="text-red">*</sup></h4>
+
+                <!-- </mat-radio-group> -->
+                <mat-radio-group aria-label="Select an option">
+                    <mat-radio-button class="px-2" name="bidderType" *ngFor="let bidderTy of bidderTypeArray"
+                        [checked]="bidderTypeName == bidderTy ? true:false" [value]=bidderTy
+                        (change)="bidderTypeCheck(bidderTy)">{{bidderTy}}</mat-radio-button>
+                </mat-radio-group>
+
+
             </div>
-            <div class="flex items-center justify-between" *ngIf="hideOrganization">    
-                <div class="pe-3">
-                    <mat-label>Organization Name <sup class="text-red">*</sup> </mat-label>
-                </div>
-                <div class="text-end">
-                    <mat-form-field class="w-60" appearance="outline">
-                        <mat-label>Organization Name </mat-label>
-                        <input matInput class="text-capitalize" autocomplete="nope" value=""
-                        formControlName="name" (keyup)="valiService.removeSpaceAtBegining($event)">
-                    <mat-error *ngIf="f.name.errors">
-                        <span class="text-danger" *ngIf="f.name.errors?.required">
-                            Organization Name is required.</span>
-                        <span class="text-danger" *ngIf="f.name.errors?.pattern">
-                            Please enter Valid Organization Name</span>
-                    </mat-error>
-                    </mat-form-field>
-                </div>
-            </div>
-            <div class="flex items-center justify-between">
-    
-                <div class="pe-3">
-                    <mat-label>Mobile Number <sup class="text-red">*</sup></mat-label>
-                </div>
-                <div class="text-end">
-                    <mat-form-field class="w-60" appearance="outline">
-                        <mat-label>Mobile Number </mat-label>
-                        <input matInput type="text" formControlName="mobile" autocomplete="nope"
-                                    (blur)="getBidderRegByCriSeprated('mobile')"
-                                    (keypress)="acceptedOnlyNumbers($event)" maxlength="10" autocomplete="off">
-                                <mat-error *ngIf="f.mobile.errors">
-                                    <span class="text-danger" *ngIf="f.mobile.errors?.required">
-                                        Mobile Number is required.</span>
-                                    <span class="text-danger" *ngIf="f.mobile.errors?.pattern">
-                                        Please enter Valid Mobile Number</span>
-                                </mat-error>
-                    </mat-form-field>
-                </div>
-            </div>
-        </div>
-    
-        <div class="grid grid-cols-2 gap-4 py-4">
-            <div class="flex items-center justify-between">
-    
-                <div class="pe-3">
-                    <mat-label>District <sup class="text-red">*</sup> </mat-label>
-                </div>
-                <div class="text-end">
-                    <mat-form-field class="w-60" appearance="outline">
-                        <mat-label>Select District </mat-label>
-                        <mat-select formControlName="districtId">
-                            <mat-option *ngFor="let districtObj of districtArray"
-                                [disabled]="districtObj.id == 0" [value]="districtObj.id">
-                                {{districtObj.district}}
-                            </mat-option>
-                        </mat-select>
-                        <mat-error *ngIf="f.districtId.errors?.required"> District is required</mat-error>
-                    </mat-form-field>
-                </div>
-            </div>
-            <div class="flex items-center justify-between">
-    
-                <div class="pe-3">
-                    <mat-label>Email ID <sup class="text-red">*</sup></mat-label>
-                </div>
-                <div class="text-end">
-                    <mat-form-field class="w-60" appearance="outline">
-                        <mat-label>Email ID </mat-label>
-                        <input matInput type="text" formControlName="email" autocomplete="nope"
-                        (keyup)="valiService.removeSpaceAtBegining($event)">
-                    <mat-error *ngIf="f.email.errors">
-                        <span class="text-danger" *ngIf="f.email.errors?.required">E-mail ID is
-                            required</span>
-                        <span class="text-danger" *ngIf="f.email.errors?.pattern">Please Enter Valid Email
-                            Id</span>
-                    </mat-error>
-                    </mat-form-field>
-                </div>
-            </div>
-        </div>
-    
-    
-        <div class="grid grid-cols-2 gap-4 py-4">
-            <div class="flex items-center justify-between">
-    
-                <div class="pe-3">
-                    <mat-label>Address <sup class="text-red">*</sup> </mat-label>
-                </div>
-                <div class="text-end">
-                    <mat-form-field class="w-60 " appearance="outline">
-                        <mat-label>Address</mat-label>
-                        <textarea matInput class="" placeholder="Address"  autocapitalize="off"   formControlName="address" autocomplete="nope" #search
-                        (keyup)="valiService.removeSpaceAtBegining($event)"></textarea>
-                        <!-- <input matInput type="text" autocapitalize="off" spellcheck="off"
-                      > -->
-                    <mat-error *ngIf="f.address.errors">
-                        <span class="text-danger" *ngIf="f.address.errors?.required">Address is required
-                        </span>
-                        <span class="text-danger" *ngIf="f.address.errors?.pattern">Please
-                            Enter Valid Address </span>
-                    </mat-error>
-                    </mat-form-field>
-                </div>
-            </div>
-            <div class="block">              
-                <div class="flex items-center justify-between">    
+
+            <div class="grid grid-cols-2 gap-4 py-4">
+                <div class="flex items-center justify-between" *ngIf="hideIndividual">
                     <div class="pe-3">
-                        <mat-label>Pin Code <sup class="text-red">*</sup></mat-label>
+                        <mat-label>Individual Name <sup class="text-red">*</sup> </mat-label>
                     </div>
                     <div class="text-end">
                         <mat-form-field class="w-60" appearance="outline">
-                            <mat-label>Pin Code </mat-label>
-                            <input matInput type="text" formControlName="pinCode" autocomplete="nope"
-                            (keypress)="acceptedOnlyNumbers($event)" maxlength="6">
-                        <mat-error *ngIf="f.pinCode.errors">
-                            <span class="text-danger" *ngIf="f.pinCode.errors?.required">Pin Code is
-                                required</span>
-                            <span class="text-danger" *ngIf="f.pinCode.errors?.pattern">Please Enter Valid Pin
-                                Code</span>
-                        </mat-error>
+                            <mat-label>Individual Name </mat-label>
+                            <input matInput class="text-capitalize" autocomplete="nope" value=""
+                                (keyup)="valiService.removeSpaceAtBegining($event)" formControlName="name">
+                            <mat-error *ngIf="f.name.errors">
+                                <span class="text-danger" *ngIf="f.name.errors?.required">
+                                    Individual Name is required.</span>
+                                <span class="text-danger" *ngIf="f.name.errors?.pattern">
+                                    Please enter Valid Individual Name</span>
+                            </mat-error>
                         </mat-form-field>
                     </div>
                 </div>
-                <div class="flex items-center justify-between" *ngIf="hideIndividual">    
+                <div class="flex items-center justify-between" *ngIf="hideOrganization">
                     <div class="pe-3">
-                        <mat-label>Designation <sup class="text-red">*</sup></mat-label>
+                        <mat-label>Organization Name <sup class="text-red">*</sup> </mat-label>
                     </div>
                     <div class="text-end">
                         <mat-form-field class="w-60" appearance="outline">
-                            <mat-label>Designation </mat-label>
-                            <mat-select formControlName="designation">
-                                <mat-option *ngFor="let designationObj of DesignationArray"
-                                    [disabled]="designationObj?.id == 0" [value]="designationObj?.id">
-                                    {{designationObj?.designation}}
+                            <mat-label>Organization Name </mat-label>
+                            <input matInput class="text-capitalize" autocomplete="nope" value="" formControlName="name"
+                                (keyup)="valiService.removeSpaceAtBegining($event)">
+                            <mat-error *ngIf="f.name.errors">
+                                <span class="text-danger" *ngIf="f.name.errors?.required">
+                                    Organization Name is required.</span>
+                                <span class="text-danger" *ngIf="f.name.errors?.pattern">
+                                    Please enter Valid Organization Name</span>
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div class="flex items-center justify-between">
+
+                    <div class="pe-3">
+                        <mat-label>Mobile Number <sup class="text-red">*</sup></mat-label>
+                    </div>
+                    <div class="text-end">
+                        <mat-form-field class="w-60" appearance="outline">
+                            <mat-label>Mobile Number </mat-label>
+                            <input matInput type="text" formControlName="mobile" autocomplete="nope"
+                                (blur)="getBidderRegByCriSeprated('mobile')" (keypress)="acceptedOnlyNumbers($event)"
+                                maxlength="10" autocomplete="off">
+                            <mat-error *ngIf="f.mobile.errors">
+                                <span class="text-danger" *ngIf="f.mobile.errors?.required">
+                                    Mobile Number is required.</span>
+                                <span class="text-danger" *ngIf="f.mobile.errors?.pattern">
+                                    Please enter Valid Mobile Number</span>
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4 py-4">
+                <div class="flex items-center justify-between">
+
+                    <div class="pe-3">
+                        <mat-label>District <sup class="text-red">*</sup> </mat-label>
+                    </div>
+                    <div class="text-end">
+                        <mat-form-field class="w-60" appearance="outline">
+                            <mat-label>Select District </mat-label>
+                            <mat-select formControlName="districtId">
+                                <mat-option *ngFor="let districtObj of districtArray" [disabled]="districtObj.id == 0"
+                                    [value]="districtObj.id">
+                                    {{districtObj.district}}
                                 </mat-option>
                             </mat-select>
-                            <mat-error *ngIf="f.designation.errors?.required"> Designation is required</mat-error>
+                            <mat-error *ngIf="f.districtId.errors?.required"> District is required</mat-error>
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div class="flex items-center justify-between">
+
+                    <div class="pe-3">
+                        <mat-label>Email ID <sup class="text-red">*</sup></mat-label>
+                    </div>
+                    <div class="text-end">
+                        <mat-form-field class="w-60" appearance="outline">
+                            <mat-label>Email ID </mat-label>
+                            <input matInput type="text" formControlName="email" autocomplete="nope"
+                                (keyup)="valiService.removeSpaceAtBegining($event)">
+                            <mat-error *ngIf="f.email.errors">
+                                <span class="text-danger" *ngIf="f.email.errors?.required">E-mail ID is
+                                    required</span>
+                                <span class="text-danger" *ngIf="f.email.errors?.pattern">Please Enter Valid Email
+                                    Id</span>
+                            </mat-error>
                         </mat-form-field>
                     </div>
                 </div>
             </div>
-        </div>
-
-        <div class="grid grid-cols-2 gap-4 py-4" *ngIf="hideOrganization">
-            <div class="flex items-center justify-between">    
-                <div class="pe-3">
-                    <mat-label>Contact Person Name <sup class="text-red">*</sup> </mat-label>
-                </div>
-                <div class="text-end">
-                    <mat-form-field class="w-60" appearance="outline">
-                        <mat-label>Contact Person Name </mat-label>
-                        <input matInput formControlName="contactPersonName" autocomplete="nope"
-                        (keyup)="valiService.removeSpaceAtBegining($event)">
-                    <mat-error *ngIf="f.contactPersonName.errors">
-                        <span class="text-danger" *ngIf="f.contactPersonName.errors?.required">
-                            Contact Person Name is required.</span>
-                        <span class="text-danger" *ngIf="f.contactPersonName.errors?.pattern">
-                            Please Enter Valid Contact Person Name</span>
-                    </mat-error>
-                    </mat-form-field>
-                </div>
-            </div>
-            <div class="flex items-center justify-between">
-    
-                <div class="pe-3">
-                    <mat-label>Org. Type<sup class="text-red">*</sup></mat-label>
-                </div>
-                <div class="text-end">
-                    <mat-form-field class="w-60" appearance="outline">
-                        <mat-label>Org. Type</mat-label>
-                        <mat-select formControlName="organizationTypeId"
-                        (selectionChange)="orgTypeHideTableRow()">
-                        <mat-option *ngFor="let organType of organTypeArray"
-                            [disabled]="organType.organizationId == 0" [value]="organType.organizationId">
-                            {{organType.organizationName}}
-                        </mat-option>
-                    </mat-select>
-                    <mat-error *ngIf="f.organizationTypeId.errors?.required"> Org. Type is required
-                    </mat-error>
-                    </mat-form-field>
-                </div>
-            </div>
-        </div>
-        <div class="grid grid-cols-2 gap-4 py-4" *ngIf="hideOrganization">
-            <div class="flex items-center justify-between">    
-                <div class="pe-3">
-                    <mat-label>Contact Person Mobile No </mat-label>
-                </div>
-                <div class="text-end">
-                    <mat-form-field class="w-60" appearance="outline">
-                        <mat-label>Contact Person Mobile No</mat-label>
-                        <input matInput type="text" formControlName="contactPersonMobile" autocomplete="nope"
-                            (keypress)="acceptedOnlyNumbers($event)" maxlength="10">
-                        <mat-error *ngIf="f.contactPersonMobile.errors?.pattern"> Please enter Valid Contact
-                            Person Mobile No.</mat-error>
-                    </mat-form-field>
-                </div>
-            </div>
-        </div>
-    
-        <!-- <vex-widget-table [columns]="tableColumns"
-        [data]="tableData"
-        class="sm:col-span-2"></vex-widget-table> -->
-        
-        <div class="flex justify-end">
-            <button mat-stroked-button class="mx-3">Clear</button>
-            <button mat-raised-button color="primary">Submit</button>
-        </div>
-    </form>
 
 
-</div>
+            <div class="grid grid-cols-2 gap-4 py-4">
+                <div class="flex items-center justify-between">
+
+                    <div class="pe-3">
+                        <mat-label>Address <sup class="text-red">*</sup> </mat-label>
+                    </div>
+                    <div class="text-end">
+                        <mat-form-field class="w-60 " appearance="outline">
+                            <mat-label>Address</mat-label>
+                            <textarea matInput class="" placeholder="Address" autocapitalize="off"
+                                formControlName="address" autocomplete="nope" #search
+                                (keyup)="valiService.removeSpaceAtBegining($event)"></textarea>
+                            <!-- <input matInput type="text" autocapitalize="off" spellcheck="off"
+                          > -->
+                            <mat-error *ngIf="f.address.errors">
+                                <span class="text-danger" *ngIf="f.address.errors?.required">Address is required
+                                </span>
+                                <span class="text-danger" *ngIf="f.address.errors?.pattern">Please
+                                    Enter Valid Address </span>
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div class="block">
+                    <div class="flex items-center justify-between">
+                        <div class="pe-3">
+                            <mat-label>Pin Code <sup class="text-red">*</sup></mat-label>
+                        </div>
+                        <div class="text-end">
+                            <mat-form-field class="w-60" appearance="outline">
+                                <mat-label>Pin Code </mat-label>
+                                <input matInput type="text" formControlName="pinCode" autocomplete="nope"
+                                    (keypress)="acceptedOnlyNumbers($event)" maxlength="6">
+                                <mat-error *ngIf="f.pinCode.errors">
+                                    <span class="text-danger" *ngIf="f.pinCode.errors?.required">Pin Code is
+                                        required</span>
+                                    <span class="text-danger" *ngIf="f.pinCode.errors?.pattern">Please Enter Valid Pin
+                                        Code</span>
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between" *ngIf="hideIndividual">
+                        <div class="pe-3">
+                            <mat-label>Designation <sup class="text-red">*</sup></mat-label>
+                        </div>
+                        <div class="text-end">
+                            <mat-form-field class="w-60" appearance="outline">
+                                <mat-label>Designation </mat-label>
+                                <mat-select formControlName="designation">
+                                    <mat-option *ngFor="let designationObj of DesignationArray"
+                                        [disabled]="designationObj?.id == 0" [value]="designationObj?.id">
+                                        {{designationObj?.designation}}
+                                    </mat-option>
+                                </mat-select>
+                                <mat-error *ngIf="f.designation.errors?.required"> Designation is required</mat-error>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4 py-4" *ngIf="hideOrganization">
+                <div class="flex items-center justify-between">
+                    <div class="pe-3">
+                        <mat-label>Contact Person Name <sup class="text-red">*</sup> </mat-label>
+                    </div>
+                    <div class="text-end">
+                        <mat-form-field class="w-60" appearance="outline">
+                            <mat-label>Contact Person Name </mat-label>
+                            <input matInput formControlName="contactPersonName" autocomplete="nope"
+                                (keyup)="valiService.removeSpaceAtBegining($event)">
+                            <mat-error *ngIf="f.contactPersonName.errors">
+                                <span class="text-danger" *ngIf="f.contactPersonName.errors?.required">
+                                    Contact Person Name is required.</span>
+                                <span class="text-danger" *ngIf="f.contactPersonName.errors?.pattern">
+                                    Please Enter Valid Contact Person Name</span>
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div class="flex items-center justify-between">
+
+                    <div class="pe-3">
+                        <mat-label>Org. Type<sup class="text-red">*</sup></mat-label>
+                    </div>
+                    <div class="text-end">
+                        <mat-form-field class="w-60" appearance="outline">
+                            <mat-label>Org. Type</mat-label>
+                            <mat-select formControlName="organizationTypeId" (selectionChange)="orgTypeHideTableRow()">
+                                <mat-option *ngFor="let organType of organTypeArray"
+                                    [disabled]="organType.organizationId == 0" [value]="organType.organizationId">
+                                    {{organType.organizationName}}
+                                </mat-option>
+                            </mat-select>
+                            <mat-error *ngIf="f.organizationTypeId.errors?.required"> Org. Type is required
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                </div>
+            </div>
+            <div class="grid grid-cols-2 gap-4 py-4" *ngIf="hideOrganization">
+                <div class="flex items-center justify-between">
+                    <div class="pe-3">
+                        <mat-label>Contact Person Mobile No </mat-label>
+                    </div>
+                    <div class="text-end">
+                        <mat-form-field class="w-60" appearance="outline">
+                            <mat-label>Contact Person Mobile No</mat-label>
+                            <input matInput type="text" formControlName="contactPersonMobile" autocomplete="nope"
+                                (keypress)="acceptedOnlyNumbers($event)" maxlength="10">
+                            <mat-error *ngIf="f.contactPersonMobile.errors?.pattern"> Please enter Valid Contact
+                                Person Mobile No.</mat-error>
+                        </mat-form-field>
+                    </div>
+                </div>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Document Name</th>
+                        <th>Document Number</th>
+                        <th>Weight</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>PAN:<span class="text-danger">* (PAN no. & PAN document
+                                mandatory) </span> </td>
+                        <td>
+                            <mat-form-field appearance="fill" class="w-100">
+                                <mat-label>PAN Number</mat-label>
+                                <input matInput type="text" uppercase maxlength="10"
+                                    (blur)="getBidderRegByCriSeprated('PAN')"
+                                    (keyup)="valiService.removeSpaceAtBegining($event)" formControlName="panNo">
+                                <mat-error *ngIf="f.panNo.errors" autocomplete="off">
+                                    <span class="text-danger" *ngIf="f.panNo.errors?.required">PAN Number is
+                                        required.</span>
+                                    <span class="text-danger" *ngIf="f.panNo.errors?.pattern">Please enter
+                                        Valid PAN Number.</span>
+                                </mat-error>
+                            </mat-form-field>
+                        </td>
+                        <td>
+                            <button mat-raised-button type="button">
+                                <label><span>Upload Document</span>
+                                    <input type="file" style="display: none" (change)="documentUpload($event,1,'PAN')"
+                                        #fileInputPan>
+                                </label>
+                            </button>
+                            <mat-icon matTooltip="Maximum File Size is 5Mb (Suported File Types .png,.jpg,.jpeg,.pdf)"
+                                class="text-primary">info</mat-icon>
+
+                        </td>
+                        <td>
+                            <span class="text-left mnw-70 d-inline-block px-1" *ngIf="panSymbolHide">
+                                <button (click)="viewDocument(1)">
+                                    <mat-icon matTooltip="View">view_headline</mat-icon>
+                                </button>
+                                <button>
+                                    <mat-icon matTooltip="Delete Uploaded Document" (click)="deleteDocument(1)">
+                                        delete_forever</mat-icon>
+                                </button>
+                            </span>
+                        </td>
+                    </tr>
+                    <tr *ngIf="hideIndividual">
+                        <td>Aadhar:</td>
+                        <td>
+                            <mat-form-field appearance="fill" class="w-100">
+                                <mat-label>Aadhar Number</mat-label>
+                                <input type="text" matInput formControlName="aadharNo" autocomplete="nope"
+                                    maxlength="12" (keypress)="acceptedOnlyNumbers($event)">
+                                <mat-error *ngIf="f.aadharNo.errors?.pattern">Please Enter Valid Aadhar Number.
+                                </mat-error>
+                            </mat-form-field>
+                        </td>
+                        <td>
+                            <button mat-raised-button type="button">
+                                <label class="px-2"><span>Upload Document</span>
+                                    <input type="file" style="display: none"
+                                        (change)="documentUpload($event,2,'Aadhar')" #fileInputAadhar>
+                                </label>
+                            </button>
+
+                            <mat-icon matTooltip="Maximum File Size is 5Mb (Suported File Types .png,.jpg,.jpeg,.pdf)"
+                                class="text-primary">info</mat-icon>
+                        </td>
+                        <td>
+                            <span *ngIf="aadharSymbolHide">
+                                <button (click)="viewDocument(2)">
+                                    <mat-icon matTooltip="View">view_headline</mat-icon>
+                                </button>
+                                <button>
+                                    <mat-icon matTooltip="Delete Uploaded Document" (click)="deleteDocument(2)">
+                                        delete_forever
+                                    </mat-icon>
+                                </button>
+                            </span>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>GST:</td>
+                        <td>
+                            <mat-form-field appearance="fill" class="w-100">
+                                <mat-label>GST Number</mat-label>
+                                <input matInput type="text" formControlName="gstNo" autocomplete="nope"
+                                    (keypress)="acceptedOnlyNumbers($event)">
+                                <mat-error *ngIf="f.gstNo.errors?.pattern">Please Enter Valid GST Number.
+                                </mat-error>
+                            </mat-form-field>
+                        </td>
+                        <td>
+                            <button mat-raised-button type="button">
+                                <label class="px-2"><span>Upload Document</span>
+                                    <input type="file" style="display: none" (change)="documentUpload($event,3,'GST')"
+                                        #fileInputGst>
+                                </label>
+                            </button>
+
+                            <mat-icon matTooltip="Maximum File Size is 5Mb (Suported File Types .png,.jpg,.jpeg,.pdf)"
+                                class="text-primary">info</mat-icon>
+                        </td>
+                        <td>
+                            <span *ngIf="gstSymbolHide">
+                                <button (click)="viewDocument(3)">
+                                    <mat-icon matTooltip="View">view_headline</mat-icon>
+                                </button>
+                                <button>
+                                    <mat-icon matTooltip="Delete Uploaded Document" (click)="deleteDocument(3)">
+                                        delete_forever
+                                    </mat-icon>
+                                </button>
+                            </span>
+                        </td>
+                    </tr>
+                  <tr *ngIf="hideOrganization">
+                        <td>Incorporation Certificate:</td>
+                        <td>
+                            <div class="row">
+                                <div class="col-6">
+                                    <mat-form-field appearance="fill">
+                                        <mat-label>Incorporation No. </mat-label>
+                                        <input matInput type="text" formControlName="incorporationCerti_No"
+                                            (keyup)="valiService.removeSpaceAtBegining($event)" maxlength="21"
+                                            autocomplete="nope">
+                                        <mat-error *ngIf="f.incorporationCerti_No.errors">
+                                            <span class="text-danger" *ngIf="f.incorporationCerti_No.errors?.required">
+                                                Incorporation No. is required.</span>
+                                            <span class="text-danger" *ngIf="f.incorporationCerti_No.errors?.pattern">
+                                                Please enter Valid Incorporation No.</span>
+                                        </mat-error>
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-6">
+                                    <mat-form-field appearance="fill">
+                                        <mat-label>Incorporation Date</mat-label>
+                                        <input matInput [matDatepicker]="picker" [readonly]="true"
+                                            formControl Name="incorporation_Date">
+                                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                                        <mat-datepicker #picker></mat-datepicker>
+                                        <mat-error *ngIf="f.incorporation_Date.errors">
+                                            <span class="text-danger" *ngIf="f.incorporation_Date.errors?.required">
+                                                Incorporation Date is required.</span>
+                                        </mat-error>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <button mat-raised-button type="button">
+                                <label class="px-2"><span>Upload Document</span>
+                                    <input type="file" style="display: none"
+                                        (change)="documentUpload($event,4,'Incorporation Certificate')" #fileInputIC>
+                                </label>
+                            </button>
+
+                            <mat-icon matTooltip="Maximum File Size is 5Mb (Suported File Types .png,.jpg,.jpeg,.pdf)"
+                                class="text-primary">info</mat-icon>
+                        </td>
+                        <td>
+                            <span *ngIf="incCertiSymbolHide">
+                                <button (click)="viewDocument(4)">
+                                    <mat-icon matTooltip="View">view_headline</mat-icon>
+                                </button>
+                                <button>
+                                    <mat-icon matTooltip="Delete Uploaded Document" (click)="deleteDocument(4)">
+                                        delete_forever
+                                    </mat-icon>
+                                </button>
+                            </span>
+                        </td>
+                    </tr>
+                    <tr *ngIf="hideOrganization">
+                        <td>Shop Act/ Local Body Certificate:</td>
+                        <td>
+                            <mat-form-field appearance="fill" class="w-100">
+                                <mat-label>Shop Act/ Local Body Certificate</mat-label>
+                                <input matInput type="text" formControlName="SALocalBodyCerti_No"
+                                    (keypress)="acceptedOnlyNumbers($event)" maxlength="15" autocomplete="nope">
+                                <mat-error *ngIf="f.SALocalBodyCerti_No.errors">
+                                    <span class="text-danger" *ngIf="f.SALocalBodyCerti_No.errors?.pattern">
+                                        Please enter Valid Shop Act/ Local Body Certificate</span>
+                                </mat-error>
+                            </mat-form-field>
+                        </td>
+                        <td>
+                            <button mat-raised-button type="button">
+                                <label class="py-1 px-2"><span>Upload Document</span>
+                                    <input type="file" style="display: none"
+                                        (change)="documentUpload($event,5,'Shop Act/ Local Body Certificate')"
+                                        #fileInputSALBC>
+                                </label>
+                            </button>
+
+                            <mat-icon matTooltip="Maximum File Size is 5Mb (Suported File Types .png,.jpg,.jpeg,.pdf)"
+                                class="text-primary">info</mat-icon>
+
+                        </td>
+                        <td>
+                            <span *ngIf="SALBodyCertiSymbolHide">
+                                <button (click)="viewDocument(5)">
+                                    <mat-icon matTooltip="View">view_headline</mat-icon>
+                                </button>
+                                <button>
+                                    <mat-icon matTooltip="Delete Uploaded Document" (click)="deleteDocument(5)">
+                                        delete_forever
+                                    </mat-icon>
+                                </button>
+                            </span>
+                        </td>
+                    </tr>
+                    <tr *ngIf="hideOrganization && PartnershipDeedCerti_Hide">
+                        <td>Partnership Deed Certificate:</td>
+                        <td>
+                            <mat-form-field appearance="fill" class="w-100">
+                                <mat-label>Partnership Deed Certificate</mat-label>
+                                <input matInput type="text" formControlName="partnershipDeedCerti_No"
+                                    (keypress)="acceptedOnlyNumbers($event)" maxlength="15" autocomplete="nope">
+                                <mat-error *ngIf="f.partnershipDeedCerti_No.errors">
+                                    <span class="text-danger" *ngIf="f.partnershipDeedCerti_No.errors?.pattern">
+                                        Please enter Valid Partnership Deed Certificate</span>
+                                </mat-error>
+                            </mat-form-field>
+                        </td>
+                        <td>
+                            <button mat-raised-button type="button">
+                                <label class="py-1 px-2"><span>Upload Document</span>
+                                    <input type="file" style="display: none"
+                                        (change)="documentUpload($event,6,'Partnership Deed Certificate')"
+                                        #fileInputPDC>
+                                </label>
+                            </button>
+
+                            <mat-icon matTooltip="Maximum File Size is 5Mb (Suported File Types .png,.jpg,.jpeg,.pdf)"
+                                class="text-primary">info</mat-icon>
+                        </td>
+                        <td *ngIf="PDCertiSymbolHide">
+                            <button (click)="viewDocument(6)">
+                                <mat-icon matTooltip="View">view_headline</mat-icon>
+                            </button>
+                            <button>
+                                <mat-icon matTooltip="Delete Uploaded Document" (click)="deleteDocument(6)">
+                                    delete_forever
+                                </mat-icon>
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </mat-dialog-content>
+    <mat-dialog-actions align="end">
+        <button type="button" mat-stroked-button class="mx-3" (click)="clearForm()">Clear</button>
+        <button type="submit" mat-raised-button color="primary" (click)="onSubmit()" > {{this.data ? 'Update':'Submit'}}</button>
+    </mat-dialog-actions>
+</form>

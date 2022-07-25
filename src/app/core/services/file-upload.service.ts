@@ -13,11 +13,11 @@ export class FileUploadService {
   constructor(private apiService: ApiService, private error: ErrorsService, private commonService: CommonService) { }
 
   uploadDocuments(event: any, folderName?: any, allowedDocTypes?: any, minsize?: any, maxsize?: any) {
-    minsize
+    minsize    
     return new Observable(obj => {
       const selResult = event.target.value.split('.');
-      const docExt = selResult.pop();
-      docExt.toLowerCase();
+      let docExt = selResult.pop();
+      docExt =  docExt.toLowerCase();
       if (allowedDocTypes.match(docExt)) {
         if (event.target.files && event.target.files[0]) {
           const file = event.target.files[0];

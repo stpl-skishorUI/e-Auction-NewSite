@@ -145,31 +145,33 @@ export class BidderListComponent implements OnInit {
 
 
 
-  createBidder() {
-    const dialogRef = this.dialog.open(AddBidderComponent, {
-      width: '60rem',
-      disableClose: true,
-      data: '',
-    });
-    dialogRef.afterClosed().subscribe(result => {
-      console.log(`Dialog result: ${result}`);
-    });
-  }
 
-  userBlockUnBlockModal(element: any, event: any) {
-    let Title: string, dialogText: string;
-    event.checked == true ? Title = 'User Block' : Title = 'User Unblock';
-    event.checked == true ? dialogText = 'Do you want to User Block' : dialogText = 'Do you want to User Unblock';
+
+  userBlockUnBlockModal(element: any, event: any , flag?:string) {
+    console.log(element);
+    let Title: string = 'Delete';
+    let dialogText: string = 'Are you sure you want to delete this record ?';   
+    if(flag != 'isDelete'){
+      event.checked == true ? Title = 'User Block' : Title = 'User Unblock';
+      event.checked == true ? dialogText = 'Do you want to User Block' : dialogText = 'Do you want to User Unblock';
+    }
+    
     const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
       width: '340px',
       data: { p1: dialogText, p2: '', cardTitle: Title, successBtnText: 'Yes', dialogIcon: 'done_outline', cancelBtnText: 'No' },
       disableClose: this.apiService.disableCloseFlag,
     });
     dialogRef.afterClosed().subscribe((res: any) => {
-      res == 'Yes' ? this.userBlockUnBlock(element, event.checked) : !event.checked ? event.source.checked = true : event.source.checked = false;
+      if(flag != 'isDelete'){
+        res == 'Yes' ? this.userBlockUnBlock(element, event.checked) : !event.checked ? event.source.checked = true : event.source.checked = false;
+      }else if( res == 'Yes' ){
+        this.deleteBidderUser(element?.bidderId)
+      }
+      
     });
   }
 
+  // block user and unblock user 
   userBlockUnBlock(element: any, event: any) {
     let obj = {
       "id": element?.userId,
@@ -193,4 +195,42 @@ export class BidderListComponent implements OnInit {
       error: (err: any) => { this.error.handelError(err) }
     })
   }
+
+  // /delete functionality start here 
+  deleteBidderUser(bidderId: number) {
+    let obj = {
+      "id": bidderId,
+      'deletedBy': this.localstorageService.userId(),
+    }
+    this.apiService.setHttp('DELETE', "user-registration", false, JSON.stringify(obj), false, 'masterUrl');
+    this.subscription = this.apiService.getHttp().subscribe({
+      next: (res: any) => {
+        if (res.statusCode === "200") {
+          this.getData();
+          this.commonService.snackBar(res.statusMessage, 0);
+        } else {
+          // if (res.statusCode != "404") {
+            this.commonService.checkDataType(res.statusMessage) == false ? this.error.handelError(res.statusCode) : this.commonService.snackBar(res.statusMessage, 1);
+          // }
+        }
+      },
+      error: (err: any) => { this.error.handelError(err) }
+    })
+  }
+
+  createBidder(data?: any): void {
+    const dialog = this.dialog.open(AddBidderComponent, {
+      width: '1100px',
+      data: data,
+      height: '100%',
+      disableClose: this.apiService.disableCloseFlag,
+    });
+
+    dialog.afterClosed().subscribe(result => {
+      if (result == true) {
+        this.getData();
+      } 
+    });
+  }
+
 }
