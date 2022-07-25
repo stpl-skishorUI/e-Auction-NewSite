@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 
 import { AgreementRoutingModule } from './agreement-routing.module';
 import { AgreementComponent } from './agreement.component';
-
+import { AngularMaterialModule } from 'src/app/core/angular-material/angular-material.module';
 
 @NgModule({
   declarations: [
@@ -11,7 +11,8 @@ import { AgreementComponent } from './agreement.component';
   ],
   imports: [
     CommonModule,
-    AgreementRoutingModule
+    AgreementRoutingModule,
+    AngularMaterialModule
   ]
 })
 export class AgreementModule { }
