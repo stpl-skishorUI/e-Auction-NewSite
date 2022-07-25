@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 
 import { LiveAuctionRoutingModule } from './live-auction-routing.module';
 import { LiveAuctionComponent } from './live-auction.component';
+import { AngularMaterialModule } from 'src/app/core/angular-material/angular-material.module';
 
 
 @NgModule({
@@ -11,7 +12,8 @@ import { LiveAuctionComponent } from './live-auction.component';
   ],
   imports: [
     CommonModule,
-    LiveAuctionRoutingModule
+    LiveAuctionRoutingModule,
+    AngularMaterialModule
   ]
 })
 export class LiveAuctionModule { }

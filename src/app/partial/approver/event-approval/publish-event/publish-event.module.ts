@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 
 import { PublishEventRoutingModule } from './publish-event-routing.module';
 import { PublishEventComponent } from './publish-event.component';
-
+import { AngularMaterialModule } from 'src/app/core/angular-material/angular-material.module';
 
 @NgModule({
   declarations: [
@@ -11,7 +11,9 @@ import { PublishEventComponent } from './publish-event.component';
   ],
   imports: [
     CommonModule,
-    PublishEventRoutingModule
+    PublishEventRoutingModule,
+    AngularMaterialModule,
+
   ]
 })
 export class PublishEventModule { }
