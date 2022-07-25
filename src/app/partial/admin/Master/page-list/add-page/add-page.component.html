@@ -1,37 +1,56 @@
-<div mat-dialog-title class="flex items-center justify-between">
-    <div>Question</div>
-    <button type="button" mat-icon-button (click)="close('No answer')" tabindex="-1">
-      <mat-icon svgIcon="mat:close"></mat-icon>
-    </button>
-  </div>
-
-  <mat-dialog-content>
-    <div @fadeInUp class="card flex-auto">
-        <div class="px-6 py-4 border-b flex items-center">
-          <h2 class="title m-0">Standard Input Style</h2>
-        </div>
-  
-        <div class="px-6 pt-4 pb-0 flex flex-col">
-          <mat-form-field [appearance]=configService?.matFormField class="vex-flex-form-field" color="primary">
-            <mat-label>Primary Color</mat-label>
-            <input matInput>
-          </mat-form-field>
-  
-          <mat-form-field appearance="standard" class="vex-flex-form-field" color="accent">
-            <mat-label>Accent Color</mat-label>
-            <input matInput>
-          </mat-form-field>
-  
-          <mat-form-field appearance="standard" class="vex-flex-form-field" color="warn">
-            <mat-label>Warn Color</mat-label>
-            <input matInput>
-          </mat-form-field>
-        </div>
+<div mat-dialog-title class="flex items-center justify-between mb-2 m-0">
+  <div>Add Page</div>
+  <button type="button" mat-icon-button (click)="close('No answer')" tabindex="-1">
+    <mat-icon svgIcon="mat:close"></mat-icon>
+  </button>
+</div>
+<mat-divider></mat-divider>
+<!-- <br> -->
+<mat-dialog-content>
+  <div class=" mt-4">
+    <div class="mb-2">
+      <div>
+        <mat-form-field appearance="outline" class="w-60">
+          <mat-label>Page Type</mat-label>
+          <mat-select>
+            <mat-option>Page type</mat-option>
+            <mat-option value="option1">Inside Module</mat-option>
+            <mat-option value="option2">Show in Side BAr</mat-option>
+            <mat-option value="option3">Show in inside</mat-option>
+          </mat-select>
+        </mat-form-field>
       </div>
-  </mat-dialog-content>
+    </div>
+
+    <div class="flex flex-col py-3">
 
 
-  <mat-dialog-actions align="end">
-    <button mat-button (click)="close('No')">No</button>
-    <button mat-button color="primary" (click)="close('Yes')">Yes</button>
-  </mat-dialog-actions>
+      <mat-form-field class="example-full-width" appearance="outline">
+        <mat-label>Page Name <sup class="text-red">*</sup> </mat-label>
+        <input matInput placeholder="Page Name" value="">
+      </mat-form-field>
+
+
+    </div>
+    <div class="grid grid-cols-2 gap-x-3 my-3">
+      <div>
+        <mat-form-field class="w-full" appearance="outline">
+          <mat-label>Page URL <sup class="text-red">*</sup> </mat-label>
+          <input matInput placeholder="Page Name" value="">
+        </mat-form-field>
+      </div>
+      <div>
+        <mat-form-field class="w-full" [appearance]=configService?.matFormField>
+          <mat-label>Menu Icon <sup class="text-red">*</sup> </mat-label>
+          <input matInput placeholder="Page Name" value="">
+        </mat-form-field>
+      </div>
+    </div>
+  </div>
+</mat-dialog-content>
+
+
+<mat-dialog-actions class="flex justify-end">
+  <button mat-stroked-button (click)="close('No')">Clear</button>
+  <button mat-raised-button color="primary" (click)="close('Yes')">Submit</button>
+</mat-dialog-actions>
