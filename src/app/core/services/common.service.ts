@@ -7,6 +7,9 @@ import { Observable, interval } from 'rxjs';
 import { map, pairwise } from 'rxjs/operators';
 import { filter } from 'rxjs';
 import { TableColumn } from 'src/@vex/interfaces/table-column.interface';
+import { SuccessDialogComponent } from '../dialogs/success-dialog/success-dialog.component';
+import { ApiService } from './api.service';
+import { MatDialog } from '@angular/material/dialog';
 
 
 @Injectable({
@@ -24,7 +27,9 @@ export class CommonService {
     private datePipe: DatePipe,
     private router: Router,
     private route: ActivatedRoute,
-    public location: Location
+    public location: Location,
+    private apiService:ApiService,
+    public dialog: MatDialog,
   ) {
     this.clock = interval(1000).pipe(map(() => new Date()))
   }
@@ -221,6 +226,13 @@ export class CommonService {
 
   trackByProperty<T>(_index: number, column: TableColumn<T>) {
     return column.property;
+  }
+  successDialog(message) {
+     this.dialog.open(SuccessDialogComponent, {      
+      width: this.apiService.modalSize[1],
+      data: { p1: message, p2: '', cardTitle: '', successBtnText: 'Ok', dialogIcon: '', cancelBtnText: '' },
+      disableClose: this.apiService.disableCloseFlag,
+    });
   }
 
 }

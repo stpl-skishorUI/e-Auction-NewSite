@@ -1,9 +1,9 @@
 import { Component, ElementRef, Inject, OnInit, Optional, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, NgForm, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-// import { TableColumn } from 'src/@vex/interfaces/table-column.interface';
 import { ApiService } from 'src/app/core/services/api.service';
 import { CommonService } from 'src/app/core/services/common.service';
+import { ConfigService } from 'src/app/core/services/config.service';
 import { ErrorsService } from 'src/app/core/services/errors.service';
 import { FileUploadService } from 'src/app/core/services/file-upload.service';
 import { LocalstorageService } from 'src/app/core/services/localstorage.service';
@@ -82,6 +82,7 @@ export class AddBidderComponent implements OnInit {
     public masterService: MasterService,
     private localstorageService: LocalstorageService,
     public uploadFilesService: FileUploadService,
+    public configService:ConfigService,
     // private mapsAPILoader: MapsAPILoader,
     // private ngZone: NgZone,
     @Optional() public dialogRef: MatDialogRef<AddBidderComponent>,
@@ -333,7 +334,7 @@ export class AddBidderComponent implements OnInit {
       this.apiService.setHttp(formType, 'bidder-registration', false, JSON.stringify(obj), false, 'bidderUrl');
       this.apiService.getHttp().subscribe((res: any) => {
         if (res.statusCode == "200") {
-          // formType == 'POST' ? this.commonService.successDialog(res.statusMessage) : this.commonService.snackBar(res.statusMessage, 0);
+          formType == 'POST' ? this.commonService.successDialog(res.statusMessage) : this.commonService.snackBar(res.statusMessage, 0);
           this.checkLoginOrNot = true ? this.dialogRef.close(true) : '';
           this.verifyBy_Form();
           this.defaultForm();
