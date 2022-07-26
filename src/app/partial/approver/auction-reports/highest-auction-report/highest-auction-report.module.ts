@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 
 import { HighestAuctionReportRoutingModule } from './highest-auction-report-routing.module';
 import { HighestAuctionReportComponent } from './highest-auction-report.component';
-
+import { AngularMaterialModule } from 'src/app/core/angular-material/angular-material.module';
 
 @NgModule({
   declarations: [
@@ -11,7 +11,8 @@ import { HighestAuctionReportComponent } from './highest-auction-report.componen
   ],
   imports: [
     CommonModule,
-    HighestAuctionReportRoutingModule
+    HighestAuctionReportRoutingModule,
+    AngularMaterialModule
   ]
 })
 export class HighestAuctionReportModule { }

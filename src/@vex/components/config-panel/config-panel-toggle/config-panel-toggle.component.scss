@@ -1,5 +1,6 @@
 .config-panel-toggle {
-  bottom: var(--padding);
+  // bottom: var(--padding);
+  bottom: 10px;
   position: fixed;
   right: var(--padding);
   z-index: 100;
@@ -9,3 +10,17 @@
   left: var(--padding);
   right: unset;
 }
+
+// .config-panel-toggle .mat-fab{
+//   width: 36px!important;
+//   height: 36px!important;
+// }
+// .config-panel-toggle .mat-fab .mat-button-wrapper {
+//   padding: 5px 0;
+//   display: inline-block;
+//   line-height: 6px;
+// }
+// .config-panel-toggle .mat-fab .mat-button-wrapper .mat-icon{
+//   height: 20px!important;
+//   width: 20px!important;
+// }

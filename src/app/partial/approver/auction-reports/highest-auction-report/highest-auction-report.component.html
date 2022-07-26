@@ -1,1 +1,90 @@
-<p>highest-auction-report works!</p>
+<div class="p-3">
+    <div class="card overflow-hidden p-3">
+        <div class="title flex justify-between p-3">
+            <h4 class="page_heading text-[18px] text-blue-600">Disposal Auction Event Report</h4>
+            <p class="text-gray-500 flex items-center">
+                <mat-icon class="mat-icon material-icons mat-icon-no-color" aria-hidden="true"
+                    data-mat-icon-type="font">keyboard_double_arrow_left</mat-icon>
+                <span> Back</span>
+            </p>
+        </div>
+        <div>
+
+            <mat-divider></mat-divider>
+        </div>
+        <div class="px-4">
+            <div class="flex gap-x-6 py-6">
+                <div class="flex items-center gap-x-5">
+                    <div>Enter Event ID</div>
+                    <div>
+                        <mat-form-field appearance="outline" class="">
+                            <mat-label>Event ID</mat-label>
+                            <mat-select>
+                                <mat-option>None</mat-option>
+                                <mat-option value="option1">ID 1</mat-option>
+                                <mat-option value="option2">ID 2</mat-option>
+                                <mat-option value="option3">ID 3</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div class="flex items-center gap-x-5">
+                    <div>Want the report in MS-Excel Format :</div>
+                    <div>
+                        <mat-form-field appearance="outline" class="w-72">
+                            <mat-label>Want the report in MS-Excel Format</mat-label>
+                            <mat-select>
+                                <mat-option>None</mat-option>
+                                <mat-option value="option1">Yes</mat-option>
+                                <mat-option value="option2">No</mat-option>
+
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                </div>
+            </div>
+            <div class="">
+                <div>
+                    <h4 class="text-blue-600 font-medium text-[18px] py-4">Check/Uncheck to Remove/Add Fields From/To
+                        Report</h4>
+                </div>
+                <div class="flex gap-x-56">
+                    <div class="grid grid-rows-10">
+                        <mat-checkbox [checked]="true" color="primary">Auction ID</mat-checkbox>
+                        <mat-checkbox [checked]="false" color="primary">Description</mat-checkbox>
+                        <mat-checkbox [checked]="true" color="primary">ApproxQty/Month</mat-checkbox>
+                        <mat-checkbox [checked]="true" color="primary">UOM</mat-checkbox>
+                        <mat-checkbox [checked]="false" color="primary">Opening Price</mat-checkbox>
+                        <mat-checkbox [checked]="true" color="primary">Reserve Price</mat-checkbox>
+                        <mat-checkbox [checked]="true" color="primary">Total Reserve Price</mat-checkbox>
+                        <mat-checkbox [checked]="false" color="primary">Max. Bid Amount</mat-checkbox>
+                        <mat-checkbox [checked]="true" color="primary">Total Max. Bid Amount</mat-checkbox>
+
+                    </div>
+                    <div class="grid grid-rows-10">
+                        <mat-checkbox [checked]="false" color="primary">Highest Bid v/s Reserve Price (%)</mat-checkbox>
+                        <mat-checkbox [checked]="true" color="primary">Bidder Name(1)</mat-checkbox>
+                        <mat-checkbox [checked]="true" color="primary">Second Highest Bid</mat-checkbox>
+                        <mat-checkbox [checked]="false" color="primary">Bidder Name(2)</mat-checkbox>
+                        <mat-checkbox [checked]="true" color="primary">Third Highest Bid</mat-checkbox>
+                        <mat-checkbox [checked]="false" color="primary">Bidder Name(3)</mat-checkbox>
+                        <mat-checkbox [checked]="true" color="primary">EMD</mat-checkbox>
+                        <mat-checkbox [checked]="false" color="primary">End Time</mat-checkbox>
+                    </div>
+                </div>
+            </div>
+            <div class="flex gap-x-10 mt-10">
+                <div>
+                    <p>Encryption :</p>
+                </div>
+                <div class="flex gap-x-10">
+                    <mat-radio-group aria-label="Select an option">
+                        <mat-radio-button class="mx-10" value="1">Yes</mat-radio-button>
+                        <mat-radio-button value="2">No</mat-radio-button>
+                    </mat-radio-group>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
