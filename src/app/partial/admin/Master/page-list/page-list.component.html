@@ -17,7 +17,7 @@
         <div>
           <button class="rounded-full bg-gray-300 text-black" mat-raised-button type="button" (click)="getData()">
             <mat-icon class="ltr:-ml-1 rtl:-mr-1 ltr:mr-2 rtl:ml-2" svgIcon="mat:search"></mat-icon>
-            <span>Search</span>
+            <span>Apply</span>
           </button>
         </div>
       </div>
@@ -38,10 +38,6 @@
       </div>
 
       <table @stagger [dataSource]="dataSource" class="w-full" mat-table matSort>
-
-        <!--- Note that these columns can be defined in any order.
-                        The actual rendered columns are set as a property on the row definition" -->
-
         <!-- sr No column -->
         <ng-container matColumnDef="srNo">
           <th mat-header-cell *matHeaderCellDef mat-sort-header> Sr.No </th>
@@ -64,7 +60,9 @@
               <a (click)="$event.stopPropagation()"
                 class="w-8 h-8 leading-none flex items-center justify-center ml-1 hover:bg-hover text-teal bg-teal-light"
                 mat-icon-button>
-                <mat-icon class="icon-sm" svgIcon="mat:edit"></mat-icon>
+                <button (click)="createPage(row)">
+                  <mat-icon class="icon-sm" svgIcon="mat:edit"></mat-icon>
+                </button>
               </a>
               <a (click)="$event.stopPropagation()"
                 class="w-8 h-8 leading-none flex items-center justify-center ml-1 hover:bg-hover text-red bg-red-light"
