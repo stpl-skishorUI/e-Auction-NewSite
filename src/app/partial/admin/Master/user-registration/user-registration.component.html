@@ -1,12 +1,12 @@
 <vex-page-layout>
-  <vex-secondary-toolbar current="User Register" class="pb-16">
+  <vex-secondary-toolbar current="User Register" class="pb-16 absolute border-0 bg-transparent drop-shadow-none -top-8 z-[99] w-8/12">
     <vex-breadcrumbs [crumbs]="['Master', 'User Register']"></vex-breadcrumbs>
   </vex-secondary-toolbar>
 
 
 
   <vex-page-layout-content [class.container]="layoutCtrl.value === 'boxed'"
-    [class.px-gutter]="layoutCtrl.value === 'fullwidth'" class="-mt-6 mb-8">
+    [class.px-gutter]="layoutCtrl.value === 'fullwidth'" class="-mt-6 mb-4">
     <form [formGroup]="filterForm" (ngSubmit)="filterData()">
       <div class="my-3 card p-3 border-0 shadow-none">
         <div class="flex gap-x-3">
@@ -56,7 +56,7 @@
             </mat-form-field>
           </div>
           <div>
-            <button type="submit" class="rounded-full bg-gray-300 text-black" mat-raised-button type="button"
+            <button type="submit" class="btn-secondary" mat-raised-button type="button"
               (click)="filterData()">
               <mat-icon class="ltr:-ml-1 rtl:-mr-1 ltr:mr-2 rtl:ml-2" svgIcon="mat:search"></mat-icon>
               <span>Search</span>
@@ -69,11 +69,11 @@
 
 
     <div class="card overflow-auto">
-      <div class="bg-app-bar px-4 h-auto min-h-16 border-b sticky left-0 flex items-center">
+      <div class="bg-app-bar px-4 h-16 border-b sticky left-0 flex items-center">
 
 
         <div class="flex-1">
-          <form [formGroup]="filterForm" (ngSubmit)="filterData()">
+          <!-- <form [formGroup]="filterForm" (ngSubmit)="filterData()">
             <div class="mt-5 border-0 shadow-none">
               <div class="grid grid-cols-3 justify-items-stretch">
                 <div>
@@ -130,7 +130,7 @@
                 </div>
               </div>
             </div>
-          </form>
+          </form> -->
         </div>
         <!-- <span class="flex-1"></span> -->
 
