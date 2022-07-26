@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 
 import { PostAuctionLinksRoutingModule } from './post-auction-links-routing.module';
 import { PostAuctionLinksComponent } from './post-auction-links.component';
-
+import { AngularMaterialModule } from 'src/app/core/angular-material/angular-material.module';
 
 @NgModule({
   declarations: [
@@ -11,7 +11,8 @@ import { PostAuctionLinksComponent } from './post-auction-links.component';
   ],
   imports: [
     CommonModule,
-    PostAuctionLinksRoutingModule
+    PostAuctionLinksRoutingModule,
+    AngularMaterialModule
   ]
 })
 export class PostAuctionLinksModule { }

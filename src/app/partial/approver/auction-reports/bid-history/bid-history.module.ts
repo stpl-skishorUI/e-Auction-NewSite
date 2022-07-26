@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 
 import { BidHistoryRoutingModule } from './bid-history-routing.module';
 import { BidHistoryComponent } from './bid-history.component';
-
+import { AngularMaterialModule } from 'src/app/core/angular-material/angular-material.module';
 
 @NgModule({
   declarations: [
@@ -11,7 +11,9 @@ import { BidHistoryComponent } from './bid-history.component';
   ],
   imports: [
     CommonModule,
-    BidHistoryRoutingModule
+    BidHistoryRoutingModule,
+    AngularMaterialModule 
+
   ]
 })
 export class BidHistoryModule { }
