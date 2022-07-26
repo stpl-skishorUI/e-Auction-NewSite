@@ -78,13 +78,13 @@
   .mat-form-field {
     margin-bottom: 0px;
 }
-  .mat-form-field-wrapper {
+  /* .mat-form-field-wrapper {
     padding-bottom: 0 !important;
-  }
-  .mat-form-field-infix {
+  } */
+  /* .mat-form-field-infix {
     padding: 0.5em 0;
     border-top: 0.5em solid transparent;
-  }
+  } */
   .mat-form-field-appearance-outline .mat-form-field-label {
     top: 2.35em;
   }
@@ -123,7 +123,7 @@
   }
   table th, mat-table mat-header-cell{
     font-size: 0.85rem !important;
-    background: rgba(var(--color-primary), 1);
-    color: #fff !important;
+    /* background: rgba(var(--color-primary), 1); */
+    /* color: #fff !important; */
     text-transform: capitalize !important;
   }

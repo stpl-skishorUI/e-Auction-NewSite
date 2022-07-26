@@ -7,9 +7,11 @@ import { AngularMaterialModule } from 'src/app/core/angular-material/angular-mat
 // import { AgmCoreModule } from '@agm/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { WidgetTableModule } from 'src/@vex/components/widgets/widget-table/widget-table.module';
+import { UpperCaseTextDirective } from 'src/app/core/directive/upper-case-text.directive';
 @NgModule({
   declarations: [
-    AddBidderComponent
+    AddBidderComponent,
+    UpperCaseTextDirective,
   ],
   imports: [
     CommonModule,
@@ -18,6 +20,7 @@ import { WidgetTableModule } from 'src/@vex/components/widgets/widget-table/widg
      FormsModule, 
      WidgetTableModule,
     ReactiveFormsModule,
+   
     // AgmCoreModule.forRoot({
     //   apiKey: 'AIzaSyAkNBALkBX7trFQFCrcHO2I85Re2MmzTo8',
     //   language: 'en',

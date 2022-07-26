@@ -28,7 +28,7 @@
                         <mat-label>Individual Name <sup class="text-red">*</sup> </mat-label>
                     </div>
                     <div class="text-end">
-                        <mat-form-field class="w-60" appearance="outline">
+                        <mat-form-field class="w-60" [appearance]=configService.matFormField>
                             <mat-label>Individual Name </mat-label>
                             <input matInput class="text-capitalize" autocomplete="nope" value=""
                                 (keyup)="valiService.removeSpaceAtBegining($event)" formControlName="name">
@@ -46,7 +46,7 @@
                         <mat-label>Organization Name <sup class="text-red">*</sup> </mat-label>
                     </div>
                     <div class="text-end">
-                        <mat-form-field class="w-60" appearance="outline">
+                        <mat-form-field class="w-60" [appearance]=configService.matFormField>
                             <mat-label>Organization Name </mat-label>
                             <input matInput class="text-capitalize" autocomplete="nope" value="" formControlName="name"
                                 (keyup)="valiService.removeSpaceAtBegining($event)">
@@ -65,7 +65,7 @@
                         <mat-label>Mobile Number <sup class="text-red">*</sup></mat-label>
                     </div>
                     <div class="text-end">
-                        <mat-form-field class="w-60" appearance="outline">
+                        <mat-form-field class="w-60" [appearance]=configService.matFormField>
                             <mat-label>Mobile Number </mat-label>
                             <input matInput type="text" formControlName="mobile" autocomplete="nope"
                                 (blur)="getBidderRegByCriSeprated('mobile')" (keypress)="acceptedOnlyNumbers($event)"
@@ -88,7 +88,7 @@
                         <mat-label>District <sup class="text-red">*</sup> </mat-label>
                     </div>
                     <div class="text-end">
-                        <mat-form-field class="w-60" appearance="outline">
+                        <mat-form-field class="w-60" [appearance]=configService.matFormField>
                             <mat-label>Select District </mat-label>
                             <mat-select formControlName="districtId">
                                 <mat-option *ngFor="let districtObj of districtArray" [disabled]="districtObj.id == 0"
@@ -106,7 +106,7 @@
                         <mat-label>Email ID <sup class="text-red">*</sup></mat-label>
                     </div>
                     <div class="text-end">
-                        <mat-form-field class="w-60" appearance="outline">
+                        <mat-form-field class="w-60" [appearance]=configService.matFormField>
                             <mat-label>Email ID </mat-label>
                             <input matInput type="text" formControlName="email" autocomplete="nope"
                                 (keyup)="valiService.removeSpaceAtBegining($event)">
@@ -129,7 +129,7 @@
                         <mat-label>Address <sup class="text-red">*</sup> </mat-label>
                     </div>
                     <div class="text-end">
-                        <mat-form-field class="w-60 " appearance="outline">
+                        <mat-form-field class="w-60 " [appearance]=configService.matFormField>
                             <mat-label>Address</mat-label>
                             <textarea matInput class="" placeholder="Address" autocapitalize="off"
                                 formControlName="address" autocomplete="nope" #search
@@ -151,7 +151,7 @@
                             <mat-label>Pin Code <sup class="text-red">*</sup></mat-label>
                         </div>
                         <div class="text-end">
-                            <mat-form-field class="w-60" appearance="outline">
+                            <mat-form-field class="w-60" [appearance]=configService.matFormField>
                                 <mat-label>Pin Code </mat-label>
                                 <input matInput type="text" formControlName="pinCode" autocomplete="nope"
                                     (keypress)="acceptedOnlyNumbers($event)" maxlength="6">
@@ -169,7 +169,7 @@
                             <mat-label>Designation <sup class="text-red">*</sup></mat-label>
                         </div>
                         <div class="text-end">
-                            <mat-form-field class="w-60" appearance="outline">
+                            <mat-form-field class="w-60" [appearance]=configService.matFormField>
                                 <mat-label>Designation </mat-label>
                                 <mat-select formControlName="designation">
                                     <mat-option *ngFor="let designationObj of DesignationArray"
@@ -190,7 +190,7 @@
                         <mat-label>Contact Person Name <sup class="text-red">*</sup> </mat-label>
                     </div>
                     <div class="text-end">
-                        <mat-form-field class="w-60" appearance="outline">
+                        <mat-form-field class="w-60" [appearance]=configService.matFormField>
                             <mat-label>Contact Person Name </mat-label>
                             <input matInput formControlName="contactPersonName" autocomplete="nope"
                                 (keyup)="valiService.removeSpaceAtBegining($event)">
@@ -209,7 +209,7 @@
                         <mat-label>Org. Type<sup class="text-red">*</sup></mat-label>
                     </div>
                     <div class="text-end">
-                        <mat-form-field class="w-60" appearance="outline">
+                        <mat-form-field class="w-60" [appearance]=configService.matFormField>
                             <mat-label>Org. Type</mat-label>
                             <mat-select formControlName="organizationTypeId" (selectionChange)="orgTypeHideTableRow()">
                                 <mat-option *ngFor="let organType of organTypeArray"
@@ -229,7 +229,7 @@
                         <mat-label>Contact Person Mobile No </mat-label>
                     </div>
                     <div class="text-end">
-                        <mat-form-field class="w-60" appearance="outline">
+                        <mat-form-field class="w-60" [appearance]=configService.matFormField>
                             <mat-label>Contact Person Mobile No</mat-label>
                             <input matInput type="text" formControlName="contactPersonMobile" autocomplete="nope"
                                 (keypress)="acceptedOnlyNumbers($event)" maxlength="10">
@@ -250,12 +250,12 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td>PAN:<span class="text-danger">* (PAN no. & PAN document
-                                mandatory) </span> </td>
+                        <td>PAN:* (PAN no. & PAN document
+                                mandatory) </td>
                         <td>
-                            <mat-form-field appearance="fill" class="w-100">
+                            <mat-form-field [appearance]=configService.matFormField class="w-100">
                                 <mat-label>PAN Number</mat-label>
-                                <input matInput type="text" uppercase maxlength="10"
+                                <input matInput type="text" uppercase maxlength="10" 
                                     (blur)="getBidderRegByCriSeprated('PAN')"
                                     (keyup)="valiService.removeSpaceAtBegining($event)" formControlName="panNo">
                                 <mat-error *ngIf="f.panNo.errors" autocomplete="off">
@@ -292,7 +292,7 @@
                     <tr *ngIf="hideIndividual">
                         <td>Aadhar:</td>
                         <td>
-                            <mat-form-field appearance="fill" class="w-100">
+                            <mat-form-field [appearance]=configService.matFormField class="w-100">
                                 <mat-label>Aadhar Number</mat-label>
                                 <input type="text" matInput formControlName="aadharNo" autocomplete="nope"
                                     maxlength="12" (keypress)="acceptedOnlyNumbers($event)">
@@ -328,7 +328,7 @@
                     <tr>
                         <td>GST:</td>
                         <td>
-                            <mat-form-field appearance="fill" class="w-100">
+                            <mat-form-field [appearance]=configService.matFormField class="w-100">
                                 <mat-label>GST Number</mat-label>
                                 <input matInput type="text" formControlName="gstNo" autocomplete="nope"
                                     (keypress)="acceptedOnlyNumbers($event)">
@@ -365,7 +365,7 @@
                         <td>
                             <div class="row">
                                 <div class="col-6">
-                                    <mat-form-field appearance="fill">
+                                    <mat-form-field [appearance]=configService.matFormField>
                                         <mat-label>Incorporation No. </mat-label>
                                         <input matInput type="text" formControlName="incorporationCerti_No"
                                             (keyup)="valiService.removeSpaceAtBegining($event)" maxlength="21"
@@ -379,7 +379,7 @@
                                     </mat-form-field>
                                 </div>
                                 <div class="col-6">
-                                    <mat-form-field appearance="fill">
+                                    <mat-form-field [appearance]=configService.matFormField>
                                         <mat-label>Incorporation Date</mat-label>
                                         <input matInput [matDatepicker]="picker" [readonly]="true"
                                             formControlName="incorporation_Date">
@@ -420,7 +420,7 @@
                     <tr *ngIf="hideOrganization">
                         <td>Shop Act/ Local Body Certificate:</td>
                         <td>
-                            <mat-form-field appearance="fill" class="w-100">
+                            <mat-form-field [appearance]=configService.matFormField class="w-100">
                                 <mat-label>Shop Act/ Local Body Certificate</mat-label>
                                 <input matInput type="text" formControlName="SALocalBodyCerti_No"
                                     (keypress)="acceptedOnlyNumbers($event)" maxlength="15" autocomplete="nope">
@@ -459,7 +459,7 @@
                     <tr *ngIf="hideOrganization && PartnershipDeedCerti_Hide">
                         <td>Partnership Deed Certificate:</td>
                         <td>
-                            <mat-form-field appearance="fill" class="w-100">
+                            <mat-form-field [appearance]=configService.matFormField class="w-100">
                                 <mat-label>Partnership Deed Certificate</mat-label>
                                 <input matInput type="text" formControlName="partnershipDeedCerti_No"
                                     (keypress)="acceptedOnlyNumbers($event)" maxlength="15" autocomplete="nope">

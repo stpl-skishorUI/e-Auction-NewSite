@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 
 import { ApproveEventRoutingModule } from './approve-event-routing.module';
 import { ApproveEventComponent } from './approve-event.component';
-
+import { AngularMaterialModule } from 'src/app/core/angular-material/angular-material.module';
 
 @NgModule({
   declarations: [
@@ -11,7 +11,8 @@ import { ApproveEventComponent } from './approve-event.component';
   ],
   imports: [
     CommonModule,
-    ApproveEventRoutingModule
+    ApproveEventRoutingModule,
+    AngularMaterialModule
   ]
 })
 export class ApproveEventModule { }
