@@ -1,6 +1,6 @@
 import { SelectionModel } from '@angular/cdk/collections';
 import { Component, Input, NgZone, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, UntypedFormControl } from '@angular/forms';
+import { FormBuilder, FormGroup, UntypedFormControl } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSelectChange } from '@angular/material/select';
@@ -39,18 +39,17 @@ export class UserRightAccessComponent implements OnInit {
   subject$: ReplaySubject<UserRightAccess[]> = new ReplaySubject<UserRightAccess[]>(1);
   userRightAccess: UserRightAccess[];
 
-  filterForm: any;
-  userRoleArray: any = [] = [];
-  userTypeArray: any = [];
-  subUserTypeArray: any = [];
-  newPagesAccArray: any[] = [];
-  projectTypeArray: any = [];
+  filterForm: FormGroup;
+  userRoleArray = [];
+  userTypeArray = [];
+  subUserTypeArray = [];
+  newPagesAccArray = [];
+  projectTypeArray= [];
   readWriteFNFlag: boolean = false;
   readFNFlag: boolean = false;
-  initalValues: any;
   dropDownSelFlag: boolean = true;
   defaultCallTableFlag: boolean = true;
-  totalPages:any;
+  totalPages:number;
   totalRows: number = 0;
 
   @Input()
