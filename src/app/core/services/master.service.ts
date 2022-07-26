@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
+
 import { ApiService } from './api.service';
 
 @Injectable({
@@ -18,12 +19,12 @@ export class MasterService {
   resDistrictByDivision = [];
   resVillageByDistrict = [];
   resdesignation = [];
-  resSubUserType: any = [];
-  resUserType: any = [];
-  resSubDivision: any = [];
-  resProjectData: any = [];
-  eventDocumentData: any = [];
-  eventItemDetail: any = [];
+  resSubUserType = [];
+  resUserType= [];
+  resSubDivision = [];
+  resProjectData:[];
+  eventDocumentData = [];
+  eventItemDetail = [];
 
   constructor(private apiService: ApiService) { }
 
@@ -170,7 +171,9 @@ export class MasterService {
     return new Observable((obj) => {
       this.apiService.setHttp('get', "subdivision-master/getByDistrictId?DistrictId=" + districtId, false, false, false, 'masterUrl');
       this.apiService.getHttp().subscribe({
-        next: (res: any) => { if (res.statusCode === "200") { this.resSubDivision = res.responseData; obj.next(this.resSubDivision); } else { obj.error(res); } },
+        next: (res: object) => { 
+          console.log(res);
+          if (res['statusCode'] === "200") { this.resSubDivision = res['responseData']; obj.next(this.resSubDivision); } else { obj.error(res); } },
         error: (e: any) => { obj.error(e) }
       })
     });
@@ -180,7 +183,9 @@ export class MasterService {
     return new Observable((obj) => {
       this.apiService.setHttp('get', "project/GetAll", false, false, false, 'masterUrl');
       this.apiService.getHttp().subscribe({
-        next: (res: any) => { if (res.statusCode === "200") { this.resProjectData = res.responseData; obj.next(this.resProjectData); } else { obj.error(res); } },
+        next: (res:object) => {
+            if (res['statusCode'] === "200") { this.resProjectData = res['responseData']; obj.next(this.resProjectData); } else { obj.error(res); } 
+          },
         error: (e: any) => { obj.error(e) }
       })
     });

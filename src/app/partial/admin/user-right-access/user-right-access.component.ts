@@ -44,7 +44,7 @@ export class UserRightAccessComponent implements OnInit {
   userTypeArray = [];
   subUserTypeArray = [];
   newPagesAccArray = [];
-  projectTypeArray= [];
+  projectTypeArray = [];
   readWriteFNFlag: boolean = false;
   readFNFlag: boolean = false;
   dropDownSelFlag: boolean = true;
@@ -103,7 +103,7 @@ export class UserRightAccessComponent implements OnInit {
     this.masterService.getProjectId().subscribe({
       next: (response: any) => {
         this.projectTypeArray = response;
-        this.projectTypeArray.length == 1 || this.dropDownSelFlag ? (this.filterForm.controls['projectId'].setValue(this.projectTypeArray[0].id), this.getuserType()) : '';
+        this.projectTypeArray.length == 1 || this.dropDownSelFlag ? (this.filterForm.controls['projectId'].setValue(this.projectTypeArray[0]?.id), this.getuserType()) : '';
       },
       error: (err => { this.error.handelError(err) })
     })
