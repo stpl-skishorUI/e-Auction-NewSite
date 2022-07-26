@@ -14,8 +14,10 @@ import { TableColumn } from 'src/@vex/interfaces/table-column.interface';
 import { ConfirmationDialogComponent } from 'src/app/core/dialogs/confirmation-dialog/confirmation-dialog.component';
 import { ApiService } from 'src/app/core/services/api.service';
 import { CommonService } from 'src/app/core/services/common.service';
+import { ConfigService } from 'src/app/core/services/config.service';
 import { ErrorsService } from 'src/app/core/services/errors.service';
 import { LocalstorageService } from 'src/app/core/services/localstorage.service';
+import { MasterService } from 'src/app/core/services/master.service';
 import { AddBidderComponent } from './add-bidder/add-bidder.component';
 import { BidderList } from './bidder-list.model';
 
@@ -49,6 +51,8 @@ export class BidderListComponent implements OnInit {
 
   @Input()
   pageNumber: number = 1;
+  districtArray = [];
+  bidderTypeArray = ['All', 'Individual', 'Organization'];
   columns: TableColumn<BidderList>[] = [
     { label: 'Sr.No', property: 'srNo', type: 'button', visible: true, cssClasses: ['text-secondary', 'font-medium'] },
     { label: 'Name', property: 'name', type: 'text', visible: true },
@@ -68,6 +72,8 @@ export class BidderListComponent implements OnInit {
     private apiService: ApiService, private fb: FormBuilder,
     public commonService: CommonService,
     private localstorageService: LocalstorageService,
+    private masterService: MasterService,
+    public configService: ConfigService,
     private error: ErrorsService) { }
 
   get visibleColumns() {
@@ -89,6 +95,7 @@ export class BidderListComponent implements OnInit {
       search: [''],
       bidderType: ['All'],
     });
+    this.getDistrict();
   }
   createUser(): void {
     //@ts-ignore
@@ -113,7 +120,7 @@ export class BidderListComponent implements OnInit {
         if (res.statusCode === "200") {
           this.dataSource = new MatTableDataSource(res.responseData.responseData1);
           this.dataSource.sort = this.sort;
-        
+
           this.totalRows = res.responseData.responseData2.pageCount;
           this.totalRows > 10 && this.pageNumber == 1 ? this.paginator?.firstPage() : '';
         } else {
@@ -147,27 +154,26 @@ export class BidderListComponent implements OnInit {
 
 
 
-  userBlockUnBlockModal(element: any, event: any , flag?:string) {
-    console.log(element);
+  userBlockUnBlockModal(element: any, event: any, flag?: string) {
     let Title: string = 'Delete';
-    let dialogText: string = 'Are you sure you want to delete this record ?';   
-    if(flag != 'isDelete'){
+    let dialogText: string = 'Are you sure you want to delete this record ?';
+    if (flag != 'isDelete') {
       event.checked == true ? Title = 'User Block' : Title = 'User Unblock';
       event.checked == true ? dialogText = 'Do you want to User Block' : dialogText = 'Do you want to User Unblock';
     }
-    
+
     const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
       width: '340px',
       data: { p1: dialogText, p2: '', cardTitle: Title, successBtnText: 'Yes', dialogIcon: 'done_outline', cancelBtnText: 'No' },
       disableClose: this.apiService.disableCloseFlag,
     });
     dialogRef.afterClosed().subscribe((res: any) => {
-      if(flag != 'isDelete'){
+      if (flag != 'isDelete') {
         res == 'Yes' ? this.userBlockUnBlock(element, event.checked) : !event.checked ? event.source.checked = true : event.source.checked = false;
-      }else if( res == 'Yes' ){
+      } else if (res == 'Yes') {
         this.deleteBidderUser(element?.bidderId)
       }
-      
+
     });
   }
 
@@ -210,7 +216,7 @@ export class BidderListComponent implements OnInit {
           this.commonService.snackBar(res.statusMessage, 0);
         } else {
           // if (res.statusCode != "404") {
-            this.commonService.checkDataType(res.statusMessage) == false ? this.error.handelError(res.statusCode) : this.commonService.snackBar(res.statusMessage, 1);
+          this.commonService.checkDataType(res.statusMessage) == false ? this.error.handelError(res.statusCode) : this.commonService.snackBar(res.statusMessage, 1);
           // }
         }
       },
@@ -229,8 +235,30 @@ export class BidderListComponent implements OnInit {
     dialog.afterClosed().subscribe(result => {
       if (result == true) {
         this.getData();
-      } 
+      }
     });
   }
+
+  // filter code  start 
+
+  getDistrict() {
+
+    this.districtArray = [];
+    this.subscription = this.masterService.getDistrictByDivisionId(0).subscribe({
+      next: (response: any) => {
+        let districtArray = response;
+        districtArray.length > 1 ? this.districtArray.push({ id: 0, district: "All District" }, ...response) : this.districtArray = response;;
+        this.filterForm.controls['districtId'].setValue(0)
+        // districtArray.length == 1 ? (this.filterForm.controls['districtId'].setValue(this.districtArray[0].id), this.getTaluka(this.districtArray[0].id)) : '';
+      },
+      error: (err => { this.error.handelError(err) })
+    })
+  }
+
+  filterData() {
+    this.pageNumber = 1;
+    this.getData();
+  }
+
 
 }
