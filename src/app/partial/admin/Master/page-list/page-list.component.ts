@@ -38,9 +38,10 @@ export class PageListComponent implements OnInit {
   searchFilter= new FormControl('');
   totalRows: number= 0;
   totalPages:any;
+   highlightedRow!: number;
+   pageNumber: number = 1;
 
   @Input()
-  pageNumber: number = 1;
   columns: TableColumn<PageList>[] = [
     { label: 'Sr.No', property: 'srNo', type: 'button', visible: true },
     { label: 'Page ID', property: 'pageId', type: 'text', visible: true, cssClasses: ['font-medium'] },
@@ -63,19 +64,6 @@ export class PageListComponent implements OnInit {
   }
   get visibleColumns() {
     return this.columns.filter(column => column.visible).map(column => column.property);
-  }
-
-  createPage(): void {
-    
-    // @ts-ignore
-    const dialogRef = this.dialog.open(AddPageComponent, {
-      width: '400px',
-      disableClose: true,
-      data: '',
-    });
-    dialogRef.afterClosed().subscribe(result => {
-      console.log(`Dialog result: ${result}`);
-    });
   }
 
   // ........................Bind Api data to table ................................. */
@@ -106,6 +94,28 @@ export class PageListComponent implements OnInit {
   getData() {
     this.pageNumber = 1;
     this.bindTable();
+  }
+// ...................open Dialog for create page and update page.......................*/
+
+  createPage(obj?:PageList){
+    this.highlightedRow = obj ? obj.pageId : 0;
+    const dialogRef = this.dialog.open(AddPageComponent, {
+      width: '40rem',
+      disableClose: true,
+      data: obj ? (obj['pageNumber'] = this.pageNumber, obj) : '',
+      // data: obj 
+    })
+    dialogRef.afterClosed().subscribe(result => {
+       console.log(`Dialog result: ${result}`);
+       this.highlightedRow = 0;
+       if(result == 'post'){
+        this.pageNumber = this.totalPages;
+        this.bindTable();
+       }else{
+        // this.pageNumber = 1;
+        this.bindTable();
+       }
+    });
   }
 
 // ........................ Paginator method ................................. */

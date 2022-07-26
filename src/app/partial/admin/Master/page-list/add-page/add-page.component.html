@@ -6,62 +6,81 @@
 </div>
 <mat-divider></mat-divider>
 <!-- <br> -->
-<mat-dialog-content>
-  <div class=" mt-4">
-    <div class="flex gap-x-3 mb-2">
-      <div>
-        <mat-form-field appearance="outline" class="w-60">
-          <mat-label>Page Type</mat-label>
-          <mat-select>
-            <mat-option>Page type</mat-option>
-            <mat-option value="option1">Inside Module</mat-option>
-            <mat-option value="option2">Show in Side BAr</mat-option>
-            <mat-option value="option3">Show in inside</mat-option>
-          </mat-select>
-        </mat-form-field>
+<form [formGroup]="addPageForm" (ngSubmit)="saveUpdateData()">
+  <mat-dialog-content>
+    <div class=" mt-4">
+      <div class="flex gap-x-3 mb-2">
+        <div>
+          <mat-form-field appearance="outline" class="w-60">
+            <mat-label>Page Type</mat-label>
+            <mat-select formControlName="isSideBarMenu" (selectionChange)="hideModule($event)">
+              <mat-option *ngFor="let page of pageAddType" [value]="page">{{page}}</mat-option>
+            </mat-select>
+            <mat-error *ngIf="fcontrol.isSideBarMenu.errors">
+              <span class="text-danger" *ngIf="fcontrol.isSideBarMenu.hasError('required')">Please select page type </span>
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div *ngIf="addPageForm.value.isSideBarMenu == 'Show in inside Module'">
+          <mat-form-field appearance="outline" class="w-60">
+            <mat-label>Module Name</mat-label>
+            <input type="text" placeholder="Pick one" aria-label="Number" matInput formControlName="module"
+              [matAutocomplete]="auto">
+            <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+              <mat-option *ngFor="let pageList of searchPageObs | async" [value]="pageList.module">
+                {{pageList.module}}
+              </mat-option>
+            </mat-autocomplete>
+            <mat-error *ngIf="fcontrol.module.errors">
+              <span class="text-danger" *ngIf="fcontrol.module.hasError('required')"> Please enter Module name</span>
+            </mat-error>
+          </mat-form-field>
+        </div>
       </div>
-      <div>
-        <mat-form-field appearance="outline" class="w-60">
-          <mat-label>Page Type</mat-label>
-          <mat-select>
-            <mat-option>Page type</mat-option>
-            <mat-option value="option1">Inside Module</mat-option>
-            <mat-option value="option2">Show in Side BAr</mat-option>
-            <mat-option value="option3">Show in inside</mat-option>
-          </mat-select>
+
+      <div class="flex flex-col py-3">
+        <mat-form-field class="example-full-width" appearance="outline">
+          <mat-label>Page Name </mat-label>
+          <input matInput placeholder="Page Name " formControlName="pageName"
+            (keyup)="validatorService.removeSpaceAtBegining($event)"
+            (keypress)="validatorService.alphabetsWithSpaces($event)" autocomplete="off" maxlength="50">
+          <mat-error *ngIf="fcontrol.pageName.errors">
+            <span class="text-danger" *ngIf="fcontrol.pageName.hasError('required')"> Please enter page name</span>
+          </mat-error>
         </mat-form-field>
+
+
+      </div>
+      <div class="grid grid-cols-2 gap-x-3 my-3">
+        <div>
+          <mat-form-field class="w-full" appearance="outline">
+            <mat-label>Page URL </mat-label>
+            <input matInput placeholder="Page url " formControlName="pageURL"
+              (keypress)="validatorService.noSpaces($event)" autocomplete="off" maxlength="50">
+            <mat-error *ngIf="fcontrol.pageURL.errors">
+              <span class="text-danger" *ngIf="fcontrol.pageURL.hasError('required')">Please enter page URL</span>
+              <span class="text-danger" *ngIf="fcontrol.pageURL.hasError('pattern')">Please enter valid page URL </span>
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div>
+          <mat-form-field class="w-full" [appearance]=configService?.matFormField>
+            <mat-label>Menu Icon </mat-label>
+            <input matInput placeholder="Menu Icon" formControlName="menuIcon"
+              (keypress)="validatorService.noSpaces($event)" autocomplete="off" maxlength="100">
+            <mat-error *ngIf="fcontrol.menuIcon.errors">
+              <span class="text-danger" *ngIf="fcontrol.menuIcon.hasError('required')"> Please enter Menu Icon</span>
+              <span class="text-danger" *ngIf="fcontrol.menuIcon.hasError('pattern')"> Please enter valid Menu Icon</span>
+            </mat-error>
+          </mat-form-field>
+        </div>
       </div>
     </div>
+  </mat-dialog-content>
 
-    <div class="flex flex-col py-3">
+  <mat-dialog-actions class="flex justify-end">
+    <button mat-stroked-button (click)="clear()">Clear</button>
+    <button mat-raised-button color="primary" type="submit">{{saveUpdateBtn}}</button>
+  </mat-dialog-actions>
 
-
-      <mat-form-field class="example-full-width" appearance="outline">
-        <mat-label>Page Name <sup class="text-red">*</sup> </mat-label>
-        <input matInput placeholder="Page Name" value="">
-      </mat-form-field>
-
-
-    </div>
-    <div class="grid grid-cols-2 gap-x-3 my-3">
-      <div>
-        <mat-form-field class="w-full" appearance="outline">
-          <mat-label>Page URL <sup class="text-red">*</sup> </mat-label>
-          <input matInput placeholder="Page Name" value="">
-        </mat-form-field>
-      </div>
-      <div>
-        <mat-form-field class="w-full" [appearance]=configService?.matFormField>
-          <mat-label>Menu Icon <sup class="text-red">*</sup> </mat-label>
-          <input matInput placeholder="Page Name" value="">
-        </mat-form-field>
-      </div>
-    </div>
-  </div>
-</mat-dialog-content>
-
-
-<mat-dialog-actions class="flex justify-end">
-  <button mat-stroked-button (click)="close('No')">Clear</button>
-  <button mat-raised-button color="primary" (click)="close('Yes')">Submit</button>
-</mat-dialog-actions>
+</form>

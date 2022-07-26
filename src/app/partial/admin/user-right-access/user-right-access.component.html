@@ -91,7 +91,7 @@
 
         <!-- Action Column -->
         <ng-container matColumnDef="readOnly">
-          <th *matHeaderCellDef mat-header-cell mat-sort-header>READ ONLY</th>
+          <th *matHeaderCellDef mat-header-cell mat-sort-header>Read Only</th>
           <td *matCellDef="let row" class="w-10 text-secondary" mat-cell>
             <mat-checkbox class="example-margin" [checked]="row?.readRight"
               (change)="readOnlyFN($event, row, 'readOnly')"></mat-checkbox>
@@ -99,7 +99,7 @@
         </ng-container>
 
         <ng-container matColumnDef="readWrite">
-          <th *matHeaderCellDef mat-header-cell mat-sort-header>READ AND WRITE</th>
+          <th *matHeaderCellDef mat-header-cell mat-sort-header>Read And Write</th>
           <td *matCellDef="let row" class="w-10 text-secondary" mat-cell>
             <mat-checkbox class="example-margin" [checked]="row?.writeRight"
               (change)="readWriteFN($event, row, 'readWrite')"></mat-checkbox>
@@ -126,74 +126,6 @@
       </button>
     </div>
   </vex-page-layout-content>
-
-    <vex-page-layout-content class="container">
-        <div class="my-3 card p-3 border-0 shadow-none">
-            <div class="flex gap-x-3">
-                <div>
-                    <mat-form-field appearance="outline">
-                        <mat-label>Project Name</mat-label>
-                        <mat-select>
-                            <mat-option>None</mat-option>
-                            <mat-option value="option1">Option 1</mat-option>
-                            <mat-option value="option2">Option 2</mat-option>
-                            <mat-option value="option3">Option 3</mat-option>
-                        </mat-select>
-                    </mat-form-field>
-                </div>
-                <div>
-                    <mat-form-field appearance="outline">
-                        <mat-label>User Type</mat-label>
-                        <mat-select>
-                            <mat-option>None</mat-option>
-                            <mat-option value="option1">Option 1</mat-option>
-                            <mat-option value="option2">Option 2</mat-option>
-                            <mat-option value="option3">Option 3</mat-option>
-                        </mat-select>
-                    </mat-form-field>
-                </div>
-                <div>
-                    <mat-form-field appearance="outline">
-                        <mat-label>Sub User Type</mat-label>
-                        <mat-select>
-                            <mat-option>None</mat-option>
-                            <mat-option value="option1">Option 1</mat-option>
-                            <mat-option value="option2">Option 2</mat-option>
-                            <mat-option value="option3">Option 3</mat-option>
-                        </mat-select>
-                    </mat-form-field>
-                </div>
-                <div>
-                    <mat-form-field appearance="outline">
-                        <mat-label>Select Role</mat-label>
-                        <mat-select>
-                            <mat-option>None</mat-option>
-                            <mat-option value="option1">Option 1</mat-option>
-                            <mat-option value="option2">Option 2</mat-option>
-                            <mat-option value="option3">Option 3</mat-option>
-                        </mat-select>
-                    </mat-form-field>
-                </div>
-                <div class="flex-auto">
-                    <mat-form-field class="" appearance="outline">
-                        <mat-label>Page Name</mat-label>
-                        <input ty matInput placeholder="Page Name">
-                    </mat-form-field>
-                </div>
-                <div>
-                    <button class="rounded-full bg-gray-300 text-black" mat-raised-button type="button">
-                        <mat-icon class="ltr:-ml-1 rtl:-mr-1 ltr:mr-2 rtl:ml-2"
-                            svgIcon="mat:search"></mat-icon>
-                        <span>APPLY</span>
-                    </button>
-                </div>
-            </div>
-        </div>
-        <div class="card overflow-auto">
-            asdf
-        </div>
-    </vex-page-layout-content>
-</vex-page-layout>
 
 <mat-menu #columnFilterMenu="matMenu" xPosition="before" yPosition="below">
   <button (click)="toggleColumnVisibility(column, $event)" *ngFor="let column of columns"
