@@ -71,31 +71,7 @@ export class AddBidderComponent implements OnInit {
   sentOtpText = 'Send OTP';
   checkLoginOrNot: any;
   mobileOtp: any;
-  // tableColumns: TableColumn<Order>[] = [
-  //   {
-  //     label: '',
-  //     property: 'status',
-  //     type: 'badge'
-  //   },
-  //   {
-  //     label: 'PRODUCT',
-  //     property: 'name',
-  //     type: 'text'
-  //   },
-  //   {
-  //     label: '$ PRICE',
-  //     property: 'price',
-  //     type: 'text',
-  //     cssClasses: ['font-medium']
-  //   },
-  //   {
-  //     label: 'DATE',
-  //     property: 'timestamp',
-  //     type: 'text',
-  //     cssClasses: ['text-secondary']
-  //   }
-  // ];
-  tableData = [];
+  
   constructor(
     // public spinner: NgxSpinnerService,
     private commonService: CommonService,
@@ -375,6 +351,7 @@ export class AddBidderComponent implements OnInit {
   }
 
   editBidderForm(data:any){ // Patch Data
+    console.log(data?.bidderType)
     this.bidderTypeName = data?.bidderType; // add for radio button
     this.bidderTypeCheck(data?.bidderType);
     this.bidderRegiForm.patchValue({
@@ -506,7 +483,7 @@ export class AddBidderComponent implements OnInit {
   // ...........................................  Document Upload Code Start Here ......................................//
 
   documentUpload(event: any, docTypeId: any, docTypeName: any) {
-    let documentUrlUploaed: any;
+    let documentUrlUploaed: any;  
     let documentUrl: any = this.uploadFilesService.uploadDocuments(event, "bidder", "png,jpg,jpeg,pdf", 5, 5000)
     documentUrl.subscribe({
       next: (ele: any) => {
@@ -705,7 +682,10 @@ export class AddBidderComponent implements OnInit {
   }
 
   //.........................................Address to get Pincode Code End Here ....................................//
-
+  close(answer: string) {
+    this.dialogRef.close(answer);
+  }
+  
   // ...........................................  Sent Otp Code Start Here ........................................//
 
   sentOtpMobile() {
