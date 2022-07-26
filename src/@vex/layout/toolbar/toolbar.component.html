@@ -37,7 +37,7 @@
 
     <div class="px-1">
       <button [matMenuTriggerFor]="languageMenu" mat-icon-button type="button">
-        <mat-icon svgIcon="flag:united-states"></mat-icon>
+        <mat-icon color="primary" svgIcon="mat:person"></mat-icon>
       </button>
     </div>
 
@@ -47,14 +47,22 @@
 
     <mat-menu #languageMenu="matMenu" overlapTrigger="false" xPosition="before" yPosition="below">
       <button mat-menu-item>
+        <span>Change Password</span>
+      </button>
+      <button mat-menu-item>
+        <span>Profile</span>
+      </button>
+      <button mat-menu-item>
+        <span>Logout</span>
+      </button>
+      <!-- <button mat-menu-item>
         <mat-icon svgIcon="flag:united-states"></mat-icon>
         <span>English</span>
       </button>
-
       <button mat-menu-item>
         <mat-icon svgIcon="flag:germany"></mat-icon>
         <span>German</span>
-      </button>
+      </button> -->
     </mat-menu>
   </div>
 </div>
