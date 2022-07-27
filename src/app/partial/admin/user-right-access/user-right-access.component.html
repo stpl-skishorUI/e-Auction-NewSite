@@ -8,8 +8,7 @@
     [class.px-gutter]="layoutCtrl.value === 'fullwidth'" class="-mt-6">
     <div class="my-3 card p-3 border-0 shadow-none">
       <form [formGroup]="filterForm" (ngSubmit)="getData()">
-        <div class="flex gap-x-3">
-          <div>
+        <div class="grid grid-cols-6 gap-4">
             <mat-form-field appearance="outline">
               <mat-label>Project</mat-label>
               <mat-select formControlName="projectId" (selectionChange)="getuserType();clearDropdown('userType')">
@@ -17,8 +16,6 @@
                   {{projectType['projectName']}}</mat-option>
               </mat-select>
             </mat-form-field>
-          </div>
-          <div>
             <mat-form-field appearance="outline">
               <mat-label>UserType</mat-label>
               <mat-select formControlName="userType" (selectionChange)="getsubUserType();clearDropdown('subUserType')">
@@ -26,8 +23,6 @@
                 </mat-option>
               </mat-select>
             </mat-form-field>
-          </div>
-          <div>
             <mat-form-field appearance="outline">
               <mat-label>Sub User Type</mat-label>
               <mat-select formControlName="subUserType" (selectionChange)="getRole();clearDropdown('level')">
@@ -35,29 +30,22 @@
                   [value]="subUserType?.subUserTypeId">{{subUserType.subUserType}}</mat-option>
               </mat-select>
             </mat-form-field>
-          </div>
-          <div>
             <mat-form-field appearance="outline">
               <mat-label>Role Type</mat-label>
               <mat-select formControlName="level" [disabled]="!filterForm.value.subUserType">
                 <mat-option *ngFor="let level of userRoleArray" [value]="level.roleId">{{level.roleType}}</mat-option>
               </mat-select>
             </mat-form-field>
-          </div>
-          <div class="flex-auto">
-            <mat-form-field class="w-60" appearance="outline">
+            <mat-form-field appearance="outline">
               <mat-label>Search by Page Url/page Name</mat-label>
               <input ty matInput placeholder="Search byPage Url/page Name" formControlName="search"
                 (keyup)="validatorService.removeSpaceAtBegining($event)">
             </mat-form-field>
-          </div>
-          <div>
             <button class="rounded-full bg-gray-300 text-black" mat-raised-button type="submit">
-              <mat-icon class="ltr:-ml-1 rtl:-mr-1 ltr:mr-2 rtl:ml-2" svgIcon="mat:search"></mat-icon>
+              <mat-icon svgIcon="mat:search"></mat-icon>
               <span>Search</span>
             </button>
           </div>
-        </div>
       </form>
     </div>
 
