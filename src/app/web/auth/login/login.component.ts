@@ -36,7 +36,7 @@ export class LoginComponent implements OnInit {
   get otpNoControls() { return this.otp.controls }
 
   inputType = 'password';
-  visible = false;
+  visible :boolean= false;
 
   constructor(
     private fb: FormBuilder,
@@ -58,8 +58,8 @@ export class LoginComponent implements OnInit {
   getIPAddress() {
     this.apiService.setHttp('get', this.configService.ipAddressUrl, false, false, false, false);
     this.apiService.getHttp().subscribe({
-      next: (res: any) => {
-        this.ipAddress = res.ip; 
+      next: (res: object) => {
+        this.ipAddress = res['ip']; 
       }
     })
   }
@@ -98,44 +98,44 @@ export class LoginComponent implements OnInit {
     }
     this.apiService.setHttp('get', "user-registration/" + formValue.UserName.trim() + "/" + formValue.Password.trim() + "?IpAddress=" + this.ipAddress, false, false, false, 'masterUrl');
     this.apiService.getHttp().subscribe({
-      next: (res: any) => {
-        if (res.statusCode === "200") {
-          if (res.responseData.isBlock == true) {
+      next: (res: object) => {
+        if (res['statusCode'] === "200") {
+          if (res['responseData'].isBlock == true) {
             this.commonService.snackBar('User is blocked', 1);
             return
           }
           this.getPageAccessByUserId(res);
           //
         } else {
-          this.commonService.checkDataType(res.statusMessage) == false ? this.error.handelError(res.statusCode) : this.commonService.snackBar(res.statusMessage, 1);
+          this.commonService.checkDataType(res['statusMessage']) == false ? this.error.handelError(res['statusCode']) : this.commonService.snackBar(res['statusMessage'], 1);
         }
       },
-      error: ((error: any) => { this.error.handelError(error.status) })
+      error: (error => { this.error.handelError(error.status) })
     })
   }
 
   // -------------Give Access to User for Page -------------------------------------//
 
-  getPageAccessByUserId(data: any) {
-    this.apiService.setHttp('get', "user-type/GetbyUserTypeId?UserId=" + data.responseData.id + '&pagesize=' + this.apiService.pagesize, false, false, false, 'masterUrl');
+  getPageAccessByUserId(data: object) {
+    this.apiService.setHttp('get', "user-type/GetbyUserTypeId?UserId=" + data['responseData'].id + '&pagesize=' + this.apiService.pagesize, false, false, false, 'masterUrl');
     this.apiService.getHttp().subscribe({
-      next: (res: any) => {
-        if (res.statusCode === "200") {
-          if (this.commonService.checkDataType(res.responseData.responseData1) == false) {
+      next: (res: object) => {
+        if (res['statusCode'] === "200") {
+          if (this.commonService.checkDataType(res['responseData'].responseData1) == false) {
             this.commonService.snackBar('sorry you not have right to access page. Please contact admin.', 1);
             return
           } else {
-            data.responseData1 = { "pageUrls": res.responseData.responseData1 }
+            data['responseData1'] = { "pageUrls": res['responseData'].responseData1 }
             localStorage.setItem('user', JSON.stringify(data));
             sessionStorage.setItem('loggedIn', 'true');
             let urlPath = this.localstorageService.redirectToDashborad();
             this.router.navigate(['../' + urlPath], { relativeTo: this.route })
           }
         } else {
-          this.commonService.checkDataType(res.statusMessage) == false ? this.error.handelError(res.statusCode) : this.commonService.snackBar(res.statusMessage, 1);
+          this.commonService.checkDataType(res['statusMessage']) == false ? this.error.handelError(res['statusCode']) : this.commonService.snackBar(res['statusMessage'], 1);
         }
       },
-      error: (error: any) => { this.error.handelError(error.status) }
+      error: error=> { this.error.handelError(error.status) }
     })
   }
 
@@ -165,13 +165,13 @@ export class LoginComponent implements OnInit {
         "isUser": true
       }
       this.apiService.setHttp('POST', 'otp-tran', false, JSON.stringify(obj), false, 'masterUrl');
-      this.apiService.getHttp().subscribe((res: any) => {
-        if (res.statusCode == "200") {
-          this.commonService.snackBar(res.statusMessage, 0);
+      this.apiService.getHttp().subscribe((res: object) => {
+        if (res['statusCode'] == "200") {
+          this.commonService.snackBar(res['statusMessage'], 0);
         } else {
-          this.commonService.snackBar(res.statusMessage, 1);
+          this.commonService.snackBar(res['statusMessage'], 1);
         }
-      }, (error: any) => {
+      }, (error) => {
         this.error.handelError(error.status);
       });
     } else {
@@ -200,19 +200,19 @@ export class LoginComponent implements OnInit {
         "isUser": true
       }
       this.apiService.setHttp('POST', 'otp-tran/VerifyOTP', false, JSON.stringify(obj), false, 'masterUrl');
-      this.apiService.getHttp().subscribe((res: any) => {
-        if (res.statusCode == "200") {
+      this.apiService.getHttp().subscribe((res: object) => {
+        if (res['statusCode'] == "200") {
           this.otpFlag = false;
           this.setPasswodPage = true;
           this.otp.setValue('');
-          this.commonService.snackBar(res.statusMessage, 0);
+          this.commonService.snackBar(res['statusMessage'], 0);
           this.genPasswordFlag = false;
           this.otpFlag = false;
           this.setPasswodPage = true;
         } else {
-          this.commonService.snackBar(res.statusMessage, 1);
+          this.commonService.snackBar(res['statusMessage'], 1);
         }
-      }, (error: any) => {
+      }, (error) => {
         this.error.handelError(error.status);
       });
     }
@@ -235,16 +235,16 @@ export class LoginComponent implements OnInit {
         'MobileNo': this.mobileNo.value.toString(),
       }
       this.apiService.setHttp('PUT', 'user-registration/UpdatePassward?OldPassword=&UserName=' + obj.UserName + '&Password=' + obj.Password + '&MobileNo=' + obj.MobileNo, false, false, false, 'masterUrl');
-      this.apiService.getHttp().subscribe((res: any) => {
-        if (res.statusCode == "200") {
+      this.apiService.getHttp().subscribe((res: object) => {
+        if (res['statusCode'] == "200") {
           this.setPasswodPage = false;
-          this.commonService.snackBar(res.statusMessage, 0);
+          this.commonService.snackBar(res['statusMessage'], 0);
           this.closeSetPassword();
           this.otpFlag = false;
         } else {
-          this.commonService.snackBar(res.statusMessage, 1);
+          this.commonService.snackBar(res['statusMessage'], 1);
         }
-      }, (error: any) => {
+      }, (error) => {
         this.error.handelError(error.status);
       });
     }
