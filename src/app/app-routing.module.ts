@@ -6,6 +6,9 @@ import { ExpenseGuard } from './core/auth/expense.guard';
 import { CustomLayoutComponent } from './custom-layout/custom-layout.component';
 
 const routes: Routes = [
+  {path:'', redirectTo:'home', pathMatch:'full'},
+  { path: 'home', loadChildren: () => import('./web/home/home.module').then(m => m.HomeModule) },
+
   {
     path: 'login',
     loadChildren: () => import('./web/auth/login/login.module').then(m => m.LoginModule),
@@ -14,7 +17,7 @@ const routes: Routes = [
     path: 'forgot-password',
     loadChildren: () => import('./web/auth/forgot-password/forgot-password.module').then(m => m.ForgotPasswordModule),
   },
-  { path: 'home', loadChildren: () => import('./web/home/home.module').then(m => m.HomeModule) },
+
   {
     path: '',
     canActivate: [AuthGuard],
