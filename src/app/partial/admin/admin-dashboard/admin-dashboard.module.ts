@@ -12,9 +12,7 @@ import { SecondaryToolbarModule } from 'src/@vex/components/secondary-toolbar/se
 import { WidgetAssistantModule } from 'src/@vex/components/widgets/widget-assistant/widget-assistant.module';
 import { WidgetLargeChartModule } from 'src/@vex/components/widgets/widget-large-chart/widget-large-chart.module';
 import { WidgetLargeGoalChartModule } from 'src/@vex/components/widgets/widget-large-goal-chart/widget-large-goal-chart.module';
-import { WidgetQuickLineChartModule } from 'src/@vex/components/widgets/widget-quick-line-chart/widget-quick-line-chart.module';
-import { WidgetQuickValueCenterModule } from 'src/@vex/components/widgets/widget-quick-value-center/widget-quick-value-center.module';
-import { WidgetQuickValueStartModule } from 'src/@vex/components/widgets/widget-quick-value-start/widget-quick-value-start.module';
+
 import { WidgetTableModule } from 'src/@vex/components/widgets/widget-table/widget-table.module';
 
 
@@ -27,9 +25,7 @@ import { WidgetTableModule } from 'src/@vex/components/widgets/widget-table/widg
     AdminDashboardRoutingModule,
     ChartModule,
     MatIconModule,
-    WidgetQuickLineChartModule,
-    WidgetQuickValueCenterModule,
-    WidgetQuickValueStartModule,
+
     WidgetLargeGoalChartModule,
 
     WidgetAssistantModule,

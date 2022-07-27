@@ -9,7 +9,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatRippleModule } from '@angular/material/core';
 import { UserMenuModule } from '../../components/user-menu/user-menu.module';
 import { MatDialogModule } from '@angular/material/dialog';
-import { SearchModalComponent } from '../../components/search-modal/search-modal.component';
+
 import { ReactiveFormsModule } from '@angular/forms';
 import {MatInputModule} from '@angular/material/input';
 
@@ -26,7 +26,6 @@ import {MatInputModule} from '@angular/material/input';
     MatRippleModule,
     UserMenuModule,
     ReactiveFormsModule,
-    SearchModalComponent,
     MatInputModule
   ],
   exports: [SidenavComponent]
