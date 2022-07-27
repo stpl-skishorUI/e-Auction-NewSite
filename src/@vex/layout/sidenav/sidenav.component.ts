@@ -21,7 +21,7 @@ import { CommonService } from 'src/app/core/services/common.service';
   styleUrls: ['./sidenav.component.scss']
 })
 export class SidenavComponent implements OnInit, AfterViewInit {
-  searchFilter = new FormControl('');
+  searchFilter: FormControl = new FormControl('')
 
   @Input() collapsed: boolean;
   collapsedOpen$ = this.layoutService.sidenavCollapsedOpen$;
@@ -41,43 +41,38 @@ export class SidenavComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
-    this.addSideMenuInSidebar();
+    this.filterSideBarMenu();
   }
 
   ngAfterViewInit() {
     let formValue = this.searchFilter.valueChanges;
     formValue.pipe(
       filter(() => this.searchFilter.valid),
-      debounceTime(500),
+      debounceTime(1000),
       distinctUntilChanged())
-      .subscribe(() => {
-        this.search(this.searchFilter.value)
+      .subscribe((res) => {
+        this.filterSideBarMenu(this.localstorageService.getAllPageName(), res.toLowerCase())
       })
   }
 
-  search(value: any) {
-    let val = value.toLowerCase();
-    if (this.commonService.checkDataType(val == false)) {
-      this.ngOnInit();
-    } else {
-      let data: any = this.localstorageService.getAllPageName();
-      let result = data.filter((res: any) => {
-        return res.pageName?.toLowerCase().includes(val) || res.module?.toLowerCase().includes(val);
-      });
-      this.addSideMenuInSidebar(result);
+  filterSideBarMenu(pageList?: [], val?: string) {
+    if (this.commonService.checkDataType(val) == false) {
+      this.moduleConArray(this.localstorageService.getAllPageName());
+      return
     }
+    let obsPageList = of(pageList);
+    const data = obsPageList.pipe(
+      map(pages => pages.filter((ele: string) =>
+        (ele['pageName']?.toLowerCase().includes(val) || ele['module'].toLowerCase().includes(val)) && ele['isSideBarMenu'] == true)));
+    data.subscribe((res: []) => {
+      this.moduleConArray(res);
+    })
   }
 
-  addSideMenuInSidebar(getAllPageName?: any) {
-    let loginPages = [];
-    let data = this.commonService.checkDataType(getAllPageName) == false ? this.localstorageService.getAllPageName() : getAllPageName;
-    let items: any = data.filter((ele: any) => {
-      if (ele.isSideBarMenu == true) {
-        return ele;
-      }
-    });
 
-    items.forEach((item: any) => {
+  moduleConArray(data: []) {
+    let loginPages = [];
+    data.find((item: any) => {
       let existing: any = loginPages.filter((v: any) => {
         return v.module == item.module;
       });
@@ -92,9 +87,11 @@ export class SidenavComponent implements OnInit, AfterViewInit {
         loginPages.push(item);
       }
     });
+    this.sideBarMenuList(loginPages);
+  }
 
-    let pageDataTransform = loginPages;
-
+  sideBarMenuList(data) {
+    let pageDataTransform = data;
     pageDataTransform.map((ele: any) => {
       if (ele.isSideBarMenu == true) {
         if (ele.pageURL.length > 1) {
