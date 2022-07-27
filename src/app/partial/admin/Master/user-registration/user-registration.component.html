@@ -6,11 +6,10 @@
 
 
 
-  <vex-page-layout-content [class.container]="layoutCtrl.value === 'boxed'"
-    [class.px-gutter]="layoutCtrl.value === 'fullwidth'" class="-mt-6 mb-4">
+  <vex-page-layout-content [class.px-gutter]="layoutCtrl.value === 'fullwidth'" class="-mt-6">
     <form [formGroup]="filterForm" (ngSubmit)="filterData()">
       <div class="my-3 card p-3 border-0 shadow-none">
-        <div class="flex flex-row">
+        <div class="flex flex-row justify-between">
           <div class="grid grid-cols-5 gap-4 mr-3">
             <mat-form-field [appearance]=configService.matFormFieldFilter>
               <mat-label>Select State</mat-label>
@@ -49,7 +48,7 @@
             </mat-form-field>
           </div>
           <div>
-            <button class="rounded-full bg-gray-300 text-black" mat-raised-button type="submit" (click)="filterData()">
+            <button class="rounded-full bg-gray-200 text-black" mat-button type="submit" (click)="filterData()">
               <mat-icon svgIcon="mat:search"></mat-icon>
               <span>Search</span>
             </button>

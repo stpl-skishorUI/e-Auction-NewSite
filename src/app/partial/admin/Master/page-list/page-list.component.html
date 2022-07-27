@@ -5,18 +5,19 @@
     <vex-breadcrumbs [crumbs]="['Master', 'Page List']"></vex-breadcrumbs>
   </vex-secondary-toolbar>
 
-  <vex-page-layout-content [class.container]="layoutCtrl.value === 'boxed'"
-    [class.px-gutter]="layoutCtrl.value === 'fullwidth'" class="-mt-6">
+  <vex-page-layout-content [class.px-gutter]="layoutCtrl.value === 'fullwidth'" class="-mt-6">
     <div class="my-3 card p-3 border-0 shadow-none">
-      <div class="flex flex-row">
+      <div class="flex flex-row justify-between">
         <mat-form-field appearance="outline" class="w-80 mr-3">
           <mat-label>Search by Page Url/page Name</mat-label>
           <input ty matInput placeholder="Search byPage Url/page Name" formControlName="searchFilter">
         </mat-form-field>
-        <button class="rounded-full bg-gray-300 text-black" mat-raised-button type="button" (click)="getData()">
-          <mat-icon svgIcon="mat:search"></mat-icon>
-          <span>Apply</span>
-        </button>
+        <div>
+          <button class="rounded-full bg-gray-200 text-black" mat-button type="button" (click)="getData()">
+            <mat-icon svgIcon="mat:search"></mat-icon>
+            <span>Apply</span>
+          </button>
+        </div>
       </div>
     </div>
 

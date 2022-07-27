@@ -4,11 +4,11 @@
     <vex-breadcrumbs [crumbs]="['User Right Access']"></vex-breadcrumbs>
   </vex-secondary-toolbar>
 
-  <vex-page-layout-content [class.container]="layoutCtrl.value === 'boxed'"
+  <vex-page-layout-content 
     [class.px-gutter]="layoutCtrl.value === 'fullwidth'" class="-mt-6">
     <div class="my-3 card p-3 border-0 shadow-none">
       <form [formGroup]="filterForm" (ngSubmit)="getData()">
-        <div class="flex flex-row">
+        <div class="flex flex-row justify-between">
         <div class="grid grid-cols-5 gap-4 mr-3">
             <mat-form-field appearance="outline">
               <mat-label>Project</mat-label>
@@ -44,7 +44,7 @@
             </mat-form-field>
           </div>
           <div>
-            <button class="rounded-full bg-gray-300 text-black" mat-raised-button type="submit">
+            <button class="rounded-full bg-gray-200 text-black" mat-button type="submit">
               <mat-icon svgIcon="mat:search"></mat-icon>
               <span>Search</span>
             </button>
@@ -109,11 +109,11 @@
 
     </div>
 
-    <div class="col-md-auto d-flex align-items-end justify-content-end my-2" align="end">
-      <button type="button" mat-raised-button class="btn-secondary me-2" (click)="clear()">
+    <div class="flex mt-3" align="start">
+      <button type="button" mat-raised-button class="bg-gray-300 mr-2" (click)="clear()">
         Clear
       </button>
-      <button type="submit" mat-raised-button class="btn-main" (click)="addPageAccess()">
+      <button type="submit" mat-raised-button color="primary" (click)="addPageAccess()">
         Submit
       </button>
     </div>
