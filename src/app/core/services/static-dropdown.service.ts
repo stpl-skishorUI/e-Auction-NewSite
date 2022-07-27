@@ -18,9 +18,12 @@ export class StaticDropdownService {
     All == true ? selectLevel : selectLevel.splice(0,1);
     return selectLevel;
   }
+
  StatusInt() {  //ApprovedStatus Dropdown
     let ApprovedStatus = [{ text: 'All', val:0 },{ text: 'Approved', val: 0 },{ text: 'Pending', val: 1}, { text: 'Rejected', val: 2 }];
     return ApprovedStatus;
   }
+
+  eventLevel: string[] = ["State", "District", "SDO", "Tahsil"];
 
 }

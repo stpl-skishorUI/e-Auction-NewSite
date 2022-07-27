@@ -12,7 +12,7 @@ import { AngularMaterialModule } from './core/angular-material/angular-material.
 import { ConfirmationDialogComponent } from './core/dialogs/confirmation-dialog/confirmation-dialog.component';
 import { SuccessDialogComponent } from './core/dialogs/success-dialog/success-dialog.component';
 import { PipeModule } from './core/pipes/pipe.module';
-import { MatNativeDateModule } from '@angular/material/core';
+import { MatNativeDateModule, MAT_DATE_LOCALE } from '@angular/material/core';
 @NgModule({
   declarations: [AppComponent, ConfirmationDialogComponent, SuccessDialogComponent],
   imports: [
@@ -26,7 +26,10 @@ import { MatNativeDateModule } from '@angular/material/core';
     PipeModule,
     CustomLayoutModule,MatNativeDateModule
   ],
-  providers: [DatePipe, TitleCasePipe],
+  providers: [{
+    provide: MAT_DATE_LOCALE,
+    useValue: 'en-GB',
+  },DatePipe, TitleCasePipe],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
