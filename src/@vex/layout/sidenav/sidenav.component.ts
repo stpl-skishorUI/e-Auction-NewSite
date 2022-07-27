@@ -97,7 +97,7 @@ export class SidenavComponent implements OnInit, AfterViewInit {
         if (ele.pageURL.length > 1) {
           ele['type'] = 'dropdown',
             ele['label'] = ele?.module,
-            ele['icon'] = 'mat:' + ele?.menuIcon
+            ele['icon'] = ele?.menuIcon
           ele['children'] = [];
           ele.pageURL.find((item: any, i: any) => {
             ele['children'].push(
@@ -111,7 +111,7 @@ export class SidenavComponent implements OnInit, AfterViewInit {
           ele['type'] = 'link',
             ele['label'] = ele?.pageName,
             ele['route'] = '/' + ele?.pageURL,
-            ele['icon'] = 'mat:' + ele?.menuIcon
+            ele['icon'] = ele?.menuIcon
         }
         return ele
       }
