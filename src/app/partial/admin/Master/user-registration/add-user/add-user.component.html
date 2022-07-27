@@ -131,8 +131,8 @@
                      (keyup)="validatorService.removeSpaceAtBegining($event)"
                      (keypress)="validatorService.alphabetsWithSpaces($event)" maxlength="200" autocomplete="off">
                   <mat-error *ngIf="f.name.errors">
-                     <span class="text-danger" *ngIf="f.name.hasError('required')"> Name is required</span>
-                     <span class="text-danger" *ngIf="f.name.hasError('pattern')"> Please Enter Valid Name</span>
+                     <span class="text-red" *ngIf="f.name.hasError('required')"> Name is required</span>
+                     <span class="text-red" *ngIf="f.name.hasError('pattern')"> Please Enter Valid Name</span>
                   </mat-error>
                </mat-form-field>
             </div>
@@ -142,9 +142,9 @@
                   <input matInput placeholder="Mobile No" (keypress)="validatorService.onlyDigits($event)"
                      formControlName="mobileNo" maxlength="10" autocomplete="off">
                   <mat-error *ngIf="f.mobileNo.errors">
-                     <span class="text-danger" *ngIf="f.mobileNo.hasError('required')"> Mobile no is
+                     <span class="text-red" *ngIf="f.mobileNo.hasError('required')"> Mobile no is
                         required</span>
-                     <span class="text-danger"
+                     <span class="text-red"
                         *ngIf="f.mobileNo.hasError('pattern') || f.mobileNo.hasError('minlength')"> Please enter
                         valid Mobile no </span>
                   </mat-error>
@@ -157,10 +157,10 @@
                      (keypress)="validatorService.alphaNumericWithSpacesAndSpecChars($event)"
                      (keyup)="validatorService.removeSpaceAtBegining($event)" autocomplete="off">
                   <mat-error *ngIf="f.userName.errors">
-                     <span class="text-danger" *ngIf="f.userName.hasError('required')"> User Name is required</span>
-                     <span class="text-danger" *ngIf="f.userName.hasError('minlength')">Minimum 5 characters
+                     <span class="text-red" *ngIf="f.userName.hasError('required')"> User Name is required</span>
+                     <span class="text-red" *ngIf="f.userName.hasError('minlength')">Minimum 5 characters
                         required</span>
-                     <span class="text-danger"
+                     <span class="text-red"
                         *ngIf="!f.userName.hasError('minlength') && f.userName.hasError('pattern')">Only alphanumeric
                         characters and special symbol @ and .(dot) are allowed</span>
                   </mat-error>
@@ -186,7 +186,7 @@
                      maxlength="100" (keypress)="validatorService.alphaNumericWithSpacesAndSpecChars($event)"
                      autocomplete="off">
                   <mat-error *ngIf="f.emailId.errors">
-                     <span class="text-danger" *ngIf="f.emailId.hasError('pattern')"> Please enter valid email id
+                     <span class="text-red" *ngIf="f.emailId.hasError('pattern')"> Please enter valid email id
                      </span>
                   </mat-error>
                </mat-form-field>
@@ -197,7 +197,7 @@
                   <input type="text" maxlength="150" matInput placeholder="Enter address" formControlName="userAddress"
                      (keyup)="validatorService.removeSpaceAtBegining($event)" autocomplete="off">
                   <mat-error *ngIf="f.userAddress.errors">
-                     <span class="text-danger" *ngIf="f.userAddress.hasError('required')"> Address is required</span>
+                     <span class="text-red" *ngIf="f.userAddress.hasError('required')"> Address is required</span>
 
                   </mat-error>
                </mat-form-field>
@@ -209,7 +209,7 @@
 </mat-dialog-content>
 
 <mat-dialog-actions align="end">
-   <button type="button" mat-stroked-button (click)="clearForm()">Clear</button>
+   <button type="button" mat-stroked-button (click)="clearForm()" class="bg-gray-300">Clear</button>
    <button type="submit" mat-raised-button color="primary" (click)="addUserData()">{{this.data ?
       'Update':'Submit'}}</button>
 </mat-dialog-actions>

@@ -1,5 +1,6 @@
 <vex-page-layout>
-  <vex-secondary-toolbar current="User Register" class=" fixed border-0 bg-transparent drop-shadow-none top-1 z-[99] w-8/12">
+  <vex-secondary-toolbar current="User Register"
+    class=" fixed border-0 bg-transparent drop-shadow-none top-1 z-[99] w-8/12">
     <vex-breadcrumbs [crumbs]="['Master', 'User Register']"></vex-breadcrumbs>
   </vex-secondary-toolbar>
 
@@ -9,8 +10,8 @@
     [class.px-gutter]="layoutCtrl.value === 'fullwidth'" class="-mt-6 mb-4">
     <form [formGroup]="filterForm" (ngSubmit)="filterData()">
       <div class="my-3 card p-3 border-0 shadow-none">
-        <div class="flex gap-x-3">
-          <div>
+        <div class="flex flex-row">
+          <div class="grid grid-cols-5 gap-4 mr-3">
             <mat-form-field [appearance]=configService.matFormFieldFilter>
               <mat-label>Select State</mat-label>
               <mat-select formControlName="stateId"
@@ -19,8 +20,6 @@
                 </mat-option>
               </mat-select>
             </mat-form-field>
-          </div>
-          <div>
             <mat-form-field [appearance]=configService.matFormFieldFilter>
               <mat-label>Select Division</mat-label>
               <mat-select formControlName="divisionId" [disabled]='!filterForm.value.stateId'
@@ -29,8 +28,6 @@
                   division.division}}</mat-option>
               </mat-select>
             </mat-form-field>
-          </div>
-          <div>
             <mat-form-field [appearance]=configService.matFormFieldFilter>
               <mat-label>Select District</mat-label>
               <mat-select formControlName="districtId" [disabled]="!filterForm.value.divisionId"
@@ -39,8 +36,6 @@
                   {{district.district}}</mat-option>
               </mat-select>
             </mat-form-field>
-          </div>
-          <div>
             <mat-form-field [appearance]=configService.matFormFieldFilter>
               <mat-label>Select Taluka</mat-label>
               <mat-select formControlName="talukaId" [disabled]='!filterForm.value.districtId'>
@@ -48,21 +43,17 @@
                 </mat-option>
               </mat-select>
             </mat-form-field>
-          </div>
-          <div class="flex-auto">
-            <mat-form-field class="w-60" [appearance]=configService.matFormFieldFilter>
+            <mat-form-field [appearance]=configService.matFormFieldFilter>
               <mat-label>Search by Name/Mob. No.</mat-label>
               <input ty matInput placeholder="Search by Name/Mob. No." formControlName="search">
             </mat-form-field>
           </div>
           <div>
-            <button type="submit" class="btn-secondary" mat-raised-button type="button"
-              (click)="filterData()">
-              <mat-icon class="ltr:-ml-1 rtl:-mr-1 ltr:mr-2 rtl:ml-2" svgIcon="mat:search"></mat-icon>
+            <button class="rounded-full bg-gray-300 text-black" mat-raised-button type="submit" (click)="filterData()">
+              <mat-icon svgIcon="mat:search"></mat-icon>
               <span>Search</span>
             </button>
           </div>
-
         </div>
       </div>
     </form>

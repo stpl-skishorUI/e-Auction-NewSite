@@ -8,7 +8,8 @@
     [class.px-gutter]="layoutCtrl.value === 'fullwidth'" class="-mt-6">
     <div class="my-3 card p-3 border-0 shadow-none">
       <form [formGroup]="filterForm" (ngSubmit)="getData()">
-        <div class="grid grid-cols-6 gap-4">
+        <div class="flex flex-row">
+        <div class="grid grid-cols-5 gap-4 mr-3">
             <mat-form-field appearance="outline">
               <mat-label>Project</mat-label>
               <mat-select formControlName="projectId" (selectionChange)="getuserType();clearDropdown('userType')">
@@ -41,11 +42,14 @@
               <input ty matInput placeholder="Search byPage Url/page Name" formControlName="search"
                 (keyup)="validatorService.removeSpaceAtBegining($event)">
             </mat-form-field>
+          </div>
+          <div>
             <button class="rounded-full bg-gray-300 text-black" mat-raised-button type="submit">
               <mat-icon svgIcon="mat:search"></mat-icon>
               <span>Search</span>
             </button>
           </div>
+        </div>
       </form>
     </div>
 
