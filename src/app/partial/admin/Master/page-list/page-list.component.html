@@ -1,6 +1,6 @@
 <vex-page-layout>
 
-  <vex-secondary-toolbar current="Page List">
+  <vex-secondary-toolbar current="Page List" class=" fixed border-0 bg-transparent drop-shadow-none top-1 z-[99] w-8/12">
     <vex-breadcrumbs [crumbs]="['Master', 'Page List']"></vex-breadcrumbs>
   </vex-secondary-toolbar>
 
@@ -9,7 +9,7 @@
     <div class="my-3 card p-3 border-0 shadow-none">
       <div class="flex gap-x-3">
         <div class="flex-auto" align="end">
-          <mat-form-field class="w-60" appearance="outline">
+          <mat-form-field class="w-60 pb-0" appearance="outline">
             <mat-label>Search by Page Url/Page Name</mat-label>
             <input ty matInput placeholder=" Search by Page Url/Page Name" [formControl]="searchFilter">
           </mat-form-field>
