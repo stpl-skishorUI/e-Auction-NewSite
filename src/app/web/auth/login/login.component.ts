@@ -35,9 +35,6 @@ export class LoginComponent implements OnInit {
   get mobileNoControls() { return this.mobileNo.controls }
   get otpNoControls() { return this.otp.controls }
 
-  inputType = 'password';
-  visible :boolean= false;
-
   constructor(
     private fb: FormBuilder,
     private apiService: ApiService,
