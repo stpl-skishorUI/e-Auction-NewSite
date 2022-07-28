@@ -138,3 +138,6 @@
   .mat-form-field-infix {
     border-top: 0.7em solid transparent !important;
 }
+.mat-form-field-underline{
+  bottom:8px !important;
+}
