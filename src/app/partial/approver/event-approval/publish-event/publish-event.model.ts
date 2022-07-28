@@ -1,0 +1,31 @@
+export class PublishEvent {
+        "id": number;
+        "eventCode": string;
+        "eventLevel": string;
+        "districtId": number;
+        "subDivisionId": number;
+        "talukaId": number;
+        "title": string;
+        "description": string;
+        "eventType": string;
+        "eventFee":number;
+        "documentPath": string;
+        "status":number;
+        "approvedBy":number;
+        "approvedDatetime": string;
+        "approvedRemark": number;
+        "startDateTime": string;
+        "endDateTime": string;
+        "isPublished": boolean;
+        "createdDate": string;
+        "district": string;
+        "subDivision": number;
+        "taluka": number;
+        "bidSubmissionStartDate": string;
+        "bidSubmissionEndDate": string;
+        "totalItems": number;
+        "createdBy": number;
+        "createdByName": string;
+        "eventLevelId": number;
+        "isSendforApproval": boolean;
+}

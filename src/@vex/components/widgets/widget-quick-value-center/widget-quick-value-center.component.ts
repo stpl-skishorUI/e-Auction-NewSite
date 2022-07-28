@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
-import { MatBottomSheet } from '@angular/material/bottom-sheet';
-import { ShareBottomSheetComponent } from '../../share-bottom-sheet/share-bottom-sheet.component';
+//import { MatBottomSheet } from '@angular/material/bottom-sheet';
+//import { ShareBottomSheetComponent } from '../../share-bottom-sheet/share-bottom-sheet.component';
 import { scaleInOutAnimation } from '../../../animations/scale-in-out.animation';
 
 @Component({
@@ -20,12 +20,12 @@ export class WidgetQuickValueCenterComponent implements OnInit {
 
   showButton: boolean;
 
-  constructor(private _bottomSheet: MatBottomSheet) { }
+  constructor() { }
 
   ngOnInit() {
   }
 
   openSheet() {
-    this._bottomSheet.open(ShareBottomSheetComponent);
+    //this._bottomSheet.open(ShareBottomSheetComponent);
   }
 }

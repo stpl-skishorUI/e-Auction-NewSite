@@ -1,22 +1,20 @@
 <vex-page-layout>
 
-  <vex-secondary-toolbar current="Page List" class=" fixed border-0 bg-transparent drop-shadow-none top-1 z-[99] w-8/12">
+  <vex-secondary-toolbar current="Page List"
+    class=" fixed border-0 bg-transparent drop-shadow-none top-1 z-[99] w-8/12">
     <vex-breadcrumbs [crumbs]="['Master', 'Page List']"></vex-breadcrumbs>
   </vex-secondary-toolbar>
 
-  <vex-page-layout-content [class.container]="layoutCtrl.value === 'boxed'"
-    [class.px-gutter]="layoutCtrl.value === 'fullwidth'" class="-mt-6">
+  <vex-page-layout-content [class.px-gutter]="layoutCtrl.value === 'fullwidth'" class="-mt-6">
     <div class="my-3 card p-3 border-0 shadow-none">
-      <div class="flex gap-x-3">
-        <div class="flex-auto" align="end">
-          <mat-form-field class="w-60 pb-0" appearance="outline">
-            <mat-label>Search by Page Url/Page Name</mat-label>
-            <input ty matInput placeholder=" Search by Page Url/Page Name" [formControl]="searchFilter">
-          </mat-form-field>
-        </div>
+      <div class="flex flex-row justify-between">
+        <mat-form-field appearance="outline" class="w-80 mr-3">
+          <mat-label>Search by Page Url/page Name</mat-label>
+          <input ty matInput placeholder="Search byPage Url/page Name" formControlName="searchFilter">
+        </mat-form-field>
         <div>
-          <button class="rounded-full bg-gray-300 text-black" mat-raised-button type="button" (click)="getData()">
-            <mat-icon class="ltr:-ml-1 rtl:-mr-1 ltr:mr-2 rtl:ml-2" svgIcon="mat:search"></mat-icon>
+          <button class="rounded-full bg-gray-200 text-black" mat-button type="button" (click)="getData()">
+            <mat-icon svgIcon="mat:search"></mat-icon>
             <span>Apply</span>
           </button>
         </div>

@@ -78,10 +78,10 @@
   .mat-form-field {
     margin-bottom: 0px;
 }
-  form .mat-form-field-wrapper {
+  .mat-form-field-wrapper {
     padding-bottom: 0 !important;
   } 
-  form .mat-form-field-infix {
+  .mat-form-field-infix {
     padding: 0.5em 0;
     border-top: 0.5em solid transparent;
   }
