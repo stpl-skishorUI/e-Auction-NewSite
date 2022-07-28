@@ -2,7 +2,7 @@ import { SelectionModel } from '@angular/cdk/collections';
 import { Component, Input, NgZone, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, UntypedFormControl } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
-import { MatPaginator } from '@angular/material/paginator';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatSelectChange } from '@angular/material/select';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
@@ -101,7 +101,7 @@ export class UserRightAccessComponent implements OnInit {
 
   getprojectType() {
     this.masterService.getProjectId().subscribe({
-      next: (response: any) => {
+      next: (response: []) => {
         this.projectTypeArray = response;
         this.projectTypeArray.length == 1 || this.dropDownSelFlag ? (this.filterForm.controls['projectId'].setValue(this.projectTypeArray[0]?.id), this.getuserType()) : '';
       },
@@ -112,7 +112,7 @@ export class UserRightAccessComponent implements OnInit {
   getuserType() {
     this.subUserTypeArray = [];
     this.masterService.getUserType().subscribe({
-      next: (response: any) => {
+      next: (response: []) => {
         this.userTypeArray = response;
         this.userTypeArray.length == 1 || this.dropDownSelFlag ? (this.filterForm.controls['userType'].setValue(this.userTypeArray[0].userTypeId), this.getsubUserType()) : '';
       },
@@ -125,7 +125,7 @@ export class UserRightAccessComponent implements OnInit {
     const userTypeId = this.filterForm.value.userType;
     const projectId = this.filterForm.value.projectId;
     this.masterService.getSubuserType(userTypeId, projectId).subscribe({
-      next: (response: any) => {
+      next: (response: []) => {
         this.subUserTypeArray = response;
         this.subUserTypeArray.length == 1 || this.dropDownSelFlag ? (this.filterForm.controls['subUserType'].setValue(this.subUserTypeArray[0].subUserTypeId), this.getRole()) : '';
       }
@@ -135,7 +135,7 @@ export class UserRightAccessComponent implements OnInit {
   getRole() {
     let fromData = this.filterForm.value;
     this.masterService.getUserRole(fromData.userType, fromData.projectId).subscribe({
-      next: (response: any) => {
+      next: (response: []) => {
         this.userRoleArray = response;
         if (this.userRoleArray.length == 1 || this.dropDownSelFlag) {
           this.filterForm.controls['level'].setValue(this.userRoleArray[0].roleId);
@@ -167,21 +167,21 @@ export class UserRightAccessComponent implements OnInit {
     let paramList: string = "?ProjectId=" + formValue.projectId + "&UserTypeId=" + formValue.userType + "&SubUserTypeId=" + formValue.subUserType + "&RoleId=" + formValue.level + "&DesignationId=0&pageno=" + this.pageNumber + "&pagesize=" + 10 + "&Textsearch=" + formValue.search;
     this.apiService.setHttp('get', "user-pages/GetByCriteria" + paramList, false, false, false, 'masterUrl');
     this.apiService.getHttp().subscribe({
-      next: (res: any) => {
-        if (res.statusCode === "200") {
+      next: (res: object) => {
+        if (res['statusCode'] === "200") {
           this.totalRows > 10 && this.pageNumber==1 ? this.paginator.firstPage() : '';
-          this.dataSource = new MatTableDataSource(res.responseData.responseData1);
+          this.dataSource = new MatTableDataSource(res['responseData'].responseData1);
           this.dataSource.sort = this.sort;
-          this.totalRows = res.responseData.responseData2[0].pageCount;
+          this.totalRows = res['responseData'].responseData2[0].pageCount;
         } else {
           this.dataSource = null         
           this.totalRows = 0;
-          if (res.statusCode != "404") {
-            this.commonService.checkDataType(res.statusMessage) == false ? this.error.handelError(res.statusCode) : this.commonService.snackBar(res.statusMessage, 1);
+          if (res['statusCode'] != "404") {
+            this.commonService.checkDataType(res['statusMessage']) == false ? this.error.handelError(res['statusCode']) : this.commonService.snackBar(res['statusMessage'], 1);
           }
         }
       },
-      error: ((error: any) => { this.error.handelError(error.status) })
+      error: ((error) => { this.error.handelError(error.status) })
     });
   }
 
@@ -205,19 +205,19 @@ export class UserRightAccessComponent implements OnInit {
     }
     this.apiService.setHttp('POST', "user-pages", false, JSON.stringify(this.newPagesAccArray), false, 'masterUrl');
      this.apiService.getHttp().subscribe({
-      next: (res: any) => {
-        if (res.statusCode === "200") {
+      next: (res:object) => {
+        if (res['statusCode'] === "200") {
           this.ngZone.run(() => {
             this.pageNumber != 1 ?  this.paginator.pageIndex = this.pageNumber  : this.getData();
           });
-          this.commonService.snackBar(res.statusMessage, 0);
+          this.commonService.snackBar(res['statusMessage'], 0);
         } else {
-          if (res.statusCode != "404") {
-            this.commonService.checkDataType(res.statusMessage) == false ? this.error.handelError(res.statusCode) : this.commonService.snackBar(res.statusMessage, 1);
+          if (res['statusCode'] != "404") {
+            this.commonService.checkDataType(res['statusMessage']) == false ? this.error.handelError(res['statusCode']) : this.commonService.snackBar(res['statusMessage'], 1);
           }
         }
       },
-      error: (err: any) => { this.error.handelError(err) }
+      error: (err) => { this.error.handelError(err) }
     })
   }
 
@@ -255,27 +255,27 @@ export class UserRightAccessComponent implements OnInit {
 
   // .................................. Paginator method ................................. */
 
-  pageChanged(event: any) {
+  pageChanged(event: PageEvent) {
     this.pageNumber = event.pageIndex + 1;
     this.bindTable();
   }
 
   // ..........................methods for checkbox change value...........................*/
 
-  readOnlyFN(event: any, element: any, _flag: string) {
+  readOnlyFN(event: any, element: UserRightAccess, _flag: string) {
     event.checked == true ? this.readFNFlag = true : this.readFNFlag = false;
     this.addDataInArray(element)
   }
-  readWriteFN(event: any, element: any, _flag: string) {
+  readWriteFN(event: any, element: UserRightAccess, _flag: string) {
     event.checked == true ? this.readWriteFNFlag = true : this.readWriteFNFlag = false;
     this.addDataInArray(element)
   }
 
   // .......................checkebox checked and push data in array...............................*/
 
-  addDataInArray(data: any) {
-    let fromData: any = this.filterForm.value;
-    let obj: any =
+  addDataInArray(data: UserRightAccess) {
+    let fromData= this.filterForm.value;
+    let obj: object =
     {
       "id": data?.pageId,
       "userTypeId": fromData.userType,
@@ -290,12 +290,12 @@ export class UserRightAccessComponent implements OnInit {
       "designationId": 0,
       "projectId": fromData.projectId
     }
-    let findObj = this.commonService.someOfArrayObject(this.newPagesAccArray, 'pageId', obj.pageId);
-    let arrayIndex = this.commonService.findIndexOfArrayObject(this.newPagesAccArray, 'pageId', obj?.pageId);
+    let findObj = this.commonService.someOfArrayObject(this.newPagesAccArray, 'pageId', obj['pageId']);
+    let arrayIndex = this.commonService.findIndexOfArrayObject(this.newPagesAccArray, 'pageId', obj['pageId']);
     findObj ? this.newPagesAccArray[arrayIndex] = obj : this.newPagesAccArray.push(obj);
   }
 
-  clearDropdown(flag: any) {
+  clearDropdown(flag: string) {
     this.dropDownSelFlag = false;
     this.defaultCallTableFlag = false;
     switch (flag) {

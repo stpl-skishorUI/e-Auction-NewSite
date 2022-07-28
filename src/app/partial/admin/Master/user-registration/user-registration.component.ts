@@ -3,12 +3,11 @@ import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, UntypedFormControl } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatFormFieldDefaultOptions, MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
-import { MatPaginator } from '@angular/material/paginator';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatSelectChange } from '@angular/material/select';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-//@ts-ignore
-import { Observable, ReplaySubject, Subscription } from 'rxjs';
+import {  ReplaySubject, Subscription } from 'rxjs';
 import { fadeInUp400ms } from 'src/@vex/animations/fade-in-up.animation';
 import { stagger40ms } from 'src/@vex/animations/stagger.animation';
 import { TableColumn } from 'src/@vex/interfaces/table-column.interface';
@@ -75,7 +74,8 @@ export class UserRegistrationComponent implements OnInit,OnDestroy {
   pageSizeOptions: number[] = [5, 10, 20, 50];
   pageSize = 10;
   pageNumber: number = 1;
-  constructor(public dialog: MatDialog,
+  constructor(
+    public dialog: MatDialog,
     private apiService: ApiService, private fb: FormBuilder,
     public commonService: CommonService,
     private localstorageService: LocalstorageService,
@@ -96,7 +96,7 @@ export class UserRegistrationComponent implements OnInit,OnDestroy {
 
   defultFilterform() {
     this.filterForm = this.fb.group({
-      stateId: [],
+      stateId: [1],
       divisionId: [0],
       districtId: [0],
       talukaId: [0],
@@ -133,36 +133,36 @@ export class UserRegistrationComponent implements OnInit,OnDestroy {
   // table data //
   getData() {
     let formValue = this.filterForm.value;
-    let paramList: string = "?StateId=" + 0 + "&DivisionId=" + 0 + "&SubDivisionId=0&DistrictId=" + 0 + "&TalukaId=" + 0 + "&pageno=" + this.pageNumber + "&pagesize=" + this.pageSize
+    let paramList: string = "?StateId=" + formValue.stateId + "&DivisionId=" + formValue.divisionId + "&SubDivisionId=0&DistrictId=" +formValue.districtId + "&TalukaId=" + formValue.talukaId + "&pageno=" + this.pageNumber + "&pagesize=" + this.pageSize
     this.commonService.checkDataType(formValue.search) == true ? paramList += "&Textsearch=" + formValue.search : '';
     this.apiService.setHttp('get', "user-registration/GetAll" + paramList, false, false, false, 'masterUrl');
     this.subscription = this.apiService.getHttp().subscribe({
-      next: (res: any) => {
-        if (res.statusCode === "200") {
-          this.dataSource = new MatTableDataSource(res.responseData.responseData1);
+      next: (res: object) => {
+        if (res['statusCode'] === "200") {
+          this.dataSource = new MatTableDataSource(res['responseData'].responseData1);
           this.dataSource.sort = this.sort;
-          this.totalRows = res.responseData.responseData2.pageCount;
+          this.totalRows = res['responseData'].responseData2.pageCount;
 
           this.totalRows > 10 && this.pageNumber == 1 ? this.paginator?.firstPage() : '';
         } else {
           this.dataSource = null;
-          if (res.statusCode != "404") {
-            this.commonService.checkDataType(res.statusMessage) == false ? this.error.handelError(res.statusCode) : this.commonService.snackBar(res.statusMessage, 1);
+          if (res['statusCode'] != "404") {
+            this.commonService.checkDataType(res['statusMessage']) == false ? this.error.handelError(res['statusCode']) : this.commonService.snackBar(res['statusMessage'], 1);
           }
         }
       },
-      error: ((error: any) => { this.error.handelError(error.status) })
+      error: (error => { this.error.handelError(error.status) })
     });
   }
 
   // pagination code start here //
-  pageChanged(event: any) {
+  pageChanged(event: PageEvent) {
     this.pageNumber = event.pageIndex + 1;
     this.getData();
   }
 
   //**  Confiramation for delete and block and unblock user */
-  takeConfiramation(ele: UserRegistration[], flag: string, event?: any) {
+  takeConfiramation(ele: UserRegistration, flag: string, event?: any) {
     let title: string = 'Delete';
     let dialogText: string = 'Are you sure you want to delete this record ?';
     flag == 'block' ? event.checked == true ? (title = 'User Block', dialogText = 'Do you want to User Block') : (title = 'User Unblock', dialogText = 'Do you want to User Unblock') : ''
@@ -181,24 +181,24 @@ export class UserRegistrationComponent implements OnInit,OnDestroy {
   }
 
   // ---------------------- delete code start here ----------//
-  deleteUser(ele: any) {
+  deleteUser(ele: UserRegistration) {
     let obj = {
       "id": ele.id,
       'deletedBy': this.localstorageService.userId(),
     }
     this.apiService.setHttp('DELETE', "user-registration", false, JSON.stringify(obj), false, 'masterUrl');
     this.subscription = this.apiService.getHttp().subscribe({
-      next: (res: any) => {
-        if (res.statusCode === "200") {
-          this.commonService.snackBar(res.statusMessage, 0);
+      next: (res: object) => {
+        if (res['statusCode'] === "200") {
+          this.commonService.snackBar(res['statusMessage'], 0);
           this.getData();
         } else {
-          if (res.statusCode != "404") {
-            this.commonService.checkDataType(res.statusMessage) == false ? this.error.handelError(res.statusCode) : this.commonService.snackBar(res.statusMessage, 1);
+          if (res['statusCode'] != "404") {
+            this.commonService.checkDataType(res['statusMessage']) == false ? this.error.handelError(res['statusCode']) : this.commonService.snackBar(res['statusMessage'], 1);
           }
         }
       },
-      error: (err: any) => { this.error.handelError(err) }
+      error: (err) => { this.error.handelError(err) }
     })
 
     this.selection.deselect(ele);
@@ -207,7 +207,7 @@ export class UserRegistrationComponent implements OnInit,OnDestroy {
   //------------- delete code end here ------------------//
 
   // ------------- user block and unblock -----------------//
-  userBlockUnBlock(element: any, event: any) {
+  userBlockUnBlock(element:UserRegistration, event: any) {
     let obj = {
       "id": element?.id,
       "isBlock": event == true ? true : false,
@@ -217,17 +217,17 @@ export class UserRegistrationComponent implements OnInit,OnDestroy {
     }
     this.apiService.setHttp('PUT', "user-registration/BlockUnblockUser", false, JSON.stringify(obj), false, 'masterUrl');
     this.subscription = this.apiService.getHttp().subscribe({
-      next: (res: any) => {
-        if (res.statusCode === "200") {
+      next: (res: object) => {
+        if (res['statusCode'] === "200") {
           this.getData();
-          this.commonService.snackBar(res.statusMessage, 0);
+          this.commonService.snackBar(res['statusMessage'], 0);
         } else {
-          if (res.statusCode != "404") {
-            this.commonService.checkDataType(res.statusMessage) == false ? this.error.handelError(res.statusCode) : this.commonService.snackBar(res.statusMessage, 1);
+          if (res['statusCode'] != "404") {
+            this.commonService.checkDataType(res['statusMessage']) == false ? this.error.handelError(res['statusCode']) : this.commonService.snackBar(res['statusMessage'], 1);
           }
         }
       },
-      error: (err: any) => { this.error.handelError(err) }
+      error: (err) => { this.error.handelError(err) }
     })
   }
   // ------------- user block and unblock End  -----------------//
@@ -241,8 +241,9 @@ export class UserRegistrationComponent implements OnInit,OnDestroy {
   getstateData() {
     this.stateArray = [];
     this.subscription = this.masterService.getState().subscribe({
-      next: (response: any) => {
-        let stateArray = response;
+      next: (response: []) => {
+        let stateArray = [];
+        stateArray = response;
         stateArray.length > 1 ? this.stateArray.push({ state: "All State", id: 0 }, ...response) : this.stateArray = response;
         stateArray.length == 1 || this.dropDownSelFlag ? (this.filterForm.controls['stateId'].setValue(this.apiService.stateId), this.getDivision(this.apiService.stateId)) : '';
       },
@@ -254,8 +255,9 @@ export class UserRegistrationComponent implements OnInit,OnDestroy {
   getDivision(stateId: number) {
     this.divisionArray = [];
     this.subscription = this.masterService.getDivisionByStateId(stateId || 0).subscribe({
-      next: (response: any) => {
-        let divisionArray = response;
+      next: (response: []) => {
+        let divisionArray = [];
+        divisionArray = response;
         divisionArray.length > 1 ? this.divisionArray.push({ id: 0, division: "All Division" }, ...response) : this.divisionArray = response;
         divisionArray.length == 1 || this.dropDownSelFlag ? (this.filterForm.controls['divisionId'].setValue(this.divisionArray[0].id), this.getDistrict(this.divisionArray[0].id)) : '';
       },
@@ -264,12 +266,13 @@ export class UserRegistrationComponent implements OnInit,OnDestroy {
   }
 
   //....... get distrcit  array ..... //
-  getDistrict(divId: any) {
+  getDistrict(divId: number) {
     console.log(divId)
     this.districtArray = [];
     this.subscription = this.masterService.getDistrictByDivisionId(divId || 0).subscribe({
-      next: (response: any) => {
-        let districtArray = response;
+      next: (response: []) => {
+        let districtArray=[];
+        districtArray = response
         districtArray.length > 1 ? this.districtArray.push({ id: 0, district: "All District" }, ...response) : this.districtArray = response;
         districtArray.length == 1 || this.dropDownSelFlag ? (this.filterForm.controls['districtId'].setValue(this.districtArray[0].id), this.getTaluka(this.districtArray[0].id)) : '';
       },
@@ -279,11 +282,12 @@ export class UserRegistrationComponent implements OnInit,OnDestroy {
 
   //......... get taluka Array ......//
 
-  getTaluka(districtId: any) {
+  getTaluka(districtId: number) {
     this.talukaArray = [];
     this.subscription = this.masterService.getTaluka(districtId || 0).subscribe({
-      next: (response: any) => {
-        let talukaArray = response;
+      next: (response: []) => {
+        let talukaArray = [];
+        talukaArray = response;
         talukaArray.length > 1 ? this.talukaArray.push({ id: 0, taluka: "All Taluka" }, ...response) : this.talukaArray = response;
         talukaArray.length == 1 || this.dropDownSelFlag ? (this.filterForm.controls['districtId'].setValue(this.talukaArray[0].id)) : '';
 
@@ -317,8 +321,7 @@ export class UserRegistrationComponent implements OnInit,OnDestroy {
   }
 
 //--------- add update user code start here ----------------//
-  userCreateUpdate(data?:UserRegistration[]): void {
-    //@ts-ignore
+  userCreateUpdate(data?:UserRegistration): void {
     const dialogRef = this.dialog.open(AddUserComponent, {
       width: 'auto',
       disableClose: false,
@@ -341,8 +344,7 @@ export class UserRegistrationComponent implements OnInit,OnDestroy {
       data: { p1: 'Added User Successfully.', p2: '', cardTitle: '', successBtnText: 'Ok', dialogIcon: '', cancelBtnText: '' },
       disableClose: this.apiService.disableCloseFlag,
     });
-
-    dialogRef.afterClosed().subscribe((res: any) => {
+    dialogRef.afterClosed().subscribe((res: string) => {
       if (res == 'Yes') {
         this.filterData();
       }

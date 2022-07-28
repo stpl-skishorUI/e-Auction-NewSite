@@ -2,7 +2,7 @@ import { SelectionModel } from '@angular/cdk/collections';
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { FormControl, UntypedFormControl } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
-import { MatPaginator } from '@angular/material/paginator';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatSelectChange } from '@angular/material/select';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
@@ -37,7 +37,7 @@ export class PageListComponent implements OnInit {
 
   searchFilter= new FormControl('');
   totalRows: number= 0;
-  totalPages:any;
+  totalPages:number;
    highlightedRow!: number;
    pageNumber: number = 1;
 
@@ -72,22 +72,22 @@ export class PageListComponent implements OnInit {
     let paramList: string = "?pageno=" + this.pageNumber + "&pagesize=10" + "&TextSearch=" + this.searchFilter.value;
     this.apiService.setHttp('get', "pagemaster/GetAll" + paramList, false, false, false, 'masterUrl');
    this.apiService.getHttp().subscribe({
-      next: (res: any) => {
-        if (res.statusCode === "200") {         
-          this.dataSource = new MatTableDataSource(res.responseData.responseData1);
-          this.totalRows = res.responseData.responseData2.pageCount;
-           this.totalPages = res.responseData.responseData2.totalPages;
+      next: (res: object) => {
+        if (res['statusCode'] === "200") {         
+          this.dataSource = new MatTableDataSource(res['responseData'].responseData1);
+          this.totalRows = res['responseData'].responseData2.pageCount;
+           this.totalPages = res['responseData'].responseData2.totalPages;
            this.dataSource.sort = this.sort;
            this.pageNumber == 1 ? this.paginator?.firstPage() : ''; 
         } else {
           this.dataSource = null;
           this.totalRows = 0;
-          if (res.statusCode != "404") {
-            this.commonService.checkDataType(res.statusMessage) == false ? this.error.handelError(res.statusCode) : this.commonService.snackBar(res.statusMessage, 1);
+          if (res['statusCode'] != "404") {
+            this.commonService.checkDataType(res['statusMessage']) == false ? this.error.handelError(res['statusCode']) : this.commonService.snackBar(res['statusMessage'], 1);
           }
         }
       },
-      error: ((error: any) => { this.error.handelError(error.status) })
+      error: ((error) => { this.error.handelError(error.status) })
     });
   }
 
@@ -120,7 +120,7 @@ export class PageListComponent implements OnInit {
 
 // ........................ Paginator method ................................. */
 
-  pageChanged(event: any) {
+  pageChanged(event:PageEvent) {
     this.pageNumber = event.pageIndex + 1;
     this.bindTable();
   }
@@ -174,17 +174,17 @@ export class PageListComponent implements OnInit {
     }
     this.apiService.setHttp('DELETE', "pagemaster/DeletePage", false, JSON.stringify(obj), false, 'masterUrl');
      this.apiService.getHttp().subscribe({
-      next: (res: any) => {
-        if (res.statusCode === "200") {
+      next: (res: object) => {
+        if (res['statusCode'] === "200") {
           this.bindTable();
-          this.commonService.snackBar(res.statusMessage, 0);
+          this.commonService.snackBar(res['statusMessage'], 0);
         } else {
-          if (res.statusCode != "404") {
-            this.commonService.checkDataType(res.statusMessage) == false ? this.error.handelError(res.statusCode) : this.commonService.snackBar(res.statusMessage, 1);
+          if (res['statusCode'] != "404") {
+            this.commonService.checkDataType(res['statusMessage']) == false ? this.error.handelError(res['statusCode']) : this.commonService.snackBar(res['statusMessage'], 1);
           }
         }
       },
-      error: (err: any) => { this.error.handelError(err) }
+      error: (err) => { this.error.handelError(err) }
     })
   }
 

@@ -9,6 +9,7 @@ import { ConfigService } from 'src/app/core/services/config.service';
 import { ErrorsService } from 'src/app/core/services/errors.service';
 import { LocalstorageService } from 'src/app/core/services/localstorage.service';
 import { ValidatorService } from 'src/app/core/services/validator.service';
+import { PageList } from '../page-list.model';
 
 @Component({
   selector: 'vex-add-page',
@@ -21,8 +22,8 @@ export class AddPageComponent implements OnInit {
   addPageForm: FormGroup |any;
   saveUpdateBtn: string = 'Submit';
   editFlag: boolean = false;
-  getAllPageName: any;
-  pageNameArray: any;
+  getAllPageName = [];
+  pageNameArray = [];
   searchPageObs!: Observable<any> | any;
   pageAddType = ['Inside Module', 'Show in Side Bar', 'Show in inside Module'];
 
@@ -36,24 +37,23 @@ export class AddPageComponent implements OnInit {
     private localstorageService: LocalstorageService,
     private titleCasePipe: TitleCasePipe,
 
-    @Inject(MAT_DIALOG_DATA) public data: any ,//
+    @Inject(MAT_DIALOG_DATA) public data: PageList ,
     
     public configService:ConfigService) { }
 
   ngOnInit(): void {
     this.defultForm();
     this.commonService.checkDataType(this.data) == true ? this.patchData() : '';
-    // console.log(this.data);
     this.getModuleName();
     this.getAllPages();
-   
     this.searchPageObs = this.addPageForm.controls.module.valueChanges.pipe(startWith(''), map((value: any) => this.commonService.filter(value, this.pageNameArray, 'module')),);
+    console.log(this.searchPageObs);
   }
 
   getModuleName() {
     let pageName = this.localstorageService.getAllPageName();
-    this.getAllPageName = pageName.filter((ele: any) => {
-      if (ele.isSideBarMenu == true) {
+    this.getAllPageName = pageName.filter((ele: object) => {
+      if (ele['isSideBarMenu'] == true) {
         return ele;
       }
     })
@@ -104,19 +104,18 @@ export class AddPageComponent implements OnInit {
     this.editFlag ? (reqType = 'PUT', apiName = 'UpdatePage') : (reqType = 'POST', apiName = 'AddPage');
     this.apiService.setHttp(reqType, "pagemaster/" + apiName, false, JSON.stringify(obj), false, 'masterUrl');
     this.apiService.getHttp().subscribe({
-      next: (res: any) => {
-        if (res.statusCode === "200") {
-          this.commonService.snackBar(res.statusMessage, 0);
+      next: (res:object) => {
+        if (res['statusCode'] === "200") {
+          this.commonService.snackBar(res['statusMessage'], 0);
           let data = this.data ? this.data : 'post';
           this.dialogRef.close(data);
         } else {
-          this.commonService.checkDataType(res.statusMessage) == false ? this.errorsService.handelError(res.statusCode) : this.commonService.snackBar(res.statusMessage, 1);
+          this.commonService.checkDataType(res['statusMessage']) == false ? this.errorsService.handelError(res['statusCode']) : this.commonService.snackBar(res['statusMessage'], 1);
         }
       },
-      error: ((error: any) => { this.errorsService.handelError(error.status) })
+      error: ((error) => { this.errorsService.handelError(error.status) })
     });
   }
-
 
   patchData() {
     this.editFlag = true;
@@ -136,41 +135,37 @@ export class AddPageComponent implements OnInit {
     let pagSize = 100
     this.apiService.setHttp("get", "pagemaster/GetAll?pageno=1&pagesize=" + pagSize, false, false, false, 'masterUrl');
     this.apiService.getHttp().subscribe({
-      next: (res: any) => {
-        if (res.statusCode === "200") {
-          this.pageNameArray = res.responseData.responseData1;
+      next: (res: object) => {
+        if (res['statusCode'] === "200") {
+          this.pageNameArray = res['responseData'].responseData1;
           this.getModuleList();
-
-
         } else {
-          this.commonService.checkDataType(res.statusMessage) == false ? this.errorsService.handelError(res.statusCode) : this.commonService.snackBar(res.statusMessage, 1);
+          this.commonService.checkDataType(res['statusMessage']) == false ? this.errorsService.handelError(res['statusCode']) : this.commonService.snackBar(res['statusMessage'], 1);
         }
       },
-      error: ((error: any) => { this.errorsService.handelError(error.status) })
+      error: ((error) => { this.errorsService.handelError(error.status) })
     });
   }
 
   getModuleList(){
-    let loginPages: any[] = [];
-    this.pageNameArray.find((item: any) => {
-      let existing: any = loginPages.filter((v: any) => {
-        return v.module == item.module;
+    let loginPages = [];
+    this.pageNameArray.find((item: object) => {
+      let existing = loginPages.filter((v:object) => {
+        return v['module'] == item['module'];
       });
       if (existing.length) {
-        let existingIndex: any = loginPages.indexOf(existing[0]);
-        loginPages[existingIndex].pageURL = loginPages[existingIndex].pageURL.concat(item.pageURL);
-        loginPages[existingIndex].pageName = loginPages[existingIndex].pageName.concat(item.pageName);
+        let existingIndex= loginPages.indexOf(existing[0]);
+        loginPages[existingIndex].pageURL = loginPages[existingIndex].pageURL.concat(item['pageURL']);
+        loginPages[existingIndex].pageName = loginPages[existingIndex].pageName.concat(item['pageName']);
       } else {
-        if (typeof item.pageName == 'string')
-          item.pageURL = [item.pageURL];
-        item.pageName = [item.pageName];
+        if (typeof item['pageName'] == 'string')
+          item['pageURL'] = [item['pageURL']];
+        item['pageName'] = [item['pageName']];
         loginPages.push(item);
       }
     });
     this.pageNameArray = loginPages;
   }
-
-
 
   clear() {
     this.data ? this.saveUpdateBtn = 'Update' : this.saveUpdateBtn = 'Submit';
@@ -178,7 +173,6 @@ export class AddPageComponent implements OnInit {
     this.addPageForm.controls["module"].clearValidators();
     this.addPageForm.controls["module"].updateValueAndValidity();
   }
-
 
   close(flag:string){
 this.dialogRef.close(flag);
