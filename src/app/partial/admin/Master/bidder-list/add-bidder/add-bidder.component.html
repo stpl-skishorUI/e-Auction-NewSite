@@ -533,7 +533,7 @@
                         </td>
                         <td>
                             <div class="flex items-center">
-                                <button mat-button type="button" class="bg-gray-200 mr-2 text-xs py-2 text-xs py-2">
+                                <button mat-button type="button" class="bg-gray-200 mr-2 text-xs py-2">
                                     <label><span>Upload Document</span>
                                         <input type="file" style="display: none"
                                             (change)="documentUpload($event,6,'Partnership Deed Certificate')"
@@ -684,7 +684,7 @@
             </ng-container>
         </mat-dialog-content>
         <mat-dialog-actions align="end">
-            <button type="button" mat-stroked-button class="mx-3" (click)="clearForm()">Clear</button>
+            <button type="button" mat-stroked-button class="bg-gray-300 mr-2" (click)="clearForm()">Clear</button>
             <button type="submit" mat-raised-button color="primary" (click)="onSubmit()"> {{this.data ?
                 'Update':'Submit'}}</button>
         </mat-dialog-actions>
