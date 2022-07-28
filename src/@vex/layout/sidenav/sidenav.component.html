@@ -13,20 +13,16 @@
       </button>
     </div>
 
-    <div class="p-3">
-      <input type="text" [formControl]="searchFilter" placeholder="Search..."
-        class="w-60 focus:outline-none focus:ring-0 text-gray-900 py-2 pl-3 pr-1 text-sm rounded-lg block dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
-        required>
-      <!-- <input type="text" [formControl]="searchFilter" style="color: #000;"> -->
-    </div>
-    <!-- <div *ngIf="searchVisible$ | async" class="vex-sidenav-search__container">
-      <div class="vex-sidenav-search relative"
-           matRippleColor="var(--sidenav-item-ripple-color)">
+
+    <div class="vex-sidenav-search__container">
+      <div class="vex-sidenav-search relative" matRipple matRippleColor="var(--sidenav-item-ripple-color)">
         <mat-icon class="flex-none vex-sidenav-search__icon" svgIcon="mat:search"></mat-icon>
-        <div class="flex-auto vex-sidenav-search__placeholder">Quick Search</div>
-        <div class="flex-none vex-sidenav-search__keybind">Ctrl K</div>
+        <div class="flex-auto vex-sidenav-search__placeholder py-1 text-sm">
+          <input type="text" [formControl]="searchFilter" placeholder="Search..."
+            class="bg-transparent outline-none border-none" required>
+        </div>
       </div>
-    </div> -->
+    </div>
 
     <div class="vex-sidenav-toolbar__divider"></div>
   </div>
