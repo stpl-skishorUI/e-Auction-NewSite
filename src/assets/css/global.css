@@ -141,3 +141,19 @@
 .mat-form-field-underline{
   bottom:8px !important;
 }
+.dashboard-table{
+  border-top: 1px solid #ddd;
+  border-left: 1px solid #ddd;
+  border-right: 1px solid #ddd;
+}
+.dashboard-table thead th{
+  padding: 10px !important;
+  background-color: #efefef !important;
+}
+.dashboard-table thead th,
+.dashboard-table tbody td{
+  border-bottom: 1px solid #ddd;
+  vertical-align: middle;
+  padding: 10px;
+  text-align: left !important;
+}
