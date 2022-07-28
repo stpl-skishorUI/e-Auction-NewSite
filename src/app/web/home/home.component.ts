@@ -95,17 +95,17 @@ export class HomeComponent implements OnInit {
     paramList += '&TenderType=Active';
     this.apiService.setHttp('get', 'event-creation/getAll' + paramList + "&IsPublished=1", false, false, false, 'bidderUrl');
     this.apiService.getHttp().subscribe({
-      next: (res: any) => {
-        if (res.statusCode === "200") {
-            this.tableDataArray = res.responseData.responseData1;
+      next: (res: object) => {
+        if (res['statusCode'] === "200") {
+            this.tableDataArray = res['responseData'].responseData1;
            this.dataSource = new MatTableDataSource(this.tableDataArray);
         } else {
-          if (res.statusCode != "404") {
-            this.commonService.checkDataType(res.statusMessage) == false ? this.error.handelError(res.statusCode) : this.commonService.snackBar(res.statusMessage, 1);
+          if (res['statusCode'] != "404") {
+            this.commonService.checkDataType(res['statusMessage']) == false ? this.error.handelError(res['statusCode']) : this.commonService.snackBar(res['statusMessage'], 1);
           }
         }
       },
-      error: ((error: any) => { this.error.handelError(error.status) })
+      error: ((error) => { this.error.handelError(error.status) })
     });
   }
 
@@ -158,18 +158,18 @@ export class HomeComponent implements OnInit {
     }
     this.apiService.setHttp('get', "lot-creation/getByEventId/" + eventId, false, false, false, 'bidderUrl');
     this.apiService.getHttp().subscribe({
-      next: (res: any) => {
-        if (res.statusCode === "200") {
-          let tempEventDetailArray = res.responseData;
-          tempEventDetailArray.map((res: any) => {
-            res.eventParticipateId != 0 && this.tabChangeFlag == "Active" ? (res.isparticipateflag = true) : res.isparticipateflag = false; //,this.isparticipateEvent(false,res,true)
+      next: (res: object) => {
+        if (res['statusCode'] === "200") {
+          let tempEventDetailArray = res['responseData'];
+          tempEventDetailArray.map((res: object) => {
+            res['eventParticipateId'] != 0 && this.tabChangeFlag == "Active" ? (res['isparticipateflag'] = true) : res['isparticipateflag'] = false; //,this.isparticipateEvent(false,res,true)
           })
           if (this.participatedBidderEventlist.length && this.commonService.someOfArrayObject(this.participatedBidderEventlist, 'eventId', eventId)) {
             let eventIdIndex = this.commonService.findIndexOfArrayObject(this.participatedBidderEventlist, 'eventId', eventId);
-            tempEventDetailArray.map((ele: any) => {
+            tempEventDetailArray.map((ele: object) => {
               for (let j = 0; j <= this.participatedBidderEventlist.length; j++) {
-                if (this.participatedBidderEventlist[eventIdIndex]?.participatedBidderEventslst[j]?.eventLotId == ele.id || ele.eventParticipateId != 0) {
-                  ele.isparticipateflag = true;
+                if (this.participatedBidderEventlist[eventIdIndex]?.participatedBidderEventslst[j]?.eventLotId == ele['id'] || ele['eventParticipateId'] != 0) {
+                  ele['isparticipateflag'] = true;
                 }
               }
             })
@@ -179,12 +179,12 @@ export class HomeComponent implements OnInit {
         } else {
           // this.spinner.hide();
           // this.eventDetails = []
-          if (res.statusCode != "404") {
-            this.commonService.checkDataType(res.statusMessage) == false ? this.error.handelError(res.statusCode) : this.commonService.snackBar(res.statusMessage, 1);
+          if (res['statusCode'] != "404") {
+            this.commonService.checkDataType(res['statusMessage']) == false ? this.error.handelError(res['statusCode']) : this.commonService.snackBar(res['statusMessage'], 1);
           }
         }
       },
-      error: ((error: any) => { this.error.handelError(error.status) })
+      error: ((error) => { this.error.handelError(error.status) })
     });
   }
 
@@ -192,7 +192,7 @@ export class HomeComponent implements OnInit {
 
   }
 
-  isparticipateEvent(event: MatCheckboxChange | any, element: any, isparticipateEvent?: boolean) {
+  isparticipateEvent(event: MatCheckboxChange | any, element: object, isparticipateEvent?: boolean) {
     let checkboxFlag;
     isparticipateEvent == true ? checkboxFlag = true : checkboxFlag = event.source.checked;
     let obj: any;
@@ -205,8 +205,8 @@ export class HomeComponent implements OnInit {
       id: 0,
       eventParticipateId: 0,
       bidderId: this.checkUserLogFlag == true ? this.localstorageService.getBidderId() : 0,
-      eventId: element.eventId,
-      eventLotId: element.id,
+      eventId: element['eventId'],
+      eventLotId: element['id'],
       isTender_ApplicationFeePaid: false,
       isEMD_SecurityDepositPaid: false,
       biddingId: ""
@@ -219,22 +219,22 @@ export class HomeComponent implements OnInit {
       isDeleted: false,
       id: 0,
       bidderId: this.checkUserLogFlag == true ? this.localstorageService.getBidderId() : 0,
-      eventId: element.eventId,
+      eventId: element['eventId'],
       isDocumentSubmitted: false,
       isDocumentApproved: false,
       participatedBidderEventslst: [obj],
-      eventLotId: element.id,
+      eventLotId: element['id'],
     }
     if (checkboxFlag) {
-      let eventIdIndex = this.commonService.findIndexOfArrayObject(this.participatedBidderEventlist, 'eventId', element.eventId);
+      let eventIdIndex = this.commonService.findIndexOfArrayObject(this.participatedBidderEventlist, 'eventId', element['eventId']);
       if (eventIdIndex >= 0) {
         this.participatedBidderEventlist[eventIdIndex].participatedBidderEventslst.push(obj);
       } else {
         this.participatedBidderEventlist.push(tempobj);
       }
     } else {
-      let eventIdIndex = this.commonService.findIndexOfArrayObject(this.participatedBidderEventlist, 'eventId', element.eventId);
-      let eventLotIdIdIndex = this.commonService.findIndexOfArrayObject(this.participatedBidderEventlist[eventIdIndex].participatedBidderEventslst, 'eventLotId', element.id);
+      let eventIdIndex = this.commonService.findIndexOfArrayObject(this.participatedBidderEventlist, 'eventId', element['eventId']);
+      let eventLotIdIdIndex = this.commonService.findIndexOfArrayObject(this.participatedBidderEventlist[eventIdIndex].participatedBidderEventslst, 'eventLotId', element['id']);
       this.participatedBidderEventlist[eventIdIndex].participatedBidderEventslst.splice(eventLotIdIdIndex, 1);
       this.participatedBidderEventlist[eventIdIndex].participatedBidderEventslst.length == 0 ? this.participatedBidderEventlist.splice(eventIdIndex, 1) : '';
     }

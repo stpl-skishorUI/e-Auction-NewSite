@@ -122,23 +122,23 @@ export class AddUserComponent implements OnInit {
     let formType = this.data ? 'PUT' : 'POST';
     this.apiService.setHttp(formType, "user-registration", false, JSON.stringify(formData), false, 'masterUrl');
     this.apiService.getHttp().subscribe({
-      next: (res: any) => {
-        if (res.statusCode == "200") {
-          formType == 'PUT' ? this.commonService.snackBar(res.statusMessage, 0) : '';
+      next: (res: object) => {
+        if (res['statusCode'] == "200") {
+          formType == 'PUT' ? this.commonService.snackBar(res['statusMessage'], 0) : '';
           let obj = {
             formType: formType,
-            statusCode: res.statusCode
+            statusCode: res['statusCode']
           }
           this.onNoClick(obj)
           this.clearForm();
 
         } else {
-          if (res.statusCode != "404") {
-            this.commonService.checkDataType(res.statusMessage) == false ? this.error.handelError(res.statusCode) : this.commonService.snackBar(res.statusMessage, 1);
+          if (res['statusCode'] != "404") {
+            this.commonService.checkDataType(res['statusMessage']) == false ? this.error.handelError(res['statusCode']) : this.commonService.snackBar(res['statusMessage'], 1);
           }
         }
       },
-      error: ((error: any) => { this.error.handelError(error.status) })
+      error: (error => { this.error.handelError(error.status) })
     });
   }
 
@@ -149,7 +149,7 @@ export class AddUserComponent implements OnInit {
     this.userRegistrationForm.controls['stateId'].setValue(1);
   }
 
-  clearDropdown(flag: any, _formName?: any) {
+  clearDropdown(flag: string, _formName?: any) {
     this.addUserFormFlag = false;
     switch (flag) {
       case 'userTypeId':
@@ -181,7 +181,7 @@ export class AddUserComponent implements OnInit {
 
   getprojectType() {
     this.masterService.getProjectId().subscribe({
-      next: (response: any) => {
+      next: (response: []) => {
         this.projectTypeArray = response;
         this.addUserFormFlag == true ? (this.userRegistrationForm.controls['projectId'].setValue(this.data?.projectId), this.getUserType()) : this.projectTypeArray.length == 1 ? (this.userRegistrationForm.controls['projectId'].setValue(this.projectTypeArray[0].id), this.getUserType()) : '';
       },
@@ -193,7 +193,7 @@ export class AddUserComponent implements OnInit {
     this.roleArray = [];
     let fromData = this.userRegistrationForm.value;
     this.masterService.getUserRole(fromData.userTypeId, fromData.projectId).subscribe({
-      next: (response: any) => {
+      next: (response: []) => {
         this.roleArray.push({ 'roleId': 0, 'roleType': 'Select Role' }, ...response);
         this.addUserFormFlag == true ? (this.userRegistrationForm.controls['roleId'].setValue(this.data?.roleId), this.getstate()) : '';
       },
@@ -207,7 +207,7 @@ export class AddUserComponent implements OnInit {
   getUserType() {
     this.userTypeArray = [];
     this.masterService.getUserType().subscribe({
-      next: (response: any) => {
+      next: (response: []) => {
         this.userTypeArray.push({ 'userTypeId': 0, 'userType': 'Select User Type' }, ...response);
         this.userTypeArray =  this.commonService.removeObjFromArray(this.userTypeArray, 'userTypeId', 2);
 
@@ -218,10 +218,10 @@ export class AddUserComponent implements OnInit {
   }
 
   //..... user type ....../
-  getSubuserType(userTypeId: number, projId:any) {
+  getSubuserType(userTypeId: number, projId:number) {
     this.subUserTypeArray = [];
     this.masterService.getSubuserType(userTypeId, projId).subscribe({
-      next: (response: any) => {
+      next: (response: []) => {
         this.subUserTypeArray.push({ 'subUserTypeId': 0, 'subUserType': 'Select Sub User Type' }, ...response);
         this.addUserFormFlag == true ? (this.userRegistrationForm.controls['subUserTypeId'].setValue(this.data?.subUserTypeId), this.getRole()) : '';
       },
@@ -236,7 +236,7 @@ export class AddUserComponent implements OnInit {
   getstate() {
     this.stateArray = [];
     this.masterService.getState().subscribe({
-      next: (response: any) => {
+      next: (response: []) => {
         this.stateArray.push(...response);
         this.addUserFormFlag == true && this.data.subUserTypeId != 4 ? (this.userRegistrationForm.controls['stateId'].setValue(this.data?.stateId), this.getDivision(this.data.stateId)) : (this.userRegistrationForm.controls['stateId'].setValue(1),this.getDivision(1) );
         this.addUserFormFlag == true && this.data.subUserTypeId == 4 ? (this.userRegistrationForm.controls['stateId'].setValue(this.data?.stateId)) :(this.userRegistrationForm.controls['stateId'].setValue(1));
@@ -250,7 +250,7 @@ export class AddUserComponent implements OnInit {
   getDivision(stateId: number) {
     this.divisionArray = [];
     this.masterService.getDivisionByStateId(stateId || 0).subscribe({
-      next: (response: any) => {
+      next: (response: []) => {
         this.divisionArray.push({ id: 0, division: "Select Division" }, ...response);
         this.addUserFormFlag == true && this.data.subUserTypeId != 4 ? (this.userRegistrationForm.controls['divisionId'].setValue(this.data?.divisionId), this.getDistrict(this.data.divisionId)) : ''
       },
@@ -259,10 +259,10 @@ export class AddUserComponent implements OnInit {
   }
 
   //....... get distrcit  array ..... //
-  getDistrict(divId: any) {
+  getDistrict(divId: number) {
     this.districtArray = [];
     this.masterService.getDistrictByDivisionId(divId || 0).subscribe({
-      next: (response: any) => {
+      next: (response: []) => {
         this.districtArray.push({ district: "Select District", id: 0 }, ...response);
         this.addUserFormFlag == true && this.data.subUserTypeId != 4 ? (this.userRegistrationForm.controls['districtId'].setValue(this.data?.districtId)) : ''
         this.data?.subUserTypeId == 7 ? this.getTaluka(this.data?.districtId) : '';
@@ -274,10 +274,10 @@ export class AddUserComponent implements OnInit {
 
   //......... get taluka Array ......//
 
-  getTaluka(districtId: any) {
+  getTaluka(districtId: number) {
     this.talukaArray = [];
     this.masterService.getTaluka(districtId || 0).subscribe({
-      next: (response: any) => {
+      next: (response: []) => {
         this.talukaArray.push({ id: 0, taluka: "Select Taluka" }, ...response);
         this.addUserFormFlag == true && this.data.subUserTypeId == 7 ? (this.userRegistrationForm.controls['talukaId'].setValue(this.data?.talukaId)) : ''
       },
@@ -289,7 +289,7 @@ export class AddUserComponent implements OnInit {
   getDesignationArray() {
     this.designationArray = [];
     this.masterService.getDesignation().subscribe({
-      next: (response: any) => {
+      next: (response: []) => {
         this.designationArray.push({ id: 0, designation: "Select Designation", isDeleted: false }, ...response);
         if (this.addUserFormFlag == true) {
           let obj = {
@@ -307,7 +307,7 @@ export class AddUserComponent implements OnInit {
     this.subDivisionArray = [];
     let districtId = this.userRegistrationForm.value.districtId;
     this.masterService.getSubdivision(districtId).subscribe({
-      next: (response: any) => {
+      next: (response: []) => {
         // this.subDivisionArray = response;
         this.subDivisionArray.push({ subDivision: "Select SDO", id: 0 }, ...response);
         this.addUserFormFlag == true ? this.userRegistrationForm.controls['subDivisionId'].setValue(this.data.subDivisionId) : '';
@@ -316,7 +316,7 @@ export class AddUserComponent implements OnInit {
     })
   }
 
-  onNoClick(status?: any): void {
+  onNoClick(status?: object): void {
     this.dialogRef.close(status);
   }
 

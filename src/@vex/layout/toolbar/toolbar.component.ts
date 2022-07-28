@@ -6,6 +6,10 @@ import { NavigationService } from '../../services/navigation.service';
 import { PopoverService } from '../../components/popover/popover.service';
 import { MegaMenuComponent } from '../../components/mega-menu/mega-menu.component';
 import { Observable, of } from 'rxjs';
+import { ConfirmationDialogComponent } from 'src/app/core/dialogs/confirmation-dialog/confirmation-dialog.component';
+import { ApiService } from 'src/app/core/services/api.service';
+import { Router } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'vex-toolbar',
@@ -33,7 +37,9 @@ export class ToolbarComponent {
   constructor(private layoutService: LayoutService,
               private configService: ConfigService,
               private navigationService: NavigationService,
-              private popoverService: PopoverService) { }
+              private popoverService: PopoverService,
+              private apiService: ApiService, private router: Router,
+              public dialog: MatDialog) { }
 
   openQuickpanel(): void {
     this.layoutService.openQuickpanel();
@@ -72,5 +78,23 @@ export class ToolbarComponent {
 
   openSearch(): void {
     this.layoutService.openSearch();
+  }
+
+  logOut() {
+    localStorage.clear();
+    this.router.navigate(['../home']);
+  }
+
+  openLogOutDialog() {
+    const dialog = this.dialog.open(ConfirmationDialogComponent, {
+      width: this.apiService.modalSize[0], // p1 for paragraph 1 same as paragraph 2
+      data: { p1: 'Do you really want to logout?', p2: '', cardTitle: 'Are you Sure?', successBtnText: 'Logout', dialogIcon: '', cancelBtnText: 'Cancel' },
+    });
+
+    dialog.afterClosed().subscribe((result: any) => {
+      if (result == 'Yes') {
+        this.logOut();
+      }
+    })
   }
 }

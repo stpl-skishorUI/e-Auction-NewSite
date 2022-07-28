@@ -11,7 +11,7 @@
     <div class=" mt-4">
       <div class="flex gap-x-3 mb-2">
         <div>
-          <mat-form-field appearance="outline" class="w-60">
+          <mat-form-field [appearance]=configService?.matFormField class="w-60">
             <mat-label>Page Type</mat-label>
             <mat-select formControlName="isSideBarMenu" (selectionChange)="hideModule($event)">
               <mat-option *ngFor="let page of pageAddType" [value]="page">{{page}}</mat-option>
@@ -22,7 +22,7 @@
           </mat-form-field>
         </div>
         <div *ngIf="addPageForm.value.isSideBarMenu == 'Show in inside Module'">
-          <mat-form-field appearance="outline" class="w-60">
+          <mat-form-field [appearance]=configService.matFormField class="w-60">
             <mat-label>Module Name</mat-label>
             <input type="text" placeholder="Pick one" aria-label="Number" matInput formControlName="module"
               [matAutocomplete]="auto">
@@ -39,7 +39,7 @@
       </div>
 
       <div class="flex flex-col py-3">
-        <mat-form-field class="example-full-width" appearance="outline">
+        <mat-form-field class="example-full-width" [appearance]=configService?.matFormField>
           <mat-label>Page Name </mat-label>
           <input matInput placeholder="Page Name " formControlName="pageName"
             (keyup)="validatorService.removeSpaceAtBegining($event)"
@@ -53,7 +53,7 @@
       </div>
       <div class="grid grid-cols-2 gap-x-3 my-3">
         <div>
-          <mat-form-field class="w-full" appearance="outline">
+          <mat-form-field class="w-full" [appearance]=configService?.matFormField>
             <mat-label>Page URL </mat-label>
             <input matInput placeholder="Page url " formControlName="pageURL"
               (keypress)="validatorService.noSpaces($event)" autocomplete="off" maxlength="50">
