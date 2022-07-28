@@ -20,6 +20,11 @@
 
   <div class="-mx-1 flex items-center">
     <div class="px-1">
+      <button (click)="openConfig.emit()" mat-icon-button type="button">
+        <mat-icon svgIcon="mat:settings" color="primary"></mat-icon>
+      </button>
+    </div>
+    <div class="px-1">
       <button (click)="openSearch()" mat-icon-button type="button">
         <mat-icon color="primary" svgIcon="mat:search"></mat-icon>
       </button>
