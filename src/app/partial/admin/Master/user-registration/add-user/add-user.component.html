@@ -8,9 +8,9 @@
 <mat-dialog-content>
  
       <div class="my-3 card p-3 border-0 shadow-none">
-         <div class="flex gap-x-3 my-3">
+         <div class="grid grid-cols-4 gap-x-3 my-3">
             <div>
-               <mat-form-field [appearance]=configService.matFormField>
+               <mat-form-field [appearance]=configService.matFormField class="w-full">
                   <mat-label>Select Project</mat-label>
                   <mat-select formControlName="projectId"
                      (selectionChange)="getUserType();clearDropdown('userTypeId');">
@@ -21,7 +21,7 @@
                </mat-form-field>
             </div>
             <div>
-               <mat-form-field [appearance]=configService.matFormField>
+               <mat-form-field [appearance]=configService.matFormField class="w-full">
                   <mat-label>Select User Type</mat-label>
                   <mat-select formControlName="userTypeId" [disabled]="!userRegistrationForm.value.projectId"
                      (selectionChange)="getSubuserType(userRegistrationForm.value.userTypeId, userRegistrationForm.value.projectId);clearDropdown('subUserTypeId');;addValSelSubUserType()">
@@ -33,7 +33,7 @@
                </mat-form-field>
             </div>
             <div>
-               <mat-form-field [appearance]=configService.matFormField>
+               <mat-form-field [appearance]=configService.matFormField class="w-full">
                   <mat-label>Select Sub User</mat-label>
                   <mat-select formControlName="subUserTypeId" [disabled]="!userRegistrationForm.value.userTypeId"
                      (selectionChange)="getRole();clearDropdown('roleId');addValSelSubUserType()">
@@ -45,7 +45,7 @@
                </mat-form-field>
             </div>
             <div>
-               <mat-form-field [appearance]=configService.matFormField>
+               <mat-form-field [appearance]=configService.matFormField class="w-full">
                   <mat-label>Select Role</mat-label>
                   <mat-select formControlName="roleId"
                      (selectionChange)="clearDropdown('stateId');addValSelSubUserType()"
@@ -58,9 +58,9 @@
                </mat-form-field>
             </div>
          </div>
-         <div class="flex gap-x-3 my-3">
+         <div class="grid grid-cols-4 gap-x-3 my-3">
             <div>
-               <mat-form-field [appearance]=configService.matFormField>
+               <mat-form-field [appearance]=configService.matFormField class="w-full">
                   <mat-label>Select State</mat-label>
                   <mat-select formControlName="stateId"
                      (selectionChange)="getDivision(userRegistrationForm.value.stateId);clearDropdown('divisionId')">
@@ -73,7 +73,7 @@
             <ng-container
                *ngIf="userRegistrationForm.value.userTypeId == 3 ||  userRegistrationForm.value.subUserTypeId == 3 ">
                <div *ngIf="userRegistrationForm.value.subUserTypeId !=4">
-                  <mat-form-field [appearance]=configService.matFormField>
+                  <mat-form-field [appearance]=configService.matFormField class="w-full">
                      <mat-label>Select Division</mat-label>
                      <mat-select formControlName="divisionId" [disabled]="!userRegistrationForm.value.stateId"
                         (selectionChange)="getDistrict(userRegistrationForm.value.divisionId);clearDropdown('districtId')">
@@ -86,7 +86,7 @@
                   </mat-form-field>
                </div>
                <div *ngIf="userRegistrationForm.value.subUserTypeId !=4">
-                  <mat-form-field [appearance]=configService.matFormField>
+                  <mat-form-field [appearance]=configService.matFormField class="w-full">
                      <mat-label>Select District </mat-label>
                      <mat-select formControlName="districtId" [disabled]="!userRegistrationForm.value.divisionId"
                         (selectionChange)="userRegistrationForm.value.subUserTypeId == 7 ? getTaluka(userRegistrationForm.value.districtId): this.getSubDivision() ;clearDropdown('talukaId')">
@@ -98,7 +98,7 @@
                   </mat-form-field>
                </div>
                <div *ngIf="userRegistrationForm.value.subUserTypeId ==7">
-                  <mat-form-field [appearance]=configService.matFormField>
+                  <mat-form-field [appearance]=configService.matFormField class="w-full">
                      <mat-label>Select Taluka</mat-label>
                      <mat-select formControlName="talukaId" [disabled]="!userRegistrationForm.value.districtId">
                         <mat-option *ngFor="let taluka of talukaArray" [value]="taluka.id" [disabled]="taluka.id == 0">
@@ -109,7 +109,7 @@
                </div>
 
                <div *ngIf="userRegistrationForm.value.subUserTypeId ==6">
-                  <mat-form-field [appearance]=configService.matFormField>
+                  <mat-form-field [appearance]=configService.matFormField class="w-full">
                      <mat-label>SDO Name</mat-label>
                      <mat-select formControlName="subDivisionId" [disabled]="!userRegistrationForm.value.districtId">
                         <mat-option [disabled]="subDivision.id == 0" *ngFor="let subDivision of subDivisionArray"
@@ -123,9 +123,9 @@
             </ng-container>
 
          </div>
-         <div class="flex gap-x-3 my-3">
+         <div class="grid grid-cols-4 gap-x-3 my-3">
             <div>
-               <mat-form-field [appearance]=configService.matFormField>
+               <mat-form-field [appearance]=configService.matFormField class="w-full">
                   <mat-label>Name</mat-label>
                   <input matInput placeholder="Name" formControlName="name"
                      (keyup)="validatorService.removeSpaceAtBegining($event)"
@@ -137,7 +137,7 @@
                </mat-form-field>
             </div>
             <div>
-               <mat-form-field [appearance]=configService.matFormField>
+               <mat-form-field [appearance]=configService.matFormField class="w-full">
                   <mat-label>Mobile Number</mat-label>
                   <input matInput placeholder="Mobile No" (keypress)="validatorService.onlyDigits($event)"
                      formControlName="mobileNo" maxlength="10" autocomplete="off">
@@ -151,7 +151,7 @@
                </mat-form-field>
             </div>
             <div>
-               <mat-form-field [appearance]=configService.matFormField>
+               <mat-form-field [appearance]=configService.matFormField class="w-full">
                   <mat-label>User Name</mat-label>
                   <input matInput placeholder="User Name" formControlName="userName" minlength="5" maxlength="20"
                      (keypress)="validatorService.alphaNumericWithSpacesAndSpecChars($event)"
@@ -167,7 +167,7 @@
                </mat-form-field>
             </div>
             <div>
-               <mat-form-field [appearance]=configService.matFormField>
+               <mat-form-field [appearance]=configService.matFormField class="w-full">
                   <mat-label>Designation</mat-label>
                   <mat-select formControlName="designationId" [compareWith]="commonService.getIdByName">
                      <mat-option *ngFor="let designation of designationArray" [value]="designation"
@@ -178,9 +178,9 @@
                </mat-form-field>
             </div>
          </div>
-         <div class="flex gap-x-3 mt-2 w-full">
+         <div class="grid grid-cols-4 gap-x-3 mt-2">
             <div>
-               <mat-form-field [appearance]=configService.matFormField>
+               <mat-form-field [appearance]=configService.matFormField class="w-full">
                   <mat-label>Email ID</mat-label>
                   <input type="text" maxlength="150" matInput placeholder="abc@gmail.com" formControlName="emailId"
                      maxlength="100" (keypress)="validatorService.alphaNumericWithSpacesAndSpecChars($event)"
@@ -191,8 +191,8 @@
                   </mat-error>
                </mat-form-field>
             </div>
-            <div class="w-full">
-               <mat-form-field class="w-full" [appearance]=configService.matFormField>
+            <div class="col-span-3">
+               <mat-form-field class="w-full" [appearance]=configService.matFormField class="w-full">
                   <mat-label>Address </mat-label>
                   <input type="text" maxlength="150" matInput placeholder="Enter address" formControlName="userAddress"
                      (keyup)="validatorService.removeSpaceAtBegining($event)" autocomplete="off">
