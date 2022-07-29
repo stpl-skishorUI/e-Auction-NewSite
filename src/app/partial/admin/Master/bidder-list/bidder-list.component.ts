@@ -226,9 +226,9 @@ export class BidderListComponent implements OnInit {
 
   createBidder(data?: any): void {
     const dialog = this.dialog.open(AddBidderComponent, {
-      width: '1100px',
+      width: '1000px',
       data: data,
-      height: '100%',
+      // height: '100%',
       disableClose: this.apiService.disableCloseFlag,
     });
 

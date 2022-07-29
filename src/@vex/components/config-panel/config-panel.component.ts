@@ -18,7 +18,7 @@ import { defaultRoundedButtonBorderRadius } from '../../config/constants';
   styleUrls: ['./config-panel.component.scss']
 })
 export class ConfigPanelComponent {
-
+  
   configs: VexConfig[] = this.configService.configs;
   colorVariables: Record<string, ColorVariable> = colorVariables;
 

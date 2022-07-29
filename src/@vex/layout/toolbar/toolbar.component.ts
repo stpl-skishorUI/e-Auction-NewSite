@@ -1,4 +1,4 @@
-import { Component, ElementRef, HostBinding, Input } from '@angular/core';
+import { Component, ElementRef,EventEmitter, HostBinding, Input, Output} from '@angular/core';
 import { LayoutService } from '../../services/layout.service';
 import { ConfigService } from '../../config/config.service';
 import { map, startWith, switchMap } from 'rxjs/operators';
@@ -17,7 +17,7 @@ import { MatDialog } from '@angular/material/dialog';
   styleUrls: ['./toolbar.component.scss']
 })
 export class ToolbarComponent {
-
+  @Output() openConfig = new EventEmitter();
   @Input() mobileQuery: boolean;
 
   @Input()
