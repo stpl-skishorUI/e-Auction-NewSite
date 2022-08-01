@@ -72,7 +72,7 @@
         <div class="card shadow-none border border-gray-200">
             <mat-tab-group>
                 <mat-tab label="Active Tenders"> 
-                    <table [dataSource]="dataSource" class="w-full" mat-table matSort multiTemplateDataRows @stagger>
+                    <table [dataSource]="dataSource" class="w-full home-table" mat-table matSort multiTemplateDataRows @stagger>
                         <ng-container matColumnDef="srNo">
                             <th mat-header-cell *matHeaderCellDef> Sr.No </th>
                             <td mat-cell *matCellDef="let element; let i = dataIndex">{{((pageNo + 1) * 10 + i + 1)-20}}
