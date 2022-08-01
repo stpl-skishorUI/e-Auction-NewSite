@@ -123,9 +123,7 @@
                         </td>
                     </ng-container>
                     <ng-container matColumnDef="bidSubmissionEndDate">
-                        <th mat-header-cell *matHeaderCellDef>{{activeTab == 'Upcoming'? "Bid Submission start Date &
-                            Time"
-                            : "Bid Submission End Date & Time"}}</th>
+                        <th mat-header-cell *matHeaderCellDef>{{activeTab == 'Upcoming'? "Bid Submission start Date & Time" : "Bid Submission End Date & Time"}}</th>
                         <td mat-cell *matCellDef="let element"> {{ activeTab == 'Upcoming'
                             ?(element.bidSubmissionStartDate
                             | date:'dd/MM/yyyy & h:m:a'):element.bidSubmissionEndDate | date:'dd/MM/yyyy & h:m:a'}}<br>
@@ -141,8 +139,7 @@
                     </ng-container>
                     <ng-container matColumnDef="startDateTime">
                         <th mat-header-cell *matHeaderCellDef>Bid Opening Date & Time </th>
-                        <td mat-cell *matCellDef="let element"> {{ element.bidSubmissionStartDate | date:'dd/MM/yyyy &
-                            h:m:a'}}<br>
+                        <td mat-cell *matCellDef="let element"> {{ element.bidSubmissionStartDate | date:'dd/MM/yyyy & h:m:a'}}<br>
                         </td>
                     </ng-container>
                     <ng-container matColumnDef="totalItem">
