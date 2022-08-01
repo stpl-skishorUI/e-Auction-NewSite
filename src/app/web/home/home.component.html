@@ -34,33 +34,42 @@
         <div class="mb-3 card border border-gray-200 p-3 shadow-none">
             <div class="flex flex-row justify-between">
                 <div class="grid grid-cols-5 gap-4 mr-3">
+                    <mat-form-field [appearance]=configService?.matFormField>
+                        <mat-label>Enter a date range</mat-label>
+                        <mat-date-range-input [rangePicker]="picker">
+                            <input matStartDate placeholder="Start date" formControlName="startDate"
+                                autocomplete="off" [disabled]="true">
+                            <input matEndDate placeholder="End date" formControlName="endDate" autocomplete="off"
+                                [disabled]="true">
+                        </mat-date-range-input>
+                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                        <mat-date-range-picker #picker [disabled]="false"></mat-date-range-picker>
+                    </mat-form-field>
                     <mat-form-field appearance="outline">
-                        <mat-label>Project</mat-label>
-                        <mat-select formControlName="projectId">
-                            <mat-option></mat-option>
+                        <mat-label>Event Level</mat-label>
+                        <mat-select formControlName="levelId">
+                            <mat-option *ngFor="let level of lavelArray" [value]=level.val>{{level.text}}
+                            </mat-option>
                         </mat-select>
                     </mat-form-field>
                     <mat-form-field appearance="outline">
-                        <mat-label>UserType</mat-label>
-                        <mat-select formControlName="userType">
-                            <mat-option></mat-option>
+                        <mat-label>All District</mat-label>
+                        <mat-select formControlName="districtId">
+                            <mat-option *ngFor="let district of districtArray" [value]=district.id>
+                                {{district.district}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field><mat-form-field appearance="outline">
+                        <mat-label>All Mineral</mat-label>
+                        <mat-select formControlName="mineralId">
+                            <mat-option *ngFor="let mineralId of MineralArray" [value]="mineralId.materialId">
+                                {{mineralId.material}}</mat-option>
                         </mat-select>
                     </mat-form-field>
                     <mat-form-field appearance="outline">
-                        <mat-label>Sub User Type</mat-label>
-                        <mat-select formControlName="subUserType">
-                            <mat-option></mat-option>
-                        </mat-select>
-                    </mat-form-field>
-                    <mat-form-field appearance="outline">
-                        <mat-label>Role Type</mat-label>
-                        <mat-select>
-                            <mat-option></mat-option>
-                        </mat-select>
-                    </mat-form-field>
-                    <mat-form-field appearance="outline">
-                        <mat-label>Search by Page Url/page Name</mat-label>
-                        <input ty matInput placeholder="Search byPage Url/page Name" formControlName="search">
+                        <mat-label>Search</mat-label>
+                        <input matInput placeholder="Search by event Id" (keypress)="VB.noSpacesAtStart($event)"
+                            formControlName="search" autocomplete="off">
                     </mat-form-field>
                 </div>
                 <div>
@@ -74,7 +83,7 @@
         <div class="card shadow-none border border-gray-200">
             <mat-tab-group>
                 <mat-tab label="Active Tenders"> 
-                    <table [dataSource]="dataSource" class="w-full" mat-table matSort multiTemplateDataRows @stagger>
+                    <table [dataSource]="dataSource" class="w-full home-table" mat-table matSort multiTemplateDataRows @stagger>
                         <ng-container matColumnDef="srNo">
                             <th mat-header-cell *matHeaderCellDef> Sr.No </th>
                             <td mat-cell *matCellDef="let element; let i = dataIndex">{{((pageNo + 1) * 10 + i + 1)-20}}

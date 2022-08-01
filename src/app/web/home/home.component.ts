@@ -16,9 +16,15 @@ import { UntypedFormControl } from '@angular/forms';
 import { SelectionModel } from '@angular/cdk/collections';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import { trigger, state, style, transition, animate } from '@angular/animations';
+<<<<<<< HEAD
 import { ConfirmationDialogComponent } from 'src/app/core/dialogs/confirmation-dialog/confirmation-dialog.component';
 import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
+=======
+import { StaticDropdownService } from 'src/app/core/services/static-dropdown.service';
+import { MasterService } from 'src/app/core/services/master.service';
+import { ValidatorService } from 'src/app/core/services/validator.service';
+>>>>>>> 9bfef76bda0375151b28bc7b90de98db25051c35
 
 @Component({
   selector: 'vex-home',
@@ -58,13 +64,18 @@ export class HomeComponent implements OnInit {
   dataSource: MatTableDataSource<any> | null;
   selection = new SelectionModel<any>(true, []);
   searchCtrl = new UntypedFormControl();
-  topFilterForm: FormGroup | any;
+  filterForm: FormGroup | any;
   activeTab: string = 'Active';
-  tableDataArray:any;
+  tableDataArray: any;
+  lavelArray = [];
+  dropDownSelFlag: boolean = true;
+  districtArray = [];
+  MineralArray = [];
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
+<<<<<<< HEAD
   constructor(private commonService: CommonService, private datePipe: DatePipe,
     public localstorageService: LocalstorageService,
     private error: ErrorsService, private apiService: ApiService, private fb: FormBuilder, private configService: ConfigService,
@@ -75,10 +86,50 @@ export class HomeComponent implements OnInit {
   ngOnInit() {
     this.defulatForm();
     this.bindTable();
+=======
+  constructor(private commonService: CommonService, private datePipe: DatePipe, private masterService: MasterService, public VB: ValidatorService,
+    public localstorageService: LocalstorageService, private error: ErrorsService, private staticDropdownService: StaticDropdownService,
+    private apiService: ApiService, private fb: FormBuilder, public configService: ConfigService) {
+>>>>>>> 9bfef76bda0375151b28bc7b90de98db25051c35
   }
 
+  ngOnInit() {
+    this.defulatForm();
+    this.levelArray();
+    this.getMineral();
+  }
+
+  //--------------------------------------------------------filter dropdown start heare -----------------------------------------------------//
+
+  levelArray() {
+    this.lavelArray = this.staticDropdownService.getSelectLevel(true);
+    this.lavelArray.length == 1 || this.dropDownSelFlag ? (this.filterForm.controls['levelId'].setValue(this.lavelArray[0].val), this.getDistrict()) : '';
+  }
+
+  getDistrict() {
+    this.masterService.getDistrict(0).subscribe({
+      next: (response: any) => {
+        this.districtArray.push({ district: "All District", id: 0, divisionId: 0, division: 'All' }, ...response);
+        this.districtArray.length == 1 || this.dropDownSelFlag ? (this.filterForm.controls['districtId'].setValue(this.districtArray[0].id), this.getMineral()) : '';
+      },
+      error: (err => { this.error.handelError(err) })
+    })
+  }
+
+  getMineral() {
+    this.masterService.getMaterial().subscribe({
+      next: (response: any) => {
+        this.MineralArray.push({ materialId: 0, material: "All Mineral" }, ...response);
+        this.MineralArray.length == 1 || this.dropDownSelFlag ? (this.filterForm.controls['mineralId'].setValue(this.MineralArray[0].materialId), this.bindTable()) : '';
+      },
+      error: (err => { this.error.handelError(err) })
+    })
+  }
+
+  //--------------------------------------------------------filter dropdown end heare -----------------------------------------------------//
+
   defulatForm() {
-    this.topFilterForm = this.fb.group({
+    this.filterForm = this.fb.group({
       levelId: [''],
       districtId: [0],
       mineralId: [0],
@@ -89,7 +140,7 @@ export class HomeComponent implements OnInit {
   }
 
   bindTable() {
-    const formValue = this.topFilterForm.value;
+    const formValue = this.filterForm.value;
     let paramList = '?EventLevel=' + formValue.levelId + '&DistrictId=' + formValue.districtId + '&MineralId=' + formValue.mineralId + '&pageno=' + this.pageNo + '&pagesize=' + this.configService.pageSize //+'&Status=&StartDate=1&EndDate=1'
     if (formValue.startDate && formValue.endDate) {
       const startDate = this.datePipe.transform(formValue.startDate, 'yyyy-MM-dd');
@@ -102,8 +153,8 @@ export class HomeComponent implements OnInit {
     this.apiService.getHttp().subscribe({
       next: (res: object) => {
         if (res['statusCode'] === "200") {
-            this.tableDataArray = res['responseData'].responseData1;
-           this.dataSource = new MatTableDataSource(this.tableDataArray);
+          this.tableDataArray = res['responseData'].responseData1;
+          this.dataSource = new MatTableDataSource(this.tableDataArray);
         } else {
           if (res['statusCode'] != "404") {
             this.commonService.checkDataType(res['statusMessage']) == false ? this.error.handelError(res['statusCode']) : this.commonService.snackBar(res['statusMessage'], 1);
