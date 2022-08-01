@@ -11,7 +11,18 @@
                     <button mat-button type="button">e-Auction</button>
                     <button mat-button type="button">Help</button>
                     <button mat-button type="button">Contact</button>
-                    <button color="primary" mat-raised-button type="button">Login</button>
+                    <button color="primary" mat-raised-button type="button" routerLink="../login"
+                    *ngIf="!this.localstorageService.checkUserIsLoggedIn() else userIsnotLog">Login</button>
+                    <ng-template #userIsnotLog>
+                        <button mat-button [matMenuTriggerFor]="menu"><span class="text-blue">Welcome </span> -  {{this.localstorageService.loggedInUserName()}}</button>
+                      </ng-template>
+
+                      <mat-menu #menu="matMenu" >
+                        <ng-container *ngIf="this.localstorageService.checkUserIsLoggedIn()">
+                        <button mat-menu-item routerLink="../{{localstorageService.redirectToDashborad()}}">Dashboard</button>
+                        <button mat-menu-item (click)="openLogOutDialog()">Logout</button>
+                      </ng-container>
+                      </mat-menu>
                 </div>
             </div>
         </div>

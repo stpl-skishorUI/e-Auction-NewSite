@@ -16,6 +16,9 @@ import { UntypedFormControl } from '@angular/forms';
 import { SelectionModel } from '@angular/cdk/collections';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import { trigger, state, style, transition, animate } from '@angular/animations';
+import { ConfirmationDialogComponent } from 'src/app/core/dialogs/confirmation-dialog/confirmation-dialog.component';
+import { Router } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'vex-home',
@@ -64,7 +67,9 @@ export class HomeComponent implements OnInit {
 
   constructor(private commonService: CommonService, private datePipe: DatePipe,
     public localstorageService: LocalstorageService,
-    private error: ErrorsService, private apiService: ApiService, private fb: FormBuilder, private configService: ConfigService) {
+    private error: ErrorsService, private apiService: ApiService, private fb: FormBuilder, private configService: ConfigService,
+    public commonservice:CommonService,private router: Router,
+    public dialog: MatDialog) {
   }
   
   ngOnInit() {
@@ -238,5 +243,25 @@ export class HomeComponent implements OnInit {
       this.participatedBidderEventlist[eventIdIndex].participatedBidderEventslst.splice(eventLotIdIdIndex, 1);
       this.participatedBidderEventlist[eventIdIndex].participatedBidderEventslst.length == 0 ? this.participatedBidderEventlist.splice(eventIdIndex, 1) : '';
     }
+  }
+
+
+
+  logOut() {
+    localStorage.clear();
+    this.router.navigate(['../home']);
+  }
+
+  openLogOutDialog() {
+    const dialog = this.dialog.open(ConfirmationDialogComponent, {
+      width: this.apiService.modalSize[0], // p1 for paragraph 1 same as paragraph 2
+      data: { p1: 'Do you really want to logout?', p2: '', cardTitle: 'Are you Sure?', successBtnText: 'Logout', dialogIcon: '', cancelBtnText: 'Cancel' },
+    });
+
+    dialog.afterClosed().subscribe((result: any) => {
+      if (result == 'Yes') {
+        this.logOut();
+      }
+    })
   }
 }
