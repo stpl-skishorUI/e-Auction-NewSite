@@ -23,6 +23,7 @@ import { ConfirmationDialogComponent } from 'src/app/core/dialogs/confirmation-d
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { MatTabChangeEvent } from '@angular/material/tabs';
+import { DetailsComponent } from 'src/app/partial/dialogs/details/details.component';
 
 @Component({
   selector: 'vex-home',
@@ -69,15 +70,15 @@ export class HomeComponent implements OnInit {
   dropDownSelFlag: boolean = true;
   districtArray = [];
   MineralArray = [];
-  tabCountFlag!:string;
-  tenderCountData:any;
+  tabCountFlag!: string;
+  tenderCountData: any;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
-  tabs:any = [ {count: '' }, {count: '' }]
+  tabs: any = [{ count: '' }, { count: '' }]
 
-  constructor(private commonService: CommonService, private datePipe: DatePipe, private masterService: MasterService, public VB: ValidatorService,
-    public localstorageService: LocalstorageService, private error: ErrorsService, private staticDropdownService: StaticDropdownService, public router:Router,
-    private apiService: ApiService, private fb: FormBuilder, public configService: ConfigService, private dialog:MatDialog) {
+  constructor(private commonService: CommonService, private masterService: MasterService, public VB: ValidatorService,
+    public localstorageService: LocalstorageService, private error: ErrorsService, private staticDropdownService: StaticDropdownService, public router: Router,
+    private apiService: ApiService, private fb: FormBuilder, public configService: ConfigService, private dialog: MatDialog, private datePipe: DatePipe) {
   }
 
   ngOnInit() {
@@ -167,7 +168,7 @@ export class HomeComponent implements OnInit {
           this.dataSource = new MatTableDataSource(this.tableDataArray);
           this.getTenderCount(paramList);
         } else {
-          this.dataSource  = null;
+          this.dataSource = null;
           if (res['statusCode'] != "404") {
             this.commonService.checkDataType(res['statusMessage']) == false ? this.error.handelError(res['statusCode']) : this.commonService.snackBar(res['statusMessage'], 1);
           }
@@ -177,9 +178,9 @@ export class HomeComponent implements OnInit {
     });
   }
 
-  onChangeTab(event:MatTabChangeEvent){
-    event?.index == 0 ? this.tabChangeFlag = 'Active' : event?.index  == 1 ? this.tabChangeFlag = 'Upcoming' : this.tabChangeFlag = '';
-    this.tabCountFlag =this.tabChangeFlag;
+  onChangeTab(event: MatTabChangeEvent) {
+    event?.index == 0 ? this.tabChangeFlag = 'Active' : event?.index == 1 ? this.tabChangeFlag = 'Upcoming' : this.tabChangeFlag = '';
+    this.tabCountFlag = this.tabChangeFlag;
     this.bindTable();
   }
 
@@ -221,8 +222,19 @@ export class HomeComponent implements OnInit {
     return parseInt(Difference_In_Days.toString());
   }
 
-  openEventDetailsDialog(_data: object) {
+  openEventDetailsDialog(data: any) {
+    let arrayObj = [
+      { 'key': 'Title', 'val': data.title, row: 1 ,tag:'<p>', class:"" },
+      { 'key': 'Description', 'val': data.description, row: 1,tag:'<p>', class:""  },
+      { 'key': 'Level', 'val': data.eventLevel, row: 1,tag:'<p>', class:""  },
+      { 'key': 'Bid Submission End Date & Time', 'val': this.datePipe.transform(data.bidSubmissionEndDate, 'dd/MM/yyyy & h:m:a'), row: 1,tag:'<p>', class:""  },
+      { 'key': 'Bid Opening Date & Time / Bid Starting Date & Time', 'val': this.datePipe.transform(data.startDateTime, 'dd/MM/yyyy & h:m:a'), row: 1,tag:'<p>', class:""  },
+    ]
 
+    this.dialog.open(DetailsComponent, {
+      width: this.apiService.modalSize[2],
+      data: arrayObj     //disableClose: true for change pwd dialog close only to click btn
+    });
   }
 
   expandEventrDetails(eventId: number, totalItems: any) {

@@ -153,7 +153,7 @@
                         <th mat-header-cell *matHeaderCellDef> Actions </th>
                         <td mat-cell *matCellDef="let element">
                             <button mat-menu-item [class.custom-disabled-btn]="element.totalItem <= 0"
-                            (click)="(expandedElement = expandedElement === element ? null : element.totalItem <= 0 ? null : element); expandEventrDetails(element.id, element.totalItem)">
+                            (click)="openEventDetailsDialog(element)">
                             <mat-icon svgIcon="mat:visibility"></mat-icon>
                         </button>
                             <button mat-menu-item [class.custom-disabled-btn]="element.totalItem <= 0"
