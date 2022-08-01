@@ -16,15 +16,12 @@ import { UntypedFormControl } from '@angular/forms';
 import { SelectionModel } from '@angular/cdk/collections';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import { trigger, state, style, transition, animate } from '@angular/animations';
-<<<<<<< HEAD
-import { ConfirmationDialogComponent } from 'src/app/core/dialogs/confirmation-dialog/confirmation-dialog.component';
-import { Router } from '@angular/router';
-import { MatDialog } from '@angular/material/dialog';
-=======
 import { StaticDropdownService } from 'src/app/core/services/static-dropdown.service';
 import { MasterService } from 'src/app/core/services/master.service';
 import { ValidatorService } from 'src/app/core/services/validator.service';
->>>>>>> 9bfef76bda0375151b28bc7b90de98db25051c35
+import { ConfirmationDialogComponent } from 'src/app/core/dialogs/confirmation-dialog/confirmation-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'vex-home',
@@ -75,22 +72,9 @@ export class HomeComponent implements OnInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
-<<<<<<< HEAD
-  constructor(private commonService: CommonService, private datePipe: DatePipe,
-    public localstorageService: LocalstorageService,
-    private error: ErrorsService, private apiService: ApiService, private fb: FormBuilder, private configService: ConfigService,
-    public commonservice:CommonService,private router: Router,
-    public dialog: MatDialog) {
-  }
-  
-  ngOnInit() {
-    this.defulatForm();
-    this.bindTable();
-=======
   constructor(private commonService: CommonService, private datePipe: DatePipe, private masterService: MasterService, public VB: ValidatorService,
-    public localstorageService: LocalstorageService, private error: ErrorsService, private staticDropdownService: StaticDropdownService,
-    private apiService: ApiService, private fb: FormBuilder, public configService: ConfigService) {
->>>>>>> 9bfef76bda0375151b28bc7b90de98db25051c35
+    public localstorageService: LocalstorageService, private error: ErrorsService, private staticDropdownService: StaticDropdownService, public router:Router,
+    private apiService: ApiService, private fb: FormBuilder, public configService: ConfigService, private dialog:MatDialog) {
   }
 
   ngOnInit() {
