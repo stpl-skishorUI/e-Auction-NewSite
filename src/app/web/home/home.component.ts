@@ -22,6 +22,7 @@ import { ValidatorService } from 'src/app/core/services/validator.service';
 import { ConfirmationDialogComponent } from 'src/app/core/dialogs/confirmation-dialog/confirmation-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
+import { MatTabChangeEvent } from '@angular/material/tabs';
 
 @Component({
   selector: 'vex-home',
@@ -68,9 +69,11 @@ export class HomeComponent implements OnInit {
   dropDownSelFlag: boolean = true;
   districtArray = [];
   MineralArray = [];
-
+  tabCountFlag!:string;
+  tenderCountData:any;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
+  tabs:any = [ {count: '' }, {count: '' }]
 
   constructor(private commonService: CommonService, private datePipe: DatePipe, private masterService: MasterService, public VB: ValidatorService,
     public localstorageService: LocalstorageService, private error: ErrorsService, private staticDropdownService: StaticDropdownService, public router:Router,
@@ -123,6 +126,29 @@ export class HomeComponent implements OnInit {
     })
   }
 
+  getTenderCount(Obj: any) {
+    Obj += '&TenderType=' + this.tabCountFlag
+    this.apiService.setHttp('get', 'event-creation/getTenderCount' + Obj, false, false, false, 'bidderUrl');
+    this.apiService.getHttp().subscribe({
+      next: (res: any) => {
+        if (res.statusCode === "200") {
+          this.tenderCountData = res.responseData;
+          if (this.commonService.checkDataType(this.tabCountFlag) == false) {
+            this.tabs[0]['count'] = this.tenderCountData.active;
+            this.tabs[1]['count'] = this.tenderCountData.upcoming;
+          } else {
+            this.tabCountFlag == 'Active' ? this.tabs[0]['count'] = this.tenderCountData.active : this.tabCountFlag == 'Upcoming' ? this.tabs[1]['count'] = this.tenderCountData.upcoming : '';
+          }
+        } else {
+          if (res.statusCode != "404") {
+            this.commonService.checkDataType(res.statusMessage) == false ? this.error.handelError(res.statusCode) : this.commonService.snackBar(res.statusMessage, 1);
+          }
+        }
+      },
+      error: ((error: any) => { this.error.handelError(error.status) })
+    });
+  }
+
   bindTable() {
     const formValue = this.filterForm.value;
     let paramList = '?EventLevel=' + formValue.levelId + '&DistrictId=' + formValue.districtId + '&MineralId=' + formValue.mineralId + '&pageno=' + this.pageNo + '&pagesize=' + this.configService.pageSize //+'&Status=&StartDate=1&EndDate=1'
@@ -132,14 +158,16 @@ export class HomeComponent implements OnInit {
       paramList += '&StartDate=' + startDate + '&EndDate=' + enddate
     }
     this.commonService.checkDataType(formValue.search) == true ? paramList += "&TextSearch=" + formValue.search : "";
-    paramList += '&TenderType=Active';
+    paramList += '&TenderType=' + this.tabChangeFlag;
     this.apiService.setHttp('get', 'event-creation/getAll' + paramList + "&IsPublished=1", false, false, false, 'bidderUrl');
     this.apiService.getHttp().subscribe({
       next: (res: object) => {
         if (res['statusCode'] === "200") {
           this.tableDataArray = res['responseData'].responseData1;
           this.dataSource = new MatTableDataSource(this.tableDataArray);
+          this.getTenderCount(paramList);
         } else {
+          this.dataSource  = null;
           if (res['statusCode'] != "404") {
             this.commonService.checkDataType(res['statusMessage']) == false ? this.error.handelError(res['statusCode']) : this.commonService.snackBar(res['statusMessage'], 1);
           }
@@ -147,6 +175,12 @@ export class HomeComponent implements OnInit {
       },
       error: ((error) => { this.error.handelError(error.status) })
     });
+  }
+
+  onChangeTab(event:MatTabChangeEvent){
+    event?.index == 0 ? this.tabChangeFlag = 'Active' : event?.index  == 1 ? this.tabChangeFlag = 'Upcoming' : this.tabChangeFlag = '';
+    this.tabCountFlag =this.tabChangeFlag;
+    this.bindTable();
   }
 
   onFilterChange(value: string) {

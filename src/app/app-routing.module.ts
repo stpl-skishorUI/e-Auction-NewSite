@@ -67,7 +67,7 @@ const routes: Routes = [
     ]
   },
   { path: 'add-bidder', loadChildren: () => import('./partial/admin/master/bidder-list/add-bidder/add-bidder.module').then(m => m.AddBidderModule) },
-  { path: 'bidder-registration', loadChildren: () => import('./partial/admin/master/bidder-list/add-bidder/add-bidder.module').then(m => m.AddBidderModule) },
+  { path: 'bidder-registration', loadChildren: () => import('./partial/admin/master/bidder-list/add-bidder/add-bidder.module').then(m => m.AddBidderModule), data: { breadcrumb: [{ title: 'Bidder Registration', active: true }] }},
  
 
 
