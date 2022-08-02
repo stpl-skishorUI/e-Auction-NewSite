@@ -54,6 +54,11 @@ const routes: Routes = [
       { path: 'bid-history', loadChildren: () => import('./partial/approver/auction-reports/bid-history/bid-history.module').then(m => m.BidHistoryModule) },
       { path: 'bidder-agreement-report', loadChildren: () => import('./partial/approver/auction-reports/bidder-agreement-report/bidder-agreement-report.module').then(m => m.BidderAgreementReportModule), data: { breadcrumb: [{ title: 'Dashboard', active: true }] }, canActivate: [ExpenseGuard]},
 
+      {
+        path: 'online-item-details/:id', loadChildren: () => import('./partial/approver/event-approval/publish-event/online-item-details/online-item-details.module').then(m => m.OnlineItemDetailsModule),
+        data: { breadcrumb: [{ title: 'Dashboard', active: true }] },
+        canActivate: [ExpenseGuard]
+      },
       //----------------------------------------------------------------for approver routing end heare-----------------------------------------//
 
       //----------------------------------------------------------------for bidder routing start heare-----------------------------------------//
@@ -68,6 +73,7 @@ const routes: Routes = [
   },
   { path: 'add-bidder', loadChildren: () => import('./partial/admin/master/bidder-list/add-bidder/add-bidder.module').then(m => m.AddBidderModule) },
   { path: 'bidder-registration', loadChildren: () => import('./partial/admin/master/bidder-list/add-bidder/add-bidder.module').then(m => m.AddBidderModule) },
+  { path: 'online-item-details', loadChildren: () => import('./partial/approver/event-approval/publish-event/online-item-details/online-item-details.module').then(m => m.OnlineItemDetailsModule) },
  
 
 
