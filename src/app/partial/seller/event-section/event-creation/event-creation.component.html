@@ -1,90 +1,87 @@
-<vex-page-layout>
+<div mat-dialog-title class="flex items-center justify-between mb-2 m-0">
+    <div>Create Event</div>
+    <button type="button" mat-icon-button mat-dialog-close tabindex="-1">
+        <mat-icon svgIcon="mat:close"></mat-icon>
+    </button>
+</div>
+<mat-divider></mat-divider>
+<div class="my-3 card p-3 border-0 shadow-none">
+    <div class="grid grid-cols-2 gap-4 mr-2 mb-4">
+        <div class="text-gray-500 py-2">Event ID : <span class="text-blue-600 font-bold py-2">EVT20221403XXXX</span>
+        </div>
+        <div class="flex flex-row items-center">
+            <div class="text-gray-500 py-2 w-32">Event Level : </div>
+            <mat-form-field appearance="outline" class="w-full">
+                <mat-label>Select Status</mat-label>
+                <mat-select>
+                    <mat-option>Satara (District)</mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+    </div>
 
-    <vex-secondary-toolbar current="Event Creation"
-        class=" fixed border-0 bg-transparent drop-shadow-none top-1 z-[99] w-8/12">
-        <vex-breadcrumbs [crumbs]="['Event Creation']"></vex-breadcrumbs>
-    </vex-secondary-toolbar>
-
-    <vex-page-layout-content [class.px-gutter]="layoutCtrl.value === 'fullwidth'" class="-mt-6">
-        <div class="my-3 card p-3 border-0 shadow-none">
-            <div class="grid grid-cols-2 gap-4 mr-2 mb-4">
-                <div class="text-gray-500 py-2">Event ID : <span
-                        class="text-blue-600 font-bold py-2">EVT20221403XXXX</span></div>
-                <div class="flex flex-row items-center">
-                    <div class="text-gray-500 py-2 w-32">Event Level : </div>
-                    <mat-form-field appearance="outline" class="w-full">
-                        <mat-label>Select Status</mat-label>
-                        <mat-select>
-                            <mat-option>Satara (District)</mat-option>
-                        </mat-select>
-                    </mat-form-field>
-                </div>
-            </div>
-
-            <div class="grid grid-cols-5 gap-4 mb-3">
-                <div class="text-gray-500 py-2 mr-2">Event Title :</div>
-                <div class="col-span-2">
-                    <mat-form-field appearance="outline" class="w-full">
-                        <mat-label>Event Title</mat-label>
-                        <input matInput placeholder="Event Title">
-                    </mat-form-field>
-                </div>
-            </div>
-            <div class="grid grid-cols-5 gap-4 mb-3">
-                <div class="text-gray-500 py-2 mr-2">Event Description :</div>
-                <div class="col-span-2">
-                    <mat-form-field appearance="outline" class="w-full">
-                        <mat-label>Event Description</mat-label>
-                        <textarea matInput placeholder="Event Description" rows="4"></textarea>
-                    </mat-form-field>
-                </div>
-            </div>
-            <div class="grid grid-cols-5 gap-4 mb-3">
-                <div class="text-gray-500 py-2 mr-2">Event Type :</div>
-                <div class="col-span-2">
-                    <mat-form-field appearance="outline" class="w-full">
-                        <mat-label>Event Type</mat-label>
-                        <mat-select>
-                            <mat-option>Event Type</mat-option>
-                        </mat-select>
-                    </mat-form-field>
-                </div>
-            </div>
-            <div class="grid grid-cols-5 gap-4 mb-3">
-                <div class="text-gray-500 py-2 mr-2">Event Fee :</div>
-                <div class="col-span-2">
-                    <mat-form-field appearance="outline" class="w-full">
-                        <mat-label>Event Fee</mat-label>
-                        <input matInput placeholder="Event Fee">
-                    </mat-form-field>
-                </div>
-            </div>
-            <div class="grid grid-cols-5 gap-4 mb-5">
-                <div class="text-gray-500 py-2 mr-2">Document :</div>
-                <div class="col-span-2">                    
-                    <div class="flex items-center">
-                    <button mat-button type="button" class="bg-gray-200 mr-2 text-xs py-2">
-                        <label><span>Upload Document</span>
-                            <input type="file" style="display: none" #fileInputPDC>
-                        </label>
-                    </button>
-                        <button
-                            class="w-8 h-8 leading-none rounded-full flex items-center justify-center ml-1 hover:bg-hover text-teal bg-teal-light">
-                            <mat-icon matTooltip="View">view_headline</mat-icon>
-                        </button>
-                        <button class="w-8 h-8 leading-none rounded-full flex items-center justify-center ml-1 hover:bg-hover text-red bg-red-light">
-                            <mat-icon matTooltip="Delete Uploaded Document">
-                                delete_forever
-                            </mat-icon>
-                        </button>
-                    </div>
-                </div>
-            </div>
-            <div class="text-right">
-                <mat-dialog-actions align="end">
-                    <button type="button" mat-stroked-button class="bg-gray-300 mr-2">Clear</button>
-                    <button type="submit" mat-raised-button color="primary">Submit</button>
-                </mat-dialog-actions>
+    <div class="flex flex-row gap-4 mb-3">
+        <div class="text-gray-500 py-2 mr-2">Event Title :</div>
+        <div>
+            <mat-form-field appearance="outline" class="w-full">
+                <mat-label>Event Title</mat-label>
+                <input matInput placeholder="Event Title">
+            </mat-form-field>
+        </div>
+    </div>
+    <div class="grid grid-cols-2 gap-4 mb-3">
+        <div class="text-gray-500 py-2 mr-2">Event Description :</div>
+        <div>
+            <mat-form-field appearance="outline" class="w-full">
+                <mat-label>Event Description</mat-label>
+                <textarea matInput placeholder="Event Description" rows="4"></textarea>
+            </mat-form-field>
+        </div>
+    </div>
+    <div class="grid grid-cols-2 gap-4 mb-3">
+        <div class="flex">
+            <div class="text-gray-500 mr-2">Event Type :</div>
+            <mat-form-field appearance="outline" class="w-full">
+                <mat-label>Event Type</mat-label>
+                <mat-select>
+                    <mat-option>Event Type</mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+        <div class="flex">
+            <div class="text-gray-500  mr-2">Event Fee :</div>
+            <mat-form-field appearance="outline" class="w-full">
+                <mat-label>Event Fee</mat-label>
+                <input matInput placeholder="Event Fee">
+            </mat-form-field>
+        </div>
+    </div>
+    <div class="grid grid-cols-5 gap-4 mb-5">
+        <div class="text-gray-500 py-2 mr-2">Document :</div>
+        <div class="col-span-2">
+            <div class="flex items-center">
+                <button mat-button type="button" class="bg-gray-200 mr-2 text-xs py-2">
+                    <label><span>Upload Document</span>
+                        <input type="file" style="display: none" #fileInputPDC>
+                    </label>
+                </button>
+                <button
+                    class="w-8 h-8 leading-none rounded-full flex items-center justify-center ml-1 hover:bg-hover text-teal bg-teal-light">
+                    <mat-icon matTooltip="View">view_headline</mat-icon>
+                </button>
+                <button
+                    class="w-8 h-8 leading-none rounded-full flex items-center justify-center ml-1 hover:bg-hover text-red bg-red-light">
+                    <mat-icon matTooltip="Delete Uploaded Document">
+                        delete_forever
+                    </mat-icon>
+                </button>
             </div>
         </div>
-    </vex-page-layout-content>
+    </div>
+    <div class="text-right">
+        <mat-dialog-actions align="end">
+            <button type="button" mat-stroked-button class="bg-gray-300 mr-2" mat-dialog-close>Clear</button>
+            <button type="submit" mat-raised-button color="primary">Submit</button>
+        </mat-dialog-actions>
+    </div>
+</div>
