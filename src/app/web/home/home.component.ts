@@ -19,10 +19,9 @@ import { trigger, state, style, transition, animate } from '@angular/animations'
 import { StaticDropdownService } from 'src/app/core/services/static-dropdown.service';
 import { MasterService } from 'src/app/core/services/master.service';
 import { ValidatorService } from 'src/app/core/services/validator.service';
-import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { MatTabChangeEvent } from '@angular/material/tabs';
-import { DetailsComponent } from 'src/app/partial/dialogs/details/details.component';
+import { DialogService } from 'src/app/core/services/dialog.service';
 
 @Component({
   selector: 'vex-home',
@@ -77,7 +76,7 @@ export class HomeComponent implements OnInit {
 
   constructor(private commonService: CommonService, private masterService: MasterService, public VB: ValidatorService,
     public localstorageService: LocalstorageService, private error: ErrorsService, private staticDropdownService: StaticDropdownService, public router: Router,
-    private apiService: ApiService, private fb: FormBuilder, public configService: ConfigService, private dialog: MatDialog, private datePipe: DatePipe) {
+    private apiService: ApiService, private fb: FormBuilder, public configService: ConfigService, private dialogService: DialogService, private datePipe: DatePipe) {
   }
 
   ngOnInit() {
@@ -223,18 +222,15 @@ export class HomeComponent implements OnInit {
 
   openEventDetailsDialog(data: any) {
     let arrayObj = [
-      
-      { 'key': 'Title', 'val': data.title, row: 1 ,tag:'<p> </p>', class:"",col:1 },
-      { 'key': 'Description', 'val': data.description, row: 1,tag:'<p> </p>', class:"",col:1  },
-      { 'key': 'Level', 'val': data.eventLevel, row: 1,tag:'<p> </p>', class:"",col:1  },
-      { 'key': 'Bid Submission End Date & Time', 'val': this.datePipe.transform(data.bidSubmissionEndDate, 'dd/MM/yyyy & h:m:a'), row: 1,tag:'<p> </p>', class:"",col:1  },
-      { 'key': 'Bid Opening Date & Time / Bid Starting Date & Time', 'val': this.datePipe.transform(data.startDateTime, 'dd/MM/yyyy & h:m:a'), row: 1,tag:'<p> </p>', class:"",col:1},
+
+      { 'key': 'Title', 'val': data.title, row: 1, tag: '<p> </p>', class: "", col: 1 },
+      { 'key': 'Description', 'val': data.description, row: 1, tag: '<p> </p>', class: "", col: 1 },
+      { 'key': 'Level', 'val': data.eventLevel, row: 1, tag: '<p> </p>', class: "", col: 1 },
+      { 'key': 'Bid Submission End Date & Time', 'val': this.datePipe.transform(data.bidSubmissionEndDate, 'dd/MM/yyyy & h:m:a'), row: 1, tag: '<p> </p>', class: "", col: 1 },
+      { 'key': 'Bid Opening Date & Time / Bid Starting Date & Time', 'val': this.datePipe.transform(data.startDateTime, 'dd/MM/yyyy & h:m:a'), row: 1, tag: '<p> </p>', class: "", col: 1 },
     ]
 
-    this.dialog.open(DetailsComponent, {
-      width: this.apiService.modalSize[2],
-      data: arrayObj     //disableClose: true for change pwd dialog close only to click btn
-    });
+    this.dialogService.detailsComponentDialog(arrayObj); // call details dialog modal
   }
 
   expandEventrDetails(eventId: number, totalItems: any) {
