@@ -4,11 +4,12 @@ import { AuthGuard } from './core/auth/auth.guard';
 import { AuthorizationGuard } from './core/auth/authorization.guard';
 import { ExpenseGuard } from './core/auth/expense.guard';
 import { CustomLayoutComponent } from './custom-layout/custom-layout.component';
+import { WebLayoutComponent } from './web/web-layout/web-layout.component';
 
 const routes: Routes = [
   {path:'', redirectTo:'home', pathMatch:'full'},
-  { path: 'home', loadChildren: () => import('./web/home/home.module').then(m => m.HomeModule) },
-
+  // { path: 'home', loadChildren: () => import('./web/home/home.module').then(m => m.HomeModule) },
+  { path: '', component: WebLayoutComponent, loadChildren: () => import('./web/web-layout/web-layout.module').then(m => m.WebLayoutModule) },
   {
     path: 'login',
     loadChildren: () => import('./web/auth/login/login.module').then(m => m.LoginModule),
@@ -68,6 +69,7 @@ const routes: Routes = [
   },
   { path: 'add-bidder', loadChildren: () => import('./partial/admin/master/bidder-list/add-bidder/add-bidder.module').then(m => m.AddBidderModule) },
   { path: 'bidder-registration', loadChildren: () => import('./partial/admin/master/bidder-list/add-bidder/add-bidder.module').then(m => m.AddBidderModule), data: { breadcrumb: [{ title: 'Bidder Registration', active: true }] }},
+  { path: 'web-layout', loadChildren: () => import('./web/web-layout/web-layout.module').then(m => m.WebLayoutModule) },
  
 
 

@@ -14,6 +14,8 @@ import { SuccessDialogComponent } from './core/dialogs/success-dialog/success-di
 import { PipeModule } from './core/pipes/pipe.module';
 import { MatNativeDateModule, MAT_DATE_LOCALE } from '@angular/material/core';
 import { DetailsComponent } from './partial/dialogs/details/details.component';
+
+
 @NgModule({
   declarations: [AppComponent, ConfirmationDialogComponent, SuccessDialogComponent, DetailsComponent],
   imports: [
