@@ -95,9 +95,14 @@
                 <mat-icon class="icon-sm" svgIcon="mat:edit"></mat-icon>
               </a>
               <a (click)="$event.stopPropagation()"
-                class="w-8 h-8 leading-none flex items-center justify-center ml-1 hover:bg-hover text-red bg-red-light"
+                class="w-8 h-8 leading-none flex items-center justify-center ml-1 hover:bg-hover text-gray-700 bg-gray-200"
                 mat-icon-button>
-                  <mat-icon class="icon-sm" svgIcon="mat:delete_outline"></mat-icon>
+                  <mat-icon class="icon-sm" svgIcon="mat:remove_red_eye"></mat-icon>
+              </a>
+              <a (click)="$event.stopPropagation()"
+                class="w-8 h-8 leading-none flex items-center justify-center ml-1 hover:bg-hover text-pink-600 bg-pink-100"
+                mat-icon-button>
+                  <mat-icon class="icon-sm" svgIcon="mat:cloud_download"></mat-icon>
               </a>
             </div>
           </td>
@@ -111,14 +116,5 @@
         (page)="pageChanged($event)" class="sticky left-0">
       </mat-paginator>
 
-    </div>
-
-    <div class="flex mt-3 justify-end" align="end">
-      <button type="button" mat-raised-button class="bg-gray-300 mr-2">
-        Clear
-      </button>
-      <button type="submit" mat-raised-button color="primary">
-        Submit
-      </button>
     </div>
   </vex-page-layout-content>
