@@ -5,10 +5,11 @@ import { AuthorizationGuard } from './core/auth/authorization.guard';
 import { ExpenseGuard } from './core/auth/expense.guard';
 import { CustomLayoutComponent } from './custom-layout/custom-layout.component';
 
+
 const routes: Routes = [
   {path:'', redirectTo:'home', pathMatch:'full'},
-  { path: 'home', loadChildren: () => import('./web/home/home.module').then(m => m.HomeModule) },
-
+  // { path: 'home', loadChildren: () => import('./web/home/home.module').then(m => m.HomeModule) },
+  
   {
     path: 'login',
     loadChildren: () => import('./web/auth/login/login.module').then(m => m.LoginModule),
@@ -72,13 +73,9 @@ const routes: Routes = [
     ]
   },
   { path: 'add-bidder', loadChildren: () => import('./partial/admin/master/bidder-list/add-bidder/add-bidder.module').then(m => m.AddBidderModule) },
-  { path: 'bidder-registration', loadChildren: () => import('./partial/admin/master/bidder-list/add-bidder/add-bidder.module').then(m => m.AddBidderModule) },
   { path: 'online-item-details', loadChildren: () => import('./partial/approver/event-approval/publish-event/online-item-details/online-item-details.module').then(m => m.OnlineItemDetailsModule) },
+  { path: 'bidder-registration', loadChildren: () => import('./partial/admin/master/bidder-list/add-bidder/add-bidder.module').then(m => m.AddBidderModule), data: { breadcrumb: [{ title: 'Bidder Registration', active: true }] }},
  
-
-
-
-
   {
     path: '**',
     loadChildren: () => import('./web/errors/error-404/error-404.module').then(m => m.Error404Module)
