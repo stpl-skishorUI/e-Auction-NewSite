@@ -9,25 +9,23 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 })
 export class DetailsComponent implements OnInit {
   dialogData = [];
-  html: any;
+  html: string = '';
   constructor(public dialogRef: MatDialogRef<DetailsComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any) { }
 
+
+
   ngOnInit(): void {
-
-    this.dialogData = this.data;
-
-    if (this.dialogData.length > 0) {
+    this.dialogData = this?.data;
+    if (this.dialogData?.length > 0) {
       for (let i = 0; i < this.dialogData?.length; i++) {
         this.html += this.dialogData[i]?.tag.split(' ')[0] + '<strong>' + this.dialogData[i]?.key + '</strong> :' + this.dialogData[i]?.val + this.dialogData[i]?.tag.split(' ')[1]
       }
     }
   }
 
-
-
   close(): void {
     /** Wait for animation to complete and then close */
-    //setTimeout(() => this.popoverRef.close(), 50);
+    // setTimeout(() => this.popoverRef.close(), 50);
   }
 }
