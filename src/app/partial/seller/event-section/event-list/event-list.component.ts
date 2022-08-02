@@ -16,6 +16,7 @@ import { DialogService } from 'src/app/core/services/dialog.service';
 import { ErrorsService } from 'src/app/core/services/errors.service';
 import { LocalstorageService } from 'src/app/core/services/localstorage.service';
 import { StaticDropdownService } from 'src/app/core/services/static-dropdown.service';
+import { EventCreationComponent } from '../event-creation/event-creation.component';
 import { EventList } from './event-list.model';
 
 
@@ -162,5 +163,18 @@ export class EventListComponent implements OnInit {
     column.visible = !column.visible;
   }
 
+
+  createEvent(data?:object) {
+    const dialogRef = this.dialog.open(EventCreationComponent, {
+      width: this.apiService.modalSize[2], // p1 for paragraph 1 same as paragraph 2.
+      data: data,
+      disableClose: this.apiService.disableCloseFlag,
+    });
+    dialogRef.afterClosed().subscribe((result: any) => {
+      if (result == 'Yes') {
+        this.getAllEventList();
+      }
+    })
+  }
 
 }
