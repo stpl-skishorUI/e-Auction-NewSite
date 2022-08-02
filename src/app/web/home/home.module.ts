@@ -17,6 +17,10 @@ import { BreadcrumbsModule } from 'src/@vex/components/breadcrumbs/breadcrumbs.m
 import { PageLayoutModule } from 'src/@vex/components/page-layout/page-layout.module';
 
 import { AngularMaterialModule } from 'src/app/core/angular-material/angular-material.module';
+import { MatNativeDateModule } from '@angular/material/core';
+import { VexModule } from 'src/@vex/vex.module';
+import { PipeModule } from 'src/app/core/pipes/pipe.module';
+import { CustomLayoutModule } from 'src/app/custom-layout/custom-layout.module';
 
 
 @NgModule({
@@ -40,6 +44,9 @@ import { AngularMaterialModule } from 'src/app/core/angular-material/angular-mat
     ReactiveFormsModule,
     AngularMaterialModule,
     MatSelectModule,
+    VexModule,
+    PipeModule,
+    CustomLayoutModule,MatNativeDateModule
   ], 
 })
 export class HomeModule { }

@@ -44,7 +44,7 @@ export class BidderListComponent implements OnInit {
   layoutCtrl = new UntypedFormControl('boxed');
   selection = new SelectionModel<BidderList>(true, []);
   searchCtrl = new UntypedFormControl();
-  dataSource: MatTableDataSource<BidderList> | null;
+  dataSource: MatTableDataSource<BidderList> | null | [];
   userRegistration: BidderList[];
   subject$: ReplaySubject<BidderList[]> = new ReplaySubject<BidderList[]>(1);
   subscription!: Subscription;
@@ -125,6 +125,7 @@ export class BidderListComponent implements OnInit {
           this.totalRows > 10 && this.pageNumber == 1 ? this.paginator?.firstPage() : '';
         } else {
           this.totalRows = 0;
+          this.dataSource = null;
           if (res.statusCode != "404") {
             this.commonService.checkDataType(res.statusMessage) == false ? this.error.handelError(res.statusCode) : this.commonService.snackBar(res.statusMessage, 1);
           }

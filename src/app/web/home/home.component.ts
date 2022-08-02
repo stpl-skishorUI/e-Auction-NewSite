@@ -16,6 +16,13 @@ import { UntypedFormControl } from '@angular/forms';
 import { SelectionModel } from '@angular/cdk/collections';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import { trigger, state, style, transition, animate } from '@angular/animations';
+import { StaticDropdownService } from 'src/app/core/services/static-dropdown.service';
+import { MasterService } from 'src/app/core/services/master.service';
+import { ValidatorService } from 'src/app/core/services/validator.service';
+import { MatDialog } from '@angular/material/dialog';
+import { Router } from '@angular/router';
+import { MatTabChangeEvent } from '@angular/material/tabs';
+import { DetailsComponent } from 'src/app/partial/dialogs/details/details.component';
 
 @Component({
   selector: 'vex-home',
@@ -55,25 +62,61 @@ export class HomeComponent implements OnInit {
   dataSource: MatTableDataSource<any> | null;
   selection = new SelectionModel<any>(true, []);
   searchCtrl = new UntypedFormControl();
-  topFilterForm: FormGroup | any;
+  filterForm: FormGroup | any;
   activeTab: string = 'Active';
-  tableDataArray:any;
-
+  tableDataArray: any;
+  lavelArray = [];
+  dropDownSelFlag: boolean = true;
+  districtArray = [];
+  MineralArray = [];
+  tabCountFlag!: string;
+  tenderCountData: any;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
+  tabs: any = [{ count: '' }, { count: '' }]
 
-  constructor(private commonService: CommonService, private datePipe: DatePipe,
-    public localstorageService: LocalstorageService,
-    private error: ErrorsService, private apiService: ApiService, private fb: FormBuilder, private configService: ConfigService) {
+  constructor(private commonService: CommonService, private masterService: MasterService, public VB: ValidatorService,
+    public localstorageService: LocalstorageService, private error: ErrorsService, private staticDropdownService: StaticDropdownService, public router: Router,
+    private apiService: ApiService, private fb: FormBuilder, public configService: ConfigService, private dialog: MatDialog, private datePipe: DatePipe) {
   }
-  
+
   ngOnInit() {
     this.defulatForm();
-    this.bindTable();
+    this.levelArray();
+    this.getMineral();
   }
 
+  //--------------------------------------------------------filter dropdown start heare -----------------------------------------------------//
+
+  levelArray() {
+    this.lavelArray = this.staticDropdownService.getSelectLevel(true);
+    this.lavelArray.length == 1 || this.dropDownSelFlag ? (this.filterForm.controls['levelId'].setValue(this.lavelArray[0].val), this.getDistrict()) : '';
+  }
+
+  getDistrict() {
+    this.masterService.getDistrict(0).subscribe({
+      next: (response: any) => {
+        this.districtArray.push({ district: "All District", id: 0, divisionId: 0, division: 'All' }, ...response);
+        this.districtArray.length == 1 || this.dropDownSelFlag ? (this.filterForm.controls['districtId'].setValue(this.districtArray[0].id), this.getMineral()) : '';
+      },
+      error: (err => { this.error.handelError(err) })
+    })
+  }
+
+  getMineral() {
+    this.masterService.getMaterial().subscribe({
+      next: (response: any) => {
+        this.MineralArray.push({ materialId: 0, material: "All Mineral" }, ...response);
+        this.MineralArray.length == 1 || this.dropDownSelFlag ? (this.filterForm.controls['mineralId'].setValue(this.MineralArray[0].materialId), this.bindTable()) : '';
+      },
+      error: (err => { this.error.handelError(err) })
+    })
+  }
+
+  //--------------------------------------------------------filter dropdown end heare -----------------------------------------------------//
+
   defulatForm() {
-    this.topFilterForm = this.fb.group({
+    this.filterForm = this.fb.group({
       levelId: [''],
       districtId: [0],
       mineralId: [0],
@@ -83,8 +126,31 @@ export class HomeComponent implements OnInit {
     })
   }
 
+  getTenderCount(Obj: any) {
+    Obj += '&TenderType=' + this.tabCountFlag
+    this.apiService.setHttp('get', 'event-creation/getTenderCount' + Obj, false, false, false, 'bidderUrl');
+    this.apiService.getHttp().subscribe({
+      next: (res: any) => {
+        if (res.statusCode === "200") {
+          this.tenderCountData = res.responseData;
+          if (this.commonService.checkDataType(this.tabCountFlag) == false) {
+            this.tabs[0]['count'] = this.tenderCountData.active;
+            this.tabs[1]['count'] = this.tenderCountData.upcoming;
+          } else {
+            this.tabCountFlag == 'Active' ? this.tabs[0]['count'] = this.tenderCountData.active : this.tabCountFlag == 'Upcoming' ? this.tabs[1]['count'] = this.tenderCountData.upcoming : '';
+          }
+        } else {
+          if (res.statusCode != "404") {
+            this.commonService.checkDataType(res.statusMessage) == false ? this.error.handelError(res.statusCode) : this.commonService.snackBar(res.statusMessage, 1);
+          }
+        }
+      },
+      error: ((error: any) => { this.error.handelError(error.status) })
+    });
+  }
+
   bindTable() {
-    const formValue = this.topFilterForm.value;
+    const formValue = this.filterForm.value;
     let paramList = '?EventLevel=' + formValue.levelId + '&DistrictId=' + formValue.districtId + '&MineralId=' + formValue.mineralId + '&pageno=' + this.pageNo + '&pagesize=' + this.configService.pageSize //+'&Status=&StartDate=1&EndDate=1'
     if (formValue.startDate && formValue.endDate) {
       const startDate = this.datePipe.transform(formValue.startDate, 'yyyy-MM-dd');
@@ -92,14 +158,16 @@ export class HomeComponent implements OnInit {
       paramList += '&StartDate=' + startDate + '&EndDate=' + enddate
     }
     this.commonService.checkDataType(formValue.search) == true ? paramList += "&TextSearch=" + formValue.search : "";
-    paramList += '&TenderType=Active';
+    paramList += '&TenderType=' + this.tabChangeFlag;
     this.apiService.setHttp('get', 'event-creation/getAll' + paramList + "&IsPublished=1", false, false, false, 'bidderUrl');
     this.apiService.getHttp().subscribe({
       next: (res: object) => {
         if (res['statusCode'] === "200") {
-            this.tableDataArray = res['responseData'].responseData1;
-           this.dataSource = new MatTableDataSource(this.tableDataArray);
+          this.tableDataArray = res['responseData'].responseData1;
+          this.dataSource = new MatTableDataSource(this.tableDataArray);
+          this.getTenderCount(paramList);
         } else {
+          this.dataSource = null;
           if (res['statusCode'] != "404") {
             this.commonService.checkDataType(res['statusMessage']) == false ? this.error.handelError(res['statusCode']) : this.commonService.snackBar(res['statusMessage'], 1);
           }
@@ -107,6 +175,12 @@ export class HomeComponent implements OnInit {
       },
       error: ((error) => { this.error.handelError(error.status) })
     });
+  }
+
+  onChangeTab(event: MatTabChangeEvent) {
+    event?.index == 0 ? this.tabChangeFlag = 'Active' : event?.index == 1 ? this.tabChangeFlag = 'Upcoming' : this.tabChangeFlag = '';
+    this.tabCountFlag = this.tabChangeFlag;
+    this.bindTable();
   }
 
   onFilterChange(value: string) {
@@ -147,8 +221,19 @@ export class HomeComponent implements OnInit {
     return parseInt(Difference_In_Days.toString());
   }
 
-  openEventDetailsDialog(_data: object) {
+  openEventDetailsDialog(data: any) {
+    let arrayObj = [
+      { 'key': 'Title', 'val': data.title, row: 1 ,tag:'<p> </p>', class:"" },
+      { 'key': 'Description', 'val': data.description, row: 1,tag:'<p> </p>', class:""  },
+      { 'key': 'Level', 'val': data.eventLevel, row: 1,tag:'<p> </p>', class:""  },
+      { 'key': 'Bid Submission End Date & Time', 'val': this.datePipe.transform(data.bidSubmissionEndDate, 'dd/MM/yyyy & h:m:a'), row: 1,tag:'<p> </p>', class:""  },
+      { 'key': 'Bid Opening Date & Time / Bid Starting Date & Time', 'val': this.datePipe.transform(data.startDateTime, 'dd/MM/yyyy & h:m:a'), row: 1,tag:'<p> </p>', class:""  },
+    ]
 
+    this.dialog.open(DetailsComponent, {
+      width: this.apiService.modalSize[2],
+      data: arrayObj     //disableClose: true for change pwd dialog close only to click btn
+    });
   }
 
   expandEventrDetails(eventId: number, totalItems: any) {
