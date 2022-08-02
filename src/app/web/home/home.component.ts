@@ -19,9 +19,9 @@ import { trigger, state, style, transition, animate } from '@angular/animations'
 import { StaticDropdownService } from 'src/app/core/services/static-dropdown.service';
 import { MasterService } from 'src/app/core/services/master.service';
 import { ValidatorService } from 'src/app/core/services/validator.service';
-import { ConfirmationDialogComponent } from 'src/app/core/dialogs/confirmation-dialog/confirmation-dialog.component';
-import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
+import { MatTabChangeEvent } from '@angular/material/tabs';
+import { DialogService } from 'src/app/core/services/dialog.service';
 
 @Component({
   selector: 'vex-home',
@@ -68,13 +68,15 @@ export class HomeComponent implements OnInit {
   dropDownSelFlag: boolean = true;
   districtArray = [];
   MineralArray = [];
-
+  tabCountFlag!: string;
+  tenderCountData: any;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
+  tabs: any = [{ count: '' }, { count: '' }]
 
-  constructor(private commonService: CommonService, private datePipe: DatePipe, private masterService: MasterService, public VB: ValidatorService,
-    public localstorageService: LocalstorageService, private error: ErrorsService, private staticDropdownService: StaticDropdownService, public router:Router,
-    private apiService: ApiService, private fb: FormBuilder, public configService: ConfigService, private dialog:MatDialog) {
+  constructor(private commonService: CommonService, private masterService: MasterService, public VB: ValidatorService,
+    public localstorageService: LocalstorageService, private error: ErrorsService, private staticDropdownService: StaticDropdownService, public router: Router,
+    private apiService: ApiService, private fb: FormBuilder, public configService: ConfigService, private dialogService: DialogService, private datePipe: DatePipe) {
   }
 
   ngOnInit() {
@@ -123,6 +125,29 @@ export class HomeComponent implements OnInit {
     })
   }
 
+  getTenderCount(Obj: any) {
+    Obj += '&TenderType=' + this.tabCountFlag
+    this.apiService.setHttp('get', 'event-creation/getTenderCount' + Obj, false, false, false, 'bidderUrl');
+    this.apiService.getHttp().subscribe({
+      next: (res: any) => {
+        if (res.statusCode === "200") {
+          this.tenderCountData = res.responseData;
+          if (this.commonService.checkDataType(this.tabCountFlag) == false) {
+            this.tabs[0]['count'] = this.tenderCountData.active;
+            this.tabs[1]['count'] = this.tenderCountData.upcoming;
+          } else {
+            this.tabCountFlag == 'Active' ? this.tabs[0]['count'] = this.tenderCountData.active : this.tabCountFlag == 'Upcoming' ? this.tabs[1]['count'] = this.tenderCountData.upcoming : '';
+          }
+        } else {
+          if (res.statusCode != "404") {
+            this.commonService.checkDataType(res.statusMessage) == false ? this.error.handelError(res.statusCode) : this.commonService.snackBar(res.statusMessage, 1);
+          }
+        }
+      },
+      error: ((error: any) => { this.error.handelError(error.status) })
+    });
+  }
+
   bindTable() {
     const formValue = this.filterForm.value;
     let paramList = '?EventLevel=' + formValue.levelId + '&DistrictId=' + formValue.districtId + '&MineralId=' + formValue.mineralId + '&pageno=' + this.pageNo + '&pagesize=' + this.configService.pageSize //+'&Status=&StartDate=1&EndDate=1'
@@ -132,14 +157,16 @@ export class HomeComponent implements OnInit {
       paramList += '&StartDate=' + startDate + '&EndDate=' + enddate
     }
     this.commonService.checkDataType(formValue.search) == true ? paramList += "&TextSearch=" + formValue.search : "";
-    paramList += '&TenderType=Active';
+    paramList += '&TenderType=' + this.tabChangeFlag;
     this.apiService.setHttp('get', 'event-creation/getAll' + paramList + "&IsPublished=1", false, false, false, 'bidderUrl');
     this.apiService.getHttp().subscribe({
       next: (res: object) => {
         if (res['statusCode'] === "200") {
           this.tableDataArray = res['responseData'].responseData1;
           this.dataSource = new MatTableDataSource(this.tableDataArray);
+          this.getTenderCount(paramList);
         } else {
+          this.dataSource = null;
           if (res['statusCode'] != "404") {
             this.commonService.checkDataType(res['statusMessage']) == false ? this.error.handelError(res['statusCode']) : this.commonService.snackBar(res['statusMessage'], 1);
           }
@@ -147,6 +174,12 @@ export class HomeComponent implements OnInit {
       },
       error: ((error) => { this.error.handelError(error.status) })
     });
+  }
+
+  onChangeTab(event: MatTabChangeEvent) {
+    event?.index == 0 ? this.tabChangeFlag = 'Active' : event?.index == 1 ? this.tabChangeFlag = 'Upcoming' : this.tabChangeFlag = '';
+    this.tabCountFlag = this.tabChangeFlag;
+    this.bindTable();
   }
 
   onFilterChange(value: string) {
@@ -187,8 +220,17 @@ export class HomeComponent implements OnInit {
     return parseInt(Difference_In_Days.toString());
   }
 
-  openEventDetailsDialog(_data: object) {
+  openEventDetailsDialog(data: any) {
+    let arrayObj = [
 
+      { 'key': 'Title', 'val': data.title, row: 1, tag: '<p> </p>', class: "", col: 1 },
+      { 'key': 'Description', 'val': data.description, row: 1, tag: '<p> </p>', class: "", col: 1 },
+      { 'key': 'Level', 'val': data.eventLevel, row: 1, tag: '<p> </p>', class: "", col: 1 },
+      { 'key': 'Bid Submission End Date & Time', 'val': this.datePipe.transform(data.bidSubmissionEndDate, 'dd/MM/yyyy & h:m:a'), row: 1, tag: '<p> </p>', class: "", col: 1 },
+      { 'key': 'Bid Opening Date & Time / Bid Starting Date & Time', 'val': this.datePipe.transform(data.startDateTime, 'dd/MM/yyyy & h:m:a'), row: 1, tag: '<p> </p>', class: "", col: 1 },
+    ]
+
+    this.dialogService.detailsComponentDialog(arrayObj); // call details dialog modal
   }
 
   expandEventrDetails(eventId: number, totalItems: any) {
@@ -278,25 +320,5 @@ export class HomeComponent implements OnInit {
       this.participatedBidderEventlist[eventIdIndex].participatedBidderEventslst.splice(eventLotIdIdIndex, 1);
       this.participatedBidderEventlist[eventIdIndex].participatedBidderEventslst.length == 0 ? this.participatedBidderEventlist.splice(eventIdIndex, 1) : '';
     }
-  }
-
-
-
-  logOut() {
-    localStorage.clear();
-    this.router.navigate(['../home']);
-  }
-
-  openLogOutDialog() {
-    const dialog = this.dialog.open(ConfirmationDialogComponent, {
-      width: this.apiService.modalSize[0], // p1 for paragraph 1 same as paragraph 2
-      data: { p1: 'Do you really want to logout?', p2: '', cardTitle: 'Are you Sure?', successBtnText: 'Logout', dialogIcon: '', cancelBtnText: 'Cancel' },
-    });
-
-    dialog.afterClosed().subscribe((result: any) => {
-      if (result == 'Yes') {
-        this.logOut();
-      }
-    })
   }
 }
