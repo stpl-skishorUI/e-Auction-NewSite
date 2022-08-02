@@ -1,0 +1,9 @@
+<div class="bg-body">
+    <vex-w-header *ngIf="hideHeaderFooter"></vex-w-header>
+    <div [ngClass]="{'container my-3 pb-5 mb-3':hideHeaderFooter == true}">
+        <div [ngClass]="{'card card-body mb-3':hideHeaderFooter == true}">
+            <router-outlet></router-outlet>
+        </div>
+    </div>
+    <vex-w-footer *ngIf="hideHeaderFooter"></vex-w-footer>
+</div>
