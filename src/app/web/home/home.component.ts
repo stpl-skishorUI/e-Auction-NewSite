@@ -223,11 +223,12 @@ export class HomeComponent implements OnInit {
 
   openEventDetailsDialog(data: any) {
     let arrayObj = [
-      { 'key': 'Title', 'val': data.title, row: 1 ,tag:'<p> </p>', class:"" },
-      { 'key': 'Description', 'val': data.description, row: 1,tag:'<p> </p>', class:""  },
-      { 'key': 'Level', 'val': data.eventLevel, row: 1,tag:'<p> </p>', class:""  },
-      { 'key': 'Bid Submission End Date & Time', 'val': this.datePipe.transform(data.bidSubmissionEndDate, 'dd/MM/yyyy & h:m:a'), row: 1,tag:'<p> </p>', class:""  },
-      { 'key': 'Bid Opening Date & Time / Bid Starting Date & Time', 'val': this.datePipe.transform(data.startDateTime, 'dd/MM/yyyy & h:m:a'), row: 1,tag:'<p> </p>', class:""  },
+      
+      { 'key': 'Title', 'val': data.title, row: 1 ,tag:'<p> </p>', class:"",col:1 },
+      { 'key': 'Description', 'val': data.description, row: 1,tag:'<p> </p>', class:"",col:1  },
+      { 'key': 'Level', 'val': data.eventLevel, row: 1,tag:'<p> </p>', class:"",col:1  },
+      { 'key': 'Bid Submission End Date & Time', 'val': this.datePipe.transform(data.bidSubmissionEndDate, 'dd/MM/yyyy & h:m:a'), row: 1,tag:'<p> </p>', class:"",col:1  },
+      { 'key': 'Bid Opening Date & Time / Bid Starting Date & Time', 'val': this.datePipe.transform(data.startDateTime, 'dd/MM/yyyy & h:m:a'), row: 1,tag:'<p> </p>', class:"",col:1},
     ]
 
     this.dialog.open(DetailsComponent, {
