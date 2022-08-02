@@ -41,3 +41,12 @@ tr.example-detail-row {
   opacity: 0.5;
   pointer-events: none;
 }
+.html p:first-child{
+  margin-top: 15px !important;
+}
+.html p:last-child{
+  margin-bottom: 15px !important;
+}
+.html p{
+  margin-bottom: 5px !important;
+}

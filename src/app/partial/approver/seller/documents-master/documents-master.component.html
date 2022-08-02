@@ -1,1 +1,100 @@
-<p>documents-master works!</p>
+<vex-page-layout>
+
+    <vex-secondary-toolbar current=" Documents Master"
+        class=" fixed border-0 bg-transparent drop-shadow-none top-1 z-[99] w-8/12">
+        <vex-breadcrumbs [crumbs]="['Documents Master']"></vex-breadcrumbs>
+    </vex-secondary-toolbar>
+
+    <vex-page-layout-content [class.px-gutter]="layoutCtrl.value === 'fullwidth'" class="-mt-6">
+      
+            <div class="my-3 card p-3 border-0 shadow-none">
+                <div class="flex flex-row justify-between">
+                    <div class="grid grid-cols-5 gap-4 mr-3">
+                        <mat-form-field [appearance]=configService.matFormField>
+                            <mat-label>Document Name</mat-label>
+                            <input matInput placeholder="Document Name" [formControl]="documentName" autocomplete="off">         
+                            <mat-error *ngIf="documentName.errors">
+                              <span class="text-danger" *ngIf="documentName.hasError('required')">Please enter document Name</span>
+                              <span class="text-danger" *ngIf="documentName.hasError('pattern') || documentName.hasError('maxlength')">Please enter valid document Name</span>
+                            </mat-error>
+                          </mat-form-field>
+                    </div>
+                    <div>
+                        <button class="rounded-full bg-gray-200 text-black" mat-button type="submit" (click)="saveDocument()">
+                           {{editFlag ? 'Update' : 'Submit'}}
+                        </button>
+                    </div>
+                </div>
+            </div>
+       
+        <div class="card overflow-auto">
+            <div class="bg-app-bar px-6 h-16 border-b sticky left-0 flex items-center">
+                <span class="flex-1"></span>
+                <button [matMenuTriggerFor]="columnFilterMenu" class="ml-4 flex-none" mat-icon-button
+                    matTooltip="Filter Columns" type="button">
+                    <mat-icon svgIcon="mat:filter_list"></mat-icon>
+                </button>
+            </div>
+
+            <table @stagger [dataSource]="dataSource" class="w-full" mat-table matSort>
+                <!-- sr No column -->
+                <ng-container matColumnDef="srNo">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Sr.No </th>
+                    <td mat-cell *matCellDef="let element;let i=index"> {{i+1}}</td>
+                </ng-container>
+
+                <!-- Text Columns -->
+                <ng-container *ngFor="let column of columns; trackBy: commonService.trackByProperty">
+                    <ng-container *ngIf="column.type === 'text'" [matColumnDef]="column.property">
+                        <th *matHeaderCellDef class="uppercase" mat-header-cell mat-sort-header> {{column.label }}</th>
+                        <td *matCellDef="let row" [ngClass]="column.cssClasses" mat-cell>{{row[column.property] }}</td>
+                    </ng-container>
+                </ng-container>
+
+                <ng-container matColumnDef="actions">
+                    <th *matHeaderCellDef mat-header-cell mat-sort-header>ACTION</th>
+                    <td *matCellDef="let row" class="w-10 text-secondary" mat-cell>
+                      <div class="flex">
+          
+                        <a (click)="$event.stopPropagation()"
+                          class="w-8 h-8 leading-none flex items-center justify-center ml-1 hover:bg-hover text-teal bg-teal-light"
+                          mat-icon-button>
+                          <button (click)="updateData(row)">
+                            <mat-icon class="icon-sm" svgIcon="mat:edit"></mat-icon>
+                          </button>
+                        </a>
+                        <a (click)="$event.stopPropagation()"
+                          class="w-8 h-8 leading-none flex items-center justify-center ml-1 hover:bg-hover text-red bg-red-light"
+                          mat-icon-button>
+                          <button (click)=" getConfirmation(row.id)">
+                            <mat-icon class="icon-sm" svgIcon="mat:delete_outline"></mat-icon>
+                          </button>
+                        </a>
+                      </div>
+                    </td>
+                  </ng-container>
+
+                <!-- <tr class="mat-row p-2 w-100" *matNoDataRow columns>
+                    <td class="alert alert-danger text-center m-2 mt-2" colspan="12">No data found </td>
+                </tr> -->
+                <tr *matHeaderRowDef="visibleColumns" mat-header-row></tr>
+                <tr *matRowDef="let row; columns: visibleColumns;" @fadeInUp
+                    class="hover:bg-hover trans-ease-out cursor-pointer" mat-row></tr>
+            </table>
+
+            <!-- <mat-paginator [pageSizeOptions]="pageSizeOptions" [pageSize]="pageSize" [length]="totalRows"
+                (page)="pageChanged($event)" class="sticky left-0">
+            </mat-paginator> -->
+        </div>
+    </vex-page-layout-content>
+
+    <vex-page-layout>
+
+        <mat-menu #columnFilterMenu="matMenu" xPosition="before" yPosition="below">
+            <button (click)="toggleColumnVisibility(column, $event)" *ngFor="let column of columns"
+                class="checkbox-item mat-menu-item">
+                <mat-checkbox (click)="$event.stopPropagation()" [(ngModel)]="column.visible" color="primary">
+                    {{ column.label }}
+                </mat-checkbox>
+            </button>
+        </mat-menu>

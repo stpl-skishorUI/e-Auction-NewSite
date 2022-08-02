@@ -12,6 +12,7 @@ import { stagger40ms } from 'src/@vex/animations/stagger.animation';
 import { TableColumn } from 'src/@vex/interfaces/table-column.interface';
 import { ApiService } from 'src/app/core/services/api.service';
 import { CommonService } from 'src/app/core/services/common.service';
+import { DialogService } from 'src/app/core/services/dialog.service';
 import { ErrorsService } from 'src/app/core/services/errors.service';
 import { LocalstorageService } from 'src/app/core/services/localstorage.service';
 import { StaticDropdownService } from 'src/app/core/services/static-dropdown.service';
@@ -73,6 +74,7 @@ export class EventListComponent implements OnInit {
     public staticDropdownService: StaticDropdownService,
     private datePipe: DatePipe,
     private localstorageService: LocalstorageService,
+    private dialogService:DialogService
   ) { }
 
   ngOnInit() {
@@ -135,6 +137,24 @@ export class EventListComponent implements OnInit {
       this.commonService.routerLinkRedirect('/lots-upload/' + eventCode + '/' + eventId + '/' + totalItem);
     }
   }
+
+  
+  eventDetails(data){
+    let arrayObj = [
+      { 'key': 'Event ID', 'val': data.eventCode, row: 1, tag: '<p> </p>', class: "", col: 1 },
+      { 'key': 'Event Title', 'val': data.title, row: 1, tag: '<p> </p>', class: "", col: 1 },
+      { 'key': 'Event Level', 'val': data.eventLevel, row: 1, tag: '<p> </p>', class: "", col: 1 },
+      { 'key': 'Total Items', 'val': data.totalItem, row: 1, tag: '<p> </p>', class: "", col: 1 },
+      { 'key': 'Start Date Time', 'val': data.startDateTime, row: 1, tag: '<p> </p>', class: "", col: 1 },
+      { 'key': 'End Date Time', 'val': data.endDateTime, row: 1, tag: '<p> </p>', class: "", col: 1 },
+      { 'key': 'Created Date', 'val': data.createdDate, row: 1, tag: '<p> </p>', class: "", col: 1 },
+      { 'key': 'Approve Status', 'val': data.status, row: 1, tag: '<p> </p>', class: "", col: 1 },
+      
+    ]
+    this.dialogService.detailsComponentDialog(arrayObj); // call details dialog modal
+  }
+
+
 
   // addEventDailog(data?: object) {
   //   const dialogRef = this.dialog.open(AuctionScreenComponent, {
