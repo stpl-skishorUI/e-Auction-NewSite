@@ -37,3 +37,7 @@
 tr.example-detail-row {
   height: 0 !important;
 }
+.divdisabled{    
+  opacity: 0.5;
+  pointer-events: none;
+}

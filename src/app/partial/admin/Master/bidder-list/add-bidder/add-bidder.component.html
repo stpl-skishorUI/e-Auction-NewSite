@@ -1,3 +1,4 @@
+<div class="container" id="add-bidder">
 <div mat-dialog-title class="flex items-center justify-between mb-0" *ngIf="checkLoginOrNot">
     <div class="mx-2">Add Bidder</div>
     <button type="button" mat-icon-button (click)="close('No answer')" tabindex="-1">
@@ -73,15 +74,15 @@
 </ng-container>
 
 <mat-divider></mat-divider>
-
+<div [class.divdisabled]="disableDiv">
 <form [formGroup]="bidderRegiForm" #formDirective="ngForm">
-    <fieldset [disabled]="disableDiv">
+    <fieldset [disabled]="disableDiv" >
         <mat-dialog-content>
             <div class="flex mt-4 mb-3">
                 <h4>Bidder Type <sup class="text-red">*</sup></h4>
                 <mat-radio-group aria-label="Select an option">
-                    <mat-radio-button class="px-2" name="bidderType" *ngFor="let bidderTy of bidderTypeArray"
-                        [disabled]="data" [checked]="bidderTypeName == bidderTy ? true:false" [value]=bidderTy
+                    <mat-radio-button class="px-2" name="bidderType" *ngFor="let bidderTy of bidderTypeArray" 
+                        [checked]="bidderTypeName == bidderTy ? true:false" [value]=bidderTy
                         (change)="bidderTypeCheck(bidderTy)">{{bidderTy}}</mat-radio-button>
                 </mat-radio-group>
             </div>
@@ -439,7 +440,7 @@
                                             formControlName="incorporation_Date">
                                         <mat-datepicker-toggle matSuffix [for]="picker">
                                         </mat-datepicker-toggle>
-                                        <mat-datepicker #picker></mat-datepicker>
+                                        <mat-datepicker #picker ></mat-datepicker>
                                         <mat-error *ngIf="f.incorporation_Date.errors">
                                             <span class="text-red" *ngIf="f.incorporation_Date.errors?.required">
                                                 Incorporation Date is required.</span>
@@ -690,3 +691,5 @@
         </mat-dialog-actions>
     </fieldset>
 </form>
+</div>
+</div>
