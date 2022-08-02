@@ -1,8 +1,14 @@
-<!-- <div mat-dialog-title class="flex items-center justify-between mb-2 m-0">
+<div mat-dialog-title class="flex items-center justify-between mb-2 m-0">
     <div>Details</div>
     <button type="button" mat-icon-button (click)="close()" tabindex="-1">
         <mat-icon svgIcon="mat:close"></mat-icon>
     </button>
 </div>
-<mat-divider></mat-divider> -->
-<div [innerHTML]="html"></div>
+<mat-divider></mat-divider>
+<div [innerHTML]="html" class="html"></div>
+
+<div class="row mt-5">
+    <div class="col-sm-12 text-center">
+        <button mat-stroked-button class="me-2" type="button" mat-dialog-close>Close</button>
+    </div>
+</div>

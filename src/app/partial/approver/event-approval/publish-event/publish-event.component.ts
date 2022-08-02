@@ -5,6 +5,7 @@ import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatTabChangeEvent } from '@angular/material/tabs';
+import { ActivatedRoute, Router } from '@angular/router';
 import { fadeInUp400ms } from 'src/@vex/animations/fade-in-up.animation';
 import { stagger40ms } from 'src/@vex/animations/stagger.animation';
 import { TableColumn } from 'src/@vex/interfaces/table-column.interface';
@@ -40,7 +41,7 @@ export class PublishEventComponent implements OnInit {
 
   columns: TableColumn<PublishEvent>[] = [
     { label: 'Sr.No', property: 'srNo', type: 'button', visible: true, cssClasses: ['text-secondary', 'font-medium'] },
-    { label: 'Event ID', property: 'eventCode', type: 'text', visible: true, cssClasses: ['font-medium'] },
+    { label: 'Event ID', property: 'eventCode', type: 'button', visible: true, cssClasses: ['font-medium'] },
     { label: 'Event Title', property: 'title', type: 'text', visible: true, cssClasses: ['text-secondary', 'font-medium'] },
     { label: 'Event Fee', property: 'eventFee', type: 'button', visible: true, cssClasses: ['text-secondary', 'font-medium'] },
     { label: 'Event Level', property: 'eventLevel', type: 'text', visible: true, cssClasses: ['text-secondary', 'font-medium'] },
@@ -62,6 +63,8 @@ export class PublishEventComponent implements OnInit {
     private datePipe: DatePipe,
     public validatorService: ValidatorService,
     public StaticDropdownService: StaticDropdownService,
+    private router: Router,
+    private route: ActivatedRoute,
   ) { }
 
   ngOnInit(): void {
@@ -158,6 +161,13 @@ export class PublishEventComponent implements OnInit {
 
   clearFilter() {
     this.defaultForm();
+  }
+
+  redirectToOnItemDetails(id:any,redLink:any) {
+    let eq = this.commonService.checkFormValueChange(this.initalValues, this.filterForm.value);
+    eq == false ? (this.filterForm.value['pageNumber'] = this.pageNumber, localStorage.setItem('filter', JSON.stringify(this.filterForm.value))) : '';
+    this.router.navigate([redLink+id], {relativeTo:this.route});
+    
   }
 
 }
