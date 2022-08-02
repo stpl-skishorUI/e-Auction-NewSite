@@ -1,4 +1,5 @@
 export class EventList {
+    srNo:number | null
     approvedBy: number
     approvedDatetime: string
     approvedRemark: number | null

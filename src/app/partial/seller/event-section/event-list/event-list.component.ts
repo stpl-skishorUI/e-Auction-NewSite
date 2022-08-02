@@ -48,16 +48,16 @@ export class EventListComponent implements OnInit {
   pageSizeOptions: number[] = [5, 10, 20, 50];
 
   columns: TableColumn<EventList>[] = [
-    { label: 'Sr.No', property: 'srNo', type: 'text', visible: true },
+    { label: 'Sr.No', property: 'srNo', type: 'button', visible: true },
     { label: 'Event ID', property: 'eventCode', type: 'text', visible: true, cssClasses: ['font-medium'] },
-    { label: 'Event Title', property: 'title', type: 'text', visible: true },
-    { label: 'Event Level', property: 'eventLevel', type: 'text', visible: true },
-    { label: 'Total Items',  property: 'totalItem', type: 'text', visible: true },
-    { label: 'Event Start Date', property: 'startDateTime', type: 'text', visible: true },
-    { label: 'Event End Date', property: 'endDateTime', type: 'text', visible: true },
-    { label: 'Event Creation Date', property: 'createdDate', type: 'text', visible: true },
-    { label: 'Approve Status', property: 'status', type: 'text', visible: true },
-    { label: 'Action', property: 'edit', type: 'button', visible: true },
+    { label: 'Event Title', property: 'title', type: 'text', visible: true, cssClasses: ['text-secondary', 'font-medium'] },
+    { label: 'Event Level', property: 'eventLevel', type: 'text', visible: true , cssClasses: ['text-secondary', 'font-medium'] },
+    { label: 'Total Items',  property: 'totalItem', type: 'text', visible: true , cssClasses: ['text-secondary', 'font-medium'] },
+    { label: 'startDateTime', property: 'startDateTime', type: 'button', visible: true, cssClasses: ['text-secondary', 'font-medium'] },
+    { label: 'endDateTime', property: 'endDateTime', type: 'button', visible: true , cssClasses: ['text-secondary', 'font-medium'] },
+    { label: 'createdDate', property: 'createdDate', type: 'button', visible: true , cssClasses: ['text-secondary', 'font-medium'] },
+    { label: 'Approve Status', property: 'status', type: 'button', visible: true , cssClasses: ['text-secondary', 'font-medium'] },
+    { label: 'Actions', property: 'actions', type: 'button', visible: true , cssClasses: ['text-secondary', 'font-medium'] },
   ];
 
   get visibleColumns() {
@@ -97,6 +97,7 @@ export class EventListComponent implements OnInit {
   }
 
   getAllEventList() {
+
     let formValue = this.filterForm.value;
     formValue.fromDate = this.datePipe.transform(formValue.fromDate, 'YYYY/MM/dd');
     formValue.toDate = this.datePipe.transform(formValue.toDate, 'YYYY/MM/dd');
@@ -106,9 +107,8 @@ export class EventListComponent implements OnInit {
     this.apiService.getHttp().subscribe({
       next: (res: any) => {
         if (res.statusCode === "200") {
-          this.dataSource = new MatTableDataSource(res.responseData.responseData1);
+          this.dataSource = new MatTableDataSource(res['responseData'].responseData1);
           this.dataSource.sort = this.sort;
-          this.totalRows = res.responseData.responseData2;
           this.totalRows = this.totalRows[0].pageCount;
           this.pageNumber == 1 ? this.paginator?.firstPage() : '';
         } else {
