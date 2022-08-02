@@ -2,4 +2,9 @@
 .home-table th{
   background-color: rgba(var(--color-primary), 1) !important;
   color: #fff !important;
+  font-size: 0.8rem !important;
+}
+.home-table mat-cell,
+.home-table td{
+  font-size: 0.8rem !important;
 }

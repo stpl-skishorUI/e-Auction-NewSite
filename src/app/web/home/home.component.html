@@ -1,70 +1,69 @@
 <vex-page-layout>
-    <vex-page-layout-content [class.container]="layoutCtrl.value === 'boxed'"
-        [class.px-gutter]="layoutCtrl.value === 'fullwidth'">
-        <form [formGroup]="filterForm" (ngSubmit)="bindTable()">
-            <div class="mb-3 card border border-gray-200 p-3 shadow-none">
-                <div class="flex flex-row justify-between">
-                    <div class="grid grid-cols-5 gap-4 mr-3">
-                        <mat-form-field [appearance]=configService?.matFormField>
-                            <mat-label>Enter a date range</mat-label>
-                            <mat-date-range-input [rangePicker]="picker">
-                                <input matStartDate placeholder="Start date" formControlName="startDate"
-                                    autocomplete="off" [disabled]="true">
-                                <input matEndDate placeholder="End date" formControlName="endDate" autocomplete="off"
-                                    [disabled]="true">
-                            </mat-date-range-input>
-                            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                            <mat-date-range-picker #picker [disabled]="false"></mat-date-range-picker>
-                        </mat-form-field>
-                        <mat-form-field appearance="outline">
-                            <mat-label>Event Level</mat-label>
-                            <mat-select formControlName="levelId">
-                                <mat-option *ngFor="let level of lavelArray" [value]=level.val>{{level.text}}
-                                </mat-option>
-                            </mat-select>
-                        </mat-form-field>
-                        <mat-form-field appearance="outline">
-                            <mat-label>All District</mat-label>
-                            <mat-select formControlName="districtId">
-                                <mat-option *ngFor="let district of districtArray" [value]=district.id>
-                                    {{district.district}}
-                                </mat-option>
-                            </mat-select>
-                        </mat-form-field>
-                        <mat-form-field appearance="outline">
-                            <mat-label>All Mineral</mat-label>
-                            <mat-select formControlName="mineralId">
-                                <mat-option *ngFor="let mineralId of MineralArray" [value]="mineralId.materialId">
-                                    {{mineralId.material}}</mat-option>
-                            </mat-select>
-                        </mat-form-field>
-                        <mat-form-field appearance="outline">
-                            <mat-label>Search</mat-label>
-                            <input matInput placeholder="Search by event Id" (keypress)="VB.noSpacesAtStart($event)"
-                                formControlName="search" autocomplete="off">
-                        </mat-form-field>
-                    </div>
-                    <div>
-                        <button class="rounded-full bg-gray-200 text-black" mat-button type="submit">
-                            <mat-icon svgIcon="mat:search"></mat-icon>
-                            <span>Search</span>
-                        </button>
-                    </div>
+    <form [formGroup]="filterForm" (ngSubmit)="bindTable()">
+        <div class="mb-3 card border border-gray-200 p-3 shadow-none">
+            <div class="flex flex-row justify-between">
+                <div class="grid grid-cols-5 gap-4 mr-3">
+                    <mat-form-field [appearance]=configService?.matFormField>
+                        <mat-label>Enter a date range</mat-label>
+                        <mat-date-range-input [rangePicker]="picker">
+                            <input matStartDate placeholder="Start date" formControlName="startDate"
+                                autocomplete="off" [disabled]="true">
+                            <input matEndDate placeholder="End date" formControlName="endDate" autocomplete="off"
+                                [disabled]="true">
+                        </mat-date-range-input>
+                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                        <mat-date-range-picker #picker [disabled]="false"></mat-date-range-picker>
+                    </mat-form-field>
+                    <mat-form-field appearance="outline">
+                        <mat-label>Event Level</mat-label>
+                        <mat-select formControlName="levelId">
+                            <mat-option *ngFor="let level of lavelArray" [value]=level.val>{{level.text}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <mat-form-field appearance="outline">
+                        <mat-label>All District</mat-label>
+                        <mat-select formControlName="districtId">
+                            <mat-option *ngFor="let district of districtArray" [value]=district.id>
+                                {{district.district}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <mat-form-field appearance="outline">
+                        <mat-label>All Mineral</mat-label>
+                        <mat-select formControlName="mineralId">
+                            <mat-option *ngFor="let mineralId of MineralArray" [value]="mineralId.materialId">
+                                {{mineralId.material}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <mat-form-field appearance="outline">
+                        <mat-label>Search</mat-label>
+                        <input matInput placeholder="Search by event Id" (keypress)="VB.noSpacesAtStart($event)"
+                            formControlName="search" autocomplete="off">
+                    </mat-form-field>
+                </div>
+                <div>
+                    <button class="rounded-full bg-gray-200 text-black" mat-button type="submit">
+                        <mat-icon svgIcon="mat:search"></mat-icon>
+                        <span>Search</span>
+                    </button>
                 </div>
             </div>
-        </form>
-        <div class="card shadow-none border border-gray-200">
-            <mat-tab-group (selectedTabChange)="onChangeTab($event)">
-                <mat-tab label="Active Tenders {{tabs[0]?.count}}">
+        </div>
+    </form>
+    <div class="card shadow-none border border-gray-200">
+        <mat-tab-group (selectedTabChange)="onChangeTab($event)">
+            <mat-tab label="Active Tenders {{tabs[0]?.count}}">
 
-                    <ng-container *ngTemplateOutlet="tabContent"></ng-container>
+                <ng-container *ngTemplateOutlet="tabContent"></ng-container>
 
                 </mat-tab>
                 <mat-tab label="Upcoming Tenders {{tabs[1]?.count}}">
                     <ng-container *ngTemplateOutlet="tabContent"></ng-container>
                 </mat-tab>
+               
             </mat-tab-group>
-
+            <button type="button" mat-raised-button color="primary"  *ngIf="participatedBidderEventlist.length >=1" (click)="onclickParticipateBtn()">PARTICIPATE</button>
             <ng-template #tabContent>
                 <table [dataSource]="dataSource" class="w-full home-table" mat-table matSort multiTemplateDataRows
                     @stagger>
@@ -92,163 +91,162 @@
                         </td>
                     </ng-container>
                     <ng-container matColumnDef="bidSubmissionEndDate">
-                        <th mat-header-cell *matHeaderCellDef>{{activeTab == 'Upcoming'? "Bid Submission start Date &
-                            Time" : "Bid Submission End Date & Time"}}</th>
+                        <th mat-header-cell *matHeaderCellDef>{{activeTab == 'Upcoming'? "Bid Submission start Date & Time" : "Bid Submission End Date & Time"}}</th>
                         <td mat-cell *matCellDef="let element"> {{ activeTab == 'Upcoming'
                             ?(element.bidSubmissionStartDate
                             | date:'dd/MM/yyyy & h:m:a'):element.bidSubmissionEndDate | date:'dd/MM/yyyy & h:m:a'}}<br>
 
-                            <span class="text-sm-start text-warning small" *ngIf="tabChangeFlag == 'Upcoming'">
-                                {{calculateDiff(element.bidSubmissionStartDate)>0?calculateDiff(element.bidSubmissionStartDate)
-                                + " - Days Remaining": ""}}</span>
-                            <span class="text-sm-start text-warning small" *ngIf="tabChangeFlag != 'Upcoming'">
-                                {{calculateDiff(element.bidSubmissionEndDate)>0?calculateDiff(element.bidSubmissionEndDate)
-                                + " - Days Remaining": ""}}</span>
-                        </td>
+                        <span class="text-sm-start text-warning small" *ngIf="tabChangeFlag == 'Upcoming'">
+                            {{calculateDiff(element.bidSubmissionStartDate)>0?calculateDiff(element.bidSubmissionStartDate)
+                            + " - Days Remaining": ""}}</span>
+                        <span class="text-sm-start text-warning small" *ngIf="tabChangeFlag != 'Upcoming'">
+                            {{calculateDiff(element.bidSubmissionEndDate)>0?calculateDiff(element.bidSubmissionEndDate)
+                            + " - Days Remaining": ""}}</span>
+                    </td>
 
-                    </ng-container>
-                    <ng-container matColumnDef="startDateTime">
-                        <th mat-header-cell *matHeaderCellDef>Bid Opening Date & Time </th>
-                        <td mat-cell *matCellDef="let element"> {{ element.bidSubmissionStartDate | date:'dd/MM/yyyy &
-                            h:m:a'}}<br>
-                        </td>
-                    </ng-container>
-                    <ng-container matColumnDef="totalItem">
-                        <th mat-header-cell *matHeaderCellDef> Item Count </th>
-                        <td mat-cell *matCellDef="let element"> {{element.totalItem}} </td>
-                    </ng-container>
-                    <ng-container matColumnDef="download">
-                        <th mat-header-cell *matHeaderCellDef> Actions </th>
-                        <td mat-cell *matCellDef="let element">
-                            <button mat-menu-item [class.custom-disabled-btn]="element.totalItem <= 0"
-                                (click)="openEventDetailsDialog(element)">
+                </ng-container>
+                <ng-container matColumnDef="startDateTime">
+                    <th mat-header-cell *matHeaderCellDef>Bid Opening Date & Time </th>
+                    <td mat-cell *matCellDef="let element"> {{ element.bidSubmissionStartDate | date:'dd/MM/yyyy & h:m:a'}}<br>
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="totalItem">
+                    <th mat-header-cell *matHeaderCellDef> Item Count </th>
+                    <td mat-cell *matCellDef="let element"> {{element.totalItem}} </td>
+                </ng-container>
+                <ng-container matColumnDef="download">
+                    <th mat-header-cell *matHeaderCellDef> Actions </th>
+                    <td mat-cell *matCellDef="let element">
+                        <div class="flex">
+                            <a [class.custom-disabled-btn]="element.totalItem <= 0"
+                            (click)="openEventDetailsDialog(element)"
+                                class="w-8 h-8 leading-none flex items-center justify-center ml-1 hover:bg-hover text-gray-600 bg-gray-light"
+                                mat-icon-button>
                                 <mat-icon svgIcon="mat:visibility"></mat-icon>
-                            </button>
-                            <button mat-menu-item [class.custom-disabled-btn]="element.totalItem <= 0"
-                                (click)="(expandedElement = expandedElement === element ? null : element.totalItem <= 0 ? null : element); expandEventrDetails(element.id, element.totalItem)">
+                            </a>
+                            <a [href]="element.documentPath"
+                                class="w-8 h-8 leading-none flex items-center justify-center ml-1 hover:bg-hover text-teal bg-teal-light"
+                                mat-icon-button>
+                                <mat-icon svgIcon="mat:save_alt"></mat-icon>
+                            </a>
+                            <a [class.custom-disabled-btn]="element.totalItem <= 0"
+                            (click)="(expandedElement = expandedElement === element ? null : element.totalItem <= 0 ? null : element); expandEventrDetails(element.id, element.totalItem)"
+                                class="w-8 h-8 leading-none flex items-center justify-center ml-1 hover:bg-hover text-gray-600 bg-gray-light"
+                                mat-icon-button>
                                 <mat-icon svgIcon="mat:keyboard_arrow_down"></mat-icon>
-                            </button>
-                            <button mat-stroked-button matTooltip="Download Document"
-                                class="text-primary btn-light mx-1">
-                                <a download="event_details" target="_blank" [href]="element.documentPath">
-                                    <mat-icon class="mt-1">save_alt</mat-icon>
-                                </a>
-                            </button>
+                            </a>
+                        </div>
 
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="expandedDetail">
+                    <td mat-cell *matCellDef="let element" [attr.colspan]="activecolumnsToDisplay.length"
+                        class="p-2">
+                        <div class="example-element-detail"
+                            [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
+                            <div class="card border-0 card-body p-0">
+                                <table #table4 mat-table [dataSource]="eventDetails"
+                                    class="table table-bordered border-top mb-0 shadow-none">
 
-                        </td>
-                    </ng-container>
-                    <ng-container matColumnDef="expandedDetail">
-                        <td mat-cell *matCellDef="let element" [attr.colspan]="activecolumnsToDisplay.length"
-                            class="p-0">
-                            <div class="example-element-detail"
-                                [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
-                                <div class="card border-0 card-body p-2">
-                                    <table #table4 mat-table [dataSource]="eventDetails"
-                                        class="table table-bordered border-top mb-0 shadow-none inner-table">
+                                    <ng-container matColumnDef="srNo">
+                                        <th mat-header-cell *matHeaderCellDef> Sr.No </th>
+                                        <td mat-cell *matCellDef="let element; let i= index">{{i+1}}</td>
+                                    </ng-container>
+                                    <ng-container matColumnDef="itemName">
+                                        <th mat-header-cell *matHeaderCellDef> Item Number And Name </th>
+                                        <td mat-cell *matCellDef="let element"> {{element.itemName | titlecase }}
+                                        </td>
+                                    </ng-container>
+                                    <ng-container matColumnDef="material">
+                                        <th mat-header-cell *matHeaderCellDef> Mineral </th>
+                                        <td mat-cell *matCellDef="let element"> {{element.material | titlecase}}
+                                        </td>
+                                    </ng-container>
+                                    <ng-container matColumnDef="taluka">
+                                        <th mat-header-cell *matHeaderCellDef> Taluka / CTSO </th>
+                                        <td mat-cell *matCellDef="let element">{{element.taluka | titlecase}}</td>
+                                    </ng-container>
+                                    <ng-container matColumnDef="village">
+                                        <th mat-header-cell *matHeaderCellDef> Village </th>
+                                        <td mat-cell *matCellDef="let element"> {{element.village | titlecase}}
+                                        </td>
+                                    </ng-container>
+                                    <ng-container matColumnDef="area">
+                                        <th mat-header-cell *matHeaderCellDef> Area </th>
+                                        <td mat-cell *matCellDef="let element">{{element.area | titlecase}}</td>
+                                    </ng-container>
+                                    <ng-container matColumnDef="quantity">
+                                        <th mat-header-cell *matHeaderCellDef> Allowed Quantity
+                                            <small>(InBrass)</small>
+                                        </th>
+                                        <td mat-cell *matCellDef="let element"> {{element.quantity}} </td>
+                                    </ng-container>
+                                    <ng-container matColumnDef="tender_ApplicationFee">
+                                        <th mat-header-cell *matHeaderCellDef> Tender / Application Fee </th>
+                                        <td mat-cell *matCellDef="let element"> {{element.tender_ApplicationFee |
+                                            currency: 'INR':true}}</td>
+                                    </ng-container>
+                                    <ng-container matColumnDef="offsetValue">
+                                        <th mat-header-cell *matHeaderCellDef> Offset Value </th>
+                                        <td mat-cell *matCellDef="let element"> {{element.offsetValue | currency:
+                                            'INR':true}} </td>
+                                    </ng-container>
+                                    <ng-container matColumnDef="emD_SecurityDeposit">
+                                        <th mat-header-cell *matHeaderCellDef> EMD </th>
+                                        <td mat-cell *matCellDef="let element"> {{element.emD_SecurityDeposit |
+                                            currency: 'INR':true}}</td>
+                                    </ng-container>
+                                    <ng-container matColumnDef="ViewItem">
+                                        <th mat-header-cell *matHeaderCellDef> Item Details </th>
+                                        <td mat-cell *matCellDef="let element">
+                                            <div class="d-flex align-items-center">
+                                                <a (click)="plotProfile(element.id)"
+                                                    class="w-8 h-8 leading-none flex items-center justify-center ml-1 hover:bg-hover text-gray-600 bg-gray-light"
+                                                    mat-icon-button>
+                                                    <mat-icon svgIcon="mat:visibility"></mat-icon>
+                                                </a>
+                                                <ng-container
+                                                    *ngIf="localstorageService.checkUserIsLoggedIn() == true">
+                                                    <mat-checkbox
+                                                        *ngIf="localstorageService.userTypeId()==2 && tabChangeFlag == 'Active' &&  element.eventParticipateId == 0"
+                                                        (click)="$event.stopPropagation()"
+                                                        (change)="isparticipateEvent($event,element)" class="ms-2"
+                                                        [checked]="element?.isparticipateflag">
+                                                    </mat-checkbox>
+                                                </ng-container>
 
-                                        <ng-container matColumnDef="srNo">
-                                            <th mat-header-cell *matHeaderCellDef> Sr.No </th>
-                                            <td mat-cell *matCellDef="let element; let i= index">{{i+1}}</td>
-                                        </ng-container>
-                                        <ng-container matColumnDef="itemName">
-                                            <th mat-header-cell *matHeaderCellDef> Item Number And Name </th>
-                                            <td mat-cell *matCellDef="let element"> {{element.itemName | titlecase }}
-                                            </td>
-                                        </ng-container>
-                                        <ng-container matColumnDef="material">
-                                            <th mat-header-cell *matHeaderCellDef> Mineral </th>
-                                            <td mat-cell *matCellDef="let element"> {{element.material | titlecase}}
-                                            </td>
-                                        </ng-container>
-                                        <ng-container matColumnDef="taluka">
-                                            <th mat-header-cell *matHeaderCellDef> Taluka / CTSO </th>
-                                            <td mat-cell *matCellDef="let element">{{element.taluka | titlecase}}</td>
-                                        </ng-container>
-                                        <ng-container matColumnDef="village">
-                                            <th mat-header-cell *matHeaderCellDef> Village </th>
-                                            <td mat-cell *matCellDef="let element"> {{element.village | titlecase}}
-                                            </td>
-                                        </ng-container>
-                                        <ng-container matColumnDef="area">
-                                            <th mat-header-cell *matHeaderCellDef> Area </th>
-                                            <td mat-cell *matCellDef="let element">{{element.area | titlecase}}</td>
-                                        </ng-container>
-                                        <ng-container matColumnDef="quantity">
-                                            <th mat-header-cell *matHeaderCellDef> Allowed Quantity
-                                                <small>(InBrass)</small>
-                                            </th>
-                                            <td mat-cell *matCellDef="let element"> {{element.quantity}} </td>
-                                        </ng-container>
-                                        <ng-container matColumnDef="tender_ApplicationFee">
-                                            <th mat-header-cell *matHeaderCellDef> Tender / Application Fee </th>
-                                            <td mat-cell *matCellDef="let element"> {{element.tender_ApplicationFee |
-                                                currency: 'INR':true}}</td>
-                                        </ng-container>
-                                        <ng-container matColumnDef="offsetValue">
-                                            <th mat-header-cell *matHeaderCellDef> Offset Value </th>
-                                            <td mat-cell *matCellDef="let element"> {{element.offsetValue | currency:
-                                                'INR':true}} </td>
-                                        </ng-container>
-                                        <ng-container matColumnDef="emD_SecurityDeposit">
-                                            <th mat-header-cell *matHeaderCellDef> EMD </th>
-                                            <td mat-cell *matCellDef="let element"> {{element.emD_SecurityDeposit |
-                                                currency: 'INR':true}}</td>
-                                        </ng-container>
-                                        <ng-container matColumnDef="ViewItem">
-                                            <th mat-header-cell *matHeaderCellDef> View Item Details </th>
-                                            <td mat-cell *matCellDef="let element">
-                                                <div class="d-flex align-items-center">
-                                                    <button (click)="plotProfile(element.id)" mat-stroked-button
-                                                        class="btn-sm mnw-auto text-primary">
-                                                        <mat-icon svgIcon="mat:visibility"></mat-icon>
-                                                    </button>
-                                                    <ng-container
-                                                        *ngIf="localstorageService.checkUserIsLoggedIn() == true">
-                                                        <mat-checkbox
-                                                            *ngIf="localstorageService.userTypeId()==2 && tabChangeFlag == 'Active' &&  element.eventParticipateId == 0"
-                                                            (click)="$event.stopPropagation()"
-                                                            (change)="isparticipateEvent($event,element)" class="ms-2"
-                                                            [checked]="element?.isparticipateflag">
-                                                        </mat-checkbox>
-                                                    </ng-container>
-
-                                                </div>
-                                            </td>
-                                        </ng-container>
-                                        <tr class="mat-row p-2 w-100" *matNoDataRow col>
-                                            <td class="text-center m-2 mt-2" colspan="12">
-                                                <div class="alert alert-danger mb-0 p-2" role="alert">
-                                                    No data found
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr mat-header-row *matHeaderRowDef="eventColumns"></tr>
-                                        <tr mat-row *matRowDef="let row; columns: eventColumns;"></tr>
-                                    </table>
-                                </div>
+                                            </div>
+                                        </td>
+                                    </ng-container>
+                                    <tr class="mat-row p-2 w-100" *matNoDataRow col>
+                                        <td class="text-center m-2 mt-2" colspan="12">
+                                            <div class="alert alert-danger mb-0 p-2" role="alert">
+                                                No data found
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr mat-header-row *matHeaderRowDef="eventColumns"></tr>
+                                    <tr mat-row *matRowDef="let row; columns: eventColumns;"></tr>
+                                </table>
                             </div>
-                        </td>
-                    </ng-container>
-                    <tr class="mat-row p-2 w-100" *matNoDataRow col>
-                        <td class="text-center border-bottom p-2 mt-2" colspan="12">
-                            <div class="alert alert-danger mb-0 p-2" role="alert">
-                                No data found
-                            </div>
-                        </td>
-                    </tr>
-                    <tr mat-header-row *matHeaderRowDef="activecolumnsToDisplay"></tr>
-                    <tr mat-row *matRowDef="let element; columns: activecolumnsToDisplay;" class="example-element-row">
-                    </tr>
-                    <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></tr>
+                        </div>
+                    </td>
+                </ng-container>
+                <tr class="mat-row p-2 w-100" *matNoDataRow col>
+                    <td class="text-center border-bottom p-2 mt-2" colspan="12">
+                        <div class="alert alert-danger mb-0 p-2" role="alert">
+                            No data found
+                        </div>
+                    </td>
+                </tr>
+                <tr mat-header-row *matHeaderRowDef="activecolumnsToDisplay"></tr>
+                <tr mat-row *matRowDef="let element; columns: activecolumnsToDisplay;" class="example-element-row">
+                </tr>
+                <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></tr>
 
-                </table>
-                <mat-paginator [pageSizeOptions]="pageSizeOptions" [pageSize]="pageSize" class="sticky left-0">
-                </mat-paginator>
-            </ng-template>
-        </div>
-
-    </vex-page-layout-content>
-
-
+            </table>
+            <mat-paginator [pageSizeOptions]="pageSizeOptions" [pageSize]="pageSize" class="sticky left-0">
+            </mat-paginator>
+        </ng-template>
+    </div>
 </vex-page-layout>
