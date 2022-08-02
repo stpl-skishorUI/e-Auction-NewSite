@@ -21,6 +21,9 @@ import { MasterService } from 'src/app/core/services/master.service';
 import { ValidatorService } from 'src/app/core/services/validator.service';
 import { Router } from '@angular/router';
 import { MatTabChangeEvent } from '@angular/material/tabs';
+//import { DetailsComponent } from 'src/app/partial/dialogs/details/details.component';
+import { TableColumn } from 'src/@vex/interfaces/table-column.interface';
+import { Home } from './home.model';
 import { DialogService } from 'src/app/core/services/dialog.service';
 
 @Component({
@@ -47,6 +50,17 @@ import { DialogService } from 'src/app/core/services/dialog.service';
 })
 
 export class HomeComponent implements OnInit {
+  columns: TableColumn<Home>[] = [
+    { label: 'Sr.No', property: 'srNo', type: 'button', visible: true,cssClasses: ['text-secondary', 'font-medium']  },
+    { label: 'Event Level', property: 'eventLevel', type: 'text', visible: true },
+    { label: 'District/ SDO/ Tehsil', property: 'district', type: 'text', visible: true ,cssClasses: ['text-secondary', 'font-medium'] },
+    { label: 'Event Id', property: 'eventCode', type: 'text', visible: true ,cssClasses: ['text-secondary', 'font-medium'] },
+    { label: 'Title', property: 'title', type: 'text', visible: true ,cssClasses: ['text-secondary', 'font-medium'] },
+    { label: 'Bid Submission End Date & Time', property: 'bidSubmissionEndDate', type: 'text', visible: false,cssClasses: ['text-secondary', 'font-medium']  },
+    { label: 'Bid Opening Date & Time', property: 'bidSubmissionStartDate', type: 'text', visible: false, cssClasses: ['text-secondary', 'font-medium']  },
+    { label: 'Item Count', property: 'totalItem', type: 'text', visible: true ,cssClasses: ['text-secondary', 'font-medium'] },
+    { label: 'Actions', property: 'actions', type: 'button', visible: true ,cssClasses: ['text-secondary', 'font-medium'] },
+  ];
   eventDetails: any;
   checkUserLogFlag: boolean = false;
   participatedBidderEventlist: any[] = [];
@@ -321,4 +335,25 @@ export class HomeComponent implements OnInit {
       this.participatedBidderEventlist[eventIdIndex].participatedBidderEventslst.length == 0 ? this.participatedBidderEventlist.splice(eventIdIndex, 1) : '';
     }
   }
+
+
+    // ...................... participate button  function  start..................................../
+    onclickParticipateBtn() {
+      for (var i = 0; i < this.participatedBidderEventlist.length; i++) {
+        delete this.participatedBidderEventlist[i]['eventLotId'];
+      }
+      this.apiService.setHttp('post', "event-participate", false, JSON.stringify(this.participatedBidderEventlist), false, 'bidderUrl');
+      this.apiService.getHttp().subscribe({
+        next: (res: any) => {
+          if (res.statusCode === "200") {
+            this.router.navigate(['event-details']);
+  
+          } else {
+            this.commonService.checkDataType(res.statusMessage) == false ? this.error.handelError(res.statusCode) : this.commonService.snackBar(res.statusMessage, 1);
+          }
+        },
+        error: ((error: any) => { this.error.handelError(error.status) })
+      });
+    }
+  
 }

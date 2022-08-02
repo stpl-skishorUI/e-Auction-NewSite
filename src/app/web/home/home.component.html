@@ -57,43 +57,45 @@
 
                 <ng-container *ngTemplateOutlet="tabContent"></ng-container>
 
-            </mat-tab>
-            <mat-tab label="Upcoming Tenders {{tabs[1]?.count}}">
-                <ng-container *ngTemplateOutlet="tabContent"></ng-container>
-            </mat-tab>
-        </mat-tab-group>
-
-        <ng-template #tabContent>
-            <table [dataSource]="dataSource" class="w-full home-table" mat-table matSort multiTemplateDataRows
-                @stagger>
-                <ng-container matColumnDef="srNo">
-                    <th mat-header-cell *matHeaderCellDef> Sr.No </th>
-                    <td mat-cell *matCellDef="let element; let i = dataIndex">{{((pageNo + 1) * 10 + i + 1)-20}}
-                    </td>
-                </ng-container>
-                <ng-container matColumnDef="eventLevel">
-                    <th mat-header-cell *matHeaderCellDef> Event Level </th>
-                    <td mat-cell *matCellDef="let element"> {{element.eventLevel | titlecase}} </td>
-                </ng-container>
-                <ng-container matColumnDef="district">
-                    <th mat-header-cell *matHeaderCellDef> District/ SDO/ Tehsil </th>
-                    <td mat-cell *matCellDef="let element"> {{element.district | titlecase}} </td>
-                </ng-container>
-                <ng-container matColumnDef="eventCode">
-                    <th mat-header-cell *matHeaderCellDef> Event Id </th>
-                    <td mat-cell *matCellDef="let element"> {{element.eventCode}} </td>
-                </ng-container>
-                <ng-container matColumnDef="title">
-                    <th mat-header-cell *matHeaderCellDef> Title </th>
-                    <td mat-cell *matCellDef="let element">
-                        <p class="text-ellipsis-100 mb-0"> {{element.title | titlecase}}</p>
-                    </td>
-                </ng-container>
-                <ng-container matColumnDef="bidSubmissionEndDate">
-                    <th mat-header-cell *matHeaderCellDef>{{activeTab == 'Upcoming'? "Bid Submission start Date & Time" : "Bid Submission End Date & Time"}}</th>
-                    <td mat-cell *matCellDef="let element"> {{ activeTab == 'Upcoming'
-                        ?(element.bidSubmissionStartDate
-                        | date:'dd/MM/yyyy & h:m:a'):element.bidSubmissionEndDate | date:'dd/MM/yyyy & h:m:a'}}<br>
+                </mat-tab>
+                <mat-tab label="Upcoming Tenders {{tabs[1]?.count}}">
+                    <ng-container *ngTemplateOutlet="tabContent"></ng-container>
+                </mat-tab>
+               
+            </mat-tab-group>
+            <button type="button" mat-raised-button color="primary"  *ngIf="participatedBidderEventlist.length >=1" (click)="onclickParticipateBtn()">PARTICIPATE</button>
+            <ng-template #tabContent>
+                <table [dataSource]="dataSource" class="w-full home-table" mat-table matSort multiTemplateDataRows
+                    @stagger>
+                    <ng-container matColumnDef="srNo">
+                        <th mat-header-cell *matHeaderCellDef> Sr.No </th>
+                        <td mat-cell *matCellDef="let element; let i = dataIndex">{{((pageNo + 1) * 10 + i + 1)-20}}
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="eventLevel">
+                        <th mat-header-cell *matHeaderCellDef> Event Level </th>
+                        <td mat-cell *matCellDef="let element"> {{element.eventLevel | titlecase}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="district">
+                        <th mat-header-cell *matHeaderCellDef> District/ SDO/ Tehsil </th>
+                        <td mat-cell *matCellDef="let element"> {{element.district | titlecase}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="eventCode">
+                        <th mat-header-cell *matHeaderCellDef> Event Id </th>
+                        <td mat-cell *matCellDef="let element"> {{element.eventCode}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="title">
+                        <th mat-header-cell *matHeaderCellDef> Title </th>
+                        <td mat-cell *matCellDef="let element">
+                            <p class="text-ellipsis-100 mb-0"> {{element.title | titlecase}}</p>
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="bidSubmissionEndDate">
+                        <th mat-header-cell *matHeaderCellDef>{{activeTab == 'Upcoming'? "Bid Submission start Date &
+                            Time" : "Bid Submission End Date & Time"}}</th>
+                        <td mat-cell *matCellDef="let element"> {{ activeTab == 'Upcoming'
+                            ?(element.bidSubmissionStartDate
+                            | date:'dd/MM/yyyy & h:m:a'):element.bidSubmissionEndDate | date:'dd/MM/yyyy & h:m:a'}}<br>
 
                         <span class="text-sm-start text-warning small" *ngIf="tabChangeFlag == 'Upcoming'">
                             {{calculateDiff(element.bidSubmissionStartDate)>0?calculateDiff(element.bidSubmissionStartDate)
