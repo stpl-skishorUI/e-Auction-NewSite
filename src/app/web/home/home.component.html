@@ -66,8 +66,9 @@
                 <mat-tab label="Upcoming Tenders {{tabs[1]?.count}}">
                     <ng-container *ngTemplateOutlet="tabContent"></ng-container>
                 </mat-tab>
+               
             </mat-tab-group>
-
+            <button type="button" mat-raised-button color="primary"  *ngIf="participatedBidderEventlist.length >=1" (click)="onclickParticipateBtn()">PARTICIPATE</button>
             <ng-template #tabContent>
                 <table [dataSource]="dataSource" class="w-full home-table" mat-table matSort multiTemplateDataRows
                     @stagger>

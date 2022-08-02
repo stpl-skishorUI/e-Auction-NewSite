@@ -59,7 +59,8 @@ const routes: Routes = [
 
       //----------------------------------------------------------------for bidder routing start heare-----------------------------------------//
      
-      { path: 'bidder-dashboard', loadChildren: () => import('./partial/bidder/bidder-dashboard/bidder-dashboard.module').then(m => m.BidderDashboardModule), data: { breadcrumb: [{ title: 'Dashboard', active: true }] }, canActivate: [ExpenseGuard]},
+     // { path: 'bidder-dashboard', loadChildren: () => import('./web/web-layout/web-layout.module').then(m => m.WebLayoutModule) },
+      { path: 'bidder-dashboard', loadChildren: () => import('./web/home/home.module').then(m => m.HomeModule) },
       { path: 'event-details', loadChildren: () => import('./partial/bidder/event-details/event-details.module').then(m => m.EventDetailsModule), data: { breadcrumb: [{ title: 'Dashboard', active: true }] }, canActivate: [ExpenseGuard]},
       { path: 'live_auction_bidding', loadChildren: () => import('./partial/bidder/live-auction-bidding/live-auction-bidding.module').then(m => m.LiveAuctionBiddingModule), data: { breadcrumb: [{ title: 'Dashboard', active: true }] }, canActivate: [ExpenseGuard] },
       { path: 'account-details', loadChildren: () => import('./partial/bidder/account-details/account-details.module').then(m => m.AccountDetailsModule), data: { breadcrumb: [{ title: 'Dashboard', active: true }] }, canActivate: [ExpenseGuard] },
