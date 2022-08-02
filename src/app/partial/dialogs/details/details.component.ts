@@ -17,15 +17,5 @@ export class DetailsComponent implements OnInit {
 
   ngOnInit(): void {
     this.dialogData = this?.data;
-    if (this.dialogData?.length > 0) {
-      for (let i = 0; i < this.dialogData?.length; i++) {
-        this.html += this.dialogData[i]?.tag.split(' ')[0] + '<strong>' + this.dialogData[i]?.key + '</strong> :' + this.dialogData[i]?.val + this.dialogData[i]?.tag.split(' ')[1]
-      }
-    }
-  }
-
-  close(): void {
-    /** Wait for animation to complete and then close */
-    // setTimeout(() => this.popoverRef.close(), 50);
   }
 }

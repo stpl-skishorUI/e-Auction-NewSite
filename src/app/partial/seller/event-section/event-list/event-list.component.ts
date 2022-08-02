@@ -30,9 +30,9 @@ import { EventList } from './event-list.model';
 })
 export class EventListComponent implements OnInit {
   layoutCtrl = new UntypedFormControl('boxed');
-  dataSource: MatTableDataSource<EventList> | null;
+  dataSource: MatTableDataSource<EventList> | [];
   selection = new SelectionModel<EventList>(true, []);
-  
+
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   filterForm!: FormGroup;
@@ -49,16 +49,16 @@ export class EventListComponent implements OnInit {
   pageSizeOptions: number[] = [5, 10, 20, 50];
 
   columns: TableColumn<EventList>[] = [
-    { label: 'Sr.No', property: 'srNo', type: 'button', visible: true },
-    { label: 'Event ID', property: 'eventCode', type: 'text', visible: true, cssClasses: ['font-medium'] },
-    { label: 'Event Title', property: 'title', type: 'text', visible: true, cssClasses: ['text-secondary', 'font-medium'] },
-    { label: 'Event Level', property: 'eventLevel', type: 'text', visible: true , cssClasses: ['text-secondary', 'font-medium'] },
-    { label: 'Total Items',  property: 'totalItem', type: 'text', visible: true , cssClasses: ['text-secondary', 'font-medium'] },
-    { label: 'startDateTime', property: 'startDateTime', type: 'button', visible: true, cssClasses: ['text-secondary', 'font-medium'] },
-    { label: 'endDateTime', property: 'endDateTime', type: 'button', visible: true , cssClasses: ['text-secondary', 'font-medium'] },
-    { label: 'createdDate', property: 'createdDate', type: 'button', visible: true , cssClasses: ['text-secondary', 'font-medium'] },
-    { label: 'Approve Status', property: 'status', type: 'button', visible: true , cssClasses: ['text-secondary', 'font-medium'] },
-    { label: 'Actions', property: 'actions', type: 'button', visible: true , cssClasses: ['text-secondary', 'font-medium'] },
+    { label: 'srNo', property: 'srNo', type: 'button', visible: true },
+    { label: 'Event Code', property: 'eventCode', type: 'button', visible: true, cssClasses: ['font-medium'] },
+    { label: 'Title', property: 'title', type: 'text', visible: true, cssClasses: ['text-secondary', 'font-medium'] },
+    { label: 'Event Level', property: 'eventLevel', type: 'text', visible: true, cssClasses: ['text-secondary', 'font-medium'] },
+    { label: 'Total Item', property: 'totalItem', type: 'text', visible: false, cssClasses: ['text-secondary', 'font-medium'] },
+    { label: 'Start Date Time', property: 'startDateTime', type: 'button', visible: false, cssClasses: ['text-secondary', 'font-medium'] },
+    { label: 'End Date Time', property: 'endDateTime', type: 'button', visible: false, cssClasses: ['text-secondary', 'font-medium'] },
+    { label: 'Created Date', property: 'createdDate', type: 'button', visible: false, cssClasses: ['text-secondary', 'font-medium'] },
+    { label: 'Approve Status', property: 'status', type: 'button', visible: true, cssClasses: ['text-secondary', 'font-medium'] },
+    { label: 'Actions', property: 'actions', type: 'button', visible: true, cssClasses: ['text-secondary', 'font-medium'] },
   ];
 
   get visibleColumns() {
@@ -74,12 +74,12 @@ export class EventListComponent implements OnInit {
     public staticDropdownService: StaticDropdownService,
     private datePipe: DatePipe,
     private localstorageService: LocalstorageService,
-    private dialogService:DialogService
+    private dialogService: DialogService
   ) { }
 
   ngOnInit() {
     this.defultFilterform();
-    this.getAllEventList();  
+    this.getAllEventList();
   }
 
   defultFilterform() {
@@ -111,10 +111,10 @@ export class EventListComponent implements OnInit {
         if (res.statusCode === "200") {
           this.dataSource = new MatTableDataSource(res['responseData'].responseData1);
           this.dataSource.sort = this.sort;
-          this.totalRows = this.totalRows[0].pageCount;
+          this.totalRows = res.responseData.responseData2?.pageCount;
           this.pageNumber == 1 ? this.paginator?.firstPage() : '';
         } else {
-          this.dataSource = null;
+          this.dataSource = [];
           this.totalRows = 0;
           if (res.statusCode != "404") {
             this.commonService.checkDataType(res.statusMessage) == false ? this.error.handelError(res.statusCode) : this.commonService.snackBar(res.statusMessage, 1);
@@ -138,36 +138,29 @@ export class EventListComponent implements OnInit {
     }
   }
 
-  
-  eventDetails(data){
+
+  eventDetails(data) {
+    // this.datePipe.transform(data.bidSubmissionEndDate, 'dd/MM/yyyy & h:m:a')
     let arrayObj = [
-      { 'key': 'Event ID', 'val': data.eventCode, row: 1, tag: '<p> </p>', class: "", col: 1 },
-      { 'key': 'Event Title', 'val': data.title, row: 1, tag: '<p> </p>', class: "", col: 1 },
-      { 'key': 'Event Level', 'val': data.eventLevel, row: 1, tag: '<p> </p>', class: "", col: 1 },
-      { 'key': 'Total Items', 'val': data.totalItem, row: 1, tag: '<p> </p>', class: "", col: 1 },
-      { 'key': 'Start Date Time', 'val': data.startDateTime, row: 1, tag: '<p> </p>', class: "", col: 1 },
-      { 'key': 'End Date Time', 'val': data.endDateTime, row: 1, tag: '<p> </p>', class: "", col: 1 },
-      { 'key': 'Created Date', 'val': data.createdDate, row: 1, tag: '<p> </p>', class: "", col: 1 },
-      { 'key': 'Approve Status', 'val': data.status, row: 1, tag: '<p> </p>', class: "", col: 1 },
-      
+      { 'key': 'Event ID', 'val': data.eventCode, row: 1, col: 1, type: 'text' },
+      { 'key': 'Event Title', 'val': data.title, row: 1, col: 2, type: 'text' },
+      { 'key': 'Event Level', 'val': data.eventLevel, row: 1, col: 2, type: 'text' },
+      { 'key': 'Total Items', 'val': data.totalItem, row: 1, col: 1, type: 'text' },
+      { 'key': 'Start Date Time', 'val': this.datePipe.transform(data.startDateTime, 'dd/MM/yyyy'), col: 2, type: 'date' },
+      { 'key': 'End Date Time', 'val': this.datePipe.transform(data.endDateTime, 'dd/MM/yyyy'), col: 2, type: 'date' },
+      { 'key': 'Created Date', 'val': this.datePipe.transform(data.createdDate, 'dd/MM/yyyy'), col: 2, type: 'date' },
+      { 'key': 'Approve Status', 'val': data.status, row: 1, col: 1, type: 'badge' },
+
     ]
     this.dialogService.detailsComponentDialog(arrayObj); // call details dialog modal
   }
 
 
-
-  // addEventDailog(data?: object) {
-  //   const dialogRef = this.dialog.open(AuctionScreenComponent, {
-  //     width: this.apiService.modalSize[2], // p1 for paragraph 1 same as paragraph 2.
-  //     data: data,
-  //     disableClose: this.apiService.disableCloseFlag,
-  //   });
-  //   dialogRef.afterClosed().subscribe((result: any) => {
-  //     if (result == 'Yes') {
-  //       this.getAllEventList();
-  //     }
-  //   })
-  // }
+  toggleColumnVisibility(column, event) {
+    event.stopPropagation();
+    event.stopImmediatePropagation();
+    column.visible = !column.visible;
+  }
 
 
 }

@@ -1,14 +1,18 @@
 <div mat-dialog-title class="flex items-center justify-between mb-2 m-0">
     <div>Details</div>
-    <button type="button" mat-icon-button (click)="close()" tabindex="-1">
+    <button type="button" mat-icon-button mat-dialog-close tabindex="-1">
         <mat-icon svgIcon="mat:close"></mat-icon>
     </button>
 </div>
 <mat-divider></mat-divider>
-<div [innerHTML]="html" class="html"></div>
+<div *ngFor="let res of dialogData">
+    <div [ngClass]="'grid grid-cols-'+res?.col">
+        <p class="mb-2"><strong>{{res?.key}} : </strong>{{res?.val}}</p>
+    </div>
+</div>
 
-<div class="row mt-5">
-    <div class="col-sm-12 text-center">
+<div class="mt-5">
+    <div class="text-center">
         <button mat-stroked-button class="me-2" type="button" mat-dialog-close>Close</button>
     </div>
 </div>
