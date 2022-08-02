@@ -1,15 +1,15 @@
 <vex-page-layout>
 
-  <vex-secondary-toolbar current="User Right Access"
+  <vex-secondary-toolbar current="Event List"
     class=" fixed border-0 bg-transparent drop-shadow-none top-1 z-[99] w-8/12">
-    <vex-breadcrumbs [crumbs]="['User Right Access']"></vex-breadcrumbs>
+    <vex-breadcrumbs [crumbs]="['Event List']"></vex-breadcrumbs>
   </vex-secondary-toolbar>
 
   <vex-page-layout-content [class.px-gutter]="layoutCtrl.value === 'fullwidth'" class="-mt-6">
     <div class="my-3 card p-3 border-0 shadow-none">
-      <form [formGroup]="filterForm" class="white">
-        <div class="row g-2">
-          <div class="col-sm-auto">
+      <form [formGroup]="filterForm">
+        <div class="flex flex-row justify-between">
+        <div class="grid grid-cols-4 gap-4 mr-2">
             <mat-form-field appearance="outline">
               <mat-label>Select Event Level</mat-label>
               <mat-select formControlName="eventLevel">
@@ -17,8 +17,6 @@
                   {{selectLevel.text}}</mat-option>
               </mat-select>
             </mat-form-field>
-          </div>
-          <div class="col-sm-3">
             <mat-form-field appearance="outline">
               <mat-label>Choose a Date Range </mat-label>
               <mat-date-range-input [rangePicker]="picker">
@@ -29,8 +27,6 @@
               <mat-date-range-picker #picker [disabled]="false">
               </mat-date-range-picker>
             </mat-form-field>
-          </div>
-          <div class="col-sm-auto">
             <mat-form-field appearance="outline" class="">
               <mat-label>Select Status</mat-label>
               <mat-select formControlName="status">
@@ -38,21 +34,18 @@
                   {{apprRej.text}}</mat-option>
               </mat-select>
             </mat-form-field>
-          </div>
-          <div class="col-sm">
             <mat-form-field appearance="outline" class="w-100">
               <mat-label>Search By Event Id</mat-label>
               <input matInput placeholder="Search By Event Id" formControlName="searchtext" autocomplete="off">
             </mat-form-field>
-          </div>
-
-          <div class="col-sm-auto align-self-end">
-            <button type="submit" (click)="filterData()" mat-stroked-button
-              class="btn-gray bg-transparent border rounded ms-1">
-              <mat-icon class="">search</mat-icon>Apply
-            </button>
-          </div>
         </div>
+        <div>
+          <button class="rounded-full bg-gray-200 text-black" (click)="filterData()" mat-button type="submit">
+            <mat-icon svgIcon="mat:search"></mat-icon>
+            <span>Search</span>
+          </button>
+        </div>
+      </div>
       </form>
     </div>
 
@@ -99,7 +92,12 @@
               <a (click)="$event.stopPropagation()"
                 class="w-8 h-8 leading-none flex items-center justify-center ml-1 hover:bg-hover text-teal bg-teal-light"
                 mat-icon-button>
-                <!-- <mat-icon class="icon-sm" svgIcon="mat:edit" (click)="createBidder(row)"></mat-icon> -->
+                <mat-icon class="icon-sm" svgIcon="mat:edit"></mat-icon>
+              </a>
+              <a (click)="$event.stopPropagation()"
+                class="w-8 h-8 leading-none flex items-center justify-center ml-1 hover:bg-hover text-red bg-red-light"
+                mat-icon-button>
+                  <mat-icon class="icon-sm" svgIcon="mat:delete_outline"></mat-icon>
               </a>
             </div>
           </td>
