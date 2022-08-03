@@ -1,5 +1,5 @@
 <div mat-dialog-title class="flex items-center justify-between mb-2 m-0">
-    <div>Create Event</div>
+    <div> Event {{this.editFlag ? 'Update' : 'Creation'}}</div>
     <button type="button" mat-icon-button mat-dialog-close tabindex="-1">
         <mat-icon svgIcon="mat:close"></mat-icon>
     </button>
@@ -7,81 +7,117 @@
 <mat-divider></mat-divider>
 <div class="my-3 card p-3 border-0 shadow-none">
     <div class="grid grid-cols-2 gap-4 mr-2 mb-4">
-        <div class="text-gray-500 py-2">Event ID : <span class="text-blue-600 font-bold py-2">EVT20221403XXXX</span>
-        </div>
-        <div class="flex flex-row items-center">
-            <div class="text-gray-500 py-2 w-32">Event Level : </div>
-            <mat-form-field appearance="outline" class="w-full">
-                <mat-label>Select Status</mat-label>
-                <mat-select>
-                    <mat-option>Satara (District)</mat-option>
-                </mat-select>
-            </mat-form-field>
+        <div class="text-gray-500 py-2" *ngIf="eventId">Event ID : <span
+                class="text-blue-600 font-bold py-2">{{eventId}}</span>
         </div>
     </div>
-
-    <div class="grid grid-cols-4 gap-4 mb-3">
-        <div class="text-gray-500 py-2 mr-2">Event Title :</div>
-        <div class="col-span-3">
-            <mat-form-field appearance="outline" class="w-full">
-                <mat-label>Event Title</mat-label>
-                <input matInput placeholder="Event Title">
-            </mat-form-field>
-        </div>
-    </div>
-    <div class="grid grid-cols-4 gap-4 mb-3">
-        <div class="text-gray-500 py-2 mr-2">Event Description :</div>
-        <div class="col-span-3">
-            <mat-form-field appearance="outline" class="w-full">
-                <mat-label>Event Description</mat-label>
-                <textarea matInput placeholder="Event Description" rows="4"></textarea>
-            </mat-form-field>
-        </div>
-    </div>
-    <div class="grid grid-cols-2 gap-4 mb-3">
-        <div class="flex">
-            <div class="text-gray-500 mr-2">Event Type :</div>
-            <mat-form-field appearance="outline" class="w-full">
-                <mat-label>Event Type</mat-label>
-                <mat-select>
-                    <mat-option>Event Type</mat-option>
-                </mat-select>
-            </mat-form-field>
-        </div>
-        <div class="flex">
-            <div class="text-gray-500  mr-2">Event Fee :</div>
-            <mat-form-field appearance="outline" class="w-full">
-                <mat-label>Event Fee</mat-label>
-                <input matInput placeholder="Event Fee">
-            </mat-form-field>
-        </div>
-    </div>
-    <div class="grid grid-cols-5 gap-4 mb-5">
-        <div class="text-gray-500 py-2 mr-2">Document :</div>
-        <div class="col-span-2">
-            <div class="flex items-center">
-                <button mat-button type="button" class="bg-gray-200 mr-2 text-xs py-2">
-                    <label><span>Upload Document</span>
-                        <input type="file" style="display: none" #fileInputPDC>
-                    </label>
-                </button>
-                <button
-                    class="w-8 h-8 leading-none rounded-full flex items-center justify-center ml-1 hover:bg-hover text-teal bg-teal-light">
-                    <mat-icon matTooltip="View">view_headline</mat-icon>
-                </button>
-                <button
-                    class="w-8 h-8 leading-none rounded-full flex items-center justify-center ml-1 hover:bg-hover text-red bg-red-light">
-                    <mat-icon matTooltip="Delete Uploaded Document">
-                        delete_forever
-                    </mat-icon>
-                </button>
+    <form [formGroup]="eventCreationForm"(ngSubmit)="onSubmit()" #myForm="ngForm" enctype="multipart/form-data">
+        <div class="grid grid-cols-4 gap-4 mb-3">
+            <div class="text-gray-500 py-2 mr-2">Event Level :</div>
+            <div class="col-span-3">
+                <mat-form-field [appearance]=configService.matFormField  class="w-full" >
+                    <mat-label>Select Event Level</mat-label>
+                    <mat-select formControlName="eventLevel" [disabled]="true">
+                        <mat-option *ngFor="let selectLevel of selectLevelArray" [value]="selectLevel.val">
+                            {{selectLevel.text}}</mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="f.eventLevel.errors">
+                        <span class="text-danger" *ngIf="f.eventLevel.errors?.required">
+                            Event Level is required.</span>
+                    </mat-error>
+                </mat-form-field>
             </div>
         </div>
-    </div>
-    <div class="text-right">
-        <mat-dialog-actions align="end">
-            <button type="button" mat-stroked-button class="bg-gray-300 mr-2" mat-dialog-close>Clear</button>
-            <button type="submit" mat-raised-button color="primary">Submit</button>
-        </mat-dialog-actions>
-    </div>
+        <div class="grid grid-cols-4 gap-4 mb-3">
+            <div class="text-gray-500 py-2 mr-2">Event Title :</div>
+            <div class="col-span-3">
+                <mat-form-field [appearance]=configService.matFormField  class="w-full" >
+                    <mat-label>Event Title</mat-label>
+                    <input matInput (keyup)="valiService.removeSpaceAtBegining($event)" formControlName="eventTitle"
+                        autocomplete="nope" value="" maxlength="100">
+                    <mat-error *ngIf="f.eventTitle.errors">
+                        <span class="text-danger" *ngIf="f.eventTitle.errors?.required">
+                            Event Title is required.</span>
+                        <span class="text-danger" *ngIf="f.eventTitle.errors?.pattern">
+                            Please enter Valid Event Title</span>
+                    </mat-error>
+                </mat-form-field>
+            </div>
+        </div>
+        <div class="grid grid-cols-4 gap-4 mb-3">
+            <div class="text-gray-500 py-2 mr-2">Event Description :</div>
+            <div class="col-span-3">
+                <mat-form-field [appearance]=configService.matFormField  class="w-full">
+                    <mat-label>Event Description</mat-label>
+                    <textarea matInput formControlName="description" (keyup)="valiService.removeSpaceAtBegining($event)"
+                        placeholder="Enter Event Description." maxlength="200" autocomplete="off"></textarea>
+                    <mat-error *ngIf="f.description.errors">
+                        <span class="text-danger" *ngIf="f.description.errors?.required">
+                            Event Description is required.</span>
+                        <span class="text-danger" *ngIf="f.description.errors?.pattern">
+                            Please enter Valid Event Description</span>
+                    </mat-error>
+                </mat-form-field>
+            </div>
+        </div>
+        <div class="grid grid-cols-2 gap-4 mb-3">
+            <div class="flex">
+                <div class="text-gray-500 mr-2">Event Type :</div>
+                <mat-form-field [appearance]=configService.matFormField  class="w-full">
+                    <mat-label>Select Event Type</mat-label>
+                    <mat-select formControlName="eventType">
+                        <mat-option *ngFor="let event_Type of eventTypeArray" [value]="event_Type.eventType">
+                            {{event_Type?.eventType}}</mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="f.eventType.errors">
+                        <span class="text-danger" *ngIf="f.eventType.errors?.required">
+                            Event Type is required.</span>
+                    </mat-error>
+                </mat-form-field>
+            </div>
+            <div class="flex">
+                <div class="text-gray-500  mr-2">Event Fee :</div>
+                <mat-form-field [appearance]=configService.matFormField  class="w-full" >
+                    <mat-label>Event Fee</mat-label>
+                    <input matInput formControlName="eventFee" (keypress)="valiService.acceptedOnlyNumbers($event)"
+                        class="text-capitalize" autocomplete="nope" value="">
+                    <mat-error *ngIf="f.eventFee.errors">
+                        <span class="text-danger" *ngIf="f.eventFee.errors?.required">
+                            Event Fee is required.</span>
+                        <span class="text-danger" *ngIf="f.eventFee.errors?.pattern">
+                            Please enter Valid Event Fee</span>
+                    </mat-error>
+                </mat-form-field>
+            </div>
+        </div>
+        <div class="grid grid-cols-5 gap-4 mb-5">
+            <div class="text-gray-500 py-2 mr-2">Document :</div>
+            <div class="col-span-2">
+                <div class="flex items-center">
+                    <button mat-button type="button" class="bg-gray-200 mr-2 text-xs py-2">
+                        <label><span>Upload Document</span>
+                            <input type="file" style="display: none" #documentFile (change)="documentUpload($event)">
+                        </label>
+                    </button>
+                    <a *ngIf="DocumentUrlUploaed" href="{{DocumentUrlUploaed}}" target="_blank"
+                        class="w-8 h-8 leading-none rounded-full flex items-center justify-center ml-1 hover:bg-hover text-teal bg-teal-light">
+                        <mat-icon matTooltip="View">view_headline</mat-icon>
+                    </a>
+                    <button *ngIf="DocumentUrlUploaed" (click)="deleteDocument()"
+                        class="w-8 h-8 leading-none rounded-full flex items-center justify-center ml-1 hover:bg-hover text-red bg-red-light">
+                        <mat-icon matTooltip="Delete Uploaded Document">
+                            delete_forever
+                        </mat-icon>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="text-right">
+            <mat-dialog-actions align="end">
+                <button type="button" mat-stroked-button class="bg-gray-300 mr-2"
+                    (click)="clearEventForm()">Clear</button>
+                <button type="submit" mat-raised-button color="primary">Submit</button>
+            </mat-dialog-actions>
+        </div>
+    </form>
 </div>
