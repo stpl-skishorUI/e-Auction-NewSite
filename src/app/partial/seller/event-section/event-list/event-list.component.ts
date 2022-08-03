@@ -141,17 +141,15 @@ export class EventListComponent implements OnInit {
 
 
   eventDetails(data) {
-    // this.datePipe.transform(data.bidSubmissionEndDate, 'dd/MM/yyyy & h:m:a')
     let arrayObj = [
       { 'key': 'Event ID', 'val': data.eventCode, row: 1, col: 1, type: 'text' },
       { 'key': 'Event Title', 'val': data.title, row: 1, col: 2, type: 'text' },
       { 'key': 'Event Level', 'val': data.eventLevel, row: 1, col: 2, type: 'text' },
       { 'key': 'Total Items', 'val': data.totalItem, row: 1, col: 1, type: 'text' },
-      { 'key': 'Start Date Time', 'val': this.datePipe.transform(data.startDateTime, 'dd/MM/yyyy'), col: 2, type: 'date' },
-      { 'key': 'End Date Time', 'val': this.datePipe.transform(data.endDateTime, 'dd/MM/yyyy'), col: 2, type: 'date' },
+      { 'key': 'Start Date Time', 'val': this.datePipe.transform(data.startDateTime, 'dd/MM/yyyy') == '01/01/0001' ? '-' : this.datePipe.transform(data.startDateTime, 'dd/MM/yyyy'), col: 2, type: 'date' },
+      { 'key': 'End Date Time', 'val': this.datePipe.transform(data.endDateTime, 'dd/MM/yyyy') == '01/01/0001' ? '-' : this.datePipe.transform(data.endDateTime, 'dd/MM/yyyy'), col: 2, type: 'date' },
       { 'key': 'Created Date', 'val': this.datePipe.transform(data.createdDate, 'dd/MM/yyyy'), col: 2, type: 'date' },
       { 'key': 'Approve Status', 'val': data.status, row: 1, col: 1, type: 'badge' },
-
     ]
     this.dialogService.detailsComponentDialog(arrayObj); // call details dialog modal
   }
