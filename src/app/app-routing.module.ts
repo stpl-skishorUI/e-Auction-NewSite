@@ -45,7 +45,7 @@ const routes: Routes = [
 
       //----------------------------------------------------------------for approver routing start heare-----------------------------------------//
       { path: 'approver-dashboard', loadChildren: () => import('./partial/approver/approver-dashboard/approver-dashboard.module').then(m => m.ApproverDashboardModule), data: { breadcrumb: [{ title: 'Dashboard', active: true }] }, canActivate: [ExpenseGuard]},
-      { path: 'approve-event', loadChildren: () => import('./partial/approver/event-approval/approve-event/approve-event.module').then(m => m.ApproveEventModule), data: { breadcrumb: [{ title: 'Dashboard', active: true }] }, canActivate: [ExpenseGuard]},
+      { path: 'approve-event/:id', loadChildren: () => import('./partial/approver/event-approval/approve-event/approve-event.module').then(m => m.ApproveEventModule), data: { breadcrumb: [{ title: 'Dashboard', active: true }] }, canActivate: [ExpenseGuard]},
       { path: 'publish-event', loadChildren: () => import('./partial/approver/event-approval/publish-event/publish-event.module').then(m => m.PublishEventModule), data: { breadcrumb: [{ title: 'Dashboard', active: true }] }, canActivate: [ExpenseGuard]},
       { path: 'documents-verification', loadChildren: () => import('./partial/approver/event-approval/documents-verification/documents-verification.module').then(m => m.DocumentsVerificationModule), data: { breadcrumb: [{ title: 'Dashboard', active: true }]}, canActivate: [ExpenseGuard]},
       { path: 'live-auction', loadChildren: () => import('./partial/approver/event-approval/live-auction/live-auction.module').then(m => m.LiveAuctionModule), data: { breadcrumb: [{ title: 'Dashboard', active: true }] }, canActivate: [ExpenseGuard]  },
@@ -57,11 +57,11 @@ const routes: Routes = [
       { path: 'bid-history', loadChildren: () => import('./partial/approver/auction-reports/bid-history/bid-history.module').then(m => m.BidHistoryModule) },
       { path: 'bidder-agreement-report', loadChildren: () => import('./partial/approver/auction-reports/bidder-agreement-report/bidder-agreement-report.module').then(m => m.BidderAgreementReportModule), data: { breadcrumb: [{ title: 'Dashboard', active: true }] }, canActivate: [ExpenseGuard]},
 
-      // {
-      //   path: 'online-item-details/:id', loadChildren: () => import('./partial/approver/event-approval/publish-event/').then(m => m.OnlineItemDetailsModule),
-      //   data: { breadcrumb: [{ title: 'Dashboard', active: true }] },
-      //   canActivate: [ExpenseGuard]
-      // },
+      {
+        path: 'online-item-details/:id', loadChildren: () => import('./partial/approver/event-approval/publish-event/online-item-details/online-item-details.module').then(m => m.OnlineItemDetailsModule),
+        data: { breadcrumb: [{ title: 'Dashboard', active: true }] },
+        canActivate: [ExpenseGuard]
+      },
       //----------------------------------------------------------------for approver routing end heare-----------------------------------------//
 
       //----------------------------------------------------------------for bidder routing start heare-----------------------------------------//
