@@ -1,0 +1,120 @@
+<div class="overflow-hidden">
+    <div class="card card-header p-2 mb-1 bg-main text-white">
+        <div class="row align-items-center p-2">
+            <div class="col-sm">
+                <h4 class="fw-bold mb-0">Lots / Item Upload</h4>
+            </div>
+            <div class="col-sm d-flex justify-content-end ">
+                <!-- <button mat-stroked-button type="button" (click)="applyItem(false)"
+                    class="border-0 bg-transparent mb-2 px-0 bg-transparent">
+                    <mat-icon>close</mat-icon>
+                </button> -->
+                <button class="dlg-close mnw-auto lh-sm"  (click)="applyItem(false)" mat-button mat-dialog-close><i class="fas fa-times"></i></button>
+            </div>
+        </div>
+    </div>
+    <div class="card-body px-2 mb-0 pb-1">
+        <div class="filterOuter card card-body pt-0 mb-2">
+            <form [formGroup]="filterForm" (ngSubmit)="filterData();">
+                <div class="row g-2 white">
+                    <div class="col-sm">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Plot Name</mat-label>
+                            <input matInput formControlName="plotName" autocomplete="off">
+                        </mat-form-field>
+                    </div>
+                    <div class="col-sm">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Plot Type</mat-label>
+                            <mat-select formControlName="plotType">
+                                <mat-option *ngFor="let ploat of ploatArray" [value]="ploat.itemTypeId">
+                                    {{ploat?.itemType}}</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-sm">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Mineral</mat-label>
+                            <mat-select formControlName="mineral">
+                                <mat-option *ngFor="let mineraln of mineralArray" [value]="mineraln.materialId">
+                                    {{mineraln?.material}}</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-sm-auto align-self-end">
+                        <button type="submit" mat-stroked-button class="btn-gray">
+                            <mat-icon class="">search</mat-icon>Search
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="col-sm-auto float-end">
+            <button mat-raised-button (click)="applyItem(true)" class="btn-primary mb-2 me-0">Apply Item</button>
+        </div>
+        <table mat-table [dataSource]="dataSource" matSort class="dashboard-table">
+            <ng-container matColumnDef="srno">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Sr.No </th>
+                <td mat-cell *matCellDef="let element;let i=index"> {{((pageNumber + 1) * 10 + i + 1)-20}} </td>
+            </ng-container>
+            <ng-container matColumnDef="itemId">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Item No </th>
+                <td mat-cell *matCellDef="let element">
+                    {{element.itemId}}
+                </td>
+            </ng-container>
+            <ng-container matColumnDef="itemName">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Item Name </th>
+                <td mat-cell *matCellDef="let element"> {{element.itemName}} </td>
+            </ng-container>
+            <ng-container matColumnDef="itemTypeId">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Item Type </th>
+                <td mat-cell *matCellDef="let element"> {{element.itemTypeId}} </td>
+            </ng-container>
+            <ng-container matColumnDef="taluka">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Taluka / CTSO </th>
+                <td mat-cell *matCellDef="let element"> {{element.taluka}} </td>
+            </ng-container>
+            <ng-container matColumnDef="village">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Village</th>
+                <td mat-cell *matCellDef="let element"> {{element.village}} </td>
+            </ng-container>
+            <ng-container matColumnDef="mineral">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Mineral</th>
+                <td mat-cell *matCellDef="let element"> {{element.mineral}} </td>
+            </ng-container>
+            <ng-container matColumnDef="quantity">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Allowed Quantity <br><span class="small">(In
+                        Brass)</span></th>
+                <td mat-cell *matCellDef="let element"> {{element.quantity}} </td>
+            </ng-container>
+            <ng-container matColumnDef="SelectItem">
+                <th mat-header-cell *matHeaderCellDef>
+                    <div class="d-flex align-items-center  justify-content-center">
+                        Select Item </div>
+                </th>
+                <td mat-cell *matCellDef="let element">
+                    <div class="d-flex align-items-center  justify-content-center">
+                        <mat-checkbox class="" (change)="checkBoxCheck($event.checked,element.itemId, element)"
+                            [checked]="element.checked == true"
+                            [disabled]="element.checked == false && checkBoxChecked">
+                        </mat-checkbox>
+                    </div>
+                </td>
+            </ng-container>
+            <tr class="mat-row p-2 w-100" *matNoDataRow col>
+                <td class="alert alert-danger text-center m-2 mt-2" colspan="12">No data found </td>
+            </tr>
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;" ></tr>
+            <!-- [class.disabled]="row?.disabled == true" -->
+        </table>
+        <ng-container *ngIf="totalRows>10">
+            <mat-paginator [pageSizeOptions]="[10]" [length]="totalRows" showFirstLastButtons
+                (page)="pageChanged($event)">
+            </mat-paginator>
+        </ng-container>
+    </div>
+
+
+</div>

@@ -8,10 +8,12 @@ import { BreadcrumbsModule } from 'src/@vex/components/breadcrumbs/breadcrumbs.m
 import { PageLayoutModule } from 'src/@vex/components/page-layout/page-layout.module';
 import { SecondaryToolbarModule } from 'src/@vex/components/secondary-toolbar/secondary-toolbar.module';
 import { AngularMaterialModule } from 'src/app/core/angular-material/angular-material.module';
+import { SelectItemComponent } from './select-item/select-item.component';
 
 @NgModule({
   declarations: [
-    LotsUploadComponent
+    LotsUploadComponent,
+    SelectItemComponent
   ],
   imports: [
     CommonModule,
