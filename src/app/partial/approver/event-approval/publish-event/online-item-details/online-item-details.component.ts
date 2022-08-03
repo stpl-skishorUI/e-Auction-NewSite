@@ -38,15 +38,15 @@ export class OnlineItemDetailsComponent implements OnInit {
     { label: 'Sr.No', property: 'srNo', type: 'button', visible: true },
     { label: 'Plot Number and Plot Name', property: 'itemName', type: 'text', visible: true, cssClasses: ['font-medium'] },
     { label: 'Mineral', property: 'material', type: 'text', visible: true, cssClasses: ['text-secondary', 'font-medium'] },
-    { label: 'Taluka / CTSO', property: 'taluka', type: 'text', visible: true , cssClasses: ['text-secondary', 'font-medium'] },
-    { label: 'Village',  property: 'village', type: 'text', visible: true , cssClasses: ['text-secondary', 'font-medium'] },
-    { label: 'Latitude / Longitude', property: 'latitude/longitude', type: 'button', visible: true, cssClasses: ['text-secondary', 'font-medium'] },
-    { label: 'Area', property: 'area', type: 'text', visible: true , cssClasses: ['text-secondary', 'font-medium'] },
+    { label: 'Taluka / CTSO', property: 'taluka', type: 'text', visible: false , cssClasses: ['text-secondary', 'font-medium'] },
+    { label: 'Village',  property: 'village', type: 'text', visible: false , cssClasses: ['text-secondary', 'font-medium'] },
+    { label: 'Latitude / Longitude', property: 'latitude/longitude', type: 'button', visible: false, cssClasses: ['text-secondary', 'font-medium'] },
+    { label: 'Area', property: 'area', type: 'text', visible: false , cssClasses: ['text-secondary', 'font-medium'] },
     { label: 'Allowed Quantity', property: 'quantity', type: 'text', visible: true , cssClasses: ['text-secondary', 'font-medium'] },
     { label: 'Tender Fee', property: 'tender_ApplicationFee', type: 'text', visible: true , cssClasses: ['text-secondary', 'font-medium'] },
     { label: 'Security Deposit', property: 'emD_SecurityDeposit', type: 'text', visible: true , cssClasses: ['text-secondary', 'font-medium'] },
     { label: 'Offset Value', property: 'offsetValue', type: 'text', visible: true , cssClasses: ['text-secondary', 'font-medium'] },
-    { label: 'View Plot', property: 'actions', type: 'button', visible: true , cssClasses: ['text-secondary', 'font-medium'] },
+    { label: 'Action', property: 'actions', type: 'button', visible: true , cssClasses: ['text-secondary', 'font-medium'] },
   ];
 
   get visibleColumns() {
