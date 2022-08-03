@@ -189,7 +189,7 @@ export class PublishEventComponent implements OnInit {
       { 'key': 'Status', 'val': data.status, row: 1, tag: '<p> </p>', class: "", col: 1 },  
       )
     }
-    this.dialogService.detailsComponentDialog(arrayObj); // call details dialog modal
+    this.dialogService.detailsComponentDialog(arrayObj, 'Event Details', this.apiService.modalSize[2]); // call details dialog modal
   }
 
 

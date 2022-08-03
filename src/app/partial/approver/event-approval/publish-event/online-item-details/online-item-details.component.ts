@@ -189,7 +189,7 @@ export class OnlineItemDetailsComponent implements OnInit {
       { 'key': 'Tender Fee', 'val': data.tender_ApplicationFee, row: 1, tag: '<p> </p>', class: "", col: 1 },
       { 'key': 'Security Deposit', 'val': data.emD_SecurityDeposit, row: 1, tag: '<p> </p>', class: "", col: 1 },  
     ]
-    this.dialogService.detailsComponentDialog(arrayObj); // call details dialog modal
+    this.dialogService.detailsComponentDialog(arrayObj, 'Event Details', this.apiService.modalSize[2]); // call details dialog modal
   }
 
 
