@@ -1,0 +1,214 @@
+<vex-page-layout>
+
+    <vex-secondary-toolbar current="Online Item Details"
+        class=" fixed border-0 bg-transparent drop-shadow-none top-1 z-[99] w-8/12">
+        <vex-breadcrumbs [crumbs]="['Online Item Details']"></vex-breadcrumbs>
+    </vex-secondary-toolbar>
+
+    <vex-page-layout-content>
+        <div class="p-3">
+            <div class="card p-2 border-0 shadow-none">
+
+                <div class="card card-body">
+                    <div class="row">
+                        <div class="col-sm">
+                            <h4 class="text-main px-2">Online Item Details</h4>
+                        </div>
+                        <div class="text-end" align="end">
+                            <a class="d-inline-flex text-muted px-0 text-decoration-none" (click)="location.back()">
+                                <mat-icon>keyboard_double_arrow_left</mat-icon>Back
+                            </a>
+                        </div>
+                    </div>
+
+                    <mat-accordion>
+                        <mat-expansion-panel>
+                            <mat-expansion-panel-header>
+                                <div class="">
+                                    <div class="flex flex-row items-center">
+                                        <div class="grid grid-cols-4 ">
+                                            <div>
+                                                <p class="text-sm">Event Level:
+                                                    <span class="text-sky-500">{{details?.eventLevel |
+                                                        titlecase}}</span>
+                                                </p>
+                                            </div>
+                                            <div>
+                                                <p class="text-sm">District/ SDO / Teshil:
+                                                    <span class="text-sky-500">{{details?.district}}</span>
+                                                </p>
+                                            </div>
+                                            <div>
+                                                <p class="text-sm">Event Id:
+                                                    <span class="text-sky-500"> {{details?.eventCode}}</span>
+                                                </p>
+                                            </div>
+                                            <div>
+                                                <p class="text-sm">Title:
+                                                    <span class="text-sky-500 text-sm">{{details?.title}}</span>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="grid grid-cols-2">
+                                        <div class="">
+                                            <p class="text-sm">Description:
+                                                <span class="text-sky-500">
+                                                    {{details?.description | titlecase}}
+                                                </span>
+                                            </p>
+                                        </div>
+                                        <div class="">
+                                            <p class="text-sm">Plot Count:
+                                                <span class="text-sky-500">{{details?.totalItem}}</span>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </mat-expansion-panel-header>
+
+                            <div class="card overflow-auto">
+                                <div class="bg-app-bar px-6 h-16 border-b sticky left-0 flex items-center">
+                                    <span class="flex-1"></span>
+                                    <button [matMenuTriggerFor]="columnFilterMenu" class="ml-4 flex-none"
+                                        mat-icon-button matTooltip="Filter Columns" type="button">
+                                        <mat-icon svgIcon="mat:filter_list"></mat-icon>
+                                    </button>
+                                </div>
+
+
+                                <table @stagger [dataSource]="dataSource" class="w-full" mat-table matSort>
+                                    <ng-container matColumnDef="srNo">
+                                        <th mat-header-cell *matHeaderCellDef mat-sort-header> Sr.No </th>
+                                        <td mat-cell *matCellDef="let element;let i=index"> {{((pageNumber + 1) * 10 + i
+                                            +
+                                            1)-20}}</td>
+                                    </ng-container>
+
+
+                                    <ng-container
+                                        *ngFor="let column of columns; trackBy: commonService.trackByProperty">
+                                        <ng-container *ngIf="column.type === 'text'" [matColumnDef]="column.property">
+                                            <th *matHeaderCellDef class="uppercase" mat-header-cell mat-sort-header> {{
+                                                column.label }}</th>
+                                            <td *matCellDef="let row" [ngClass]="column.cssClasses" mat-cell>
+                                                {{ row[column.property] }}</td>
+                                        </ng-container>
+                                    </ng-container>
+
+                                    <ng-container matColumnDef="latitude/longitude">
+                                        <th mat-header-cell *matHeaderCellDef mat-sort-header> Latitude / Longitude
+                                        </th>
+                                        <td mat-cell *matCellDef="let element;let i=index"> {{element.latitude + '/' +
+                                            element.longitude}}</td>
+                                    </ng-container>
+
+                                    <ng-container matColumnDef="actions">
+                                        <th *matHeaderCellDef mat-header-cell mat-sort-header>View Plot</th>
+                                        <td *matCellDef="let row" class="w-10 text-secondary" mat-cell>
+                                            <div class="flex">
+                                                <a (click)="eventDetails(row)"
+                                                    class="w-8 h-8 leading-none flex items-center justify-center ml-1 hover:bg-hover text-gray-700 bg-gray-200"
+                                                    mat-icon-button>
+                                                    <mat-icon class="icon-sm" svgIcon="mat:remove_red_eye"></mat-icon>
+                                                </a>
+                                            </div>
+                                        </td>
+                                    </ng-container>
+                                    <tr *matHeaderRowDef="visibleColumns" mat-header-row></tr>
+                                    <tr *matRowDef="let row; columns: visibleColumns;" @fadeInUp
+                                        class="hover:bg-hover trans-ease-out cursor-pointer" mat-row></tr>
+                                </table>
+                            </div>
+                        </mat-expansion-panel>
+                    </mat-accordion>
+
+                    <form [formGroup]="onlineItemForm" (ngSubmit)="onSubmit()">
+                        <div class="flex gap-x-3 pt-3 m-2">
+            
+                                <h4 class="text-main fw-bold px-2 mb-0">Document / Payment Date & Time</h4>
+                                <div>
+                                    <mat-form-field appearance="outline" class="w-100">
+                                        <input matInput [matDatepicker]="eventFromDate"  [min]="minDate" formControlName="startDateTime"
+                                            placeholder="Choose a date & time" [disabled]="true" #ref  (dateChange)="onDateChange()">
+                                        <mat-datepicker-toggle matSuffix [for]="$any(eventFromDate)">
+                                        </mat-datepicker-toggle>
+                                        <mat-datepicker #eventFromDate [disabled]="false"></mat-datepicker>
+                                        <mat-error *ngIf="onlineItemFormControls.startDateTime.errors">
+                                            <span class="text-danger"
+                                                *ngIf="onlineItemFormControls.startDateTime.errors?.required">
+                                                Event start date & time is required</span>
+                                        </mat-error>
+                                    </mat-form-field>
+                                </div>
+                                <div>
+                                    <mat-form-field appearance="outline" class="w-100">
+                                        <input matInput [matDatepicker]="eventToDate" [min]="this.onlineItemForm.value.startDateTime" formControlName="endDateTime"
+                                            placeholder="Choose a date & time" [disabled]="true" #ref  (dateChange)="onDateChange()">
+                                        <mat-datepicker-toggle matSuffix [for]="eventToDate"></mat-datepicker-toggle>
+                                        <mat-datepicker #eventToDate [disabled]="false"></mat-datepicker>
+                                        <mat-error *ngIf="onlineItemFormControls.endDateTime.errors">
+                                            <span class="text-danger"
+                                                *ngIf="onlineItemFormControls.endDateTime.errors?.required">
+                                                Event end date & time is required</span>
+                                        </mat-error>
+                                    </mat-form-field>
+                                </div>
+                            
+                           
+                                <h4 class="text-main fw-bold px-2 mb-0">Live Bid Date & Time</h4>
+                                <div>
+                                    <mat-form-field appearance="outline" class="w-100">
+                                        <input matInput [matDatepicker]="bidFromDate"  [min]="this.onlineItemForm.value.endDateTime"
+                                            formControlName="bidSubmissionStartDate" placeholder="Choose a date & time"
+                                            [disabled]="true">
+                                        <mat-datepicker-toggle matSuffix [for]="bidFromDate"></mat-datepicker-toggle>
+                                        <mat-datepicker #bidFromDate [disabled]="false"></mat-datepicker>
+                                        <mat-error *ngIf="onlineItemFormControls.bidSubmissionStartDate.errors">
+                                            <span class="text-danger"
+                                                *ngIf="onlineItemFormControls.bidSubmissionStartDate.errors?.required">
+                                                Bidding start date & time is required</span>
+                                        </mat-error>
+                                    </mat-form-field>
+                                </div>
+                                <div>
+                                    <mat-form-field appearance="outline" class="w-100">
+                                        <input matInput [matDatepicker]="bidToDate" formControlName="bidSubmissionEndDate"
+                                        [min]="this.onlineItemForm.value.bidSubmissionStartDate"
+                                            placeholder="Choose a date & time" [disabled]="true">
+                                        <mat-datepicker-toggle matSuffix [for]="bidToDate"></mat-datepicker-toggle>
+                                        <mat-datepicker #bidToDate [disabled]="false"></mat-datepicker>
+                                        <mat-error *ngIf="onlineItemFormControls.bidSubmissionStartDate.errors">
+                                            <span class="text-danger"
+                                                *ngIf="onlineItemFormControls.bidSubmissionStartDate.errors?.required">
+                                                Bidding end date & time is required</span>
+                                        </mat-error>
+                                    </mat-form-field>
+                                </div>
+                           
+
+                        </div>
+                        <div class="text-right" >
+                        <div align="end">
+                            <button type="button" mat-stroked-button (click)="clearform()" class="bg-gray-300">Clear</button>
+                            <button type="submit" mat-raised-button color="primary" >Submit</button>
+                        </div>
+                    </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+
+    </vex-page-layout-content>
+</vex-page-layout>
+
+
+<mat-menu #columnFilterMenu="matMenu" xPosition="before" yPosition="below">
+    <button (click)="toggleColumnVisibility(column, $event)" *ngFor="let column of columns"
+        class="checkbox-item mat-menu-item">
+        <mat-checkbox (click)="$event.stopPropagation()" [(ngModel)]="column.visible" color="primary">
+            {{ column.label }}
+        </mat-checkbox>
+    </button>
+</mat-menu>
