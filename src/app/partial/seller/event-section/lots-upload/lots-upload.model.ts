@@ -39,5 +39,31 @@ export class documentsUpload {
     documentType: string;
     id: number | null
     m_DocumentType: null
-    checked:boolean;
+    checked: boolean;
+}
+export class selectItem {
+    address: string
+    area: string
+    district: string
+    districtId: number | null
+    division: string
+    divisionId: number | null
+    itemId: number | null
+    itemName: string
+    itemTypeId: number | null
+    latitude: string
+    longitude: string
+    mineral: string
+    mineralId: number | null
+    projectId: number | null
+    quantity: number | null
+    remark: string
+    river: string
+    state: string
+    stateId: string
+    taluka: string
+    talukaId: number | null
+    unit: string
+    unitId: number | null
+    village: string
 }

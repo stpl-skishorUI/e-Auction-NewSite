@@ -5,28 +5,60 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Subscription } from 'rxjs';
+import { fadeInUp400ms } from 'src/@vex/animations/fade-in-up.animation';
+import { stagger40ms } from 'src/@vex/animations/stagger.animation';
+import { TableColumn } from 'src/@vex/interfaces/table-column.interface';
 import { ApiService } from 'src/app/core/services/api.service';
 import { CommonService } from 'src/app/core/services/common.service';
 import { ErrorsService } from 'src/app/core/services/errors.service';
 import { LocalstorageService } from 'src/app/core/services/localstorage.service';
 import { SharedataService } from 'src/app/core/services/sharedata.service';
 import { StaticDropdownService } from 'src/app/core/services/static-dropdown.service';
+import { selectItem } from '../lots-upload.model';
 
 
 @Component({
   selector: 'app-select-item',
   templateUrl: './select-item.component.html',
-  styleUrls: ['./select-item.component.scss']
+  styleUrls: ['./select-item.component.scss'],
+  animations: [
+    fadeInUp400ms,
+    stagger40ms
+  ],
 })
 export class SelectItemComponent implements OnInit {
+  //lots table sort 
+  columns: TableColumn<selectItem>[] = [
+    { label: 'Sr.No', property: 'srNo', type: 'button', visible: true, cssClasses: ['text-secondary', 'font-medium'] },
+    { label: 'itemId', property: 'itemId', type: 'text', visible: true, cssClasses: ['text-secondary', 'font-medium'] },
+    { label: 'Item Name', property: 'itemName', type: 'text', visible: true, cssClasses: ['font-medium'] },
+    { label: 'Item Type', property: 'itemTypeId', type: 'text', visible: false, cssClasses: ['text-secondary', 'font-medium'] },
+    { label: 'Taluka', property: 'taluka', type: 'text', visible: false, cssClasses: ['text-secondary', 'font-medium'] },
+    { label: 'Village', property: 'village', type: 'text', visible: true, cssClasses: ['text-secondary', 'font-medium'] },
+    { label: 'mineral', property: 'mineral', type: 'text', visible: true, cssClasses: ['text-secondary', 'font-medium'] },
+    { label: 'quantity', property: 'quantity', type: 'text', visible: true, cssClasses: ['text-secondary', 'font-medium'] },
+    { label: 'Actions', property: 'actions', type: 'button', visible: true, cssClasses: ['text-secondary', 'font-medium'] },
+  ];
 
-  displayedColumns: string[] = ['srno', 'itemId', 'itemName', 'itemTypeId', 'taluka', 'village', 'mineral', 'quantity',
-    'SelectItem'];
+  get visibleColumns() {
+    return this.columns.filter(column => column.visible).map(column => column.property);
+  }
+
+  trackByProperty<T>(_index: number, column: TableColumn<T>) {
+    return column.property;
+  }
+
+  toggleColumnVisibility(column, event) {
+    event.stopPropagation();
+    event.stopImmediatePropagation();
+    column.visible = !column.visible;
+  }
+
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   filterForm!: FormGroup;
   pageNumber: number = 1;
-  dataSource: any
+  dataSource: MatTableDataSource<selectItem> | any;
   totalRows: any;
   localstorageData = this.localstorageService.getLoggedInLocalstorageData().responseData;
   mineralArray: any;

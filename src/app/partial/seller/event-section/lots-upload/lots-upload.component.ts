@@ -31,8 +31,8 @@ import { stagger40ms } from 'src/@vex/animations/stagger.animation';
 })
 
 export class LotsUploadComponent implements OnInit {
-  dataSource: MatTableDataSource<any> | [];
-  dataSourceDocument: MatTableDataSource<any> | [];
+  dataSource: MatTableDataSource<LotsUpload> | [];
+  dataSourceDocument: MatTableDataSource<documentsUpload> | [];
   lotsItemForm!: FormGroup | any;
   @ViewChild('myForm', { static: false }) myForm!: NgForm;
   recDataFromSelectItemModal: any;
