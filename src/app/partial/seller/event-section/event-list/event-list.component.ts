@@ -151,7 +151,7 @@ export class EventListComponent implements OnInit {
       { 'key': 'Created Date', 'val': this.datePipe.transform(data.createdDate, 'dd/MM/yyyy'), col: 2, type: 'date' },
       { 'key': 'Approve Status', 'val': data.status, row: 1, col: 1, type: 'badge' },
     ]
-    this.dialogService.detailsComponentDialog(arrayObj); // call details dialog modal
+    this.dialogService.detailsComponentDialog(arrayObj, 'Event Details', this.apiService.modalSize[2]); // call details dialog modal
   }
 
 
