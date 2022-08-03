@@ -11,6 +11,7 @@ import { stagger40ms } from 'src/@vex/animations/stagger.animation';
 import { TableColumn } from 'src/@vex/interfaces/table-column.interface';
 import { ApiService } from 'src/app/core/services/api.service';
 import { CommonService } from 'src/app/core/services/common.service';
+import { DialogService } from 'src/app/core/services/dialog.service';
 import { ErrorsService } from 'src/app/core/services/errors.service';
 import { LocalstorageService } from 'src/app/core/services/localstorage.service';
 import { StaticDropdownService } from 'src/app/core/services/static-dropdown.service';
@@ -43,11 +44,12 @@ export class PublishEventComponent implements OnInit {
     { label: 'Sr.No', property: 'srNo', type: 'button', visible: true, cssClasses: ['text-secondary', 'font-medium'] },
     { label: 'Event ID', property: 'eventCode', type: 'button', visible: true, cssClasses: ['font-medium'] },
     { label: 'Event Title', property: 'title', type: 'text', visible: true, cssClasses: ['text-secondary', 'font-medium'] },
-    { label: 'Event Fee', property: 'eventFee', type: 'button', visible: true, cssClasses: ['text-secondary', 'font-medium'] },
-    { label: 'Event Level', property: 'eventLevel', type: 'text', visible: true, cssClasses: ['text-secondary', 'font-medium'] },
-    { label: 'Total Items', property: 'totalItems', type: 'text', visible: true, cssClasses: ['text-secondary', 'font-medium'] },
-    { label: 'Event Created By', property: 'createdByName', type: 'text', visible: true, cssClasses: ['text-secondary', 'font-medium'] },
-    { label: 'Event Creation Date', property: 'createdDate', type: 'date', visible: true, cssClasses: ['text-secondary', 'font-medium'] },
+    { label: 'Event Fee', property: 'eventFee', type: 'button', visible: false, cssClasses: ['text-secondary', 'font-medium'] },
+    { label: 'Event Level', property: 'eventLevel', type: 'text', visible: false, cssClasses: ['text-secondary', 'font-medium'] },
+    { label: 'Total Items', property: 'totalItems', type: 'text', visible: false, cssClasses: ['text-secondary', 'font-medium'] },
+    { label: 'Event Created By', property: 'createdByName', type: 'text', visible: false, cssClasses: ['text-secondary', 'font-medium'] },
+    { label: 'Event Creation Date', property: 'createdDate', type: 'date', visible: false, cssClasses: ['text-secondary', 'font-medium'] },
+    { label: 'View Plot', property: 'actions', type: 'button', visible: true , cssClasses: ['text-secondary', 'font-medium'] },
   ];
 
   get visibleColumns() {
@@ -65,6 +67,7 @@ export class PublishEventComponent implements OnInit {
     public StaticDropdownService: StaticDropdownService,
     private router: Router,
     private route: ActivatedRoute,
+    private dialogService:DialogService
   ) { }
 
   ngOnInit(): void {
@@ -86,10 +89,10 @@ export class PublishEventComponent implements OnInit {
     this.isPublishFlag = event['index'];
     if (this.isPublishFlag == 1) {
       this.columns.push(
-        { label: 'Bid Submission Start Date', property: 'bidSubmissionStartDate', type: 'date', visible: true, cssClasses: ['text-secondary', 'font-medium'] },
-        { label: 'Bid Submission End Date', property: 'bidSubmissionEndDate', type: 'date', visible: true, cssClasses: ['text-secondary', 'font-medium'] },
-        { label: 'Status', property: 'status', type: 'badge', visible: true, cssClasses: ['text-secondary', 'font-medium'] }
-      )
+        { label: 'Bid Submission Start Date', property: 'bidSubmissionStartDate', type: 'date', visible: false, cssClasses: ['text-secondary', 'font-medium'] },
+        { label: 'Bid Submission End Date', property: 'bidSubmissionEndDate', type: 'date', visible: false, cssClasses: ['text-secondary', 'font-medium'] },
+        { label: 'Status', property: 'status', type: 'badge', visible: false, cssClasses: ['text-secondary', 'font-medium'] },
+      )   
     } else {
       const filteredColumns = this.columns.filter((ele) => (ele['property'] != 'bidSubmissionStartDate' && ele['property'] != 'bidSubmissionEndDate' && ele['property'] != 'status'));
       this.columns = filteredColumns;
@@ -168,6 +171,34 @@ export class PublishEventComponent implements OnInit {
     eq == false ? (this.filterForm.value['pageNumber'] = this.pageNumber, localStorage.setItem('filter', JSON.stringify(this.filterForm.value))) : '';
     this.router.navigate([redLink+id], {relativeTo:this.route});
     
+  }
+
+  eventDetails(data){
+    let arrayObj = [
+      { 'key': 'Event Fee', 'val': data.eventFee, row: 1, tag: '<p> </p>', class: "", col: 1 },
+      { 'key': 'Event Level', 'val': data.eventLevel, row: 1, tag: '<p> </p>', class: "", col: 1 },
+      { 'key': 'Total Items', 'val': data.totalItems, row: 1, tag: '<p> </p>', class: "", col: 1 },
+      { 'key': 'Event Created By', 'val': data.createdByName, row: 1, tag: '<p> </p>', class: "", col: 1 },
+      { 'key': 'Event Creation Date', 'val': data.createdDate, row: 1, tag: '<p> </p>', class: "", col: 1 },  
+    ]
+
+    if(this.isPublishFlag == 1) {
+      arrayObj.push(
+      { 'key': 'Bid Submission Start Date', 'val': data.bidSubmissionStartDate, row: 1, tag: '<p> </p>', class: "", col: 1 },
+      { 'key': 'Bid Submission End Date', 'val': data.bidSubmissionEndDate, row: 1, tag: '<p> </p>', class: "", col: 1 },  
+      { 'key': 'Status', 'val': data.status, row: 1, tag: '<p> </p>', class: "", col: 1 },  
+      )
+    }
+    this.dialogService.detailsComponentDialog(arrayObj); // call details dialog modal
+  }
+
+
+  navigatePage(_eventCode: any, eventId?: any) {
+    if (this.isPublishFlag == 1) {
+      this.commonService.routerLinkRedirect('/approve-event/' + eventId);
+    } else {
+      this.commonService.routerLinkRedirect('/online-item-details/'+ eventId);
+    }
   }
 
 }
