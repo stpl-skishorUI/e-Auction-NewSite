@@ -277,7 +277,7 @@ export class HomeComponent implements OnInit {
       { 'key': 'Bid Opening Date & Time / Bid Starting Date & Time', 'val': this.datePipe.transform(data.startDateTime, 'dd/MM/yyyy & h:m:a'), row: 1, tag: '<p> </p>', class: "", col: 1 },
     ]
 
-    this.dialogService.detailsComponentDialog(arrayObj); // call details dialog modal
+    this.dialogService.detailsComponentDialog(arrayObj, 'Event Details', this.apiService.modalSize[2]); // call details dialog modal
   }
 
   expandEventrDetails(eventId: number, totalItems: any) {

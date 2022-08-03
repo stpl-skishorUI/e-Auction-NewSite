@@ -1,1 +1,276 @@
-<p>lots-upload works!</p>
+<vex-page-layout>
+    <vex-secondary-toolbar current="Lots Upload" class=" fixed border-0 bg-transparent drop-shadow-none top-1 z-[99] w-8/12">
+      <vex-breadcrumbs [crumbs]="['Lots/Item Upload']"></vex-breadcrumbs>
+    </vex-secondary-toolbar>
+  
+    <vex-page-layout-content>
+        <div class="card">
+            <div class="card-body m-3 p-3">
+                <div>
+                    <div class="flex items-center gap-3">
+                        <div>
+                            Event ID :
+                        </div>
+                        <mat-form-field class="w-1/4" appearance="outline">
+                            <mat-label>First name</mat-label>
+                            <mat-select >
+                                <mat-option >Primary</mat-option>
+                                <mat-option>Accent</mat-option>
+                                <mat-option >Warn</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                </div>
+                <mat-divider class="mt-4"></mat-divider>
+                <div class="mt-4">
+                    <div class="flex items-center gap-3">
+                        <div>
+                           Select Item :
+                        </div>
+                        <button mat-raised-button color="primary"> 
+                            Select Item
+                        </button>
+                    </div>
+                </div>
+            <!----------------Plot-Details----------------->
+
+                <div class="mt-4">
+                    <h3 class="text-sky-500 text-lg">Plot Details</h3>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="flex items-center">
+                            <div class="text-gray-500 mr-2 w-40">
+                                Item Name :
+                            </div>
+                            <mat-form-field class="example-full-width" appearance="outline">
+                                <mat-label>Item Name</mat-label>
+                                <input matInput>
+                            </mat-form-field>
+                        </div>
+                        <div class="flex items-center">
+                            <div class="text-gray-500 mr-2 w-40">
+                                Plot Number :
+                            </div>
+                            <mat-form-field class="example-full-width" appearance="outline">
+                                <mat-label>Plot Number</mat-label>
+                                <input matInput>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="flex items-center">
+                            <div class="text-gray-500 mr-2 w-40">
+                               Mineral:
+                            </div>
+                            <mat-form-field class="example-full-width" appearance="outline">
+                                <mat-label>Mineral</mat-label>
+                                <input matInput>
+                            </mat-form-field>
+                        </div>
+                        <div class="flex items-center">
+                            <div class="text-gray-500 mr-2  w-40">
+                               Quantity :
+                            </div>
+                            <mat-form-field class="example-full-width" appearance="outline">
+                                <mat-label>Quantity</mat-label>
+                                <input matInput>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="flex items-center">
+                            <div class="text-gray-500 mr-2  w-40">
+                               Area :
+                            </div>
+                            <mat-form-field class="example-full-width" appearance="outline">
+                                <mat-label> Area</mat-label>
+                                <input matInput>
+                            </mat-form-field>
+                        </div>
+                        <div class="flex items-center">
+                            <div class="text-gray-500 mr-2  w-40">
+                                District :
+                            </div>
+                            <mat-form-field class="example-full-width" appearance="outline">
+                                <mat-label>District</mat-label>
+                                <input matInput>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="flex items-center">
+                            <div class="text-gray-500 mr-2  w-40">
+                               Taluka/CTSO :
+                            </div>
+                            <mat-form-field class="example-full-width" appearance="outline">
+                                <mat-label>Taluka/CTSO</mat-label>
+                                <input matInput>
+                            </mat-form-field>
+                        </div>
+                        <div class="flex items-center">
+                            <div class="text-gray-500 mr-2  w-40">
+                                village :
+                            </div>
+                            <mat-form-field class="example-full-width" appearance="outline">
+                                <mat-label>village</mat-label>
+                                <input matInput>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="flex items-center">
+                            <div class="text-gray-500 mr-2  w-40">
+                                Latitude :
+                            </div>
+                            <mat-form-field class="example-full-width" appearance="outline">
+                                <mat-label>Latitude</mat-label>
+                                <input matInput>
+                            </mat-form-field>
+                        </div>
+                        <div class="flex items-center">
+                            <div class="text-gray-500 mr-2  w-40">
+                                Longitude :
+                            </div>
+                            <mat-form-field class="example-full-width" appearance="outline">
+                                <mat-label> Longitudes</mat-label>
+                                <input matInput>
+                            </mat-form-field>
+                        </div>
+                        <div class="flex items-center">
+                            <div class="text-gray-500 mr-2  w-40">
+                                Unit Of Measurement :
+                            </div>
+                            <mat-form-field class="example-full-width" appearance="outline">
+                                <mat-label>Unit Of Measurement</mat-label>
+                                <input matInput>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                </div>
+            <!----------------Fees-And-Charges-Details----------------->
+
+                <div class="mt-4">
+                    <h3 class="text-sky-500 text-lg">
+                        Fees And Charges Details
+                    </h3>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="flex items-center">
+                            <div class="text-gray-500 mr-2 w-40">
+                                Tender/Application Fee :
+                            </div>
+                            <mat-form-field class="example-full-width" appearance="outline">
+                                <mat-label> Tender Fee/Application Fee </mat-label>
+                                <input matInput>
+                            </mat-form-field>
+                        </div>
+                        <div class="flex items-center">
+                            <div class="text-gray-500 mr-2 w-40">
+                                Office Value :
+                            </div>
+                            <mat-form-field class="example-full-width" appearance="outline">
+                                <mat-label> Office Value</mat-label>
+                                <input matInput>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="flex items-center">
+                            <div class="text-gray-500 mr-2 w-40">
+                                EMD/ Security<br>
+                                 Deposite :
+                            </div>
+                            <mat-form-field class="example-full-width" appearance="outline">
+                                <mat-label> EMD/ Security Deposite</mat-label>
+                                <input matInput>
+                            </mat-form-field>
+                        </div>
+                        <div class="flex items-center">
+                            <div class="text-gray-500 mr-2  w-40">
+                              GST :
+                            </div>
+                            <mat-form-field class="example-full-width" appearance="outline">
+                                <mat-label>GST</mat-label>
+                                <input matInput>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="flex items-center">
+                            <div class="text-gray-500 mr-2  w-40">
+                              Minimum Bid <br>
+                              Increment :
+                            </div>
+                            <mat-form-field class="example-full-width" appearance="outline">
+                                <mat-label> Minimum Bid Increment</mat-label>
+                                <input matInput>
+                            </mat-form-field>
+                        </div>
+                        <div class="flex items-center">
+                            <div class="text-gray-500 mr-2  w-40">
+                               SGST :
+                            </div>
+                            <mat-form-field class="example-full-width" appearance="outline">
+                                <mat-label>SGST</mat-label>
+                                <input matInput>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="flex items-center">
+                            <div class="text-gray-500 mr-2  w-40">
+                               CGST :
+                            </div>
+                            <mat-form-field class="example-full-width" appearance="outline">
+                                <mat-label>CGST</mat-label>
+                                <input matInput>
+                            </mat-form-field>
+                        </div>
+                        <div class="flex items-center">
+                            <div class="text-gray-500 mr-2  w-40">
+                                TCS :
+                            </div>
+                            <mat-form-field class="example-full-width" appearance="outline">
+                                <mat-label>TCS</mat-label>
+                                <input matInput>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4 space-y-4">
+                        <div class="flex items-center">
+                            <div class=" text-gray-500 mr-2  w-40">
+                               IGST :
+                            </div>
+                            <mat-form-field class="example-full-width" appearance="outline">
+                                <mat-label>IGST</mat-label>
+                                <input matInput>
+                            </mat-form-field>
+                        </div>
+                        <div class="flex items-center">
+                            <div class="col-span-1 text-gray-500 mr-2  w-40">
+                              Any Other :
+                            </div>
+                            <mat-form-field class="example-full-width" appearance="outline">
+                                <mat-label>Any Other</mat-label>
+                                <input matInput>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div align="end" class="me-5 my-4">
+                        <button mat-raised-button color="primary"> 
+                           Add Item
+                        </button>
+                    </div>
+                <!----------Table-------------->   
+                    <div>
+                        <h2 class="text-sky-500">Table</h2>
+                    </div>
+                <!----------Table-End------------->
+                <div align="end" class="me-5 my-4">
+                    <button mat-raised-button color="primary"> 
+                        Proceed to Document List
+                    </button>
+                </div>
+                </div>
+            </div> 
+        </div>     
+    </vex-page-layout-content>
+</vex-page-layout>
