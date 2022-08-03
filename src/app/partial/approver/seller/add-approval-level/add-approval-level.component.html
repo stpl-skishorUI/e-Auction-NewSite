@@ -1,1 +1,62 @@
-<p>add-approval-level works!</p>
+<vex-page-layout>
+
+    <vex-secondary-toolbar current="Add Approval" class=" fixed border-0 bg-transparent drop-shadow-none top-1 z-[99] w-8/12">
+      <vex-breadcrumbs [crumbs]="['Add Approval Level']"></vex-breadcrumbs>
+    </vex-secondary-toolbar>
+  
+    <vex-page-layout-content>
+      <div class="card">
+        <div class="card-body m-3 p-3">
+            <div class="grid grid-cols-2 gap-4">
+                <div class="flex items-center">
+                    <div class="text-gray-500 mr-2 w-40">
+                        Approval Name :
+                    </div>
+                    <mat-form-field class="w-3/5" appearance="outline">
+                        <mat-label>Select Approval Name </mat-label>
+                        <mat-select >
+                            <mat-option >Primary</mat-option>
+                            <mat-option>Accent</mat-option>
+                            <mat-option >Warn</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="flex items-center">
+                    <div class="text-gray-500 mr-2 w-40">
+                        Seller Name :
+                    </div>
+                    <mat-form-field class="w-3/5" appearance="outline">
+                        <mat-label>Select Seller Name</mat-label>
+                        <mat-select >
+                            <mat-option >Primary</mat-option>
+                            <mat-option>Accent</mat-option>
+                            <mat-option >Warn</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="flex items-center">
+                    <div class="text-gray-500 mr-2 w-40">
+                        Approval Level :
+                    </div>
+                    <mat-form-field class="w-3/5" appearance="outline">
+                        <mat-label>Select Approval Level</mat-label>
+                        <mat-select >
+                            <mat-option >Primary</mat-option>
+                            <mat-option>Accent</mat-option>
+                            <mat-option >Warn</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div align="end">
+                <button mat-raised-button color="primary"> 
+                    Update
+                </button>
+            </div>
+            <div class="my-3">
+                <h1 class="text-sky-500 text-xl">Table</h1>
+            </div>
+        </div>
+      </div>
+    </vex-page-layout-content>
+</vex-page-layout>

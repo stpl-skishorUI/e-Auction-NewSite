@@ -10,7 +10,7 @@ import { ConfigService } from 'src/app/core/services/config.service';
 import { ErrorsService } from 'src/app/core/services/errors.service';
 import { LocalstorageService } from 'src/app/core/services/localstorage.service';
 import { MatTableDataSource } from '@angular/material/table';
-import { MatPaginator } from '@angular/material/paginator';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { UntypedFormControl } from '@angular/forms';
 import { SelectionModel } from '@angular/cdk/collections';
@@ -23,8 +23,12 @@ import { Router } from '@angular/router';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 //import { DetailsComponent } from 'src/app/partial/dialogs/details/details.component';
 import { TableColumn } from 'src/@vex/interfaces/table-column.interface';
-import { Home } from './home.model';
+
 import { DialogService } from 'src/app/core/services/dialog.service';
+import { EventDetail } from './interfaces/event-detail.model';
+import { LotCreation } from './interfaces/lot-creation.model';
+import { AuctionPlotProfileComponent } from 'src/app/partial/bidder/auction-plot-profile/auction-plot-profile.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'vex-home',
@@ -50,24 +54,47 @@ import { DialogService } from 'src/app/core/services/dialog.service';
 })
 
 export class HomeComponent implements OnInit {
-  columns: TableColumn<Home>[] = [
-    { label: 'Sr.No', property: 'srNo', type: 'button', visible: true,cssClasses: ['text-secondary', 'font-medium']  },
+  columns: TableColumn<EventDetail>[] = [
+    { label: 'srNo', property: 'srNo', type: 'button', visible: true },
     { label: 'Event Level', property: 'eventLevel', type: 'text', visible: true },
-    { label: 'District/ SDO/ Tehsil', property: 'district', type: 'text', visible: true ,cssClasses: ['text-secondary', 'font-medium'] },
-    { label: 'Event Id', property: 'eventCode', type: 'text', visible: true ,cssClasses: ['text-secondary', 'font-medium'] },
-    { label: 'Title', property: 'title', type: 'text', visible: true ,cssClasses: ['text-secondary', 'font-medium'] },
-    { label: 'Bid Submission End Date & Time', property: 'bidSubmissionEndDate', type: 'text', visible: false,cssClasses: ['text-secondary', 'font-medium']  },
-    { label: 'Bid Opening Date & Time', property: 'bidSubmissionStartDate', type: 'text', visible: false, cssClasses: ['text-secondary', 'font-medium']  },
-    { label: 'Item Count', property: 'totalItem', type: 'text', visible: true ,cssClasses: ['text-secondary', 'font-medium'] },
-    { label: 'Actions', property: 'actions', type: 'button', visible: true ,cssClasses: ['text-secondary', 'font-medium'] },
+    { label: 'District/ SDO/ Tehsil', property: 'district', type: 'text', visible: true, cssClasses: ['text-secondary', 'font-medium'] },
+    { label: 'Event Id', property: 'eventCode', type: 'text', visible: false, cssClasses:['text-secondary', 'font-medium'] },
+    { label: 'Title', property: 'title', type: 'text', visible: true, cssClasses:['text-secondary', 'font-medium']  },
+    { label: 'Bid Submission End Date & Time', property: 'bidSubmissionEndDate', type: 'button', visible: false, cssClasses: ['text-secondary', 'font-medium']  },
+    { label: 'Bid Opening Date & Time', property: 'startDateTime', type: 'button', visible: false, cssClasses: ['text-secondary', 'font-medium']  },
+    { label: 'Item Count', property: 'totalItem', type: 'text', visible: false, cssClasses: ['text-secondary', 'font-medium']  },
+    { label: 'Actions', property: 'actions', type: 'button', visible: true, cssClasses: ['text-secondary', 'font-medium']  },
   ];
+
+  eventColumns1:TableColumn<LotCreation>[]=[
+    { label: 'srNo', property: 'srNo', type: 'button', visible: true },
+    { label: 'Item Number And Name', property: 'itemName', type: 'text', visible: true, cssClasses: ['text-secondary', 'font-medium'] },
+    { label: 'Mineral', property: 'material', type: 'text', visible: true, cssClasses: ['text-secondary', 'font-medium'] },
+    { label: 'Taluka / CTSO	', property: 'taluka', type: 'text', visible: true, cssClasses: ['text-secondary', 'font-medium'] },
+    { label: 'Village', property: 'village', type: 'text', visible: true, cssClasses: ['text-secondary', 'font-medium'] },
+    { label: 'Area', property: 'area', type: 'text', visible: true, cssClasses: ['text-secondary', 'font-medium'] },
+    { label: 'Allowed Quantity (InBrass)	', property: 'quantity', type: 'text', visible: true, cssClasses: ['text-secondary', 'font-medium'] },
+    { label: 'Tender / Application Fee', property: 'tender_ApplicationFee', type: 'text', visible: true, cssClasses: ['text-secondary', 'font-medium'] },
+    { label: 'Offset Value	', property: 'offsetValue', type: 'text', visible: true, cssClasses: ['text-secondary', 'font-medium'] },
+    { label: 'EMD', property: 'emD_SecurityDeposit', type: 'text', visible: true, cssClasses: ['text-secondary', 'font-medium'] },
+    { label: 'View Item Details', property: 'actions', type: 'button', visible: true, cssClasses: ['text-secondary', 'font-medium'] },
+  ];
+
+  get visibleColumns() {
+    return this.columns.filter(column => column.visible).map(column => column.property);
+  }
+
+  get visibleColumnsEvent() {
+    return this.eventColumns1.filter(column => column.visible).map(column => column.property);
+  }
+  
   eventDetails: any;
   checkUserLogFlag: boolean = false;
   participatedBidderEventlist: any[] = [];
   expandedElement!: any | null;
-  pageNo: number = 1;
+  pageNumber: number = 1;
   layoutCtrl = new UntypedFormControl('boxed');
-  activecolumnsToDisplay = ['srNo', 'eventLevel', 'district', 'eventCode', 'title', 'bidSubmissionEndDate', 'startDateTime', 'totalItem', 'download'];
+  
   tabChangeFlag: string = 'Active';
   eventColumns = ['srNo', 'itemName', 'material', 'taluka', 'village', 'area', 'quantity', 'tender_ApplicationFee', 'offsetValue', 'emD_SecurityDeposit', 'ViewItem']
   pageSize = 10;
@@ -87,17 +114,23 @@ export class HomeComponent implements OnInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   tabs: any = [{ count: '' }, { count: '' }]
-
   constructor(private commonService: CommonService, private masterService: MasterService, public VB: ValidatorService,
     public localstorageService: LocalstorageService, private error: ErrorsService, private staticDropdownService: StaticDropdownService, public router: Router,
-    private apiService: ApiService, private fb: FormBuilder, public configService: ConfigService, private dialogService: DialogService, private datePipe: DatePipe) {
+    private apiService: ApiService, private fb: FormBuilder, public configService: ConfigService, private dialogService: DialogService, private datePipe: DatePipe,
+    private dialog: MatDialog) {
   }
 
   ngOnInit() {
+    console.log(this.visibleColumns,this.visibleColumnsEvent);
     this.defulatForm();
     this.levelArray();
     this.getMineral();
   }
+  // new code start here
+  trackByProperty<T>(_index: number, column: TableColumn<T>) {
+    return column.property;
+  }
+
 
   //--------------------------------------------------------filter dropdown start heare -----------------------------------------------------//
 
@@ -164,7 +197,7 @@ export class HomeComponent implements OnInit {
 
   bindTable() {
     const formValue = this.filterForm.value;
-    let paramList = '?EventLevel=' + formValue.levelId + '&DistrictId=' + formValue.districtId + '&MineralId=' + formValue.mineralId + '&pageno=' + this.pageNo + '&pagesize=' + this.configService.pageSize //+'&Status=&StartDate=1&EndDate=1'
+    let paramList = '?EventLevel=' + formValue.levelId + '&DistrictId=' + formValue.districtId + '&MineralId=' + formValue.mineralId + '&pageno=' + this.pageNumber + '&pagesize=' + this.configService.pageSize //+'&Status=&StartDate=1&EndDate=1'
     if (formValue.startDate && formValue.endDate) {
       const startDate = this.datePipe.transform(formValue.startDate, 'yyyy-MM-dd');
       const enddate = this.datePipe.transform(formValue.endDate, 'yyyy-MM-dd');
@@ -284,9 +317,7 @@ export class HomeComponent implements OnInit {
     });
   }
 
-  plotProfile(_id: any) {
-
-  }
+ 
 
   isparticipateEvent(event: MatCheckboxChange | any, element: object, isparticipateEvent?: boolean) {
     let checkboxFlag;
@@ -337,23 +368,44 @@ export class HomeComponent implements OnInit {
   }
 
 
-    // ...................... participate button  function  start..................................../
-    onclickParticipateBtn() {
-      for (var i = 0; i < this.participatedBidderEventlist.length; i++) {
-        delete this.participatedBidderEventlist[i]['eventLotId'];
-      }
-      this.apiService.setHttp('post', "event-participate", false, JSON.stringify(this.participatedBidderEventlist), false, 'bidderUrl');
-      this.apiService.getHttp().subscribe({
-        next: (res: any) => {
-          if (res.statusCode === "200") {
-            this.router.navigate(['event-details']);
-  
-          } else {
-            this.commonService.checkDataType(res.statusMessage) == false ? this.error.handelError(res.statusCode) : this.commonService.snackBar(res.statusMessage, 1);
-          }
-        },
-        error: ((error: any) => { this.error.handelError(error.status) })
-      });
+  // ...................... participate button  function  start..................................../
+  onclickParticipateBtn() {
+    for (var i = 0; i < this.participatedBidderEventlist.length; i++) {
+      delete this.participatedBidderEventlist[i]['eventLotId'];
     }
+    this.apiService.setHttp('post', "event-participate", false, JSON.stringify(this.participatedBidderEventlist), false, 'bidderUrl');
+    this.apiService.getHttp().subscribe({
+      next: (res: any) => {
+        if (res.statusCode === "200") {
+          this.router.navigate(['event-details']);
+
+        } else {
+          this.commonService.checkDataType(res.statusMessage) == false ? this.error.handelError(res.statusCode) : this.commonService.snackBar(res.statusMessage, 1);
+        }
+      },
+      error: ((error: any) => { this.error.handelError(error.status) })
+    });
+  }
+
+  pageChanged(event: PageEvent) {
+    this.pageNumber = event.pageIndex + 1;
+    this.bindTable();
+  }
   
+
+  plotProfile(_id:any){
+    this.dialog.open(AuctionPlotProfileComponent).afterClosed().subscribe((res) => {
+      /**
+       * Customer is the updated customer (if the user pressed Save - otherwise it's null)
+       */
+      if (res) {
+        /**
+         * Here we are updating our local array.
+         * You would probably make an HTTP request here.
+         */
+      
+      
+      }
+    });
+  }
 }
