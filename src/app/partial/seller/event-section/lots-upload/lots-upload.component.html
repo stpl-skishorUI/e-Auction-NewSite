@@ -5,17 +5,16 @@
     </vex-secondary-toolbar>
 
     <vex-page-layout-content>
-        <div class="row">
-            <div class="col-sm">
-                <h4 class="text-main fw-bold mb-0 px-2">Lots / Item {{this.editFlag?'Update':'Upload'}}</h4>
-            </div>
-            <div class="col-sm text-end">
-                <a class="d-inline-flex text-decoration-none text-muted px-0 align-items-center"
-                    (click)="location.back()">
-                    <mat-icon>keyboard_double_arrow_left</mat-icon>Back
-                </a>
-            </div>
+        <!-- <div class="col-sm">
+            <h4 class="text-main fw-bold mb-0 px-2">Lots / Item {{this.editFlag?'Update':'Upload'}}</h4>
+        </div> -->
+        <div >
+            <a class="flex justify-end items-center text-gray-500" (click)="location.back()">
+                <mat-icon>keyboard_double_arrow_left</mat-icon>
+                <span>Back</span>
+            </a>
         </div>
+            
         <div class="card">
             <div class="card-body m-3 p-3">
                 <div>
@@ -38,11 +37,16 @@
                     </div>
                 </div>
                 <!----------------Plot-Details----------------->
+
                 <form [formGroup]="lotsItemForm" (ngSubmit)="addLotData()" #myForm="ngForm">
                     <div [class.disabled-contenct]="disableDiv">
                         <div class="mt-4">
-                            <h3 class="text-sky-500 text-lg">Plot Details</h3>
-                            <div class="grid grid-cols-2 gap-4">
+                            <div class=" text-[#6366f1]">
+                                <h3 class=" text-lg">
+                                    Plot Details
+                                </h3>
+                            </div>
+                            <div class="grid grid-cols-2 gap-4 my-4">
                                 <div class="flex items-center">
                                     <div class="text-gray-500 mr-2 w-40">
                                         Item Name :
@@ -62,7 +66,7 @@
                                     </mat-form-field>
                                 </div>
                             </div>
-                            <div class="grid grid-cols-2 gap-4">
+                            <div class="grid grid-cols-2 gap-4 my-4">
                                 <div class="flex items-center">
                                     <div class="text-gray-500 mr-2 w-40">
                                         Mineral:
@@ -82,7 +86,7 @@
                                     </mat-form-field>
                                 </div>
                             </div>
-                            <div class="grid grid-cols-2 gap-4">
+                            <div class="grid grid-cols-2 gap-4 my-4">
                                 <div class="flex items-center">
                                     <div class="text-gray-500 mr-2  w-40">
                                         Area :
@@ -102,7 +106,7 @@
                                     </mat-form-field>
                                 </div>
                             </div>
-                            <div class="grid grid-cols-2 gap-4">
+                            <div class="grid grid-cols-2 gap-4 my-4">
                                 <div class="flex items-center">
                                     <div class="text-gray-500 mr-2  w-40">
                                         Taluka/CTSO :
@@ -122,7 +126,7 @@
                                     </mat-form-field>
                                 </div>
                             </div>
-                            <div class="grid grid-cols-2 gap-4">
+                            <div class="grid grid-cols-2 gap-4 my-4">
                                 <div class="flex items-center">
                                     <div class="text-gray-500 mr-2  w-40">
                                         Latitude :
@@ -141,6 +145,8 @@
                                         <input matInput type="text" formControlName="longitude" autocomplete="off">
                                     </mat-form-field>
                                 </div>
+                            </div>
+                            <div class="grid grid-cols-2 gap-4 my-4">
                                 <div class="flex items-center">
                                     <div class="text-gray-500 mr-2  w-40">
                                         Unit Of Measurement :
@@ -155,13 +161,17 @@
                         </div>
                     </div>
 
+                    <!----------------Plot-Details-End---------------->
+                    <mat-divider class="mt-5"></mat-divider>
                     <!----------------Fees-And-Charges-Details----------------->
 
-                    <div class="mt-4">
-                        <h3 class="text-sky-500 text-lg">
-                            Fees And Charges Details
-                        </h3>
-                        <div class="grid grid-cols-2 gap-4">
+                    <div class="mt-5">
+                        <div class="text-[#6366f1]">
+                            <h3 class="text-lg">
+                                Fees And Charges Details
+                            </h3>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4 my-4">
                             <div class="flex items-center">
                                 <div class="text-gray-500 mr-2 w-40">
                                     Tender/Application Fee :
@@ -179,9 +189,6 @@
                                     </mat-error>
                                 </mat-form-field>
                             </div>
-
-                        </div>
-                        <div class="grid grid-cols-2 gap-4">
                             <div class="flex items-center">
                                 <div class="text-gray-500 mr-2 w-40">
                                     EMD/ Security<br>
@@ -200,22 +207,8 @@
                                     </mat-error>
                                 </mat-form-field>
                             </div>
-                            <div class="flex items-center">
-                                <div class="text-gray-500 mr-2  w-40">
-                                    GST :
-                                </div>
-                                <mat-form-field [appearance]=configService.matFormFieldFilter class="w-100">
-                                    <mat-label>GST</mat-label>
-                                    <input matInput type="text" formControlName="gst" autocomplete="off">
-                                    <mat-error *ngIf="f.gst.errors">
-                                        <span class="text-danger"
-                                            *ngIf="f.gst.errors?.pattern || f.gst.errors?.maxlength ">
-                                            Please enter Valid GST</span>
-                                    </mat-error>
-                                </mat-form-field>
-                            </div>
                         </div>
-                        <div class="grid grid-cols-2 gap-4">
+                        <div class="grid grid-cols-2 gap-4 my-4">
                             <div class="flex items-center">
                                 <div class="text-gray-500 mr-2  w-40">
                                     Minimum Bid <br>
@@ -235,6 +228,22 @@
                             </div>
                             <div class="flex items-center">
                                 <div class="text-gray-500 mr-2  w-40">
+                                    GST :
+                                </div>
+                                <mat-form-field [appearance]=configService.matFormFieldFilter class="w-100">
+                                    <mat-label>GST</mat-label>
+                                    <input matInput type="text" formControlName="gst" autocomplete="off">
+                                    <mat-error *ngIf="f.gst.errors">
+                                        <span class="text-danger"
+                                            *ngIf="f.gst.errors?.pattern || f.gst.errors?.maxlength ">
+                                            Please enter Valid GST</span>
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4 my-4">
+                            <div class="flex items-center">
+                                <div class="text-gray-500 mr-2  w-40">
                                     SGST :
                                 </div>
                                 <mat-form-field [appearance]=configService.matFormFieldFilter class="w-100">
@@ -247,8 +256,6 @@
                                     </mat-error>
                                 </mat-form-field>
                             </div>
-                        </div>
-                        <div class="grid grid-cols-2 gap-4">
                             <div class="flex items-center">
                                 <div class="text-gray-500 mr-2  w-40">
                                     CGST :
@@ -260,6 +267,22 @@
                                         <span class="text-danger"
                                             *ngIf="f.cgst.errors?.pattern ||f.cgst.errors?.maxlength">
                                             Please enter Valid CGST </span>
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4 my-4">
+                            <div class="flex items-center">
+                                <div class=" text-gray-500 mr-2  w-40">
+                                    IGST :
+                                </div>
+                                <mat-form-field [appearance]=configService.matFormFieldFilter class="w-100">
+                                    <mat-label>IGST</mat-label>
+                                    <input matInput type="text" formControlName="igst" autocomplete="off">
+                                    <mat-error *ngIf="f.igst.errors">
+                                        <span class="text-danger"
+                                            *ngIf="f.igst.errors?.pattern ||f.igst.errors?.maxlength">
+                                            Please enter Valid IGST </span>
                                     </mat-error>
                                 </mat-form-field>
                             </div>
@@ -278,21 +301,7 @@
                                 </mat-form-field>
                             </div>
                         </div>
-                        <div class="grid grid-cols-2 gap-4 space-y-4">
-                            <div class="flex items-center">
-                                <div class=" text-gray-500 mr-2  w-40">
-                                    IGST :
-                                </div>
-                                <mat-form-field [appearance]=configService.matFormFieldFilter class="w-100">
-                                    <mat-label>IGST</mat-label>
-                                    <input matInput type="text" formControlName="igst" autocomplete="off">
-                                    <mat-error *ngIf="f.igst.errors">
-                                        <span class="text-danger"
-                                            *ngIf="f.igst.errors?.pattern ||f.igst.errors?.maxlength">
-                                            Please enter Valid IGST </span>
-                                    </mat-error>
-                                </mat-form-field>
-                            </div>
+                        <div class="grid grid-cols-2 gap-4 my-4">
                             <div class="flex items-center">
                                 <div class="col-span-1 text-gray-500 mr-2  w-40">
                                     Any Other :
@@ -310,7 +319,10 @@
                                 {{buttonText}}
                             </button>
                         </div>
-                        <!----------Table-------------->
+                    <!----------------Fees-And-Charges-Details-End---------------->
+
+                    <!----------Table-------------->
+
                         <div class="card overflow-auto">
                             <div class="bg-app-bar px-6 h-16 border-b sticky left-0 flex items-center">
                                 <span class="flex-1"></span>
@@ -364,13 +376,16 @@
                                 <p class="bg-red-400 text-stone-200	text-center	 py-px	"> Data Not Found </p>
                             </ng-container>
                         </div>
-                        <!----------Table-End------------->
+
+                    <!----------Table-End------------->
+
                         <div class="card overflow-auto  mt-5">
                             <div align="end" class="me-5 my-4">
                                 <button mat-stroked-button class="btn-main mb-2  img-upload-btn"
                                     [disabled]="documentListHide == true"
                                     (click)="this.getdocumentList(); documentListHide = true">
-                                    {{this.editFlag?'Update':'Proceed'}} to Document List</button>
+                                    {{this.editFlag?'Update':'Proceed'}} to Document List
+                                </button>
                             </div>
 
                             <div class="bg-app-bar px-6 h-16 border-b sticky left-0 flex items-center">
