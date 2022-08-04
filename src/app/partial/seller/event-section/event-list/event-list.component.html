@@ -6,7 +6,7 @@
   <vex-page-layout-content [class.px-gutter]="layoutCtrl.value === 'fullwidth'" class="-mt-6">
     <div class="my-3 card p-3 border-0 shadow-none">
       <form [formGroup]="filterForm">
-        <div class="flex flex-row justify-between">
+        <div class="flex flex-row justify-between items-center">
           <div class="grid grid-cols-4 gap-4 mr-2">
             <mat-form-field appearance="outline">
               <mat-label>Select Event Level</mat-label>
@@ -103,12 +103,12 @@
           <th *matHeaderCellDef mat-header-cell mat-sort-header>ACTION</th>
           <td *matCellDef="let row" class="w-10 text-secondary" mat-cell>
             <div class="flex">
-              <a (click)="eventDetails(row)"
+              <a (click)="eventDetails(row)" matTooltip="View Event Details"
                 class="w-8 h-8 leading-none flex items-center justify-center ml-1 hover:bg-hover text-gray-700 bg-gray-200"
                 mat-icon-button>
                 <mat-icon class="icon-sm" svgIcon="mat:remove_red_eye"></mat-icon>
               </a>
-              <a (click)="createEvent(row)"
+              <a (click)="createEvent(row)" matTooltip="Edit Event"
                 class="w-8 h-8 leading-none flex items-center justify-center ml-1 hover:bg-hover text-teal bg-teal-light"
                 mat-icon-button>
                 <mat-icon class="icon-sm" svgIcon="mat:edit"></mat-icon>
