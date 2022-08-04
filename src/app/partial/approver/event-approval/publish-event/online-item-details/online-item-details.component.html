@@ -6,65 +6,59 @@
     </vex-secondary-toolbar>
 
     <vex-page-layout-content>
+        <div>
+            <a class="text-gray-500 flex justify-end items-center" (click)="location.back()">
+                    <mat-icon>keyboard_double_arrow_left</mat-icon>
+                    <span>Back</span>
+            </a>
+        </div>
         <div class="p-3">
-            <div class="card p-2 border-0 shadow-none">
-
-                <div class="card card-body">
-                    <div class="row">
-                        <div class="col-sm">
-                            <h4 class="text-main px-2">Online Item Details</h4>
-                        </div>
-                        <div class="text-end" align="end">
-                            <a class="d-inline-flex text-muted px-0 text-decoration-none" (click)="location.back()">
-                                <mat-icon>keyboard_double_arrow_left</mat-icon>Back
-                            </a>
-                        </div>
-                    </div>
-
+            <div class="card border-0 shadow-none">
+                <div class="card card-body p-2">
                     <mat-accordion>
                         <mat-expansion-panel>
                             <mat-expansion-panel-header>
-                                <div class="">
+                                <div>
                                     <div class="flex flex-row items-center">
-                                        <div class="grid grid-cols-4 ">
+                                        <div class="grid grid-cols-4 gap-6 ">
                                             <div>
-                                                <p class="text-sm">Event Level:
+                                                <p class="text-sm">Event Level :
                                                     <span class="text-sky-500">{{details?.eventLevel |
                                                         titlecase}}</span>
                                                 </p>
                                             </div>
                                             <div>
-                                                <p class="text-sm">District/ SDO / Teshil:
+                                                <p class="text-sm">District/ SDO / Teshil :
                                                     <span class="text-sky-500">{{details?.district}}</span>
                                                 </p>
                                             </div>
                                             <div>
-                                                <p class="text-sm">Event Id:
+                                                <p class="text-sm">Event Id :
                                                     <span class="text-sky-500"> {{details?.eventCode}}</span>
                                                 </p>
                                             </div>
                                             <div>
-                                                <p class="text-sm">Title:
+                                                <p class="text-sm">Title :
                                                     <span class="text-sky-500 text-sm">{{details?.title}}</span>
                                                 </p>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="grid grid-cols-2">
-                                        <div class="">
-                                            <p class="text-sm">Description:
+                                    <div class="grid grid-cols-4 gap-6 my-[2px]">
+                                        <div class="col-span-3">
+                                            <p class="text-sm">Description :
                                                 <span class="text-sky-500">
                                                     {{details?.description | titlecase}}
                                                 </span>
                                             </p>
                                         </div>
                                         <div class="">
-                                            <p class="text-sm">Plot Count:
+                                            <p class="text-sm">Plot Count :
                                                 <span class="text-sky-500">{{details?.totalItem}}</span>
                                             </p>
                                         </div>
                                     </div>
-                                </div>
+                                </div>   
                             </mat-expansion-panel-header>
 
                             <div class="card overflow-auto">
@@ -123,10 +117,85 @@
                         </mat-expansion-panel>
                     </mat-accordion>
 
-                    <form [formGroup]="onlineItemForm" (ngSubmit)="onSubmit()">
-                        <div class="flex gap-x-3 pt-3 m-2">
-            
-                                <h4 class="text-main fw-bold px-2 mb-0">Document / Payment Date & Time</h4>
+                    <form [formGroup]="onlineItemForm" (ngSubmit)="onSubmit()" class="my-6">
+                        <div class="flex items-center gap-x-12">
+                            <div class="grid grid-cols-2 gap-4">
+                                <h4 class="mb-0">
+                                    Document / Payment Date & Time
+                                </h4>
+                            </div>
+                            <div class="grid grid-cols-2 gap-4">
+                                <h4 class="mb-0">
+                                    Live Bid Date & Time
+                                </h4>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-x-5 my-2">
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <mat-form-field appearance="outline" class="">
+                                        <input matInput [matDatepicker]="eventFromDate"  [min]="minDate" formControlName="startDateTime"
+                                            placeholder="Choose a date & time" [disabled]="true" #ref  (dateChange)="onDateChange()">
+                                        <mat-datepicker-toggle matSuffix [for]="$any(eventFromDate)">
+                                        </mat-datepicker-toggle>
+                                        <mat-datepicker #eventFromDate [disabled]="false"></mat-datepicker>
+                                        <mat-error *ngIf="onlineItemFormControls.startDateTime.errors">
+                                            <span class="text-danger"
+                                                *ngIf="onlineItemFormControls.startDateTime.errors?.required">
+                                                Event start date & time is required</span>
+                                        </mat-error>
+                                    </mat-form-field>
+                                </div>
+                                <div>
+                                    <mat-form-field appearance="outline" class="">
+                                        <input matInput [matDatepicker]="eventToDate" [min]="this.onlineItemForm.value.startDateTime" formControlName="endDateTime"
+                                            placeholder="Choose a date & time" [disabled]="true" #ref  (dateChange)="onDateChange()">
+                                        <mat-datepicker-toggle matSuffix [for]="eventToDate"></mat-datepicker-toggle>
+                                        <mat-datepicker #eventToDate [disabled]="false"></mat-datepicker>
+                                        <mat-error *ngIf="onlineItemFormControls.endDateTime.errors">
+                                            <span class="text-danger"
+                                                *ngIf="onlineItemFormControls.endDateTime.errors?.required">
+                                                Event end date & time is required</span>
+                                        </mat-error>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <mat-form-field appearance="outline" class="">
+                                        <input matInput [matDatepicker]="bidFromDate"  [min]="this.onlineItemForm.value.endDateTime"
+                                            formControlName="bidSubmissionStartDate" placeholder="Choose a date & time"
+                                            [disabled]="true">
+                                        <mat-datepicker-toggle matSuffix [for]="bidFromDate"></mat-datepicker-toggle>
+                                        <mat-datepicker #bidFromDate [disabled]="false"></mat-datepicker>
+                                        <mat-error *ngIf="onlineItemFormControls.bidSubmissionStartDate.errors">
+                                            <span class="text-danger"
+                                                *ngIf="onlineItemFormControls.bidSubmissionStartDate.errors?.required">
+                                                Bidding start date & time is required</span>
+                                        </mat-error>
+                                    </mat-form-field>
+                                </div>
+                                <div>
+                                    <mat-form-field appearance="outline" class="">
+                                        <input matInput [matDatepicker]="bidToDate" formControlName="bidSubmissionEndDate"
+                                        [min]="this.onlineItemForm.value.bidSubmissionStartDate"
+                                            placeholder="Choose a date & time" [disabled]="true">
+                                        <mat-datepicker-toggle matSuffix [for]="bidToDate"></mat-datepicker-toggle>
+                                        <mat-datepicker #bidToDate [disabled]="false"></mat-datepicker>
+                                        <mat-error *ngIf="onlineItemFormControls.bidSubmissionStartDate.errors">
+                                            <span class="text-danger"
+                                                *ngIf="onlineItemFormControls.bidSubmissionStartDate.errors?.required">
+                                                Bidding end date & time is required</span>
+                                        </mat-error>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="space-x-3 my-4" align="end">
+                            <button type="button" mat-stroked-button (click)="clearform()" class="bg-gray-300">Clear</button>
+                            <button type="submit" mat-raised-button color="primary" >Submit</button>
+                        </div>
+                                <!-- <h4 class="text-main fw-bold px-2 mb-0">Document / Payment Date & Time</h4>
                                 <div>
                                     <mat-form-field appearance="outline" class="w-100">
                                         <input matInput [matDatepicker]="eventFromDate"  [min]="minDate" formControlName="startDateTime"
@@ -184,22 +253,15 @@
                                                 Bidding end date & time is required</span>
                                         </mat-error>
                                     </mat-form-field>
-                                </div>
+                                </div> -->
                            
 
-                        </div>
-                        <div class="text-right" >
-                        <div align="end">
-                            <button type="button" mat-stroked-button (click)="clearform()" class="bg-gray-300">Clear</button>
-                            <button type="submit" mat-raised-button color="primary" >Submit</button>
-                        </div>
-                    </div>
+                        
+                        
                     </form>
                 </div>
             </div>
         </div>
-
-
     </vex-page-layout-content>
 </vex-page-layout>
 
