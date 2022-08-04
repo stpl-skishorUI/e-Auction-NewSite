@@ -1,16 +1,16 @@
-<div mat-dialog-title class="flex items-center justify-end ">
+<div mat-dialog-title class="flex items-center justify-between ">
     <!-- {{dialogData?.cardTitle}} -->
 
-    <p class="mb-0"></p>
+    <p class="mb-0">Auction Profile</p>
     <button type="button" mat-icon-button (click)=" this.dialogRef.close()" tabindex="-1">
         <mat-icon svgIcon="mat:close"></mat-icon>
     </button>
 </div>
-
+<mat-divider></mat-divider>
 <mat-dialog-content>
     <!-- <p class="mb-0" *ngIf="dialogData?.p1">{{dialogData?.p1}}</p>
     <p class="mb-0" *ngIf="dialogData?.p2">{{dialogData?.p2}}</p> -->
-    <span class="mb-3">
+    <!-- <span class="mb-3">
 
         <div class="dummy-positioning flex mx-auto mb-3">
 
@@ -20,7 +20,66 @@
             </div>
 
         </div>
-    </span>
+    </span> -->
+    <div class="container my-10 px-0">
+        <div class="grid grid-cols-2 gap-5">
+            <div>
+                <div class="map">
+                    <img src="https://c8.alamy.com/comp/F04EJJ/india-political-map-with-capital-new-delhi-national-borders-important-F04EJJ.jpg" alt="" class="h-[20rem] w-full">
+                </div>
+                <div class="table_data my-3 bg-gray-500">
+                    Table data
+                </div>
+            </div>
+            <div>
+                <div class="grid grid-cols-2 gap-5">
+                    <div class="flex">
+                        <p>Plot Name :</p>
+                        <p>PLot Name </p>
+                    </div>
+                    <div class="flex">
+                        <p class="w-32">Plot Category :</p>
+                        <p>PLot Category</p>
+                    </div>
+                    <div class="flex">
+                        <p>Plot Type: </p>
+                        <p>Plot Type  </p>
+                    </div>
+                    <div class="flex">
+                        <p>Plot location: </p>
+                        <p>Plot location </p>
+                    </div>
+                    <div class="flex">
+                        <p>Plot District: </p>
+                        <p>Plot district </p>
+                    </div>
+                    
+                    <div class="flex">
+                        <p>Plot River / Coast Name </p>:
+                        <p>Plot Coast name </p>
+                    </div>
+                    <div class="flex">
+                        <p>Plot Taluka / CSTo </p>:
+                        <p>Plot CSTO  </p>
+                    </div>
+                    <div class="flex">
+                        <p>Plot PLot ownership</p>:
+                        <p>Plot owner  </p>
+                    </div>
+                    <div class="flex">
+                        <p>Plot Village</p>:
+                        <p>Plot Village  </p>
+                    </div>
+                    <div class="flex">
+                        <p>Plot Area</p>:
+                        <p>Plot area  </p>
+                    </div>
+                    
+                   
+                </div>
+            </div>
+        </div>
+    </div>
    
 
 </mat-dialog-content>
