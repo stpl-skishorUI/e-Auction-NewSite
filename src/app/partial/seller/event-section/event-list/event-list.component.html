@@ -113,8 +113,7 @@
                 mat-icon-button>
                 <mat-icon class="icon-sm" svgIcon="mat:edit"></mat-icon>
               </a>
-
-              <a (click)="navigatePage(2,row.eventCode,row.id, row.totalItem)"
+              <a (click)="navigatePage(2,row.eventCode,row.id, row.totalItem)" [disabled]="(row?.status == 'Pending' ||row?.status == 'Approved'||row?.status == 'Rejected') && row?.isSendforApproval == true? true:false " matTooltip="{{ row.totalItem == 0 ? 'Lots Upload' :'Edit Lots Upload'}}"
                 class="w-8 h-8 leading-none flex items-center justify-center ml-1 hover:bg-hover text-pink-600 bg-pink-100"
                 mat-icon-button>
                 <mat-icon class="icon-sm" svgIcon="mat:cloud_download"></mat-icon>

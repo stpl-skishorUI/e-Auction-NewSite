@@ -1,9 +1,21 @@
 <vex-page-layout>
-    <vex-secondary-toolbar current="Lots Upload" class=" fixed border-0 bg-transparent drop-shadow-none top-1 z-[99] w-8/12">
-      <vex-breadcrumbs [crumbs]="['Lots/Item Upload']"></vex-breadcrumbs>
+    <vex-secondary-toolbar current="Lots Upload"
+        class=" fixed border-0 bg-transparent drop-shadow-none top-1 z-[99] w-8/12">
+        <vex-breadcrumbs [crumbs]="['Lots/Item Upload']"></vex-breadcrumbs>
     </vex-secondary-toolbar>
-  
+
     <vex-page-layout-content>
+        <div class="row">
+            <div class="col-sm">
+                <h4 class="text-main fw-bold mb-0 px-2">Lots / Item {{this.editFlag?'Update':'Upload'}}</h4>
+            </div>
+            <div class="col-sm text-end">
+                <a class="d-inline-flex text-decoration-none text-muted px-0 align-items-center"
+                    (click)="location.back()">
+                    <mat-icon>keyboard_double_arrow_left</mat-icon>Back
+                </a>
+            </div>
+        </div>
         <div class="card">
             <div class="card-body m-3 p-3">
                 <div>
@@ -11,266 +23,409 @@
                         <div>
                             Event ID :
                         </div>
-                        <mat-form-field class="w-1/4" appearance="outline">
-                            <mat-label>First name</mat-label>
-                            <mat-select >
-                                <mat-option >Primary</mat-option>
-                                <mat-option>Accent</mat-option>
-                                <mat-option >Warn</mat-option>
-                            </mat-select>
-                        </mat-form-field>
+                        <h4 class="form-label mb-0">{{eventCode}}</h4>
                     </div>
                 </div>
                 <mat-divider class="mt-4"></mat-divider>
                 <div class="mt-4">
                     <div class="flex items-center gap-3">
                         <div>
-                           Select Item :
+                            {{this.editFlag?'Update':'Select'}} Item :
                         </div>
-                        <button mat-raised-button color="primary"> 
-                            Select Item
+                        <button mat-raised-button color="primary" (click)="openSelectDialog()">
+                            {{this.editFlag?'Update':'Select'}} Item
                         </button>
                     </div>
                 </div>
-            <!----------------Plot-Details----------------->
+                <!----------------Plot-Details----------------->
+                <form [formGroup]="lotsItemForm" (ngSubmit)="addLotData()" #myForm="ngForm">
+                    <div [class.disabled-contenct]="disableDiv">
+                        <div class="mt-4">
+                            <h3 class="text-sky-500 text-lg">Plot Details</h3>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div class="flex items-center">
+                                    <div class="text-gray-500 mr-2 w-40">
+                                        Item Name :
+                                    </div>
+                                    <mat-form-field [appearance]=configService.matFormFieldFilter class="w-100">
+                                        <mat-label>Item Name</mat-label>
+                                        <input matInput type="text" formControlName="itemName" autocomplete="off">
+                                    </mat-form-field>
+                                </div>
+                                <div class="flex items-center">
+                                    <div class="text-gray-500 mr-2 w-40">
+                                        Plot Number :
+                                    </div>
+                                    <mat-form-field [appearance]=configService.matFormFieldFilter class="w-100">
+                                        <mat-label>Plot Number</mat-label>
+                                        <input matInput type="text" formControlName="plotNumber" autocomplete="off">
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div class="flex items-center">
+                                    <div class="text-gray-500 mr-2 w-40">
+                                        Mineral:
+                                    </div>
+                                    <mat-form-field [appearance]=configService.matFormFieldFilter class="w-100">
+                                        <mat-label>Mineral</mat-label>
+                                        <input matInput type="text" formControlName="mineral" autocomplete="off">
+                                    </mat-form-field>
+                                </div>
+                                <div class="flex items-center">
+                                    <div class="text-gray-500 mr-2  w-40">
+                                        Quantity :
+                                    </div>
+                                    <mat-form-field [appearance]=configService.matFormFieldFilter class="w-100">
+                                        <mat-label>Quantity</mat-label>
+                                        <input matInput type="text" formControlName="quantity" autocomplete="off">
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div class="flex items-center">
+                                    <div class="text-gray-500 mr-2  w-40">
+                                        Area :
+                                    </div>
+                                    <mat-form-field [appearance]=configService.matFormFieldFilter class="w-100">
+                                        <mat-label>Area</mat-label>
+                                        <input matInput type="text" formControlName="area" autocomplete="off">
+                                    </mat-form-field>
+                                </div>
+                                <div class="flex items-center">
+                                    <div class="text-gray-500 mr-2  w-40">
+                                        District :
+                                    </div>
+                                    <mat-form-field [appearance]=configService.matFormFieldFilter class="w-100">
+                                        <mat-label>District</mat-label>
+                                        <input matInput type="text" formControlName="district" autocomplete="off">
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div class="flex items-center">
+                                    <div class="text-gray-500 mr-2  w-40">
+                                        Taluka/CTSO :
+                                    </div>
+                                    <mat-form-field [appearance]=configService.matFormFieldFilter class="w-100">
+                                        <mat-label>Taluka/CTSO</mat-label>
+                                        <input matInput type="text" formControlName="taluka" autocomplete="off">
+                                    </mat-form-field>
+                                </div>
+                                <div class="flex items-center">
+                                    <div class="text-gray-500 mr-2  w-40">
+                                        village :
+                                    </div>
+                                    <mat-form-field [appearance]=configService.matFormFieldFilter class="w-100">
+                                        <mat-label>Village</mat-label>
+                                        <input matInput type="text" formControlName="village" autocomplete="off">
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div class="flex items-center">
+                                    <div class="text-gray-500 mr-2  w-40">
+                                        Latitude :
+                                    </div>
+                                    <mat-form-field [appearance]=configService.matFormFieldFilter class="w-100">
+                                        <mat-label>Latitude</mat-label>
+                                        <input matInput type="text" formControlName="latitude" autocomplete="off">
+                                    </mat-form-field>
+                                </div>
+                                <div class="flex items-center">
+                                    <div class="text-gray-500 mr-2  w-40">
+                                        Longitude :
+                                    </div>
+                                    <mat-form-field [appearance]=configService.matFormFieldFilter class="w-100">
+                                        <mat-label>Longitude</mat-label>
+                                        <input matInput type="text" formControlName="longitude" autocomplete="off">
+                                    </mat-form-field>
+                                </div>
+                                <div class="flex items-center">
+                                    <div class="text-gray-500 mr-2  w-40">
+                                        Unit Of Measurement :
+                                    </div>
+                                    <mat-form-field [appearance]=configService.matFormFieldFilter class="w-100">
+                                        <mat-label>Unit of Measurement :</mat-label>
+                                        <input matInput type="text" formControlName="unitOfMesurment"
+                                            autocomplete="off">
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
-                <div class="mt-4">
-                    <h3 class="text-sky-500 text-lg">Plot Details</h3>
-                    <div class="grid grid-cols-2 gap-4">
-                        <div class="flex items-center">
-                            <div class="text-gray-500 mr-2 w-40">
-                                Item Name :
-                            </div>
-                            <mat-form-field class="example-full-width" appearance="outline">
-                                <mat-label>Item Name</mat-label>
-                                <input matInput>
-                            </mat-form-field>
-                        </div>
-                        <div class="flex items-center">
-                            <div class="text-gray-500 mr-2 w-40">
-                                Plot Number :
-                            </div>
-                            <mat-form-field class="example-full-width" appearance="outline">
-                                <mat-label>Plot Number</mat-label>
-                                <input matInput>
-                            </mat-form-field>
-                        </div>
-                    </div>
-                    <div class="grid grid-cols-2 gap-4">
-                        <div class="flex items-center">
-                            <div class="text-gray-500 mr-2 w-40">
-                               Mineral:
-                            </div>
-                            <mat-form-field class="example-full-width" appearance="outline">
-                                <mat-label>Mineral</mat-label>
-                                <input matInput>
-                            </mat-form-field>
-                        </div>
-                        <div class="flex items-center">
-                            <div class="text-gray-500 mr-2  w-40">
-                               Quantity :
-                            </div>
-                            <mat-form-field class="example-full-width" appearance="outline">
-                                <mat-label>Quantity</mat-label>
-                                <input matInput>
-                            </mat-form-field>
-                        </div>
-                    </div>
-                    <div class="grid grid-cols-2 gap-4">
-                        <div class="flex items-center">
-                            <div class="text-gray-500 mr-2  w-40">
-                               Area :
-                            </div>
-                            <mat-form-field class="example-full-width" appearance="outline">
-                                <mat-label> Area</mat-label>
-                                <input matInput>
-                            </mat-form-field>
-                        </div>
-                        <div class="flex items-center">
-                            <div class="text-gray-500 mr-2  w-40">
-                                District :
-                            </div>
-                            <mat-form-field class="example-full-width" appearance="outline">
-                                <mat-label>District</mat-label>
-                                <input matInput>
-                            </mat-form-field>
-                        </div>
-                    </div>
-                    <div class="grid grid-cols-2 gap-4">
-                        <div class="flex items-center">
-                            <div class="text-gray-500 mr-2  w-40">
-                               Taluka/CTSO :
-                            </div>
-                            <mat-form-field class="example-full-width" appearance="outline">
-                                <mat-label>Taluka/CTSO</mat-label>
-                                <input matInput>
-                            </mat-form-field>
-                        </div>
-                        <div class="flex items-center">
-                            <div class="text-gray-500 mr-2  w-40">
-                                village :
-                            </div>
-                            <mat-form-field class="example-full-width" appearance="outline">
-                                <mat-label>village</mat-label>
-                                <input matInput>
-                            </mat-form-field>
-                        </div>
-                    </div>
-                    <div class="grid grid-cols-2 gap-4">
-                        <div class="flex items-center">
-                            <div class="text-gray-500 mr-2  w-40">
-                                Latitude :
-                            </div>
-                            <mat-form-field class="example-full-width" appearance="outline">
-                                <mat-label>Latitude</mat-label>
-                                <input matInput>
-                            </mat-form-field>
-                        </div>
-                        <div class="flex items-center">
-                            <div class="text-gray-500 mr-2  w-40">
-                                Longitude :
-                            </div>
-                            <mat-form-field class="example-full-width" appearance="outline">
-                                <mat-label> Longitudes</mat-label>
-                                <input matInput>
-                            </mat-form-field>
-                        </div>
-                        <div class="flex items-center">
-                            <div class="text-gray-500 mr-2  w-40">
-                                Unit Of Measurement :
-                            </div>
-                            <mat-form-field class="example-full-width" appearance="outline">
-                                <mat-label>Unit Of Measurement</mat-label>
-                                <input matInput>
-                            </mat-form-field>
-                        </div>
-                    </div>
-                </div>
-            <!----------------Fees-And-Charges-Details----------------->
+                    <!----------------Fees-And-Charges-Details----------------->
 
-                <div class="mt-4">
-                    <h3 class="text-sky-500 text-lg">
-                        Fees And Charges Details
-                    </h3>
-                    <div class="grid grid-cols-2 gap-4">
-                        <div class="flex items-center">
-                            <div class="text-gray-500 mr-2 w-40">
-                                Tender/Application Fee :
+                    <div class="mt-4">
+                        <h3 class="text-sky-500 text-lg">
+                            Fees And Charges Details
+                        </h3>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="flex items-center">
+                                <div class="text-gray-500 mr-2 w-40">
+                                    Tender/Application Fee :
+                                </div>
+                                <mat-form-field [appearance]=configService.matFormFieldFilter class="w-100">
+                                    <mat-label>Tender Fee / Application Free</mat-label>
+                                    <input matInput type="text" formControlName="tender_ApplicationFee"
+                                        autocomplete="off">
+                                    <mat-error *ngIf="f.tender_ApplicationFee.errors">
+                                        <span class="text-danger" *ngIf="f.tender_ApplicationFee.errors?.required">
+                                            Tender Fee / Application Free is required.</span>
+                                        <span class="text-danger"
+                                            *ngIf="f.tender_ApplicationFee.errors?.pattern || f.tender_ApplicationFee.errors?.maxlength || f.tender_ApplicationFee.errors?.minlength">
+                                            Please enter Valid Tender Fee / Application Free</span>
+                                    </mat-error>
+                                </mat-form-field>
                             </div>
-                            <mat-form-field class="example-full-width" appearance="outline">
-                                <mat-label> Tender Fee/Application Fee </mat-label>
-                                <input matInput>
-                            </mat-form-field>
+
                         </div>
-                        <div class="flex items-center">
-                            <div class="text-gray-500 mr-2 w-40">
-                                Office Value :
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="flex items-center">
+                                <div class="text-gray-500 mr-2 w-40">
+                                    EMD/ Security<br>
+                                    Deposite :
+                                </div>
+                                <mat-form-field [appearance]=configService.matFormFieldFilter class="w-100">
+                                    <mat-label>EMD/ Security Deposite :</mat-label>
+                                    <input matInput type="text" formControlName="emD_SecurityDeposit"
+                                        autocomplete="off">
+                                    <mat-error *ngIf="f.emD_SecurityDeposit.errors">
+                                        <span class="text-danger" *ngIf="f.emD_SecurityDeposit.errors?.required">
+                                            EMD/ Security Deposite is required.</span>
+                                        <span class="text-danger"
+                                            *ngIf="f.emD_SecurityDeposit.errors?.pattern || f.emD_SecurityDeposit.errors?.maxlength ">
+                                            Please enter Valid EMD/ Security Deposite</span>
+                                    </mat-error>
+                                </mat-form-field>
                             </div>
-                            <mat-form-field class="example-full-width" appearance="outline">
-                                <mat-label> Office Value</mat-label>
-                                <input matInput>
-                            </mat-form-field>
+                            <div class="flex items-center">
+                                <div class="text-gray-500 mr-2  w-40">
+                                    GST :
+                                </div>
+                                <mat-form-field [appearance]=configService.matFormFieldFilter class="w-100">
+                                    <mat-label>GST</mat-label>
+                                    <input matInput type="text" formControlName="gst" autocomplete="off">
+                                    <mat-error *ngIf="f.gst.errors">
+                                        <span class="text-danger"
+                                            *ngIf="f.gst.errors?.pattern || f.gst.errors?.maxlength ">
+                                            Please enter Valid GST</span>
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="flex items-center">
+                                <div class="text-gray-500 mr-2  w-40">
+                                    Minimum Bid <br>
+                                    Increment :
+                                </div>
+                                <mat-form-field [appearance]=configService.matFormFieldFilter class="w-100">
+                                    <mat-label>Minimum Bid Increment</mat-label>
+                                    <input matInput type="text" formControlName="minBidIncrement" autocomplete="off">
+                                    <mat-error *ngIf="f.minBidIncrement.errors">
+                                        <span class="text-danger" *ngIf="f.minBidIncrement.errors?.required">
+                                            Minimum Bid Increment is required.</span>
+                                        <span class="text-danger"
+                                            *ngIf="f.minBidIncrement.errors?.pattern || f.minBidIncrement.errors?.maxlength">
+                                            Please enter Valid Minimum Bid Increment</span>
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+                            <div class="flex items-center">
+                                <div class="text-gray-500 mr-2  w-40">
+                                    SGST :
+                                </div>
+                                <mat-form-field [appearance]=configService.matFormFieldFilter class="w-100">
+                                    <mat-label>SGST </mat-label>
+                                    <input matInput type="text" formControlName="sgst" autocomplete="off">
+                                    <mat-error *ngIf="f.sgst.errors">
+                                        <span class="text-danger"
+                                            *ngIf="f.sgst.errors?.pattern ||f.sgst.errors?.maxlength">
+                                            Please enter Valid SGST </span>
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="flex items-center">
+                                <div class="text-gray-500 mr-2  w-40">
+                                    CGST :
+                                </div>
+                                <mat-form-field [appearance]=configService.matFormFieldFilter class="w-100">
+                                    <mat-label>CGST </mat-label>
+                                    <input matInput type="text" formControlName="cgst" autocomplete="off">
+                                    <mat-error *ngIf="f.cgst.errors">
+                                        <span class="text-danger"
+                                            *ngIf="f.cgst.errors?.pattern ||f.cgst.errors?.maxlength">
+                                            Please enter Valid CGST </span>
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+                            <div class="flex items-center">
+                                <div class="text-gray-500 mr-2  w-40">
+                                    TCS :
+                                </div>
+                                <mat-form-field [appearance]=configService.matFormFieldFilter class="w-100">
+                                    <mat-label>TCS</mat-label>
+                                    <input matInput type="text" formControlName="tcs" autocomplete="off">
+                                    <mat-error *ngIf="f.tcs.errors">
+                                        <span class="text-danger"
+                                            *ngIf="f.tcs.errors?.pattern ||f.tcs.errors?.maxlength">
+                                            Please enter Valid TCS </span>
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4 space-y-4">
+                            <div class="flex items-center">
+                                <div class=" text-gray-500 mr-2  w-40">
+                                    IGST :
+                                </div>
+                                <mat-form-field [appearance]=configService.matFormFieldFilter class="w-100">
+                                    <mat-label>IGST</mat-label>
+                                    <input matInput type="text" formControlName="igst" autocomplete="off">
+                                    <mat-error *ngIf="f.igst.errors">
+                                        <span class="text-danger"
+                                            *ngIf="f.igst.errors?.pattern ||f.igst.errors?.maxlength">
+                                            Please enter Valid IGST </span>
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+                            <div class="flex items-center">
+                                <div class="col-span-1 text-gray-500 mr-2  w-40">
+                                    Any Other :
+                                </div>
+                                <div class="col-sm-8">
+                                    <mat-form-field [appearance]=configService.matFormFieldFilter class="w-100">
+                                        <mat-label>Any Other</mat-label>
+                                        <input matInput type="text" formControlName="anyOther" autocomplete="off">
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                        </div>
+                        <div align="end" class="me-5 my-4">
+                            <button mat-raised-button color="primary">
+                                {{buttonText}}
+                            </button>
+                        </div>
+                        <!----------Table-------------->
+                        <div class="card overflow-auto">
+                            <div class="bg-app-bar px-6 h-16 border-b sticky left-0 flex items-center">
+                                <span class="flex-1"></span>
+                                <button [matMenuTriggerFor]="columnFilterMenu" class="ml-4 flex-none" mat-icon-button
+                                    matTooltip="Filter Columns" type="button">
+                                    <mat-icon svgIcon="mat:filter_list"></mat-icon>
+                                </button>
+                            </div>
+
+                            <table @stagger [dataSource]="dataSource" class="w-full" mat-table matSort>
+                                <!-- sr No column -->
+                                <ng-container matColumnDef="srNo">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Sr.No </th>
+                                    <td mat-cell *matCellDef="let element;let i=index"> {{((pageNumber + 1) * 10 + i +
+                                        1)-20}}</td>
+                                </ng-container>
+
+                                <!-- Text Columns -->
+                                <ng-container *ngFor="let column of columns; trackBy: trackByProperty">
+                                    <ng-container *ngIf="column.type === 'text'" [matColumnDef]="column.property">
+                                        <th *matHeaderCellDef class="uppercase" mat-header-cell mat-sort-header> {{
+                                            column.label }}</th>
+                                        <td *matCellDef="let row" [ngClass]="column.cssClasses" mat-cell>{{
+                                            row[column.property] }}</td>
+                                    </ng-container>
+                                </ng-container>
+                                <ng-container matColumnDef="actions">
+                                    <th mat-header-cell *matHeaderCellDef>Action</th>
+                                    <td mat-cell *matCellDef="let element;let i = index">
+                                        <div class="flex">
+                                            <a (click)="editLotData(element,i)"
+                                                class="w-8 h-8 leading-none flex items-center justify-center ml-1 hover:bg-hover text-teal bg-teal-light"
+                                                mat-icon-button>
+                                                <mat-icon class="icon-sm" svgIcon="mat:edit"></mat-icon>
+                                            </a>
+                                            <a (click)="deleteLotModel(element.itemId,i)"
+                                                class="w-8 h-8 leading-none flex items-center justify-center ml-1 hover:bg-hover text-pink-600 bg-pink-100"
+                                                mat-icon-button>
+                                                <mat-icon class="icon-sm" svgIcon="mat:delete"></mat-icon>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </ng-container>
+
+                                <tr *matHeaderRowDef="visibleColumns" mat-header-row></tr>
+
+                                <tr *matRowDef="let row; columns: visibleColumns;" @fadeInUp
+                                    class="hover:bg-hover trans-ease-out cursor-pointer" mat-row></tr>
+                            </table>
+                            <ng-container *ngIf="!dataSource">
+                                <p class="bg-red-400 text-stone-200	text-center	 py-px	"> Data Not Found </p>
+                            </ng-container>
+                        </div>
+                        <!----------Table-End------------->
+                        <div class="card overflow-auto  mt-5">
+                            <div align="end" class="me-5 my-4">
+                                <button mat-stroked-button class="btn-main mb-2  img-upload-btn"
+                                    [disabled]="documentListHide == true"
+                                    (click)="this.getdocumentList(); documentListHide = true">
+                                    {{this.editFlag?'Update':'Proceed'}} to Document List</button>
+                            </div>
+
+                            <div class="bg-app-bar px-6 h-16 border-b sticky left-0 flex items-center">
+                                <span class="flex-1"></span>
+                            </div>
+                            <table @stagger [dataSource]="dataSourceDocument" class="w-full" mat-table matSort>
+                                <!-- sr No column -->
+                                <ng-container matColumnDef="srNo">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Sr.No </th>
+                                    <td mat-cell *matCellDef="let element;let i=index"> {{((pageNumber + 1) * 10 + i +
+                                        1)-20}}</td>
+                                </ng-container>
+
+                                <!-- Text Columns -->
+                                <ng-container *ngFor="let column of columnsDoc; trackBy: trackByProperty">
+                                    <ng-container *ngIf="column.type === 'text'" [matColumnDef]="column.property">
+                                        <th *matHeaderCellDef class="uppercase" mat-header-cell mat-sort-header> {{
+                                            column.label }}</th>
+                                        <td *matCellDef="let row" [ngClass]="column.cssClasses" mat-cell>{{
+                                            row[column.property] }}</td>
+                                    </ng-container>
+                                </ng-container>
+                                <ng-container matColumnDef="actions">
+                                    <th mat-header-cell *matHeaderCellDef>
+                                        <div class="d-flex align-items-center justify-content-center">Select</div>
+                                    </th>
+                                    <td mat-cell *matCellDef="let element">
+                                        <div class="d-flex align-items-center justify-content-center">
+                                            <mat-checkbox class="" (change)="selectDocument($event,element,element.id)"
+                                                [checked]="element?.checked">
+                                            </mat-checkbox>
+                                        </div>
+                                    </td>
+                                </ng-container>
+                                <tr *matHeaderRowDef="visibleColumnsDoc" mat-header-row></tr>
+
+                                <tr *matRowDef="let row; columns: visibleColumnsDoc;" @fadeInUp
+                                    class="hover:bg-hover trans-ease-out cursor-pointer" mat-row></tr>
+                            </table>
+                            <ng-container *ngIf="!dataSourceDocument">
+                                <p class="bg-red-400 text-stone-200	text-center	 py-px	"> Data Not Found </p>
+                            </ng-container>
                         </div>
                     </div>
-                    <div class="grid grid-cols-2 gap-4">
-                        <div class="flex items-center">
-                            <div class="text-gray-500 mr-2 w-40">
-                                EMD/ Security<br>
-                                 Deposite :
-                            </div>
-                            <mat-form-field class="example-full-width" appearance="outline">
-                                <mat-label> EMD/ Security Deposite</mat-label>
-                                <input matInput>
-                            </mat-form-field>
-                        </div>
-                        <div class="flex items-center">
-                            <div class="text-gray-500 mr-2  w-40">
-                              GST :
-                            </div>
-                            <mat-form-field class="example-full-width" appearance="outline">
-                                <mat-label>GST</mat-label>
-                                <input matInput>
-                            </mat-form-field>
-                        </div>
-                    </div>
-                    <div class="grid grid-cols-2 gap-4">
-                        <div class="flex items-center">
-                            <div class="text-gray-500 mr-2  w-40">
-                              Minimum Bid <br>
-                              Increment :
-                            </div>
-                            <mat-form-field class="example-full-width" appearance="outline">
-                                <mat-label> Minimum Bid Increment</mat-label>
-                                <input matInput>
-                            </mat-form-field>
-                        </div>
-                        <div class="flex items-center">
-                            <div class="text-gray-500 mr-2  w-40">
-                               SGST :
-                            </div>
-                            <mat-form-field class="example-full-width" appearance="outline">
-                                <mat-label>SGST</mat-label>
-                                <input matInput>
-                            </mat-form-field>
-                        </div>
-                    </div>
-                    <div class="grid grid-cols-2 gap-4">
-                        <div class="flex items-center">
-                            <div class="text-gray-500 mr-2  w-40">
-                               CGST :
-                            </div>
-                            <mat-form-field class="example-full-width" appearance="outline">
-                                <mat-label>CGST</mat-label>
-                                <input matInput>
-                            </mat-form-field>
-                        </div>
-                        <div class="flex items-center">
-                            <div class="text-gray-500 mr-2  w-40">
-                                TCS :
-                            </div>
-                            <mat-form-field class="example-full-width" appearance="outline">
-                                <mat-label>TCS</mat-label>
-                                <input matInput>
-                            </mat-form-field>
-                        </div>
-                    </div>
-                    <div class="grid grid-cols-2 gap-4 space-y-4">
-                        <div class="flex items-center">
-                            <div class=" text-gray-500 mr-2  w-40">
-                               IGST :
-                            </div>
-                            <mat-form-field class="example-full-width" appearance="outline">
-                                <mat-label>IGST</mat-label>
-                                <input matInput>
-                            </mat-form-field>
-                        </div>
-                        <div class="flex items-center">
-                            <div class="col-span-1 text-gray-500 mr-2  w-40">
-                              Any Other :
-                            </div>
-                            <mat-form-field class="example-full-width" appearance="outline">
-                                <mat-label>Any Other</mat-label>
-                                <input matInput>
-                            </mat-form-field>
-                        </div>
-                    </div>
-                    <div align="end" class="me-5 my-4">
-                        <button mat-raised-button color="primary"> 
-                           Add Item
-                        </button>
-                    </div>
-                <!----------Table-------------->   
-                    <div>
-                        <h2 class="text-sky-500">Table</h2>
-                    </div>
-                <!----------Table-End------------->
-                <div align="end" class="me-5 my-4">
-                    <button mat-raised-button color="primary"> 
-                        Proceed to Document List
-                    </button>
-                </div>
-                </div>
-            </div> 
-        </div>     
+                </form>
+            </div>
+        </div>
     </vex-page-layout-content>
 </vex-page-layout>
+
+<mat-menu #columnFilterMenu="matMenu" xPosition="before" yPosition="below">
+    <button (click)="toggleColumnVisibility(column, $event)" *ngFor="let column of columns"
+        class="checkbox-item mat-menu-item">
+        <mat-checkbox (click)="$event.stopPropagation()" [(ngModel)]="column.visible" color="primary">
+            {{ column.label }}
+        </mat-checkbox>
+    </button>
+</mat-menu>

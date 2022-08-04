@@ -14,14 +14,16 @@ import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { BreadcrumbsModule } from 'src/@vex/components/breadcrumbs/breadcrumbs.module';
-import { PageLayoutModule } from 'src/@vex/components/page-layout/page-layout.module';
+// import { PageLayoutModule } from 'src/@vex/components/page-layout/page-layout.module';
 
 import { AngularMaterialModule } from 'src/app/core/angular-material/angular-material.module';
 import { MatNativeDateModule } from '@angular/material/core';
 import { VexModule } from 'src/@vex/vex.module';
 import { PipeModule } from 'src/app/core/pipes/pipe.module';
 import { CustomLayoutModule } from 'src/app/custom-layout/custom-layout.module';
-
+import { PageLayoutModule } from 'src/@vex/components/page-layout/page-layout.module';
+import { SecondaryToolbarModule } from 'src/@vex/components/secondary-toolbar/secondary-toolbar.module';
+// import { BreadcrumbsModule } from 'src/@vex/components/breadcrumbs/breadcrumbs.module';
 
 @NgModule({
   declarations: [
@@ -46,6 +48,7 @@ import { CustomLayoutModule } from 'src/app/custom-layout/custom-layout.module';
     MatSelectModule,
     VexModule,
     PipeModule,
+    SecondaryToolbarModule,
     CustomLayoutModule,MatNativeDateModule
   ], 
 })
