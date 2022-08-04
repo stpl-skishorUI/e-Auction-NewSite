@@ -25,8 +25,7 @@ import { MatTabChangeEvent } from '@angular/material/tabs';
 import { TableColumn } from 'src/@vex/interfaces/table-column.interface';
 
 import { DialogService } from 'src/app/core/services/dialog.service';
-import { EventDetail } from './interfaces/event-detail.model';
-import { LotCreation } from './interfaces/lot-creation.model';
+import { EventDetail, LotCreation } from './interfaces/event-detail.model';
 import { AuctionPlotProfileComponent } from 'src/app/partial/bidder/auction-plot-profile/auction-plot-profile.component';
 import { MatDialog } from '@angular/material/dialog';
 
@@ -66,18 +65,18 @@ export class HomeComponent implements OnInit {
     { label: 'Actions', property: 'actions', type: 'button', visible: true, cssClasses: ['text-secondary', 'font-medium']  },
   ];
 
-  eventColumns1:TableColumn<LotCreation>[]=[
+  eventDetailsColumns:TableColumn<LotCreation>[]=[
     { label: 'srNo', property: 'srNo', type: 'button', visible: true },
     { label: 'Item Number And Name', property: 'itemName', type: 'text', visible: true, cssClasses: ['text-secondary', 'font-medium'] },
-    { label: 'Mineral', property: 'material', type: 'text', visible: true, cssClasses: ['text-secondary', 'font-medium'] },
+    { label: 'Mineral', property: 'material', type: 'text', visible: false, cssClasses: ['text-secondary', 'font-medium'] },
     { label: 'Taluka / CTSO	', property: 'taluka', type: 'text', visible: true, cssClasses: ['text-secondary', 'font-medium'] },
     { label: 'Village', property: 'village', type: 'text', visible: true, cssClasses: ['text-secondary', 'font-medium'] },
     { label: 'Area', property: 'area', type: 'text', visible: true, cssClasses: ['text-secondary', 'font-medium'] },
     { label: 'Allowed Quantity (InBrass)	', property: 'quantity', type: 'text', visible: true, cssClasses: ['text-secondary', 'font-medium'] },
-    { label: 'Tender / Application Fee', property: 'tender_ApplicationFee', type: 'text', visible: true, cssClasses: ['text-secondary', 'font-medium'] },
-    { label: 'Offset Value	', property: 'offsetValue', type: 'text', visible: true, cssClasses: ['text-secondary', 'font-medium'] },
-    { label: 'EMD', property: 'emD_SecurityDeposit', type: 'text', visible: true, cssClasses: ['text-secondary', 'font-medium'] },
-    { label: 'View Item Details', property: 'actions', type: 'button', visible: true, cssClasses: ['text-secondary', 'font-medium'] },
+    { label: 'Tender / Application Fee', property: 'tender_ApplicationFee', type: 'currency', visible: false, cssClasses: ['text-secondary', 'font-medium'] },
+    { label: 'Offset Value	', property: 'offsetValue', type: 'currency', visible: false, cssClasses: ['text-secondary', 'font-medium'] },
+    { label: 'EMD', property: 'emD_SecurityDeposit', type: 'currency', visible: false, cssClasses: ['text-secondary', 'font-medium'] },
+    { label: 'View Item Details', property: 'action', type: 'button', visible: true, cssClasses: ['text-secondary', 'font-medium'] },
   ];
 
   get visibleColumns() {
@@ -85,26 +84,25 @@ export class HomeComponent implements OnInit {
   }
 
   get visibleColumnsEvent() {
-    return this.eventColumns1.filter(column => column.visible).map(column => column.property);
+    return this.eventDetailsColumns.filter(column => column.visible).map(column => column.property);
   }
   
-  eventDetails: any;
+  eventDetails: MatTableDataSource<LotCreation>;
   checkUserLogFlag: boolean = false;
   participatedBidderEventlist: any[] = [];
   expandedElement!: any | null;
   pageNumber: number = 1;
   layoutCtrl = new UntypedFormControl('boxed');
-  
-  tabChangeFlag: string = 'Active';
-  eventColumns = ['srNo', 'itemName', 'material', 'taluka', 'village', 'area', 'quantity', 'tender_ApplicationFee', 'offsetValue', 'emD_SecurityDeposit', 'ViewItem']
+  totalRows: number = 0;
+  tabChangeFlag: string = 'Active';  
   pageSize = 10;
   pageSizeOptions: number[] = [5, 10, 20, 50];
-  dataSource: MatTableDataSource<any> | null;
+  dataSource: MatTableDataSource<EventDetail> | null;
   selection = new SelectionModel<any>(true, []);
   searchCtrl = new UntypedFormControl();
-  filterForm: FormGroup | any;
+  filterForm!: FormGroup ;
   activeTab: string = 'Active';
-  tableDataArray: any;
+  tableDataArray =[];
   lavelArray = [];
   dropDownSelFlag: boolean = true;
   districtArray = [];
@@ -121,7 +119,6 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log(this.visibleColumns,this.visibleColumnsEvent);
     this.defulatForm();
     this.levelArray();
     this.getMineral();
@@ -130,6 +127,20 @@ export class HomeComponent implements OnInit {
   trackByProperty<T>(_index: number, column: TableColumn<T>) {
     return column.property;
   }
+
+  eventDetailsdialog(data:EventDetail) {
+    console.log(data);
+    let arrayObj = [
+      { 'key': 'Title', 'val': data.title, row: 1, col: 1, type: 'text' },
+      { 'key': 'Description', 'val': data.description, row: 1, col: 2, type: 'text' },
+      { 'key': 'Level', 'val': data.eventLevel, row: 1, col: 2, type: 'text' },
+      { 'key': 'Bid Submission End Date & Time', 'val': this.datePipe.transform(data.bidSubmissionEndDate, 'dd/MM/yyyy') == '01/01/0001' ? '-' : this.datePipe.transform(data.bidSubmissionEndDate, 'dd/MM/yyyy'), col: 2, type: 'date' },
+      { 'key': 'Bid Opening Date & Time / Bid Starting Date & Time', 'val': this.datePipe.transform(data.bidSubmissionStartDate, 'dd/MM/yyyy') == '01/01/0001' ? '-' : this.datePipe.transform(data.bidSubmissionStartDate, 'dd/MM/yyyy'), col: 2, type: 'date' },
+     
+    ]
+    this.dialogService.detailsComponentDialog(arrayObj, 'Event Details', this.apiService.modalSize[2]); // call details dialog modal
+  }
+
 
 
   //--------------------------------------------------------filter dropdown start heare -----------------------------------------------------//
@@ -172,7 +183,7 @@ export class HomeComponent implements OnInit {
     })
   }
 
-  getTenderCount(Obj: any) {
+  getTenderCount(Obj: Object) {
     Obj += '&TenderType=' + this.tabCountFlag
     this.apiService.setHttp('get', 'event-creation/getTenderCount' + Obj, false, false, false, 'bidderUrl');
     this.apiService.getHttp().subscribe({
@@ -207,10 +218,13 @@ export class HomeComponent implements OnInit {
     paramList += '&TenderType=' + this.tabChangeFlag;
     this.apiService.setHttp('get', 'event-creation/getAll' + paramList + "&IsPublished=1", false, false, false, 'bidderUrl');
     this.apiService.getHttp().subscribe({
-      next: (res: object) => {
+      next: (res: any) => {
         if (res['statusCode'] === "200") {
           this.tableDataArray = res['responseData'].responseData1;
           this.dataSource = new MatTableDataSource(this.tableDataArray);
+          this.dataSource.sort = this.sort;
+          this.totalRows = res.responseData.responseData2[0].pageCount;
+          this.totalRows > 10 && this.pageNumber == 1 ? this.paginator?.firstPage() : '';
           this.getTenderCount(paramList);
         } else {
           this.dataSource = null;
@@ -258,7 +272,7 @@ export class HomeComponent implements OnInit {
       this.dataSource.data.forEach(row => this.selection.select(row));
   }
 
-  calculateDiff(date: any) {
+  calculateDiff(date: Date) {
     var date1 = new Date(date);
     let date2 = new Date();
     var Difference_In_Time = date1.getTime() - date2.getTime();
@@ -267,7 +281,7 @@ export class HomeComponent implements OnInit {
     return parseInt(Difference_In_Days.toString());
   }
 
-  openEventDetailsDialog(data: any) {
+  openEventDetailsDialog(data: EventDetail) {
     let arrayObj = [
 
       { 'key': 'Title', 'val': data.title, row: 1, tag: '<p> </p>', class: "", col: 1 },
@@ -280,7 +294,7 @@ export class HomeComponent implements OnInit {
     this.dialogService.detailsComponentDialog(arrayObj, 'Event Details', this.apiService.modalSize[2]); // call details dialog modal
   }
 
-  expandEventrDetails(eventId: number, totalItems: any) {
+  expandEventrDetails(eventId: number, totalItems: number) {
     if (totalItems <= 0) {
       this.commonService.snackBar('Event item count is zero', 1);
       return
@@ -322,7 +336,7 @@ export class HomeComponent implements OnInit {
   isparticipateEvent(event: MatCheckboxChange | any, element: object, isparticipateEvent?: boolean) {
     let checkboxFlag;
     isparticipateEvent == true ? checkboxFlag = true : checkboxFlag = event.source.checked;
-    let obj: any;
+    let obj: Object;
     obj = {
       createdBy: this.checkUserLogFlag == true ? this.localstorageService.userId() : 0,
       modifiedBy: this.checkUserLogFlag == true ? this.localstorageService.userId() : 0,
@@ -402,9 +416,7 @@ export class HomeComponent implements OnInit {
         /**
          * Here we are updating our local array.
          * You would probably make an HTTP request here.
-         */
-      
-      
+         */ 
       }
     });
   }

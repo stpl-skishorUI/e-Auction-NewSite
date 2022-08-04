@@ -1,260 +1,257 @@
 <vex-page-layout>
-    <vex-secondary-toolbar current="User Register"
-      class=" fixed border-0 bg-transparent drop-shadow-none top-1 z-[99] w-8/12">
-      <vex-breadcrumbs [crumbs]="['Master', 'User Register']"></vex-breadcrumbs>
-    </vex-secondary-toolbar>
-  
-  
-  
-    <vex-page-layout-content [class.px-gutter]="layoutCtrl.value === 'fullwidth'" class="-mt-6">
-      <form [formGroup]="filterForm" (ngSubmit)="bindTable()">
-        <div class="my-3 card p-3 border-0 shadow-none">
-          <div class="flex flex-row justify-between">
-            <div class="grid grid-cols-5 gap-4 mr-3">
-                <mat-form-field [appearance]=configService?.matFormField>
-                    <mat-label>Enter a date range</mat-label>
-                    <mat-date-range-input [rangePicker]="picker">
-                        <input matStartDate placeholder="Start date" formControlName="startDate"
-                            autocomplete="off" [disabled]="true">
-                        <input matEndDate placeholder="End date" formControlName="endDate" autocomplete="off"
-                            [disabled]="true">
-                    </mat-date-range-input>
-                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                    <mat-date-range-picker #picker [disabled]="false"></mat-date-range-picker>
-                </mat-form-field>
-              <mat-form-field [appearance]=configService.matFormFieldFilter>
-                <mat-label>Event Level</mat-label>
-                        <mat-select formControlName="levelId">
-                            <mat-option *ngFor="let level of lavelArray" [value]=level.val>{{level.text}}
-                            </mat-option>
-                        </mat-select>
-              </mat-form-field>
-              <mat-form-field [appearance]=configService.matFormFieldFilter>
-                <mat-label>All District</mat-label>
-                <mat-select formControlName="districtId">
-                    <mat-option *ngFor="let district of districtArray" [value]=district.id>
-                        {{district.district}}
-                    </mat-option>
-                    </mat-select>
-              </mat-form-field>
-              <mat-form-field [appearance]=configService.matFormFieldFilter>
-                <mat-label>All Mineral</mat-label>
-                        <mat-select formControlName="mineralId">
-                            <mat-option *ngFor="let mineralId of MineralArray" [value]="mineralId.materialId">
-                                {{mineralId.material}}</mat-option>
-                        </mat-select>
-              </mat-form-field>
-              <mat-form-field [appearance]=configService.matFormFieldFilter>
-                <mat-label>Search</mat-label>
-                <input matInput placeholder="Search by event Id" (keypress)="VB.noSpacesAtStart($event)"
-                    formControlName="search" autocomplete="off">
-              </mat-form-field>
-            </div>
-            <div>
-                <button class="rounded-full bg-gray-200 text-black" mat-button type="submit">
-                    <mat-icon svgIcon="mat:search"></mat-icon>
-                    <span>Search</span>
-                </button>
-            </div>
+  <vex-secondary-toolbar current="Dashboard" *ngIf="router.url!= 'bidder-dashboard'"
+    class=" fixed border-0 bg-transparent drop-shadow-none top-1 z-[99] w-8/12">
+    <vex-breadcrumbs [crumbs]="['Dashboard']"></vex-breadcrumbs>
+  </vex-secondary-toolbar>
+
+
+
+  <vex-page-layout-content [class.px-gutter]="layoutCtrl.value === 'fullwidth'" class="-mt-6">
+    <form [formGroup]="filterForm" (ngSubmit)="bindTable()">
+      <div class="my-3 card p-3 border-0 shadow-none">
+        <div class="flex flex-row justify-between">
+          <div class="grid grid-cols-5 gap-4 mr-3">
+            <mat-form-field [appearance]=configService?.matFormField>
+              <mat-label>Enter a date range</mat-label>
+              <mat-date-range-input [rangePicker]="picker">
+                <input matStartDate placeholder="Start date" formControlName="startDate" autocomplete="off"
+                  [disabled]="true">
+                <input matEndDate placeholder="End date" formControlName="endDate" autocomplete="off" [disabled]="true">
+              </mat-date-range-input>
+              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-date-range-picker #picker [disabled]="false"></mat-date-range-picker>
+            </mat-form-field>
+            <mat-form-field [appearance]=configService.matFormFieldFilter>
+              <mat-label>Event Level</mat-label>
+              <mat-select formControlName="levelId">
+                <mat-option *ngFor="let level of lavelArray" [value]=level.val>{{level.text}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field [appearance]=configService.matFormFieldFilter>
+              <mat-label>All District</mat-label>
+              <mat-select formControlName="districtId">
+                <mat-option *ngFor="let district of districtArray" [value]=district.id>
+                  {{district.district}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field [appearance]=configService.matFormFieldFilter>
+              <mat-label>All Mineral</mat-label>
+              <mat-select formControlName="mineralId">
+                <mat-option *ngFor="let mineralId of MineralArray" [value]="mineralId.materialId">
+                  {{mineralId.material}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field [appearance]=configService.matFormFieldFilter>
+              <mat-label>Search</mat-label>
+              <input matInput placeholder="Search by event Id" (keypress)="VB.noSpacesAtStart($event)"
+                formControlName="search" autocomplete="off">
+            </mat-form-field>
+          </div>
+          <div>
+            <button class="rounded-full bg-gray-200 text-black" mat-button type="submit">
+              <mat-icon svgIcon="mat:search"></mat-icon>
+              <span>Search</span>
+            </button>
           </div>
         </div>
-      </form>
-  
-  
-      <div class="card overflow-auto">
-        <div class="bg-app-bar px-4 h-16 border-b sticky left-0 flex items-center">  
-            <mat-tab-group (selectedTabChange)="onChangeTab($event)">
-                <mat-tab label="Active Tenders {{tabs[0]?.count}}">
-    
-                    <!-- <ng-container *ngTemplateOutlet="tabContent"></ng-container> -->
-    
-                    </mat-tab>
-                    <mat-tab label="Upcoming Tenders {{tabs[1]?.count}}">
-                        <!-- <ng-container *ngTemplateOutlet="tabContent"></ng-container> -->
-                    </mat-tab>                   
-                </mat-tab-group>
-          <div class="flex-1">  
-            <button [matMenuTriggerFor]="columnFilterMenu" class="ml-4 flex-none" mat-icon-button
+      </div>
+    </form>
+
+
+    <div class="card overflow-auto">
+      <div class="bg-app-bar px-4 h-16 border-b sticky left-0 flex items-center">
+        <mat-tab-group (selectedTabChange)="onChangeTab($event)">
+          <mat-tab label="Active Tenders {{tabs[0]?.count}}">
+
+            <!-- <ng-container *ngTemplateOutlet="tabContent"></ng-container> -->
+
+          </mat-tab>
+          <mat-tab label="Upcoming Tenders {{tabs[1]?.count}}">
+            <!-- <ng-container *ngTemplateOutlet="tabContent"></ng-container> -->
+          </mat-tab>
+        </mat-tab-group>
+        <div class="flex-1">
+          <button [matMenuTriggerFor]="columnFilterMenu" class="ml-4 flex-none" mat-icon-button
             matTooltip="Filter Columns" type="button">
             <mat-icon svgIcon="mat:filter_list"></mat-icon>
-          </button>        
-          <button type="button" mat-raised-button color="primary" > PARTICIPATE</button>
-          </div>
+          </button>
+          <button type="button" mat-raised-button color="primary" *ngIf="participatedBidderEventlist.length >=1" (click)="onclickParticipateBtn()"> PARTICIPATE</button>
         </div>
-  
-        <table @stagger [dataSource]="dataSource" class="w-full" mat-table matSort multiTemplateDataRows>
-          <ng-container matColumnDef="srNo">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header> Sr.No </th>
-            <td mat-cell *matCellDef="let element;let i=index">{{i}}</td>
-          </ng-container>
+      </div>
 
-          <ng-container matColumnDef="bidSubmissionEndDate">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>{{activeTab == 'Upcoming'? "Bid Submission start Date & Time"
-              : "Bid Submission End Date & Time"}}</th>
-            <td mat-cell *matCellDef="let element">
-              {{ activeTab == 'Upcoming' ?(element.bidSubmissionStartDate
-              | date:'dd/MM/yyyy & h:m:a'):element.bidSubmissionEndDate | date:'dd/MM/yyyy & h:m:a'}}<br>
+      <table @stagger #eventTavble [dataSource]="dataSource" class="w-full" mat-table matSort multiTemplateDataRows>
+        <ng-container matColumnDef="srNo">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Sr.No </th>
+          <td mat-cell *matCellDef="let row;let i=index">{{i}}</td>
+        </ng-container>
 
-              <span class="text-yellow-400" *ngIf="tabChangeFlag == 'Upcoming'">
-                  {{calculateDiff(element.bidSubmissionStartDate)>0?calculateDiff(element.bidSubmissionStartDate)
-                  + " - Days Remaining": ""}}</span>
-              <span class="text-yellow-400" *ngIf="tabChangeFlag != 'Upcoming'">
-                  {{calculateDiff(element.bidSubmissionEndDate)>0?calculateDiff(element.bidSubmissionEndDate)
-                  + " - Days Remaining": ""}}</span>
+        <ng-container matColumnDef="bidSubmissionEndDate">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>{{activeTab == 'Upcoming'? "Bid Submission start Date &
+            Time"
+            : "Bid Submission End Date & Time"}}</th>
+          <td mat-cell *matCellDef="let element">
+            {{ activeTab == 'Upcoming' ?(element.bidSubmissionStartDate
+            | date:'dd/MM/yyyy & h:m:a'):element.bidSubmissionEndDate | date:'dd/MM/yyyy & h:m:a'}}<br>
+
+            <span class="text-yellow-400" *ngIf="tabChangeFlag == 'Upcoming'">
+              {{calculateDiff(element.bidSubmissionStartDate)>0?calculateDiff(element.bidSubmissionStartDate)
+              + " - Days Remaining": ""}}</span>
+            <span class="text-yellow-400" *ngIf="tabChangeFlag != 'Upcoming'">
+              {{calculateDiff(element.bidSubmissionEndDate)>0?calculateDiff(element.bidSubmissionEndDate)
+              + " - Days Remaining": ""}}</span>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="startDateTime">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Bid Opening Date & Time</th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.bidSubmissionStartDate | date:'dd/MM/yyyy & h:m:a'}}<br>
+
+          </td>
+        </ng-container>
+        <!-- Text Columns -->
+        <ng-container *ngFor="let column of columns; trackBy: trackByProperty">
+          <ng-container *ngIf="column.type === 'text'" [matColumnDef]="column.property">
+            <th *matHeaderCellDef class="uppercase" mat-header-cell mat-sort-header> {{ column.label }}</th>
+            <td *matCellDef="let row" [ngClass]="column.cssClasses" mat-cell>{{ row[column.property] }}
             </td>
           </ng-container>
+        </ng-container>
 
-          <ng-container matColumnDef="startDateTime">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>Bid Opening Date & Time</th>
-            <td mat-cell *matCellDef="let element">
-              {{ element.bidSubmissionStartDate | date:'dd/MM/yyyy & h:m:a'}}<br>
 
-            </td>
-          </ng-container>
-          <!-- Text Columns -->
-          <ng-container *ngFor="let column of columns; trackBy: trackByProperty">
-            <ng-container *ngIf="column.type === 'text'" [matColumnDef]="column.property">
-              <th *matHeaderCellDef class="uppercase" mat-header-cell mat-sort-header> {{ column.label }}</th>
-              <td *matCellDef="let row" [ngClass]="column.cssClasses" mat-cell>{{ row[column.property] }}
-              </td>
-            </ng-container>
-          </ng-container>
-         
-  
-          <!-- Action Column -->
-          <ng-container matColumnDef="actions">
-            <th *matHeaderCellDef mat-header-cell mat-sort-header>ACTION</th>
-            <td *matCellDef="let row" mat-cell>
-              <div class="flex">
-                <a (click)="eventDetails(row)"
+        <!-- Action Column -->
+        <ng-container matColumnDef="actions">
+          <th *matHeaderCellDef mat-header-cell mat-sort-header>ACTION</th>
+          <td *matCellDef="let row" mat-cell>
+            <div class="flex">
+              <a class="w-8 h-8 leading-none flex items-center justify-center ml-1 hover:bg-hover text-gray-700 bg-gray-200"
+                mat-icon-button>
+                <button [class.custom-disabled-btn]="row.totalItem <= 0"
+                  (click)="(expandedElement = expandedElement === row ? null : row.totalItem <= 0 ? null : row); expandEventrDetails(row.id, row.totalItem)">
+                  <!-- <mat-icon>keyboard_arrow_up</mat-icon> -->
+                  <mat-icon >keyboard_arrow_up</mat-icon>
+                </button>
+
+              </a>
+              <a (click)="eventDetailsdialog(row)"
                 class="w-8 h-8 leading-none flex items-center justify-center ml-1 hover:bg-hover text-gray-700 bg-gray-200"
                 mat-icon-button>
-                  <button 
-                  [class.custom-disabled-btn]="row.totalItem <= 0"
-                  (click)="(expandedElement = expandedElement === row ? null : row.totalItem <= 0 ? null : row); expandEventrDetails(row.id, row.totalItem)">
-                  <mat-icon  >keyboard_arrow_up</mat-icon>
-                  <!-- <mat-icon  (click)="arrowFlag"  *ngIf="!arrowFlag">keyboard_arrow_up</mat-icon> -->
+                <mat-icon class="icon-sm" svgIcon="mat:remove_red_eye"></mat-icon>
+              </a>
+              <a (click)="$event.stopPropagation()"  [href]="row.documentPath" target="_blank"
+                class="w-8 h-8 leading-none flex items-center justify-center ml-1 hover:bg-hover text-red bg-red-light"
+                mat-icon-button>
+                <button>
+                  <mat-icon>arrow_downward</mat-icon>
+                </button>
+              </a>
+            </div>
+          </td>
+        </ng-container>
+        <!-- inside table start here  -->
+        <ng-container matColumnDef="expandedDetail">
+          <td mat-cell *matCellDef="let element" [attr.colspan]="visibleColumns.length">
+            <div class="example-element-detail" [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
+              <button [matMenuTriggerFor]="columnEvent" class="ml-4 flex-none" mat-icon-button
+                matTooltip="Filter Columns" type="button">
+                <mat-icon svgIcon="mat:filter_list"></mat-icon>
               </button>
-            
-            </a>
-                <a (click)="$event.stopPropagation()"
-                  class="w-8 h-8 leading-none flex items-center justify-center ml-1 hover:bg-hover text-red bg-red-light"
-                  mat-icon-button>
-                  <button >
-                    <mat-icon>arrow_downward</mat-icon>
+              <div>
+
+                <table @stagger [dataSource]="eventDetails" class="w-full" mat-table #inSideTable>
+                  <ng-container matColumnDef="srNo">
+                    <th mat-header-cell *matHeaderCellDef> Sr.No </th>
+                    <td mat-cell *matCellDef="let element;let i=index"> {{((pageNumber + 1) * 10 + i + 1)-20}}</td>
+                  </ng-container>
+                  <!-- Text Columns -->
+                  <ng-container *ngFor="let column of eventDetailsColumns; trackBy: trackByProperty">
+                    <ng-container *ngIf="column.type === 'text'" [matColumnDef]="column.property">
+                      <th *matHeaderCellDef class="uppercase" mat-header-cell> {{ column.label }}</th>
+                      <td *matCellDef="let row" [ngClass]="column.cssClasses" mat-cell>
+                        {{ row[column.property] }}</td>
+                    </ng-container>
+                  </ng-container>
+                  <!--  Columns fee  -->
+                  <ng-container *ngFor="let column of eventDetailsColumns; trackBy: trackByProperty">
+                    <ng-container *ngIf="column.type === 'currency'" [matColumnDef]="column.property">
+                      <th *matHeaderCellDef class="uppercase" mat-header-cell> {{ column.label }}</th>
+                      <td *matCellDef="let row" [ngClass]="column.cssClasses" mat-cell>
+                        {{ row[column.property] | currency: 'INR':true }}</td>
+                    </ng-container>
+                  </ng-container>
+
+                  <ng-container matColumnDef="action">
+                    <th mat-header-cell *matHeaderCellDef>View Item Details</th>
+                    <td mat-cell *matCellDef="let element">
+                      <button (click)="plotProfile(element.id)" 
+                      class="btn-sm mnw-auto text-primary">
+                      <mat-icon>remove_red_eye</mat-icon>
                   </button>
-                </a>
+                  <ng-container *ngIf="localstorageService.checkUserIsLoggedIn() == true">
+                      <mat-checkbox
+                          *ngIf="localstorageService.userTypeId()==2 && tabChangeFlag == 'Active' &&  element.eventParticipateId == 0"
+                          (click)="$event.stopPropagation()"
+                          (change)="isparticipateEvent($event,element)" class="ms-2"
+                          [checked]="element?.isparticipateflag">
+                      </mat-checkbox>                                                
+                  </ng-container>
+                       </td>
+                  </ng-container>
+
+
+
+
+
+                  <tr class="mat-row p-2 w-100" *matNoDataRow col>
+                    <td class="alert alert-danger text-center m-2 mt-2" colspan="12">No data found </td>
+                  </tr>
+                  <tr *matHeaderRowDef="visibleColumnsEvent" mat-header-row></tr>
+                  <tr *matRowDef="let row; columns: visibleColumnsEvent;" @fadeInUp
+                    class="hover:bg-hover trans-ease-out cursor-pointer" mat-row></tr>
+                </table>
               </div>
-            </td>
-          </ng-container>
-          <!-- inside table start here  -->
-          <ng-container matColumnDef="expandedDetail">
-            <td mat-cell *matCellDef="let element" [attr.colspan]="visibleColumns.length" class="p-0">
-                <div class="example-element-detail"
-                    [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
-                    <div class="card border-0 card-body p-2">
-                        <table #table4 mat-table [dataSource]="eventDetails"
-                            class="table table-bordered border-top mb-0 shadow-none inner-table">
-                                      <ng-container matColumnDef="srNo">
-                                        <th mat-header-cell *matHeaderCellDef> Sr.No </th>
-                                        <td mat-cell *matCellDef="let element; let i= index">{{i+1}}</td>
-                                    </ng-container>
-                                    <ng-container matColumnDef="itemName">
-                                        <th mat-header-cell *matHeaderCellDef> Item Number And Name </th>
-                                        <td mat-cell *matCellDef="let element"> {{element.itemName | titlecase }}</td>
-                                    </ng-container>
-                                    <ng-container matColumnDef="material">
-                                        <th mat-header-cell *matHeaderCellDef> Mineral </th>
-                                        <td mat-cell *matCellDef="let element"> {{element.material | titlecase}} </td>
-                                    </ng-container>
-                                    <ng-container matColumnDef="taluka">
-                                        <th mat-header-cell *matHeaderCellDef> Taluka / CTSO </th>
-                                        <td mat-cell *matCellDef="let element">{{element.taluka | titlecase}}</td>
-                                    </ng-container>
-                                    <ng-container matColumnDef="village">
-                                        <th mat-header-cell *matHeaderCellDef> Village </th>
-                                        <td mat-cell *matCellDef="let element"> {{element.village | titlecase}} </td>
-                                    </ng-container>
-                                    <ng-container matColumnDef="area">
-                                        <th mat-header-cell *matHeaderCellDef> Area </th>
-                                        <td mat-cell *matCellDef="let element">{{element.area | titlecase}}</td>
-                                    </ng-container>
-                                    <ng-container matColumnDef="quantity">
-                                        <th mat-header-cell *matHeaderCellDef> Allowed Quantity
-                                            <small>(InBrass)</small>
-                                        </th>
-                                        <td mat-cell *matCellDef="let element"> {{element.quantity}} </td>
-                                    </ng-container>
-                                    <ng-container matColumnDef="tender_ApplicationFee">
-                                        <th mat-header-cell *matHeaderCellDef> Tender / Application Fee </th>
-                                        <td mat-cell *matCellDef="let element"> {{element.tender_ApplicationFee |
-                                            currency: 'INR':true}}</td>
-                                    </ng-container>
-                                    <ng-container matColumnDef="offsetValue">
-                                        <th mat-header-cell *matHeaderCellDef> Offset Value </th>
-                                        <td mat-cell *matCellDef="let element"> {{element.offsetValue |  currency: 'INR':true}} </td>
-                                    </ng-container>
-                                    <ng-container matColumnDef="emD_SecurityDeposit">
-                                        <th mat-header-cell *matHeaderCellDef> EMD </th>
-                                        <td mat-cell *matCellDef="let element"> {{element.emD_SecurityDeposit |  currency: 'INR':true}}</td>
-                                    </ng-container>
-                                    <ng-container matColumnDef="ViewItem">
-                                        <th mat-header-cell *matHeaderCellDef> View Item Details </th>
-                                        <td mat-cell *matCellDef="let element">
-                                            <div class="d-flex align-items-center">
-                                                <button (click)="plotProfile(element.id)" 
-                                                    class="btn-sm mnw-auto text-primary">
-                                                    <mat-icon>remove_red_eye</mat-icon>
-                                                </button>
-                                                <ng-container *ngIf="localstorageService.checkUserIsLoggedIn() == true">
-                                                    <mat-checkbox
-                                                        *ngIf="localstorageService.userTypeId()==2 && tabChangeFlag == 'Active' &&  element.eventParticipateId == 0"
-                                                        (click)="$event.stopPropagation()"
-                                                        (change)="isparticipateEvent($event,element)" class="ms-2"
-                                                        [checked]="element?.isparticipateflag">
-                                                    </mat-checkbox>                                                
-                                                </ng-container>
+            </div>
+          </td>
+        </ng-container>
+        <!--  End here  -->
+        <tr class="mat-row p-2 w-100" *matNoDataRow col>
+          <td class="alert alert-danger text-center m-2 mt-2" colspan="12">No data found </td>
+        </tr>
+        <tr *matHeaderRowDef="visibleColumns" mat-header-row></tr>
+        <tr *matRowDef="let row; columns: visibleColumns;" @fadeInUp
+          class="hover:bg-hover trans-ease-out cursor-pointer" mat-row></tr>
+        <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></tr>
 
-                                            </div>
-                                        </td>
-                                    </ng-container>
-                                    <tr class="mat-row p-2 w-100" *matNoDataRow col>
-                                        <td class="text-center m-2 mt-2" colspan="12">
-                                            <div class="alert alert-danger mb-0 p-2" role="alert">
-                                                No data found
-                                            </div>
-                                        </td>
-                                    </tr>
-                            <tr *matHeaderRowDef="eventColumns" mat-header-row></tr>
-                            <tr *matRowDef="let row; columns: eventColumns;" @fadeInUp
-                              class="hover:bg-hover trans-ease-out cursor-pointer" mat-row></tr>
-                          </table>                           
-                    </div>
-                </div>
-            </td>
-        </ng-container> 
-             <!--  End here  -->
-          <tr *matHeaderRowDef="visibleColumns" mat-header-row></tr>
-          <tr *matRowDef="let row; columns: visibleColumns;" @fadeInUp
-            class="hover:bg-hover trans-ease-out cursor-pointer" mat-row></tr>
-            <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></tr>
+      </table>
+      <ng-container *ngIf="totalRows > 10">
+        <mat-paginator [pageSizeOptions]="pageSizeOptions" [pageSize]="pageSize" (page)="pageChanged($event)"
+        class="sticky left-0"></mat-paginator>
+      </ng-container>
+     
+        
+    </div>
 
-        </table>
-  <!-- [length]="totalRows" -->
-        <mat-paginator [pageSizeOptions]="pageSizeOptions" [pageSize]="pageSize" 
-          (page)="pageChanged($event)" class="sticky left-0"></mat-paginator>
-      </div>
-  
-    </vex-page-layout-content>
-  
-  </vex-page-layout>
-  
-  
-  <mat-menu #columnFilterMenu="matMenu" xPosition="before" yPosition="below">
-    <button (click)="toggleColumnVisibility(column, $event)" *ngFor="let column of columns"
-      class="checkbox-item mat-menu-item">
-      <mat-checkbox (click)="$event.stopPropagation()" [(ngModel)]="column.visible" color="primary">
-        {{ column.label }}
-      </mat-checkbox>
-    </button>
-  </mat-menu>
+  </vex-page-layout-content>
+
+</vex-page-layout>
+
+
+<mat-menu #columnFilterMenu="matMenu" xPosition="before" yPosition="below">
+  <button (click)="toggleColumnVisibility(column, $event )" *ngFor="let column of columns"
+    class="checkbox-item mat-menu-item">
+    <mat-checkbox (click)="$event.stopPropagation()" [(ngModel)]="column.visible" color="primary">
+      {{ column.label }}
+    </mat-checkbox>
+  </button>
+</mat-menu>
+
+<mat-menu #columnEvent="matMenu" xPosition="before" yPosition="below">
+  <button (click)="toggleColumnVisibility(column, $event)" *ngFor="let column of eventDetailsColumns"
+    class="checkbox-item mat-menu-item">
+    <mat-checkbox (click)="$event.stopPropagation()" [(ngModel)]="column.visible" color="primary">
+      {{ column.label }}
+    </mat-checkbox>
+  </button>
+</mat-menu>
