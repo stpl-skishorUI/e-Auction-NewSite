@@ -1,44 +1,49 @@
-<div mat-dialog-title class="flex items-center justify-between mb-2 m-0">
-    <div>Lots / Item Upload</div>
+<div mat-dialog-title class="flex items-center justify-between mb-0">
+    <div>
+        Lots / Item Upload
+    </div>
     <button type="button" mat-icon-button mat-dialog-close tabindex="-1">
         <mat-icon svgIcon="mat:close"></mat-icon>
     </button>
 </div>
 <mat-divider></mat-divider>
-    <div class="my-5">
-        <form [formGroup]="filterForm" (ngSubmit)="filterData();">
-            <div class="grid grid-cols-4 gap-4">
-                <div class="">
-                    <mat-form-field appearance="outline" class="w-full">
-                        <mat-label>Plot Name</mat-label>
-                        <input matInput formControlName="plotName" autocomplete="off">
-                    </mat-form-field>
+
+    <div class="card my-3">
+        <div class="card-body p-3">
+            <form [formGroup]="filterForm" (ngSubmit)="filterData();">
+                <div class="grid grid-cols-4 gap-4">
+                    <div class="">
+                        <mat-form-field appearance="outline" class="w-full">
+                            <mat-label>Plot Name</mat-label>
+                            <input matInput formControlName="plotName" autocomplete="off">
+                        </mat-form-field>
+                    </div>
+                    <div class="">
+                        <mat-form-field appearance="outline" class="w-full">
+                            <mat-label>Plot Type</mat-label>
+                            <mat-select formControlName="plotType">
+                                <mat-option *ngFor="let ploat of ploatArray" [value]="ploat.itemTypeId">
+                                    {{ploat?.itemType}}</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                    <div class="">
+                        <mat-form-field appearance="outline" class="w-full">
+                            <mat-label>Mineral</mat-label>
+                            <mat-select formControlName="mineral">
+                                <mat-option *ngFor="let mineraln of mineralArray" [value]="mineraln.materialId">
+                                    {{mineraln?.material}}</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                    <div class="">
+                        <button type="submit" mat-button class=" bg-gray-200 float-right">
+                            <mat-icon class="">search</mat-icon>Search
+                        </button>
+                    </div>
                 </div>
-                <div class="">
-                    <mat-form-field appearance="outline" class="w-full">
-                        <mat-label>Plot Type</mat-label>
-                        <mat-select formControlName="plotType">
-                            <mat-option *ngFor="let ploat of ploatArray" [value]="ploat.itemTypeId">
-                                {{ploat?.itemType}}</mat-option>
-                        </mat-select>
-                    </mat-form-field>
-                </div>
-                <div class="">
-                    <mat-form-field appearance="outline" class="w-full">
-                        <mat-label>Mineral</mat-label>
-                        <mat-select formControlName="mineral">
-                            <mat-option *ngFor="let mineraln of mineralArray" [value]="mineraln.materialId">
-                                {{mineraln?.material}}</mat-option>
-                        </mat-select>
-                    </mat-form-field>
-                </div>
-                <div class="">
-                    <button type="submit" mat-stroked-button class="btn-gray float-right">
-                        <mat-icon class="">search</mat-icon>Search
-                    </button>
-                </div>
-            </div>
-        </form>
+            </form>
+        </div>
     </div>
     <div align="end">
         <button mat-raised-button color="primary" (click)="applyItem(true)">
