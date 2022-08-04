@@ -5,8 +5,8 @@
     </button>
 </div>
 <mat-divider></mat-divider>
-<div *ngFor="let res of dialogData['data']" class="details">
-    <div [ngClass]="'grid grid-cols-'+res?.col">
+<div  class="mt-5">
+    <div *ngFor="let res of dialogData['data']" [ngClass]="'grid grid-cols-'+res?.col" >
         <ng-container *ngIf="res.type == 'badge'">
             <p class="mb-2"><strong>{{res?.key}} </strong>: <span class="rounded px-2 py-1"
                     [ngClass]="{'bg-green-light text-green': res?.val =='Approved',' bg-cyan-light text-cyan': res?.val=='Rejected' ,'bg-amber-light text-amber': res?.val == 'Pending' }">

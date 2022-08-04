@@ -40,7 +40,7 @@ const routes: Routes = [
       { path: 'event-creation', loadChildren: () => import('./partial/seller/event-section/event-creation/event-creation.module').then(m => m.EventCreationModule), data: { breadcrumb: [{ title: 'Dashboard', active: true }] }, canActivate: [ExpenseGuard]},
       { path: 'lots-upload/:id/:id/:id', loadChildren: () => import('./partial/seller/event-section/lots-upload/lots-upload.module').then(m => m.LotsUploadModule), data: { breadcrumb: [{ title: 'Dashboard', active: true }] }, canActivate: [ExpenseGuard]},
       { path: 'event-list', loadChildren: () => import('./partial/seller/event-section/event-list/event-list.module').then(m => m.EventListModule) },
-
+      { path: 'e-detail/:id', loadChildren: () => import('./partial/approver/event-approval/approve-event/approve-event.module').then(m => m.ApproveEventModule), data: { breadcrumb: [{ title: 'Dashboard', active: true }] }, canActivate: [ExpenseGuard]},
       //----------------------------------------------------------------for seller routing end heare-----------------------------------------//
 
       //----------------------------------------------------------------for approver routing start heare-----------------------------------------//
