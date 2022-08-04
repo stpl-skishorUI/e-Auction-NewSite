@@ -49,7 +49,7 @@ export class PublishEventComponent implements OnInit {
     { label: 'Total Items', property: 'totalItems', type: 'text', visible: false, cssClasses: ['text-secondary', 'font-medium'] },
     { label: 'Event Created By', property: 'createdByName', type: 'text', visible: false, cssClasses: ['text-secondary', 'font-medium'] },
     { label: 'Event Creation Date', property: 'createdDate', type: 'date', visible: false, cssClasses: ['text-secondary', 'font-medium'] },
-    { label: 'View Plot', property: 'actions', type: 'button', visible: true , cssClasses: ['text-secondary', 'font-medium'] },
+    { label: 'Action', property: 'actions', type: 'button', visible: true , cssClasses: ['text-secondary', 'font-medium'] },
   ];
 
   get visibleColumns() {
