@@ -1,27 +1,13 @@
 <div mat-dialog-title class="flex items-center justify-between mb-2 m-0">
-    <div>{{dialogData['title']}}</div>
+    <div>Lots / Item Upload</div>
     <button type="button" mat-icon-button mat-dialog-close tabindex="-1">
         <mat-icon svgIcon="mat:close"></mat-icon>
     </button>
 </div>
 <mat-divider></mat-divider>
 <div class="overflow-hidden">
-    <div class="card card-header p-2 mb-1 bg-main text-white">
-        <div class="row align-items-center p-2">
-            <div class="col-sm">
-                <h4 class="fw-bold mb-0">Lots / Item Upload</h4>
-            </div>
-            <div class="col-sm d-flex justify-content-end ">
-                <!-- <button mat-stroked-button type="button" (click)="applyItem(false)"
-                    class="border-0 bg-transparent mb-2 px-0 bg-transparent">
-                    <mat-icon>close</mat-icon>
-                </button> -->
-                <button class="dlg-close mnw-auto lh-sm" (click)="applyItem(false)" mat-button mat-dialog-close><i
-                        class="fas fa-times"></i></button>
-            </div>
-        </div>
-    </div>
     <div class="card-body px-2 mb-0 pb-1">
+        
         <div class="filterOuter card card-body pt-0 mb-2">
             <form [formGroup]="filterForm" (ngSubmit)="filterData();">
                 <div class="row g-2 white">
