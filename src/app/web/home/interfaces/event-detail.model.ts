@@ -30,7 +30,7 @@ export class EventDetail {
     tenderType: string;
     title: string;
     totalItem: number;
-    
+    srNo:number;
 
 }
 export class LotCreation {
