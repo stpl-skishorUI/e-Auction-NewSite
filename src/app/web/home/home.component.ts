@@ -86,7 +86,6 @@ export class HomeComponent implements OnInit {
   get visibleColumnsEvent() {
     return this.eventDetailsColumns.filter(column => column.visible).map(column => column.property);
   }
-  
   eventDetails: MatTableDataSource<LotCreation>;
   checkUserLogFlag: boolean = false;
   participatedBidderEventlist: any[] = [];
@@ -407,17 +406,19 @@ export class HomeComponent implements OnInit {
   }
   
 
-  plotProfile(_id:any){
-    this.dialog.open(AuctionPlotProfileComponent).afterClosed().subscribe((res) => {
-      /**
-       * Customer is the updated customer (if the user pressed Save - otherwise it's null)
-       */
-      if (res) {
-        /**
-         * Here we are updating our local array.
-         * You would probably make an HTTP request here.
-         */ 
+  plotProfile(id:any){
+    const dialog = this.dialog.open(AuctionPlotProfileComponent, {
+   
+      data: id,
+      disableClose: this.apiService.disableCloseFlag,
+    })
+    dialog.afterClosed().subscribe(res => {
+      if (res == 'Yes') {
+       
+      } else {
+        
       }
-    });
+    })
+
   }
 }
