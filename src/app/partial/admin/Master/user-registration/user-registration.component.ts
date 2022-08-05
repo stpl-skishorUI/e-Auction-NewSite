@@ -45,7 +45,7 @@ export class UserRegistrationComponent implements OnInit,OnDestroy {
   layoutCtrl = new UntypedFormControl('boxed');
   selection = new SelectionModel<UserRegistration>(true, []);
   searchCtrl = new UntypedFormControl();
-  dataSource: MatTableDataSource<UserRegistration> | null;
+  dataSource: MatTableDataSource<UserRegistration> | null | any;
   userRegistration: UserRegistration[];
   subject$: ReplaySubject<UserRegistration[]> = new ReplaySubject<UserRegistration[]>(1);
 
@@ -74,6 +74,8 @@ export class UserRegistrationComponent implements OnInit,OnDestroy {
   pageSizeOptions: number[] = [5, 10, 20, 50];
   pageSize = 10;
   pageNumber: number = 1;
+  highlightedRow!:number;
+
   constructor(
     public dialog: MatDialog,
     private apiService: ApiService, private fb: FormBuilder,
@@ -87,6 +89,9 @@ export class UserRegistrationComponent implements OnInit,OnDestroy {
     return this.columns.filter(column => column.visible).map(column => column.property);
   }
 
+//   highlight(row){
+//     this.highlightedRow = row.id;
+// }
 
 
   ngOnInit(): void {
@@ -157,12 +162,15 @@ export class UserRegistrationComponent implements OnInit,OnDestroy {
 
   // pagination code start here //
   pageChanged(event: PageEvent) {
+    if(event.pageSize !=10) this.pageSize = event.pageSize;
+    this.commonService.removeFilerLocalStorage('pagination');
     this.pageNumber = event.pageIndex + 1;
     this.getData();
   }
 
   //**  Confiramation for delete and block and unblock user */
   takeConfiramation(ele: UserRegistration, flag: string, event?: any) {
+    this.highlightedRow = ele ? ele.id : 0;
     let title: string = 'Delete';
     let dialogText: string = 'Are you sure you want to delete this record ?';
     flag == 'block' ? event.checked == true ? (title = 'User Block', dialogText = 'Do you want to User Block') : (title = 'User Unblock', dialogText = 'Do you want to User Unblock') : ''
@@ -172,6 +180,7 @@ export class UserRegistrationComponent implements OnInit,OnDestroy {
       disableClose: this.apiService.disableCloseFlag,
     })
     dialog.afterClosed().subscribe(res => {
+      this.highlightedRow=0;
       if (res == 'Yes') {
         flag == 'block' ? this.userBlockUnBlock(ele, event.checked) : this.deleteUser(ele)
       } else {
@@ -322,12 +331,14 @@ export class UserRegistrationComponent implements OnInit,OnDestroy {
 
 //--------- add update user code start here ----------------//
   userCreateUpdate(data?:UserRegistration): void {
+    this.highlightedRow = data ? data.id : 0;
     const dialogRef = this.dialog.open(AddUserComponent, {
       width: 'auto',
       disableClose: false,
       data:data,
     });
-    dialogRef.afterClosed().subscribe(result => {     
+    dialogRef.afterClosed().subscribe(result => { 
+      this.highlightedRow = 0;    
       if (result?.statusCode == 200 && result?.formType != 'PUT') {
         this.successDialog();
       } else if (result?.statusCode == 200 && result?.formType == 'PUT') {

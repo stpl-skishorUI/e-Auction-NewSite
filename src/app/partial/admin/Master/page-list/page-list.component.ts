@@ -1,5 +1,5 @@
 import { SelectionModel } from '@angular/cdk/collections';
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import {  Component, Input, OnInit, ViewChild } from '@angular/core';
 import { FormControl, UntypedFormControl } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
@@ -13,6 +13,7 @@ import { TableColumn } from 'src/@vex/interfaces/table-column.interface';
 import { ConfirmationDialogComponent } from 'src/app/core/dialogs/confirmation-dialog/confirmation-dialog.component';
 import { ApiService } from 'src/app/core/services/api.service';
 import { CommonService } from 'src/app/core/services/common.service';
+import { ConfigService } from 'src/app/core/services/config.service';
 import { ErrorsService } from 'src/app/core/services/errors.service';
 import { AddPageComponent } from './add-page/add-page.component';
 import { PageList } from './page-list.model';
@@ -25,11 +26,11 @@ import { PageList } from './page-list.model';
     stagger40ms
   ],
 })
-export class PageListComponent implements OnInit {
+export class PageListComponent implements OnInit{
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   layoutCtrl = new UntypedFormControl('boxed');
-  dataSource: MatTableDataSource<PageList> | null;
+  dataSource: MatTableDataSource<PageList> | null | any;
   selection = new SelectionModel<PageList>(true, []);
   searchCtrl = new UntypedFormControl();
   subject$: ReplaySubject<PageList[]> = new ReplaySubject<PageList[]>(1);
@@ -38,8 +39,11 @@ export class PageListComponent implements OnInit {
   searchFilter= new FormControl('');
   totalRows: number= 0;
   totalPages:number;
-   highlightedRow!: number;
+  
    pageNumber: number = 1;
+
+   highlightedRow:number;
+   
 
   @Input()
   columns: TableColumn<PageList>[] = [
@@ -52,11 +56,13 @@ export class PageListComponent implements OnInit {
 
   pageSizeOptions: number[] = [5, 10, 20, 50];
   pageSize = 10;
+  
 
   constructor(public dialog: MatDialog,
     private apiService: ApiService, 
     public commonService: CommonService,
-    private error: ErrorsService) { }
+    private error: ErrorsService,
+    public configService:ConfigService) { }
 
   ngOnInit(): void {
    this.bindTable();
@@ -69,7 +75,7 @@ export class PageListComponent implements OnInit {
   // ........................Bind Api data to table ................................. */
 
   bindTable() {
-    let paramList: string = "?pageno=" + this.pageNumber + "&pagesize=10" + "&TextSearch=" + this.searchFilter.value;
+    let paramList: string = "?pageno=" + this.pageNumber + "&pagesize="+this.pageSize + "&TextSearch=" + this.searchFilter.value;
     this.apiService.setHttp('get', "pagemaster/GetAll" + paramList, false, false, false, 'masterUrl');
    this.apiService.getHttp().subscribe({
       next: (res: object) => {
@@ -121,6 +127,8 @@ export class PageListComponent implements OnInit {
 // ........................ Paginator method ................................. */
 
   pageChanged(event:PageEvent) {
+    if(event.pageSize !=10) this.pageSize = event.pageSize;
+    this.commonService.removeFilerLocalStorage('pagination');
     this.pageNumber = event.pageIndex + 1;
     this.bindTable();
   }

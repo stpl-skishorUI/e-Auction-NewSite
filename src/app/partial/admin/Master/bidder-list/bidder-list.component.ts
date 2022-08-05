@@ -4,7 +4,7 @@ import { Component, Input, OnInit, ViewChild, } from '@angular/core';
 import { FormBuilder, FormGroup, UntypedFormControl } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatFormFieldDefaultOptions, MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
-import { MatPaginator } from '@angular/material/paginator';
+import { MatPaginator, PageEvent} from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { ReplaySubject, Subscription } from 'rxjs';
@@ -82,6 +82,7 @@ export class BidderListComponent implements OnInit {
 
   pageSizeOptions: number[] = [5, 10, 20, 50];
   pageSize = 10;
+  highlightedRow:number;
 
   ngOnInit(): void {
     this.defultFilterform()
@@ -112,11 +113,11 @@ export class BidderListComponent implements OnInit {
     let formValue = this.filterForm.value;
     let bidderTy = formValue.bidderType == 'All' ? '' : formValue.bidderType;
     let obj = "StateId=" + localstorData?.stateId + "&DivisionId=" + localstorData?.divisionId + "&DistrictId=" + formValue.districtId +
-      "&BidderType=" + bidderTy + "&ProjectId=" + localstorData?.projectId + "&pageno=" + this.pageNumber + "&pagesize=" + 10;
+      "&BidderType=" + bidderTy + "&ProjectId=" + localstorData?.projectId + "&pageno=" + this.pageNumber + "&pagesize=" + this.pageSize;
     this.commonService.checkDataType(formValue.search) == true ? obj += "&Textsearch=" + formValue.search : '';
     this.apiService.setHttp('get', "user-registration/GetBidderUsers?" + obj, false, false, false, 'masterUrl');
     this.subscription = this.apiService.getHttp().subscribe({
-      next: (res: any) => {
+      next: (res) => {
         if (res.statusCode === "200") {
           this.dataSource = new MatTableDataSource(res.responseData.responseData1);
           this.dataSource.sort = this.sort;
@@ -131,7 +132,7 @@ export class BidderListComponent implements OnInit {
           }
         }
       },
-      error: ((error: any) => { this.error.handelError(error.status) })
+      error: ((error) => { this.error.handelError(error.status) })
     });
   }
 
@@ -146,14 +147,12 @@ export class BidderListComponent implements OnInit {
     column.visible = !column.visible;
   }
 
-  pageChanged(event: any) {
+  pageChanged(event: PageEvent) {
+    if(event.pageSize !=10) this.pageSize = event.pageSize;
+    this.commonService.removeFilerLocalStorage('pagination');
     this.pageNumber = event.pageIndex + 1;
     this.getData();
   }
-
-
-
-
 
   userBlockUnBlockModal(element: any, event: any, flag?: string) {
     let Title: string = 'Delete';
@@ -168,7 +167,7 @@ export class BidderListComponent implements OnInit {
       data: { p1: dialogText, p2: '', cardTitle: Title, successBtnText: 'Yes', dialogIcon: 'done_outline', cancelBtnText: 'No' },
       disableClose: this.apiService.disableCloseFlag,
     });
-    dialogRef.afterClosed().subscribe((res: any) => {
+    dialogRef.afterClosed().subscribe((res: string) => {
       if (flag != 'isDelete') {
         res == 'Yes' ? this.userBlockUnBlock(element, event.checked) : !event.checked ? event.source.checked = true : event.source.checked = false;
       } else if (res == 'Yes') {
@@ -189,7 +188,7 @@ export class BidderListComponent implements OnInit {
     }
     this.apiService.setHttp('PUT', "user-registration/BlockUnblockUser", false, JSON.stringify(obj), false, 'masterUrl');
     this.subscription = this.apiService.getHttp().subscribe({
-      next: (res: any) => {
+      next: (res) => {
         if (res.statusCode === "200") {
           this.getData();
           this.commonService.snackBar(res.statusMessage, 0);
@@ -199,7 +198,7 @@ export class BidderListComponent implements OnInit {
           }
         }
       },
-      error: (err: any) => { this.error.handelError(err) }
+      error: (err) => { this.error.handelError(err) }
     })
   }
 
@@ -211,7 +210,7 @@ export class BidderListComponent implements OnInit {
     }
     this.apiService.setHttp('DELETE', "user-registration", false, JSON.stringify(obj), false, 'masterUrl');
     this.subscription = this.apiService.getHttp().subscribe({
-      next: (res: any) => {
+      next: (res) => {
         if (res.statusCode === "200") {
           this.getData();
           this.commonService.snackBar(res.statusMessage, 0);
@@ -221,11 +220,12 @@ export class BidderListComponent implements OnInit {
           // }
         }
       },
-      error: (err: any) => { this.error.handelError(err) }
+      error: (err) => { this.error.handelError(err) }
     })
   }
 
-  createBidder(data?: any): void {
+  createBidder(data?: BidderList): void {
+    this.highlightedRow = data ? data.bidderId : 0;
     const dialog = this.dialog.open(AddBidderComponent, {
       width: '1000px',
       data: data,
@@ -234,6 +234,7 @@ export class BidderListComponent implements OnInit {
     });
 
     dialog.afterClosed().subscribe(result => {
+      this.highlightedRow = 0;
       if (result == true) {
         this.getData();
       }
@@ -246,7 +247,7 @@ export class BidderListComponent implements OnInit {
 
     this.districtArray = [];
     this.subscription = this.masterService.getDistrictByDivisionId(0).subscribe({
-      next: (response: any) => {
+      next: (response: []) => {
         let districtArray = response;
         districtArray.length > 1 ? this.districtArray.push({ id: 0, district: "All District" }, ...response) : this.districtArray = response;;
         this.filterForm.controls['districtId'].setValue(0)

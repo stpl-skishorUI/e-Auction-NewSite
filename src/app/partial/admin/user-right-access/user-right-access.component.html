@@ -1,3 +1,4 @@
+
 <vex-page-layout>
 
   <vex-secondary-toolbar current="User Right Access" class=" fixed border-0 bg-transparent drop-shadow-none top-1 z-[99] w-8/12">
@@ -10,34 +11,34 @@
       <form [formGroup]="filterForm" (ngSubmit)="getData()">
         <div class="flex flex-row justify-between">
         <div class="grid grid-cols-5 gap-4 mr-3">
-            <mat-form-field appearance="outline">
+            <mat-form-field [appearance]=configService?.matFormField>
               <mat-label>Project</mat-label>
               <mat-select formControlName="projectId" (selectionChange)="getuserType();clearDropdown('userType')">
                 <mat-option *ngFor="let projectType of projectTypeArray" [value]="projectType['id']">
                   {{projectType['projectName']}}</mat-option>
               </mat-select>
             </mat-form-field>
-            <mat-form-field appearance="outline">
+            <mat-form-field [appearance]=configService?.matFormField>
               <mat-label>UserType</mat-label>
               <mat-select formControlName="userType" (selectionChange)="getsubUserType();clearDropdown('subUserType')">
                 <mat-option *ngFor="let userType of userTypeArray" [value]="userType?.userTypeId">{{userType?.userType}}
                 </mat-option>
               </mat-select>
             </mat-form-field>
-            <mat-form-field appearance="outline">
+            <mat-form-field [appearance]=configService?.matFormField>
               <mat-label>Sub User Type</mat-label>
               <mat-select formControlName="subUserType" (selectionChange)="getRole();clearDropdown('level')">
                 <mat-option *ngFor="let subUserType of subUserTypeArray" [disabled]="!filterForm.value.userType"
                   [value]="subUserType?.subUserTypeId">{{subUserType.subUserType}}</mat-option>
               </mat-select>
             </mat-form-field>
-            <mat-form-field appearance="outline">
+            <mat-form-field [appearance]=configService?.matFormField>
               <mat-label>Role Type</mat-label>
               <mat-select formControlName="level" [disabled]="!filterForm.value.subUserType">
                 <mat-option *ngFor="let level of userRoleArray" [value]="level.roleId">{{level.roleType}}</mat-option>
               </mat-select>
             </mat-form-field>
-            <mat-form-field appearance="outline">
+            <mat-form-field [appearance]=configService?.matFormField>
               <mat-label>Search by Page Url/page Name</mat-label>
               <input ty matInput placeholder="Search byPage Url/page Name" formControlName="search"
                 (keyup)="validatorService.removeSpaceAtBegining($event)">
@@ -46,7 +47,7 @@
           <div>
             <button class="rounded-full bg-gray-200 text-black" mat-button type="submit">
               <mat-icon svgIcon="mat:search"></mat-icon>
-              <span>Search</span>
+              <span>Apply</span>
             </button>
           </div>
         </div>
@@ -98,14 +99,29 @@
           </td>
         </ng-container>
 
+      <ng-container *ngIf="!dataSource">
+        <tr >
+          <td style="text-align: center;">
+            No Records Found!
+          </td>
+        </tr>
+      </ng-container>
+
         <tr *matHeaderRowDef="visibleColumns" mat-header-row></tr>
         <tr *matRowDef="let row; columns: visibleColumns;" @fadeInUp
-          class="hover:bg-hover trans-ease-out cursor-pointer" mat-row></tr>
+         class="hover:bg-hover trans-ease-out cursor-pointer" mat-row></tr>
       </table>
 
-      <mat-paginator [pageSizeOptions]="pageSizeOptions" [pageSize]="pageSize" [length]="totalRows"
-        (page)="pageChanged($event)" class="sticky left-0">
-      </mat-paginator>
+      <!-- <ng-container *ngIf="!dataSource" >
+        <p class="bg-red-400 text-stone-200	text-center	 py-px	"> Data Not Found </p>
+      </ng-container> -->
+
+      <ng-container *ngIf="totalRows>10">
+        <mat-paginator [pageSizeOptions]="pageSizeOptions" showFirstLastButtons
+            [pageSize]="pageSize" [length]="totalRows" (page)="pageChanged($event)"
+            class="sticky left-0">
+        </mat-paginator>
+    </ng-container>
 
     </div>
 
@@ -118,6 +134,8 @@
       </button>
     </div>
   </vex-page-layout-content>
+  </vex-page-layout>
+  
 
   <mat-menu #columnFilterMenu="matMenu" xPosition="before" yPosition="below">
     <button (click)="toggleColumnVisibility(column, $event)" *ngFor="let column of columns"

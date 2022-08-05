@@ -8,7 +8,7 @@
   <vex-page-layout-content [class.px-gutter]="layoutCtrl.value === 'fullwidth'" class="-mt-6">
     <div class="my-3 card p-3 border-0 shadow-none">
       <div class="flex flex-row justify-between">
-        <mat-form-field appearance="outline" class="w-80 mr-3">
+        <mat-form-field [appearance]=configService?.matFormField class="w-80 mr-3">
           <mat-label>Search by Page Url/page Name</mat-label>
           <input ty matInput placeholder="Search byPage Url/page Name" formControlName="searchFilter">
         </mat-form-field>
@@ -74,13 +74,16 @@
         </ng-container>
 
         <tr *matHeaderRowDef="visibleColumns" mat-header-row></tr>
-        <tr *matRowDef="let row; columns: visibleColumns;" @fadeInUp
-          class="hover:bg-hover trans-ease-out cursor-pointer" mat-row></tr>
+        <tr *matRowDef="let row; let i=index; columns: visibleColumns;" @fadeInUp
+        [ngClass]="{'bg-green-light':highlightedRow == row.pageId}" class="hover:bg-hover trans-ease-out cursor-pointer" mat-row></tr>
       </table>
 
-      <mat-paginator [pageSizeOptions]="pageSizeOptions" [pageSize]="pageSize" [length]="totalRows"
-        (page)="pageChanged($event)" class="sticky left-0">
-      </mat-paginator>
+      <ng-container *ngIf="totalRows>10">
+        <mat-paginator [pageSizeOptions]="pageSizeOptions" showFirstLastButtons
+            [pageSize]="pageSize" [length]="totalRows" (page)="pageChanged($event)"
+            class="sticky left-0">
+        </mat-paginator>
+    </ng-container>
 
     </div>
   </vex-page-layout-content>

@@ -14,7 +14,8 @@ export class ValidatorService {
     valName = '^[^\\s0-9\\[\\[`&._@#%*!+"\'\/\\]\\]{}][a-zA-Z.\\s]+$'; // fname, mname, lname
     
     valDescription = '^[^\\s\\[\\[`&._@#%*!+"\'\/\\]\\]{}][a-zA-Z@0-9.\\s]+$'; // Description or commit
-    valEmailId = '^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$';
+    // valEmailId = '^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$';
+    valEmailId='^[a-z0-9][-a-z0-9._%+-]+@([-a-z0-9]+[.])+[a-z]{2,5}$';
 
     vaPanNo = '[a-zA-Z]{5}[0-9]{4}[a-zA-Z]{1}';
     valAadharNo = '^[2-9]{1}[0-9]{3}[0-9]{4}[0-9]{4}$';
