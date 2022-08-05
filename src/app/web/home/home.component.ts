@@ -28,6 +28,7 @@ import { DialogService } from 'src/app/core/services/dialog.service';
 import { EventDetail, LotCreation } from './interfaces/event-detail.model';
 import { AuctionPlotProfileComponent } from 'src/app/partial/bidder/auction-plot-profile/auction-plot-profile.component';
 import { MatDialog } from '@angular/material/dialog';
+import { SharedataService } from 'src/app/core/services/sharedata.service';
 
 @Component({
   selector: 'vex-home',
@@ -54,7 +55,7 @@ import { MatDialog } from '@angular/material/dialog';
 
 export class HomeComponent implements OnInit {
   columns: TableColumn<EventDetail>[] = [
-    { label: 'srNo', property: 'srNo', type: 'button', visible: true },
+    { label: 'srNo', property: 'srNo', type: 'text', visible: true },
     { label: 'Event Level', property: 'eventLevel', type: 'text', visible: true },
     { label: 'District/ SDO/ Tehsil', property: 'district', type: 'text', visible: true, cssClasses: ['text-secondary', 'font-medium'] },
     { label: 'Event Id', property: 'eventCode', type: 'text', visible: false, cssClasses:['text-secondary', 'font-medium'] },
@@ -108,19 +109,31 @@ export class HomeComponent implements OnInit {
   MineralArray = [];
   tabCountFlag!: string;
   tenderCountData: any;
+  bidderLogFlag: boolean = false;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   tabs: any = [{ count: '' }, { count: '' }]
   constructor(private commonService: CommonService, private masterService: MasterService, public VB: ValidatorService,
     public localstorageService: LocalstorageService, private error: ErrorsService, private staticDropdownService: StaticDropdownService, public router: Router,
     private apiService: ApiService, private fb: FormBuilder, public configService: ConfigService, private dialogService: DialogService, private datePipe: DatePipe,
-    private dialog: MatDialog) {
+    private dialog: MatDialog ,
+    public sharedataService :SharedataService) {
   }
 
   ngOnInit() {
+    this.setLang();
+    // let getTodayDate = new Date();
+    // this.todayDate = this.datePipe.transform(getTodayDate, 'dd/MM/YYYY hh:mm a')?.split(' ');
     this.defulatForm();
     this.levelArray();
-    this.getMineral();
+    this.checkUserLogFlag =  this.localstorageService.checkUserIsLoggedIn();
+    if (this.checkUserLogFlag) {
+      this.bidderLogFlag = this.localstorageService.subUserTypeId() == 8 ? true : false;
+    }
+
+    this.sharedataService.langSubject.subscribe((res: any) => this.setLang(res));
+
+
   }
   // new code start here
   trackByProperty<T>(_index: number, column: TableColumn<T>) {
@@ -220,6 +233,10 @@ export class HomeComponent implements OnInit {
       next: (res: any) => {
         if (res['statusCode'] === "200") {
           this.tableDataArray = res['responseData'].responseData1;
+          this.tableDataArray.map((ele:EventDetail,ind:number)=>{
+            ele.srNo =((this.pageNumber + 1) * 10 + ind + 1)-20
+            // {{((pageNumber + 1) * 10 + i + 1)-20}}
+          })
           this.dataSource = new MatTableDataSource(this.tableDataArray);
           this.dataSource.sort = this.sort;
           this.totalRows = res.responseData.responseData2[0].pageCount;
@@ -333,6 +350,7 @@ export class HomeComponent implements OnInit {
  
 
   isparticipateEvent(event: MatCheckboxChange | any, element: object, isparticipateEvent?: boolean) {
+    debugger
     let checkboxFlag;
     isparticipateEvent == true ? checkboxFlag = true : checkboxFlag = event.source.checked;
     let obj: Object;
@@ -420,5 +438,9 @@ export class HomeComponent implements OnInit {
       }
     })
 
+  }
+  setLang(_selLanguage?: any) {
+    // const browserLang: any = this.translate.getBrowserLang();
+    // this.translate.use(browserLang.match(/English|Hindi|Marathi/) ? browserLang : selLanguage ? selLanguage : this.localstorageService.getSelLanguage());
   }
 }
