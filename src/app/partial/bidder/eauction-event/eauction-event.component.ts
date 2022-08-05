@@ -15,6 +15,10 @@ import { MatStepper } from '@angular/material/stepper';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import { MatDialog } from '@angular/material/dialog';
 import { SuccessDialogComponent } from 'src/app/core/dialogs/success-dialog/success-dialog.component';
+import { SelectionModel } from '@angular/cdk/collections';
+import { TableColumn } from 'src/@vex/interfaces/table-column.interface';
+import { fadeInUp400ms } from 'src/@vex/animations/fade-in-up.animation';
+import { stagger40ms } from 'src/@vex/animations/stagger.animation';
 
 @Component({
   selector: 'vex-eauction-event',
@@ -25,6 +29,7 @@ import { SuccessDialogComponent } from 'src/app/core/dialogs/success-dialog/succ
       provide: STEPPER_GLOBAL_OPTIONS,
       useValue: { displayDefaultIndicatorType: false },
     },
+  
   ],
   animations: [
     trigger('detailExpand', [
@@ -32,6 +37,8 @@ import { SuccessDialogComponent } from 'src/app/core/dialogs/success-dialog/succ
       state('expanded', style({ height: '*' })),
       transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
     ]),
+    fadeInUp400ms,
+    stagger40ms
   ],
 })
 export class EauctionEventComponent implements OnInit {
@@ -41,6 +48,7 @@ export class EauctionEventComponent implements OnInit {
   secondFormGroup: FormGroup | any;
   thirdFormGroup: FormGroup | any;
   forthFormGroup: FormGroup | any;
+  selection = new SelectionModel<any>(true, []);
   dataSource: any;
   dataSource2: any;
   isLinear = true;
@@ -55,21 +63,58 @@ export class EauctionEventComponent implements OnInit {
   @ViewChild('stepper') private myStepper!: MatStepper;
   // ........................................ upload Document  variables declare Here ....................................//
   participatedDocArray: any;
-  ParticipatedDetails: any;
+
   displayedEventDetails: string[] = ['SrNo', 'eventLevel', 'district', 'eventCode', 'title', 'description', 'bidSubmissionEndDate', 'bidSubmissionStartDate'];
   displayEventDetails: string[] = ['SrNo', 'eventLevel', 'district', 'eventCode', 'title', 'description', 'bidSubmissionEndDate', 'bidSubmissionStartDate', 'documentApprovedStatus'];
-  documentDisplayColum: string[] = ['eventDocumentId', 'documentName', 'VerificationStatus', 'Upload'];
-  dataSourceForEventDocument: any;
   participatedDocListArray: any[] = [];
   checkedDataflag: boolean = false;
   @ViewChild('fileInputPan', { static: false }) fileInputPan !: ElementRef;
-  @ViewChild('docTblsort') docTblsort = new MatSort();
-  @ViewChild('eventdetails1') eventdetails1 = new MatSort();
+
+
   // DocumentUrlUploaed: any;  // eventId: any;  
   byTenderDatasource: any;
   activeflag: boolean = true;
   eventParticipateIdCheck: any;
   payNowNewArray: any[] = [];
+
+  //--------------------------------------------------------------steper 1st colum's start heare -----------------------------------------------//
+  ParticipatedDetails: MatTableDataSource<any> | null;
+
+  participatedDetailsCol: TableColumn<any>[] = [
+    { label: 'Sr.No', property: 'srNo', type: 'button', visible: true },
+    { label: 'Event Level', property: 'eventLevel', type: 'text', visible: false, cssClasses: ['text-secondary', 'font-medium'] },
+    { label: 'District', property: 'district', type: 'text', visible: false, cssClasses: ['text-secondary', 'font-medium'] },
+    { label: 'Event Code', property: 'eventCode', type: 'text', visible: true, cssClasses: ['text-secondary', 'font-medium'] },
+    { label: 'Title', property: 'title', type: 'text', visible: true, cssClasses: ['font-medium'] },
+    { label: 'Description', property: 'description', type: 'text', visible: false, cssClasses: ['text-secondary', 'font-medium'] },
+    { label: 'Bid Submission End Date', property: 'bidSubmissionEndDate', type: 'date', visible: true, cssClasses: ['text-secondary', 'font-medium'] },
+    { label: 'Bid Submission Start Date', property: 'bidSubmissionStartDate', type: 'date', visible: true, cssClasses: ['text-secondary', 'font-medium'] },
+    { label: 'Document Approved Status', property: 'documentApprovedStatus', type: 'badge', visible: true, cssClasses: ['text-secondary', 'font-medium'] },
+  ];
+
+  get visibleParDetailsColumns() {
+    return this.participatedDetailsCol.filter(column => column.visible).map(column => column.property);
+  }
+
+  @ViewChild('participatedDetailsSort') participatedDetailsSort = new MatSort();
+
+  dataSourceForEventDocument: MatTableDataSource<any> | null;
+
+  eventDocumentCol: TableColumn<any>[] = [
+    // { label: 'srNo', property: 'srNo', type: 'button', visible: true },
+    { label: 'Event Document Id', property: 'eventDocumentId', type: 'text', visible: true, cssClasses: ['text-secondary', 'font-medium'] },
+    { label: 'Document Name', property: 'documentName', type: 'text', visible: true, cssClasses: ['text-secondary', 'font-medium'] },
+    { label: 'Verification Status', property: 'VerificationStatus', type: 'badge', visible: true, cssClasses: ['text-secondary', 'font-medium'] },
+    { label: 'Upload', property: 'Upload', type: 'button', visible: true, cssClasses: ['font-medium'] },
+  ];
+
+  get  visibleDocumentDisplayColum() {
+    return this.eventDocumentCol.filter(column => column.visible).map(column => column.property);
+  }
+
+  @ViewChild('docTblsort') docTblsort = new MatSort();
+  //--------------------------------------------------------------steper 1nd colum's end heare -----------------------------------------------//
+
 
   constructor(
     private route: ActivatedRoute,
@@ -113,7 +158,7 @@ export class EauctionEventComponent implements OnInit {
         if (res.statusCode === "200") {
           this.eventParticipatedDetails = res.responseData;
           this.ParticipatedDetails = new MatTableDataSource([this.eventParticipatedDetails]);
-          this.ParticipatedDetails.sort = this.eventdetails1
+          this.ParticipatedDetails.sort = this.participatedDetailsSort
           this.activeflag == true && this.eventParticipatedDetails.isDocumentSubmitted == true ? (this.autoActiveTab(1), this.activeflag = false) : ""
           this.eventDocumentData();
         } else {
@@ -159,10 +204,6 @@ export class EauctionEventComponent implements OnInit {
     }
   }
   // .......................................  common code End here .....................//
-
-
-
-
 
   //----------------------------------------- stepper 1 and 2 same code   -------------------------------//
   eventDocumentData() {
@@ -261,6 +302,7 @@ export class EauctionEventComponent implements OnInit {
           this.participatedDocListArray.push(tempObj);
         }
       })
+
       if (this.participatedDocListArray.length == this.participatedDocArray.length) {
         this.firstFormGroup.controls['firstCtrl'].setValue('1');
         this.isLinear = true;
@@ -290,6 +332,7 @@ export class EauctionEventComponent implements OnInit {
       }
       uploadDocumentArray.push(obj)
     })
+ 
     this.apiService.setHttp('Post', "event-participate/UploadDocument", false, uploadDocumentArray, false, 'bidderUrl');
     this.apiService.getHttp().subscribe({
       next: (res: any) => {
@@ -324,7 +367,7 @@ export class EauctionEventComponent implements OnInit {
   totalPayableAmount: number = 0;
   byTenderDetailsArray: any;
 
-  getByEventId(flag:any) {
+  getByEventId(flag: any) {
     this.payNowArray = [];
     this.apiService.setHttp('get', "lot-creation/getByEventId/" + this.eventParticipatedDetails.eventId, false, false, false, 'bidderUrl');
     this.apiService.getHttp().subscribe({
@@ -343,23 +386,23 @@ export class EauctionEventComponent implements OnInit {
     });
   }
 
-  addTender_EmdData(flag:any){ // find eventParticipateId > 0 and Show Totall Amount
+  addTender_EmdData(flag: any) { // find eventParticipateId > 0 and Show Totall Amount
     this.byTenderDetailsArray.find((ele: any) => {
-      if (ele.eventParticipateId > 0 ) {
+      if (ele.eventParticipateId > 0) {
         let obj;
-       if(flag == 'tender'){
-        obj = {
-          id: ele.itemId,
-          isTender_ApplicationFeePaid: true,
-          tenderFee: ele.tender_ApplicationFee
-        } 
-      }else if(flag == 'emd'){
-        obj = {
-          id: ele.itemId,
-          isEMD_SecurityDepositPaid: true,
-          tenderFee: ele.emD_SecurityDeposit
-        } 
-        } else{
+        if (flag == 'tender') {
+          obj = {
+            id: ele.itemId,
+            isTender_ApplicationFeePaid: true,
+            tenderFee: ele.tender_ApplicationFee
+          }
+        } else if (flag == 'emd') {
+          obj = {
+            id: ele.itemId,
+            isEMD_SecurityDepositPaid: true,
+            tenderFee: ele.emD_SecurityDeposit
+          }
+        } else {
           return;
         }
         this.payNowArray.push(obj);
@@ -370,23 +413,23 @@ export class EauctionEventComponent implements OnInit {
     })
   }
 
-  addforEventItemPayment(event: MatCheckboxChange, element: any , checkFlag:any) {
+  addforEventItemPayment(event: MatCheckboxChange, element: any, checkFlag: any) {
     let checkboxFlag = event.source.checked;
     if (checkboxFlag == true) {
       let obj;
-      if(checkFlag == 'tender'){
+      if (checkFlag == 'tender') {
         obj = {
           id: element.itemId,
           isTender_ApplicationFeePaid: true,
           tenderFee: element.tender_ApplicationFee
         }
-      }else if(checkFlag == 'emd'){
+      } else if (checkFlag == 'emd') {
         obj = {
           id: element.itemId,
           isEMD_SecurityDepositPaid: true,
           tenderFee: element.emD_SecurityDeposit
-        } 
-      } else{
+        }
+      } else {
         return;
       }
       this.payNowArray.push(obj);
@@ -471,5 +514,20 @@ export class EauctionEventComponent implements OnInit {
       return;
     }
   }
-}
+
   // -------------------------------------------  stepper 4 & Pay emd Code End here --------------------------------------------//
+
+
+
+  toggleColumnVisibility(column, event) {
+    event.stopPropagation();
+    event.stopImmediatePropagation();
+    column.visible = !column.visible;
+  }
+  isAllSelected() {
+    const numSelected = this.selection.selected.length;
+    const numRows = this.dataSource.data.length;
+    return numSelected === numRows;
+  }
+
+}
