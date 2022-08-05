@@ -29,8 +29,8 @@ export class EventDetailsComponent implements OnInit {
     { label: 'Event Code', property: 'eventCode', type: 'text', visible: false, cssClasses: ['text-secondary', 'font-medium'] },
     { label: 'Title', property: 'title', type: 'text', visible: true, cssClasses: ['font-medium'] },
     { label: 'Description', property: 'description', type: 'text', visible: false, cssClasses: ['text-secondary', 'font-medium'] },
-    { label: 'Bid Submission Start Date', property: 'bidSubmissionStartDate', type: 'button', visible: true, cssClasses: ['text-secondary', 'font-medium'] },
-    { label: 'Bid Submission End Date', property: 'bidSubmissionEndDate', type: 'button', visible: true, cssClasses: ['text-secondary', 'font-medium'] },
+    { label: 'Bid Submission Start Date', property: 'bidSubmissionStartDate', type: 'date', visible: true, cssClasses: ['text-secondary', 'font-medium'] },
+    { label: 'Bid Submission End Date', property: 'bidSubmissionEndDate', type: 'date', visible: true, cssClasses: ['text-secondary', 'font-medium'] },
     { label: 'Action', property: 'action', type: 'button', visible: true, cssClasses: ['text-secondary', 'font-medium'] },
   ];
 
