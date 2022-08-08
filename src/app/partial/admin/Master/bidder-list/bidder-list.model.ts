@@ -21,6 +21,7 @@ export class BidderList {
     stateId: number;
     userId: number;
     verfiedOTPId: number;
+    srNo:number;
 }
 
 export interface bidderUserDocuments {

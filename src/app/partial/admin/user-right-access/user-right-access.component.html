@@ -99,22 +99,16 @@
           </td>
         </ng-container>
 
-      <ng-container *ngIf="!dataSource">
-        <tr >
-          <td style="text-align: center;">
-            No Records Found!
-          </td>
-        </tr>
-      </ng-container>
+     
 
         <tr *matHeaderRowDef="visibleColumns" mat-header-row></tr>
         <tr *matRowDef="let row; columns: visibleColumns;" @fadeInUp
          class="hover:bg-hover trans-ease-out cursor-pointer" mat-row></tr>
       </table>
 
-      <!-- <ng-container *ngIf="!dataSource" >
+       <ng-container *ngIf="!dataSource" >
         <p class="bg-red-400 text-stone-200	text-center	 py-px	"> Data Not Found </p>
-      </ng-container> -->
+      </ng-container>
 
       <ng-container *ngIf="totalRows>10">
         <mat-paginator [pageSizeOptions]="pageSizeOptions" showFirstLastButtons

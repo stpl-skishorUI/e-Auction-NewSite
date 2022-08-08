@@ -10,7 +10,7 @@
       <div class="flex flex-row justify-between">
         <mat-form-field [appearance]=configService?.matFormField class="w-80 mr-3">
           <mat-label>Search by Page Url/page Name</mat-label>
-          <input ty matInput placeholder="Search byPage Url/page Name" formControlName="searchFilter">
+          <input matInput placeholder="Search byPage Url/page Name" [formControl]="searchFilter">
         </mat-form-field>
         <div>
           <button class="rounded-full bg-gray-200 text-black" mat-button type="button" (click)="getData()">
@@ -73,10 +73,17 @@
           </td>
         </ng-container>
 
+       
+
         <tr *matHeaderRowDef="visibleColumns" mat-header-row></tr>
         <tr *matRowDef="let row; let i=index; columns: visibleColumns;" @fadeInUp
         [ngClass]="{'bg-green-light':highlightedRow == row.pageId}" class="hover:bg-hover trans-ease-out cursor-pointer" mat-row></tr>
       </table>
+
+      <ng-container *ngIf="!dataSource">
+        <p class="bg-red-400 text-stone-200	text-center	 py-px	"> Data Not Found </p>
+      </ng-container>
+
 
       <ng-container *ngIf="totalRows>10">
         <mat-paginator [pageSizeOptions]="pageSizeOptions" showFirstLastButtons
