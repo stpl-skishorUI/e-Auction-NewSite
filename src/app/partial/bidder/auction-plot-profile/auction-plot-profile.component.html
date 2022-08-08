@@ -8,79 +8,74 @@
 </div>
 <mat-divider></mat-divider>
 <mat-dialog-content>
-    <!-- <p class="mb-0" *ngIf="dialogData?.p1">{{dialogData?.p1}}</p>
-    <p class="mb-0" *ngIf="dialogData?.p2">{{dialogData?.p2}}</p> -->
-    <!-- <span class="mb-3">
 
-        <div class="dummy-positioning flex mx-auto mb-3">
-
-            <div class="success-icon">
-                <div class="success-icon__tip"> Hello</div>
-                <div class="success-icon__long"></div>
-            </div>
-
-        </div>
-    </span> -->
     <div class="container my-10 px-0">
         <div class="grid grid-cols-2 gap-5">
             <div>
                 <div class="map">
-                    <img src="https://c8.alamy.com/comp/F04EJJ/india-political-map-with-capital-new-delhi-national-borders-important-F04EJJ.jpg" alt="" class="h-[20rem] w-full">
+                    <agm-map class="h-72 w-full"
+                     [fitBounds]="true" [latitude]="lat" [longitude]="lng" [mapTypeControl]='true' [fullscreenControl]='true'>
+                        <agm-marker [agmFitBounds]="true" [latitude]="lat" [longitude]="lng"></agm-marker>
+                      </agm-map>  
+                      
                 </div>
                 <div class="table_data my-3 bg-gray-500">
                     Table data
                 </div>
             </div>
             <div>
+
+
                 <div class="grid grid-cols-2 gap-5">
-                    <div class="flex">
-                        <p>Plot Name :</p>
-                        <p>PLot Name </p>
+                    <div>
+                        <div>img</div>
+                        <div class="flex">
+                            <p>Plot Name :</p>
+                            <p>{{syniseplotIdArray?.plotName}}</p>
+                        </div>
+                        <div class="flex">
+                            <p class="w-32">Plot Type :</p>
+                            <p>{{syniseplotIdArray?.plotTypeName}}</p>
+                        </div>
+                        <div class="flex">
+                            <p>Category :</p>
+                            <p>{{syniseplotIdArray?.categoryName}}</p>
+                        </div>
+                        <div class="flex">
+                            <p>Plot Location :</p>
+                            <p>{{syniseplotIdArray?.address}}</p>
+                        </div>
+                        <div class="flex">
+                            <p>District :</p>
+                            <p>{{syniseplotIdArray?.district}}</p>
+                        </div>
+
+                        <div class="flex">
+                            <p>Plot River / Coast Name </p>:
+                            <p>{{syniseplotIdArray?.riverCostal}}</p>
+                        </div>
+                        <div class="flex">
+                            <p>Plot Taluka / CSTo </p>:
+                            <p>{{syniseplotIdArray?.taluka}}</p>
+                        </div>
+                        <div class="flex">
+                            <p>Plot PLot ownership</p>:
+                            <p>{{syniseplotIdArray?.ownerShip}}</p>
+                        </div>
+                        <div class="flex">
+                            <p>Plot Village</p>:
+                            <p>{{syniseplotIdArray?.village}}</p>
+                        </div>
+                        <div class="flex">
+                            <p>Plot Area</p>:
+                            <p>{{syniseplotIdArray?.area}} (Hectare)</p>
+                        </div>
                     </div>
-                    <div class="flex">
-                        <p class="w-32">Plot Category :</p>
-                        <p>PLot Category</p>
-                    </div>
-                    <div class="flex">
-                        <p>Plot Type: </p>
-                        <p>Plot Type  </p>
-                    </div>
-                    <div class="flex">
-                        <p>Plot location: </p>
-                        <p>Plot location </p>
-                    </div>
-                    <div class="flex">
-                        <p>Plot District: </p>
-                        <p>Plot district </p>
-                    </div>
-                    
-                    <div class="flex">
-                        <p>Plot River / Coast Name </p>:
-                        <p>Plot Coast name </p>
-                    </div>
-                    <div class="flex">
-                        <p>Plot Taluka / CSTo </p>:
-                        <p>Plot CSTO  </p>
-                    </div>
-                    <div class="flex">
-                        <p>Plot PLot ownership</p>:
-                        <p>Plot owner  </p>
-                    </div>
-                    <div class="flex">
-                        <p>Plot Village</p>:
-                        <p>Plot Village  </p>
-                    </div>
-                    <div class="flex">
-                        <p>Plot Area</p>:
-                        <p>Plot area  </p>
-                    </div>
-                    
-                   
                 </div>
             </div>
         </div>
     </div>
-   
+
 
 </mat-dialog-content>
 

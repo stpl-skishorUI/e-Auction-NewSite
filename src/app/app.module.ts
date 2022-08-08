@@ -15,7 +15,7 @@ import { PipeModule } from './core/pipes/pipe.module';
 import { MatNativeDateModule, MAT_DATE_LOCALE } from '@angular/material/core';
 import { DetailsComponent } from './partial/dialogs/details/details.component';
 import { AuctionPlotProfileComponent } from './partial/bidder/auction-plot-profile/auction-plot-profile.component';
-
+import { AgmCoreModule } from '@agm/core';
 
 @NgModule({
   declarations: [AppComponent, ConfirmationDialogComponent, SuccessDialogComponent, DetailsComponent, AuctionPlotProfileComponent],
@@ -24,7 +24,11 @@ import { AuctionPlotProfileComponent } from './partial/bidder/auction-plot-profi
     AppRoutingModule,
     BrowserAnimationsModule,
     HttpClientModule,
-    AngularMaterialModule,
+    AngularMaterialModule, AgmCoreModule.forRoot({
+      apiKey: 'AIzaSyAkNBALkBX7trFQFCrcHO2I85Re2MmzTo8',
+    language: 'en',
+    libraries: ['places', 'geometry'],
+    }),
     // Vex
     VexModule,
     PipeModule,
