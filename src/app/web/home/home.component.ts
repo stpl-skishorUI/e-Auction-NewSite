@@ -69,12 +69,12 @@ export class HomeComponent implements OnInit {
   eventDetailsColumns:TableColumn<LotCreation>[]=[
     { label: 'srNo', property: 'srNo', type: 'button', visible: true },
     { label: 'Item Number And Name', property: 'itemName', type: 'text', visible: true, cssClasses: ['text-secondary', 'font-medium'] },
-    { label: 'Mineral', property: 'material', type: 'text', visible: false, cssClasses: ['text-secondary', 'font-medium'] },
+    { label: 'Mineral', property: 'material', type: 'text', visible: true, cssClasses: ['text-secondary', 'font-medium'] },
     { label: 'Taluka / CTSO	', property: 'taluka', type: 'text', visible: true, cssClasses: ['text-secondary', 'font-medium'] },
     { label: 'Village', property: 'village', type: 'text', visible: true, cssClasses: ['text-secondary', 'font-medium'] },
     { label: 'Area', property: 'area', type: 'text', visible: true, cssClasses: ['text-secondary', 'font-medium'] },
     { label: 'Allowed Quantity (InBrass)	', property: 'quantity', type: 'text', visible: true, cssClasses: ['text-secondary', 'font-medium'] },
-    { label: 'Tender / Application Fee', property: 'tender_ApplicationFee', type: 'currency', visible: false, cssClasses: ['text-secondary', 'font-medium'] },
+    { label: 'Tender / Application Fee', property: 'tender_ApplicationFee', type: 'currency', visible: true, cssClasses: ['text-secondary', 'font-medium'] },
     { label: 'Offset Value	', property: 'offsetValue', type: 'currency', visible: false, cssClasses: ['text-secondary', 'font-medium'] },
     { label: 'EMD', property: 'emD_SecurityDeposit', type: 'currency', visible: false, cssClasses: ['text-secondary', 'font-medium'] },
     { label: 'View Item Details', property: 'action', type: 'button', visible: true, cssClasses: ['text-secondary', 'font-medium'] },
@@ -122,6 +122,7 @@ export class HomeComponent implements OnInit {
 
   ngOnInit() {
     this.setLang();
+    console.log(this.router.url)
     // let getTodayDate = new Date();
     // this.todayDate = this.datePipe.transform(getTodayDate, 'dd/MM/YYYY hh:mm a')?.split(' ');
     this.defulatForm();
@@ -233,10 +234,7 @@ export class HomeComponent implements OnInit {
       next: (res: any) => {
         if (res['statusCode'] === "200") {
           this.tableDataArray = res['responseData'].responseData1;
-          this.tableDataArray.map((ele:EventDetail,ind:number)=>{
-            ele.srNo =((this.pageNumber + 1) * 10 + ind + 1)-20
-            // {{((pageNumber + 1) * 10 + i + 1)-20}}
-          })
+          this.tableDataArray.map((ele:EventDetail,ind:number)=>{ele.srNo =((this.pageNumber + 1) * 10 + ind + 1)-20})
           this.dataSource = new MatTableDataSource(this.tableDataArray);
           this.dataSource.sort = this.sort;
           this.totalRows = res.responseData.responseData2[0].pageCount;
