@@ -1,13 +1,10 @@
 <vex-page-layout>
-
     <vex-secondary-toolbar current="User Right Access"
         class=" fixed border-0 bg-transparent drop-shadow-none top-1 z-[99] w-8/12">
         <vex-breadcrumbs [crumbs]="['User Right Access']"></vex-breadcrumbs>
     </vex-secondary-toolbar>
 
-
     <div @stagger class="p-gutter container">
-
         <h2 class="title mb-4 flex items-center">
             <span @scaleIn
                 class="w-10 h-10 rounded-full text-primary mr-3 flex items-center justify-center bg-primary/10">
@@ -17,7 +14,6 @@
         </h2>
 
         <div @fadeInUp class="card overflow-hidden">
-
             <mat-stepper labelPosition="bottom" [linear]="isLinear" #stepper (selectionChange)="tabChange($event)">
                 <mat-step [stepControl]="firstFormGroup">
     
@@ -30,7 +26,7 @@
                                 <mat-icon svgIcon="mat:filter_list"></mat-icon>
                                 </button>
                             </div>
-                        <ng-template matStepLabel>Upload <br> Documents</ng-template>
+                        <ng-template matStepLabel>Upload Documents</ng-template>
                         <div class="row mt-2">
                             <table @stagger [dataSource]="ParticipatedDetails" class="w-full" mat-table matSort #participatedDetailsSort='matSort'>
                                 <ng-container matColumnDef="srNo">
@@ -54,8 +50,8 @@
                                     <th mat-header-cell *matHeaderCellDef mat-sort-header>Document Status</th>
                                     <td mat-cell *matCellDef="let element">
                                         <span class="rounded px-2 py-1"
-                                        [ngClass]="{'bg-green-light text-green': element?.documentApprovedStatus =='Approved',' bg-cyan-light text-cyan': element?.documentApprovedStatus=='Rejected' ,'bg-amber-light text-amber': element?.documentApprovedStatus == 'Pending' }">
-                                        {{element?.documentApprovedStatus?element.documentApprovedStatus:"Pending"}}</span>
+                                        [ngClass]="{'bg-green-light text-green': element?.documentApprovedStatus =='Approved',' bg-cyan-light text-cyan': element?.documentApprovedStatus=='rejected' ,'bg-amber-light text-amber': element?.documentApprovedStatus == 'Pending' }">
+                                        {{element?.documentApprovedStatus?(element.documentApprovedStatus | titlecase):"Pending"}}</span>
                                     </td>
                                 </ng-container>
                                 <tr *matHeaderRowDef="visibleParDetailsColumns" mat-header-row></tr>
@@ -97,16 +93,16 @@
                                     <th mat-header-cell *matHeaderCellDef> Upload </th>
                                     <td mat-cell *matCellDef="let element">
                                         <span
-                                            *ngIf="(documentUploadedFlag  || element?.documentPath != null )else docNotUploaded">
-                                            <span class="rounded bg-green-light text-green">Document Uploaded </span>
+                                            *ngIf="(documentUploadedFlag  || element?.documentPath != null || element?.documentPath != 'rejected'  )else docNotUploaded">
+                                            <span class="rounded bg-green-light text-green">Document Uploaded</span>
                                             <span class="pt-1"><i class="fa fa-file-alt fa-lg text-primary mx-2"
                                                     (click)="viewDocument(element.documentPath)"></i></span>
                                         </span>
 
                                         <div class="d-flex align-items-center">
                                             <ng-template #docNotUploaded class="flex items-center">
-                                                <a type="button" mat-raised-button color="primary"   >
-                                                    <label class=" px-2"><span>Upload </span>
+                                                <a type="button" class="w-8 h-8 leading-none flex items-center justify-center ml-1 hover:bg-hover text-pink-600 bg-pink-100" mat-icon-button>
+                                                    <label><mat-icon class="icon-sm" svgIcon="mat:cloud_download"></mat-icon>
                                                         <input type="file" style="display: none"
                                                             (change)="documentUpload($event,element)" #fileInputPan>
                                                     </label>
@@ -136,11 +132,11 @@
                             </table>
                         </div>
                         </div>
-                        <div class="text-center">
-                            <button mat-button matStepperNext type="button" (click)="stepperFirstSubmit('firstCtrl')"
+                        <div class="text-center mt-5">
+                            <button mat-raised-button color="primary"  (click)="stepperFirstSubmit('firstCtrl')"
                                 *ngIf="activeflag ==true" class="btn btn-main">Submit</button>
 
-                            <button mat-button matStepperNext type="button" *ngIf="activeflag == false"
+                            <button mat-raised-button color="primary" *ngIf="activeflag == false"
                                 class="btn btn-main">Next</button>
                         </div>
                     </form>
@@ -148,108 +144,6 @@
                 </mat-step>
                 <mat-step [stepControl]="secondFormGroup">
                     <form [formGroup]="secondFormGroup">
-                        <ng-template matStepLabel>Documents <br> Verification</ng-template>
-
-                        <div class="row mt-2">
-                            <table mat-table [dataSource]="ParticipatedDetails" matSort
-                                class="dashboard-table mb-3 px-0" [trackBy]="commonService.trackTask">
-                                <ng-container matColumnDef="SrNo">
-                                    <th mat-header-cell *matHeaderCellDef>Sr.No </th>
-                                    <td mat-cell *matCellDef="let element let i= index"> {{i+1}} </td>
-                                </ng-container>
-                                <ng-container matColumnDef="eventLevel">
-                                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Event Level </th>
-                                    <td mat-cell *matCellDef="let element"> {{element.eventLevel | titlecase}} </td>
-                                </ng-container>
-                                <ng-container matColumnDef="district">
-                                    <th mat-header-cell *matHeaderCellDef mat-sort-header> District / SDO / Tehsil </th>
-                                    <td mat-cell *matCellDef="let element"> {{element.district | titlecase}} </td>
-                                </ng-container>
-                                <ng-container matColumnDef="eventCode">
-                                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Event ID </th>
-                                    <td mat-cell *matCellDef="let element"> {{element.eventCode | titlecase}} </td>
-                                </ng-container>
-                                <ng-container matColumnDef="title">
-                                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Title </th>
-                                    <td mat-cell *matCellDef="let element"> {{element.title | titlecase}} </td>
-                                </ng-container>
-                                <ng-container matColumnDef="description">
-                                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Description</th>
-                                    <td mat-cell *matCellDef="let element"> {{element.description | titlecase}} </td>
-                                </ng-container>
-                                <ng-container matColumnDef="bidSubmissionEndDate">
-                                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Bid Submission End Date & Time
-                                    </th>
-                                    <td mat-cell *matCellDef="let element"> {{element.bidSubmissionEndDate | date:
-                                        'dd/MM/yyyy &
-                                        h:m a'}} </td>
-                                </ng-container>
-                                <ng-container matColumnDef="bidSubmissionStartDate">
-                                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Bid Opening Date & Time</th>
-                                    <td mat-cell *matCellDef="let element"> {{element.bidSubmissionStartDate |
-                                        date:'dd/MM/yyyy
-                                        & h:m a'}} </td>
-                                </ng-container>
-                                <ng-container matColumnDef="documentApprovedStatus">
-                                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Document Status</th>
-                                    <td mat-cell *matCellDef="let element">
-                                        <span class="badge"
-                                            [ngClass]="{'bg-success': element?.documentApprovedStatus=='approved' || element?.documentApprovedStatus=='Approved',
-                                'bg-danger': element?.documentApprovedStatus=='Rejected' || element?.documentApprovedStatus=='rejected','bg-warning':element?.documentApprovedStatus== null || element?.documentApprovedStatus== 'Pending'|| element?.documentApprovedStatus== 'pending'}">
-                                            {{element?.documentApprovedStatus |titlecase}}
-                                        </span>
-                                    </td>
-                                </ng-container>
-                                <tr mat-header-row *matHeaderRowDef="displayEventDetails"></tr>
-                                <tr mat-row *matRowDef="let row; columns: displayEventDetails;"></tr>
-                            </table>
-                        </div>
-                        <div class="row mt-2">
-                            <table mat-table [dataSource]="dataSourceForEventDocument" matSort #docTblsort='matSort'
-                                class="dashboard-table mb-3 px-0">
-                                <ng-container matColumnDef="eventDocumentId">
-                                    <th mat-header-cell *matHeaderCellDef>Sr.No</th>
-                                    <td mat-cell *matCellDef="let element let i=index"> {{i+1}} </td>
-                                </ng-container>
-                                <ng-container matColumnDef="documentName">
-                                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Document Name </th>
-                                    <td mat-cell *matCellDef="let element">{{element.documentName | titlecase}}</td>
-                                </ng-container>
-                                <ng-container matColumnDef="VerificationStatus">
-                                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Verification Status </th>
-                                    <td mat-cell *matCellDef="let element">
-                                        <span mat-raised-button aria-label="tooltip" class="badge"
-                                            [ngClass]="{'bg-success': element?.documentApprovedStatus=='Approved',
-                          'bg-danger': element?.documentApprovedStatus=='Rejected','bg-warning':element?.documentApprovedStatus== null || element?.documentApprovedStatus== 'Pending'}">
-                                            {{element?.documentApprovedStatus?element.documentApprovedStatus:"Pending"}}</span>
-                                    </td>
-                                </ng-container>
-                                <ng-container matColumnDef="Upload">
-                                    <th mat-header-cell *matHeaderCellDef> Upload </th>
-                                    <td mat-cell *matCellDef="let element">
-                                        <!-- <span class="badge bg-success">Document Uploaded </span> -->
-                                        <span class="pt-1" *ngIf="element.documentPath != null "><i
-                                                class="fa fa-file-alt fa-lg text-primary mx-2"
-                                                (click)="viewDocument(element.documentPath)"></i></span>
-                                    </td>
-                                </ng-container>
-                                <tr mat-header-row *matHeaderRowDef="visibleDocumentDisplayColum"></tr>
-                                <tr mat-row *matRowDef="let row; columns: visibleDocumentDisplayColum;"></tr>
-                            </table>
-                        </div>
-                        <p class="text-success text-center"
-                            *ngIf="eventParticipatedDetails?.documentApprovedStatus =='approved' || eventParticipatedDetails?.documentApprovedStatus =='Approved'">
-                            Your document has been verified successfully.Kindly proceed to
-                            tender purchase page.</p>
-                        <div class="text-center">
-                            <button mat-stroked-button matStepperPrevious>Back</button>
-                            <button mat-raised-button class="btn-main ms-2"
-                                (click)="stepperSecoundSubmit()">Next</button>
-                        </div>
-                    </form>
-                </mat-step>
-                <mat-step [stepControl]="thirdFormGroup">
-                    <form [formGroup]="thirdFormGroup">
                         <ng-template matStepLabel>By Tender</ng-template>
                         <div class="row mt-2">
                             <table mat-table [dataSource]="ParticipatedDetails" matSort
@@ -281,15 +175,11 @@
                                 <ng-container matColumnDef="bidSubmissionEndDate">
                                     <th mat-header-cell *matHeaderCellDef mat-sort-header>Bid Submission End Date & Time
                                     </th>
-                                    <td mat-cell *matCellDef="let element"> {{element.bidSubmissionEndDate | date:
-                                        'dd/MM/yyyy &
-                                        h:m a'}} </td>
+                                    <td mat-cell *matCellDef="let element"> {{element.bidSubmissionEndDate | date: 'dd/MM/yyyy & h:m a'}} </td>
                                 </ng-container>
                                 <ng-container matColumnDef="bidSubmissionStartDate">
                                     <th mat-header-cell *matHeaderCellDef mat-sort-header>Bid Opening Date & Time</th>
-                                    <td mat-cell *matCellDef="let element"> {{element.bidSubmissionStartDate |
-                                        date:'dd/MM/yyyy
-                                        & h:m a'}} </td>
+                                    <td mat-cell *matCellDef="let element"> {{element.bidSubmissionStartDate | date:'dd/MM/yyyy  & h:m a'}} </td>
                                 </ng-container>
 
                                 <tr mat-header-row *matHeaderRowDef="displayedEventDetails"></tr>
@@ -381,8 +271,8 @@
                         </div>
                     </form>
                 </mat-step>
-                <mat-step [stepControl]="forthFormGroup">
-                    <form [formGroup]="forthFormGroup">
+                <mat-step [stepControl]="thirdFormGroup">
+                    <form [formGroup]="thirdFormGroup">
                         <ng-template matStepLabel>Pay EMD</ng-template>
                         <div class="row mt-2">
                             <table mat-table [dataSource]="byTenderDatasource" class="dashboard-table mb-3 px-0">
