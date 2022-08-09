@@ -63,7 +63,7 @@
                <mat-form-field [appearance]=configService.matFormField class="w-full">
                   <mat-label>Select State</mat-label>
                   <mat-select formControlName="stateId"
-                     (selectionChange)="getDivision(userRegistrationForm.value.stateId);clearDropdown('divisionId')">
+                     (selectionChange)="getDivision(userRegistrationForm.value.stateId);clearDropdown('stateId')">
                      <mat-option *ngFor="let state of stateArray" [value]="state.id">{{ state.state }}
                      </mat-option>
                   </mat-select>
@@ -76,7 +76,7 @@
                   <mat-form-field [appearance]=configService.matFormField class="w-full">
                      <mat-label>Select Division</mat-label>
                      <mat-select formControlName="divisionId" [disabled]="!userRegistrationForm.value.stateId"
-                        (selectionChange)="getDistrict(userRegistrationForm.value.divisionId);clearDropdown('districtId')">
+                        (selectionChange)="getDistrict(userRegistrationForm.value.divisionId);clearDropdown('divisionId')">
                         <mat-option *ngFor="let division of divisionArray" [value]="division.id"
                            [disabled]="division.id == 0">
                            {{division.division}}</mat-option>
@@ -89,7 +89,7 @@
                   <mat-form-field [appearance]=configService.matFormField class="w-full">
                      <mat-label>Select District </mat-label>
                      <mat-select formControlName="districtId" [disabled]="!userRegistrationForm.value.divisionId"
-                        (selectionChange)="userRegistrationForm.value.subUserTypeId == 7 ? getTaluka(userRegistrationForm.value.districtId): this.getSubDivision() ;clearDropdown('talukaId')">
+                        (selectionChange)="userRegistrationForm.value.subUserTypeId == 7 ? getTaluka(userRegistrationForm.value.districtId): this.getSubDivision() ;clearDropdown('districtId')">
                         <mat-option *ngFor="let district of districtArray" [value]="district.id"
                            [disabled]="district.id == 0">
                            {{district.district}}</mat-option>
@@ -198,7 +198,8 @@
                      (keyup)="validatorService.removeSpaceAtBegining($event)" autocomplete="off">
                   <mat-error *ngIf="f.userAddress.errors">
                      <span class="text-red" *ngIf="f.userAddress.hasError('required')"> Address is required</span>
-
+                     <span class="text-red" *ngIf="f.userAddress.hasError('minlength')"> Please enter at least 3 characters</span>
+                     <span class="text-red" *ngIf="!f.userAddress.hasError('minlength') && f.userAddress.hasError('pattern')">Only alphanumeric characters are allowed</span>
                   </mat-error>
                </mat-form-field>
             </div>

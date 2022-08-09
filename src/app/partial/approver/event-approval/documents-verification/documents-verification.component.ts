@@ -49,11 +49,11 @@ export class DocumentsVerificationComponent implements OnInit {
  
   pageSizeOptions: number[] = [5, 10, 20, 50];
   pageSize = 10;
-
+  pageIndex=1;
 
   columns: TableColumn<DocumentsVerification>[] = [
     { label: 'Sr.No', property: 'srNo', type: 'button', visible: true, cssClasses: ['text-secondary', 'font-medium'] },
-    { label: 'Event ID', property: 'eventCode', type: 'text', visible: true, cssClasses: ['font-medium'] },
+    { label: 'Event ID', property: 'eventCode', type: 'button', visible: true, cssClasses: ['font-medium'] },
     { label: 'Event Title', property: 'title', type: 'text', visible: true, cssClasses: ['text-secondary', 'font-medium'] },
     { label: 'Event Fee', property: 'eventFee', type: 'button', visible: true, cssClasses: ['text-secondary', 'font-medium'] },
     { label: 'Event Level', property: 'eventLevel', type: 'text', visible: true, cssClasses: ['text-secondary', 'font-medium'] },
@@ -124,7 +124,8 @@ export class DocumentsVerificationComponent implements OnInit {
           this.dataSource.sort = this.sort;
           this.totalRows = res['responseData'].responseData2;
           this.totalRows = this.totalRows[0].pageCount;
-          this.pageNumber == 1 ? this.paginator?.firstPage() : '';
+          (this.totalRows >= 10 && this.pageNumber == 1) ? this.paginator?.firstPage() : '';
+          // this.pageNumber == 1 ? this.paginator?.firstPage() : '';
         } else {
           this.dataSource = null;
           this.totalRows = 0;
@@ -144,6 +145,9 @@ export class DocumentsVerificationComponent implements OnInit {
 
 
   pageChanged(event: PageEvent) {
+    // if(event.pageSize !=10) this.pageSize = event.pageSize;
+    this.pageSize = event.pageSize;
+    this.commonService.removeFilerLocalStorage('pagination');
     this.pageNumber = event.pageIndex + 1;
     this.getAllEventList();
   }
@@ -176,6 +180,14 @@ export class DocumentsVerificationComponent implements OnInit {
 
   clearFilter() {
     this.defultFilterform();
+  }
+
+  navigatePage(flag: any, eventCode: any, eventId?: any, totalItem?: any) {
+    if (flag == 1) {
+      this.commonService.routerLinkRedirect('../approve-document/' + eventId);
+    } else {
+      this.commonService.routerLinkRedirect('/lots-upload/' + eventCode + '/' + eventId + '/' + totalItem);
+    }
   }
 
 }

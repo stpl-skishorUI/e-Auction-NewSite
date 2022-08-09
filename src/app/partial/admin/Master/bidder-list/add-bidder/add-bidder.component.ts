@@ -9,6 +9,7 @@ import { FileUploadService } from 'src/app/core/services/file-upload.service';
 import { LocalstorageService } from 'src/app/core/services/localstorage.service';
 import { MasterService } from 'src/app/core/services/master.service';
 import { ValidatorService } from 'src/app/core/services/validator.service';
+import { BidderList } from '../bidder-list.model';
 // import { MapsAPILoader } from '@agm/core';
 declare var google: any;
 @Component({
@@ -34,14 +35,14 @@ export class AddBidderComponent implements OnInit {
   bidderTypeArray = ['Individual', 'Organization'];
   hideIndividual: boolean = true;
   hideOrganization: boolean = false;
-  organTypeArray: any[] = [];
-  districtArray: any[] = [];
-  DesignationArray: any[] = [];
-  BidderRegByCriteriaArray: any[] = [];
+  organTypeArray = [];
+  districtArray = [];
+  DesignationArray = [];
+  BidderRegByCriteriaArray = [];
   bidderTypeName = 'Individual';
   acceptedOnlyNumbers: any;
   designationName: any;
-  bidderDocumentListArray: any[] = [];
+  bidderDocumentListArray = [];
   PartnershipDeedCerti_Hide: boolean = false;
   disableDiv: boolean = false;
 
@@ -149,7 +150,7 @@ export class AddBidderComponent implements OnInit {
     })
   }
 
-  verifyByPAN_M(flag: any) {
+  verifyByPAN_M(flag: string) {
     flag == 'PAN' ? (this.hideByPAN = true, this.hideByMobile = false) : (this.hideByMobile = true, this.hideByPAN = false);
     this.sentOtpText = 'Send OTP';
     this.disableDiv = true;
@@ -162,7 +163,7 @@ export class AddBidderComponent implements OnInit {
     this.defaultfilenativeElementClear();
   }
 
-  addRemoveVali_VerifyByPAN_M(flag: any) {
+  addRemoveVali_VerifyByPAN_M(flag: string) {
     if (flag == 'PAN') {
       this.verifyByForm.controls['mobileNo'].setValue('');
       this.verifyByForm.controls['mobileNo'].clearValidators();
@@ -191,7 +192,7 @@ export class AddBidderComponent implements OnInit {
     this.defaultfilenativeElementClear();
   }
 
-  addRemoveVali_BidderTypeCheck(flag: any) {
+  addRemoveVali_BidderTypeCheck(flag: string) {
     if (flag == 'Individual') {
       this.bidderRegiForm.controls['organizationTypeId'].setValue('');
       this.bidderRegiForm.controls['organizationTypeId'].clearValidators();
@@ -332,7 +333,7 @@ export class AddBidderComponent implements OnInit {
       }
       let formType = this.data ? 'PUT' : 'POST';
       this.apiService.setHttp(formType, 'bidder-registration', false, JSON.stringify(obj), false, 'bidderUrl');
-      this.apiService.getHttp().subscribe((res: any) => {
+      this.apiService.getHttp().subscribe((res) => {
         if (res.statusCode == "200") {
           formType == 'POST' ? this.commonService.successDialog(res.statusMessage) : this.commonService.snackBar(res.statusMessage, 0);
           this.checkLoginOrNot = true ? this.dialogRef.close(true) : '';
@@ -344,14 +345,14 @@ export class AddBidderComponent implements OnInit {
         } else {
           this.commonService.snackBar(res.statusMessage, 1);
         }
-      }, (error: any) => {
+      }, (error) => {
         this.errorSerivce.handelError(error.status);
       });
       this.clearForm();
     }
   }
 
-  editBidderForm(data:any){ // Patch Data
+  editBidderForm(data:BidderList){ // Patch Data
     console.log(data?.bidderType)
     this.bidderTypeName = data?.bidderType; // add for radio button
     this.bidderTypeCheck(data?.bidderType);
@@ -371,7 +372,7 @@ export class AddBidderComponent implements OnInit {
     })
     this.bidderDocumentListArray = data?.bidderUserDocuments;
     this.documentSymbolHide();
-    this.bidderDocumentListArray.map((ele:any)=>{
+    this.bidderDocumentListArray.map((ele)=>{
       switch (ele.docTypeId) {
         case 1: this.bidderRegiForm.controls['panNo'].setValue(ele.docNo); break;
         case 2: this.bidderRegiForm.controls['aadharNo'].setValue(ele.docNo); break;
@@ -399,7 +400,7 @@ export class AddBidderComponent implements OnInit {
 
   getOrganizationtype() {
     this.masterService.getOrganizationType().subscribe({
-      next: (response: any) => {
+      next: (response:[]) => {
         this.organTypeArray.push({ organizationName: "Select Orgination Type", organizationId: 0 }, ...response);
       },
       error: (err => { this.errorSerivce.handelError(err) })
@@ -408,7 +409,7 @@ export class AddBidderComponent implements OnInit {
 
   getDistrict() {
     this.masterService.getDistrict(0).subscribe({
-      next: (response: any) => {
+      next: (response: []) => {
         this.districtArray.push({ district: "Select District", id: 0 }, ...response);
       },
       error: (err => { this.errorSerivce.handelError(err) })
@@ -418,7 +419,7 @@ export class AddBidderComponent implements OnInit {
   getDesignation() {
     this.apiService.setHttp('get', "designation/GetAll", false, false, false, 'masterUrl');
     this.apiService.getHttp().subscribe({
-      next: (res: any) => {
+      next: (res) => {
         if (res.statusCode === "200") {
           // this.spinner.hide();
           this.DesignationArray = res.responseData;
@@ -429,7 +430,7 @@ export class AddBidderComponent implements OnInit {
           this.commonService.checkDataType(res.statusMessage) == false ? this.errorSerivce.handelError(res.statusCode) : this.commonService.snackBar(res.statusMessage, 1);
         }
       },
-      error: ((error: any) => { this.errorSerivce.handelError(error.status) })
+      error: ((error) => { this.errorSerivce.handelError(error.status) })
     });
   }
 
@@ -440,7 +441,7 @@ export class AddBidderComponent implements OnInit {
     let obj = 'Mobile=' + this.verifyByForm.value.mobileNo + '&PAN=' + this.verifyByForm.value.panNumber;
     this.apiService.setHttp('get', "bidder-registration/getbyCriteria?" + obj, false, false, false, 'bidderUrl');
     this.apiService.getHttp().subscribe({
-      next: (res: any) => {
+      next: (res) => {
         if (res.statusCode === "200") {
           // this.spinner.hide();
           this.BidderRegByCriteriaArray = res.responseData;
@@ -456,7 +457,7 @@ export class AddBidderComponent implements OnInit {
             this.bidderRegiForm.controls['panNo'].setValue(this.verifyByForm.value.panNumber.toUpperCase());
         }
       },
-      error: ((error: any) => { this.errorSerivce.handelError(error.status) })
+      error: ((error) => { this.errorSerivce.handelError(error.status) })
     });
   }
 
@@ -468,7 +469,7 @@ export class AddBidderComponent implements OnInit {
       let obj = 'Mobile=' + mobile + '&PAN=' + PanNo;
       this.apiService.setHttp('get', "bidder-registration/getbyCriteria?" + obj, false, false, false, 'bidderUrl');
       this.apiService.getHttp().subscribe({
-        next: (res: any) => {
+        next: (res) => {
           if (res.statusCode === "200") {
             mobile ? this.commonService.snackBar('Mobile Number Is Already Registerd', 1) :
               this.commonService.snackBar('PAN Number Is Already Registerd', 1);
@@ -476,18 +477,18 @@ export class AddBidderComponent implements OnInit {
             this.commonService.checkDataType(res.statusMessage) == false ? this.errorSerivce.handelError(res.statusCode) : '';
           }
         },
-        error: ((error: any) => { this.errorSerivce.handelError(error.status) })
+        error: ((error) => { this.errorSerivce.handelError(error.status) })
       });
     }
   }
 
   // ...........................................  Document Upload Code Start Here ......................................//
 
-  documentUpload(event: any, docTypeId: any, docTypeName: any) {
+  documentUpload(event: any, docTypeId: number, docTypeName: string) {
     let documentUrlUploaed: any;  
     let documentUrl: any = this.uploadFilesService.uploadDocuments(event, "bidder", "png,jpg,jpeg,pdf", 5, 5000)
     documentUrl.subscribe({
-      next: (ele: any) => {
+      next: (ele) => {
         documentUrlUploaed = ele.responseData;
         if (documentUrlUploaed != null) {
           let obj = {
@@ -513,13 +514,13 @@ export class AddBidderComponent implements OnInit {
     })
   }
 
-  checkUniqueData(obj: any, docTypeId: any) { //Check Unique Data then Insert or Update
+  checkUniqueData(obj: object, docTypeId: number) { //Check Unique Data then Insert or Update
     this.checkedDataflag = true;
     if (this.bidderDocumentListArray.length <= 0) {
       this.bidderDocumentListArray.push(obj);
       this.checkedDataflag = false;
     } else {
-      this.bidderDocumentListArray.map((ele: any, index: any) => {
+      this.bidderDocumentListArray.map((ele, index) => {
         if (ele.docTypeId == docTypeId) {
           this.bidderDocumentListArray[index] = obj;
           this.checkedDataflag = false;
@@ -532,7 +533,7 @@ export class AddBidderComponent implements OnInit {
 
   documentSymbolHide() {
     if (this.bidderDocumentListArray.length > 0) {
-      this.bidderDocumentListArray.map((ele: any) => {
+      this.bidderDocumentListArray.map((ele) => {
         switch (ele.docType) {
           case 'PAN': this.panSymbolHide = true; break;
           case 'Aadhar': this.aadharSymbolHide = true; break;
@@ -560,7 +561,7 @@ export class AddBidderComponent implements OnInit {
   }
 
   viewDocument(flag: any) {
-    this.bidderDocumentListArray.find((ele: any) => {
+    this.bidderDocumentListArray.find((ele) => {
       if (ele.docTypeId == flag) {
         window.open(ele.docPath, '_blank');
       }
@@ -571,7 +572,7 @@ export class AddBidderComponent implements OnInit {
 
   addDocumentNumber() { // Add Document Number In bidderDocumentListArray
     const controls = this.bidderRegiForm.controls;
-    this.bidderDocumentListArray.map((ele: any) => {
+    this.bidderDocumentListArray.map((ele) => {
       if (controls['panNo'].valid && ele.docTypeId == 1) {
         ele.docNo = this.bidderRegiForm.value.panNo.toUpperCase();
       } else if (controls['aadharNo'].valid && ele.docTypeId == 2) {
@@ -595,7 +596,7 @@ export class AddBidderComponent implements OnInit {
     let ShopActLBCerti: boolean = true;
     let PartDCerti: boolean = true;
 
-    this.bidderDocumentListArray.map((ele: any) => {
+    this.bidderDocumentListArray.map((ele) => {
       switch (ele.docType) {
         case 'Aadhar': Aadhar = false; break;
         case 'GST': GST = false; break;
@@ -674,8 +675,8 @@ export class AddBidderComponent implements OnInit {
   findAddressByCoordinates() {
     this.geocoder.geocode(
       { location: { lat: this.latitude, lng: this.longitude, } },
-      (results: any) => {
-        results[0].address_components.forEach((element: any) => {
+      (results) => {
+        results[0].address_components.forEach((element) => {
           this.pinCode = element.long_name;
           this.bidderRegiForm.controls['pinCode'].setValue(this.pinCode);
         });
@@ -706,7 +707,7 @@ export class AddBidderComponent implements OnInit {
         "isUser": false
       }
       this.apiService.setHttp('POST', 'otp-tran', false, JSON.stringify(obj), false, 'masterUrl');
-      this.apiService.getHttp().subscribe((res: any) => {
+      this.apiService.getHttp().subscribe((res) => {
         if (res.statusCode == "200") {
           this.sentOtpText = 'Resend OTP'
           this.commonService.snackBar(res.statusMessage, 1);
@@ -714,7 +715,7 @@ export class AddBidderComponent implements OnInit {
         } else {
           this.commonService.snackBar(res.statusMessage, 0);
         }
-      }, (error: any) => {
+      }, (error) => {
         this.errorSerivce.handelError(error.status);
       });
     } else {
@@ -726,7 +727,7 @@ export class AddBidderComponent implements OnInit {
     let obj = 'MobileNo=' + mobileNo + '&PageName=' + PageName;
     this.apiService.setHttp('get', "otp-tran/GetOtpByMobileNo?" + obj, false, false, false, 'masterUrl');
     this.apiService.getHttp().subscribe({
-      next: (res: any) => {
+      next: (res) => {
         if (res.statusCode === "200") {
           this.verfiedOTPId = res.responseData[0].id;
           this.mobileOtp = res.responseData[0].otp;
@@ -736,7 +737,7 @@ export class AddBidderComponent implements OnInit {
           this.commonService.checkDataType(res.statusMessage) == false ? this.errorSerivce.handelError(res.statusCode) : this.commonService.snackBar(res.statusMessage, 1);
         }
       },
-      error: ((error: any) => { this.errorSerivce.handelError(error.status) })
+      error: ((error) => { this.errorSerivce.handelError(error.status) })
     });
   }
 

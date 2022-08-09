@@ -3,7 +3,7 @@ import { Component, Input, NgZone, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, UntypedFormControl } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
-import { MatSelectChange } from '@angular/material/select';
+// import { MatSelectChange } from '@angular/material/select';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { ReplaySubject } from 'rxjs';
@@ -13,6 +13,7 @@ import { TableColumn } from 'src/@vex/interfaces/table-column.interface';
 import { SuccessDialogComponent } from 'src/app/core/dialogs/success-dialog/success-dialog.component';
 import { ApiService } from 'src/app/core/services/api.service';
 import { CommonService } from 'src/app/core/services/common.service';
+import { ConfigService } from 'src/app/core/services/config.service';
 import { ErrorsService } from 'src/app/core/services/errors.service';
 import { LocalstorageService } from 'src/app/core/services/localstorage.service';
 import { MasterService } from 'src/app/core/services/master.service';
@@ -33,7 +34,7 @@ export class UserRightAccessComponent implements OnInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   layoutCtrl = new UntypedFormControl('boxed');
-  dataSource: MatTableDataSource<UserRightAccess> | null;
+  dataSource: MatTableDataSource<UserRightAccess> | null |[];
   selection = new SelectionModel<UserRightAccess>(true, []);
   searchCtrl = new UntypedFormControl();
   subject$: ReplaySubject<UserRightAccess[]> = new ReplaySubject<UserRightAccess[]>(1);
@@ -65,6 +66,7 @@ export class UserRightAccessComponent implements OnInit {
 
   pageSizeOptions: number[] = [5, 10, 20, 50];
   pageSize = 10;
+  
 
   constructor(
     public dialog: MatDialog,
@@ -75,12 +77,14 @@ export class UserRightAccessComponent implements OnInit {
     private error: ErrorsService,
     private localstorageService: LocalstorageService,
     public validatorService:ValidatorService,
-    private ngZone: NgZone
+    private ngZone: NgZone,
+    public configService:ConfigService
   ) { }
 
   get visibleColumns() {
     return this.columns.filter(column => column.visible).map(column => column.property);
   }
+
 
   ngOnInit(): void {
     this.defultForm();
@@ -164,7 +168,7 @@ export class UserRightAccessComponent implements OnInit {
       return
     }
    
-    let paramList: string = "?ProjectId=" + formValue.projectId + "&UserTypeId=" + formValue.userType + "&SubUserTypeId=" + formValue.subUserType + "&RoleId=" + formValue.level + "&DesignationId=0&pageno=" + this.pageNumber + "&pagesize=" + 10 + "&Textsearch=" + formValue.search;
+    let paramList: string = "?ProjectId=" + formValue.projectId + "&UserTypeId=" + formValue.userType + "&SubUserTypeId=" + formValue.subUserType + "&RoleId=" + formValue.level + "&DesignationId=0&pageno=" + this.pageNumber + "&pagesize=" + this.pageSize + "&Textsearch=" + formValue.search;
     this.apiService.setHttp('get', "user-pages/GetByCriteria" + paramList, false, false, false, 'masterUrl');
     this.apiService.getHttp().subscribe({
       next: (res: object) => {
@@ -174,7 +178,7 @@ export class UserRightAccessComponent implements OnInit {
           this.dataSource.sort = this.sort;
           this.totalRows = res['responseData'].responseData2[0].pageCount;
         } else {
-          this.dataSource = null         
+          this.dataSource = null;         
           this.totalRows = 0;
           if (res['statusCode'] != "404") {
             this.commonService.checkDataType(res['statusMessage']) == false ? this.error.handelError(res['statusCode']) : this.commonService.snackBar(res['statusMessage'], 1);
@@ -237,25 +241,28 @@ export class UserRightAccessComponent implements OnInit {
     event.stopImmediatePropagation();
     column.visible = !column.visible;
   }
-  isAllSelected() {
-    const numSelected = this.selection.selected.length;
-    const numRows = this.dataSource.data.length;
-    return numSelected === numRows;
-  }
-  masterToggle() {
-    this.isAllSelected() ?
-      this.selection.clear() :
-      this.dataSource.data.forEach(row => this.selection.select(row));
-  }
-  onLabelChange(change: MatSelectChange, row: UserRightAccess) {
-    const index = this.userRightAccess.findIndex(c => c === row);
-    this.userRightAccess[index].labels = change.value;
-    this.subject$.next(this.userRightAccess);
-  }
+  // isAllSelected() {
+  //   const numSelected = this.selection.selected.length;
+  //   const numRows = this.dataSource.data.length;
+  //   return numSelected === numRows;
+  // }
+  // masterToggle() {
+  //   this.isAllSelected() ?
+  //     this.selection.clear() :
+  //     this.dataSource.data.forEach(row => this.selection.select(row));
+  // }
+  // onLabelChange(change: MatSelectChange, row: UserRightAccess) {
+  //   const index = this.userRightAccess.findIndex(c => c === row);
+  //   this.userRightAccess[index].labels = change.value;
+  //   this.subject$.next(this.userRightAccess);
+  // }
 
   // .................................. Paginator method ................................. */
 
   pageChanged(event: PageEvent) {
+    // if(event.pageSize !=10) this.pageSize = event.pageSize;
+    this.pageSize = event.pageSize;
+    this.commonService.removeFilerLocalStorage('pagination');
     this.pageNumber = event.pageIndex + 1;
     this.bindTable();
   }

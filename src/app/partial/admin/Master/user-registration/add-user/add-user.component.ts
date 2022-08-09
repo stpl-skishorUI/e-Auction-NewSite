@@ -82,7 +82,7 @@ export class AddUserComponent implements OnInit {
       userName: [this.data?.userName || '', [Validators.required,Validators.minLength(5),Validators.pattern(this.validatorService.valUserName)]],
       designationId: ['', [Validators.required]],
       emailId: [this.data?.emailId || '', [Validators.pattern(this.validatorService.valEmailId)]],
-      userAddress: [this.data?.userAddress || '', [Validators.required]],
+      userAddress: [this.data?.userAddress || '', [Validators.required,Validators.minLength(3),Validators.pattern("^(?=.*[0-9])(?=.*[a-zA-Z])([a-zA-Z0-9\'.,-\/\\s]+)$")]],
       subDivisionId: [this.data?.subDivisionId || ''],
       profilePath: ['']
     })
@@ -168,15 +168,21 @@ export class AddUserComponent implements OnInit {
         this.userRegistrationForm.controls['subDivisionId'].setValue('');
         break;
       case 'stateId':
+        this.userRegistrationForm.controls['divisionId'].setValue('');
+        this.userRegistrationForm.controls['districtId'].setValue('');
+        this.userRegistrationForm.controls['talukaId'].setValue('');
+        this.userRegistrationForm.controls['subDivisionId'].setValue('');
         break;
       case 'divisionId':
         this.userRegistrationForm.controls['districtId'].setValue('');
         this.userRegistrationForm.controls['talukaId'].setValue('');
+        this.userRegistrationForm.controls['subDivisionId'].setValue('');
         break;
       case 'districtId':
         this.userRegistrationForm.controls['talukaId'].setValue('');
         break;
     }
+    this.addValSelSubUserType();
   }
 
   getprojectType() {

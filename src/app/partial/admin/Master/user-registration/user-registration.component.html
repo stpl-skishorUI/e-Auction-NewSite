@@ -11,7 +11,7 @@
       <div class="my-3 card p-3 border-0 shadow-none">
         <div class="flex flex-row justify-between">
           <div class="grid grid-cols-5 gap-4 mr-3">
-            <mat-form-field [appearance]=configService.matFormFieldFilter>
+            <mat-form-field [appearance]=configService.matFormField>
               <mat-label>Select State</mat-label>
               <mat-select formControlName="stateId"
                 (selectionChange)="getDivision(filterForm.value.stateId);clearDropdown('state')">
@@ -19,7 +19,7 @@
                 </mat-option>
               </mat-select>
             </mat-form-field>
-            <mat-form-field [appearance]=configService.matFormFieldFilter>
+            <mat-form-field [appearance]=configService.matFormField>
               <mat-label>Select Division</mat-label>
               <mat-select formControlName="divisionId" [disabled]='!filterForm.value.stateId'
                 (selectionChange)="getDistrict(filterForm.value.divisionId);clearDropdown('division');">
@@ -27,7 +27,7 @@
                   division.division}}</mat-option>
               </mat-select>
             </mat-form-field>
-            <mat-form-field [appearance]=configService.matFormFieldFilter>
+            <mat-form-field [appearance]=configService.matFormField>
               <mat-label>Select District</mat-label>
               <mat-select formControlName="districtId" [disabled]="!filterForm.value.divisionId"
                 (selectionChange)="getTaluka(filterForm.value.districtId);clearDropdown('district');">
@@ -35,14 +35,14 @@
                   {{district.district}}</mat-option>
               </mat-select>
             </mat-form-field>
-            <mat-form-field [appearance]=configService.matFormFieldFilter>
+            <mat-form-field [appearance]=configService.matFormField>
               <mat-label>Select Taluka</mat-label>
               <mat-select formControlName="talukaId" [disabled]='!filterForm.value.districtId'>
                 <mat-option *ngFor="let taluka of talukaArray" [value]="taluka.id">{{taluka.taluka}}
                 </mat-option>
               </mat-select>
             </mat-form-field>
-            <mat-form-field [appearance]=configService.matFormFieldFilter>
+            <mat-form-field [appearance]=configService.matFormField>
               <mat-label>Search by Name/Mob. No.</mat-label>
               <input ty matInput placeholder="Search by Name/Mob. No." formControlName="search">
             </mat-form-field>
@@ -50,7 +50,7 @@
           <div>
             <button class="rounded-full bg-gray-200 text-black" mat-button type="submit" (click)="filterData()">
               <mat-icon svgIcon="mat:search"></mat-icon>
-              <span>Search</span>
+              <span>Apply</span>
             </button>
           </div>
         </div>
@@ -143,7 +143,8 @@
         <!-- sr No column -->
         <ng-container matColumnDef="srNo">
           <th mat-header-cell *matHeaderCellDef mat-sort-header> Sr.No </th>
-          <td mat-cell *matCellDef="let element;let i=index"> {{((pageNumber + 1) * 10 + i + 1)-20}}</td>
+          <!-- <td mat-cell *matCellDef="let element;let i=index"> {{((pageNumber + 1) * 10 + i + 1)-20}}</td> -->
+          <td mat-cell *matCellDef="let element;let i=index"> {{ paginator.pageIndex*paginator.pageSize+i+1}}</td>
         </ng-container>
 
         <!-- Text Columns -->
@@ -199,13 +200,22 @@
           </td>
         </ng-container>
 
+        
         <tr *matHeaderRowDef="visibleColumns" mat-header-row></tr>
         <tr *matRowDef="let row; columns: visibleColumns;" @fadeInUp
-          class="hover:bg-hover trans-ease-out cursor-pointer" mat-row></tr>
+        [ngClass]="{'bg-green-light':highlightedRow == row.id}" class="hover:bg-hover trans-ease-out cursor-pointer" mat-row></tr>
       </table>
 
-      <mat-paginator [pageSizeOptions]="pageSizeOptions" [pageSize]="pageSize" [length]="totalRows"
-        (page)="pageChanged($event)" class="sticky left-0"></mat-paginator>
+      <ng-container *ngIf="!dataSource" >
+        <p class="bg-red-400 text-stone-200	text-center	 py-px	"> Data Not Found </p>
+      </ng-container>
+
+      <ng-container>
+        <mat-paginator [pageSizeOptions]="pageSizeOptions" showFirstLastButtons
+            [pageSize]="pageSize" [length]="totalRows" (page)="pageChanged($event)"
+            class="sticky left-0">
+        </mat-paginator>
+    </ng-container>
     </div>
 
   </vex-page-layout-content>
