@@ -48,7 +48,7 @@
             </mat-form-field>
           </div>
           <div>
-            <button class="rounded-full bg-gray-200 text-black" mat-button type="submit" (click)="filterData()">
+            <button class="rounded-full bg-gray-200 text-black" mat-button type="submit" >
               <mat-icon svgIcon="mat:search"></mat-icon>
               <span>Apply</span>
             </button>
@@ -62,67 +62,9 @@
       <div class="bg-app-bar px-4 h-16 border-b sticky left-0 flex items-center">
 
 
-        <div class="flex-1">
-          <!-- <form [formGroup]="filterForm" (ngSubmit)="filterData()">
-            <div class="mt-5 border-0 shadow-none">
-              <div class="grid grid-cols-3 justify-items-stretch">
-                <div>
-                  <mat-form-field class="mb-3 w-full pr-3" [appearance]=configService.matFormFieldFilter>
-                    <mat-label>Select State</mat-label>
-                    <mat-select formControlName="stateId"
-                      (selectionChange)="getDivision(filterForm.value.stateId);clearDropdown('state')">
-                      <mat-option *ngFor="let state of stateArray" [value]="state.id">{{ state.state }}
-                      </mat-option>
-                    </mat-select>
-                  </mat-form-field>
-                </div>
-                <div>
-                  <mat-form-field class="mb-3 w-full pr-3" [appearance]=configService.matFormFieldFilter>
-                    <mat-label>Select Division</mat-label>
-                    <mat-select formControlName="divisionId" [disabled]='!filterForm.value.stateId'
-                      (selectionChange)="getDistrict(filterForm.value.divisionId);clearDropdown('division');">
-                      <mat-option *ngFor="let division of divisionArray;" [value]="division.id">{{
-                        division.division}}</mat-option>
-                    </mat-select>
-                  </mat-form-field>
-                </div>
-                <div>
-                  <mat-form-field class="mb-3 w-full pr-3" [appearance]=configService.matFormFieldFilter>
-                    <mat-label>Select District</mat-label>
-                    <mat-select formControlName="districtId" [disabled]="!filterForm.value.divisionId"
-                      (selectionChange)="getTaluka(filterForm.value.districtId);clearDropdown('district');">
-                      <mat-option *ngFor="let district of districtArray" [value]="district.id">
-                        {{district.district}}</mat-option>
-                    </mat-select>
-                  </mat-form-field>
-                </div>
-                <div>
-                  <mat-form-field class="mb-3 w-full pr-3" [appearance]=configService.matFormFieldFilter>
-                    <mat-label>Select Taluka</mat-label>
-                    <mat-select formControlName="talukaId" [disabled]='!filterForm.value.districtId'>
-                      <mat-option *ngFor="let taluka of talukaArray" [value]="taluka.id">{{taluka.taluka}}
-                      </mat-option>
-                    </mat-select>
-                  </mat-form-field>
-                </div>
-                <div class="">
-                  <mat-form-field  class="mb-3 w-full pr-3" [appearance]=configService.matFormFieldFilter>
-                    <mat-label>Search by Name/Mob. No.</mat-label>
-                    <input ty matInput placeholder="Search by Name/Mob. No." formControlName="search">
-                  </mat-form-field>
-                </div>
-                <div class="justify-self-end pr-3">
-                  <button type="submit" class="btn-secondary" mat-raised-button type="button"
-                    (click)="filterData()">
-                    <mat-icon class="ltr:-ml-1 rtl:-mr-1 ltr:mr-1 rtl:ml-1" svgIcon="mat:search"></mat-icon>
-                    <span>Search</span>
-                  </button>
-                </div>
-              </div>
-            </div>
-          </form> -->
+        <div class="flex-1">        
         </div>
-        <!-- <span class="flex-1"></span> -->
+   
 
         <button [matMenuTriggerFor]="columnFilterMenu" class="ml-4 flex-none" mat-icon-button
           matTooltip="Filter Columns" type="button">
