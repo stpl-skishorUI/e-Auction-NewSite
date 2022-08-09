@@ -127,7 +127,8 @@ export class PageListComponent implements OnInit{
 // ........................ Paginator method ................................. */
 
   pageChanged(event:PageEvent) {
-    if(event.pageSize !=10) this.pageSize = event.pageSize;
+    // if(event.pageSize !=10) this.pageSize = event.pageSize;
+    this.pageSize = event.pageSize;
     this.commonService.removeFilerLocalStorage('pagination');
     this.pageNumber = event.pageIndex + 1;
     this.bindTable();
