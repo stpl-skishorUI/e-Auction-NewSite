@@ -7,6 +7,7 @@ import { MatFormFieldDefaultOptions, MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@ang
 import { MatPaginator, PageEvent} from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
+import { NgxSpinnerService } from 'ngx-spinner';
 import { ReplaySubject, Subscription } from 'rxjs';
 import { fadeInUp400ms } from 'src/@vex/animations/fade-in-up.animation';
 import { stagger40ms } from 'src/@vex/animations/stagger.animation';
@@ -67,8 +68,11 @@ export class BidderListComponent implements OnInit {
 
   filterForm!: FormGroup;
   totalRows: number;
+  noDataFlag:boolean = false;
 
-  constructor(public dialog: MatDialog,
+  constructor(
+    private spinner: NgxSpinnerService,
+    public dialog: MatDialog,
     private apiService: ApiService, private fb: FormBuilder,
     public commonService: CommonService,
     private localstorageService: LocalstorageService,
@@ -109,6 +113,7 @@ export class BidderListComponent implements OnInit {
 
 
   getData() {
+    this.spinner.show();
     let localstorData = this.localstorageService.getLoggedInLocalstorageData().responseData;
     let formValue = this.filterForm.value;
     let bidderTy = formValue.bidderType == 'All' ? '' : formValue.bidderType;
@@ -119,15 +124,18 @@ export class BidderListComponent implements OnInit {
     this.subscription = this.apiService.getHttp().subscribe({
       next: (res) => {
         if (res.statusCode === "200") {
+          this.spinner.hide();
           this.dataSource = new MatTableDataSource(res.responseData.responseData1);
           this.dataSource.sort = this.sort;
-
+          this.noDataFlag=true;
           this.totalRows = res.responseData.responseData2.pageCount;
           this.totalRows > 10 && this.pageNumber == 1 ? this.paginator?.firstPage() : '';
         } else {
+          this.spinner.hide();
           this.totalRows = 0;
           this.dataSource = null;
           if (res.statusCode != "404") {
+            this.spinner.hide();
             this.commonService.checkDataType(res.statusMessage) == false ? this.error.handelError(res.statusCode) : this.commonService.snackBar(res.statusMessage, 1);
           }
         }

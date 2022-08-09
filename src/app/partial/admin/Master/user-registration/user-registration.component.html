@@ -206,8 +206,8 @@
         [ngClass]="{'bg-green-light':highlightedRow == row.id}" class="hover:bg-hover trans-ease-out cursor-pointer" mat-row></tr>
       </table>
 
-      <ng-container *ngIf="!dataSource" >
-        <p class="bg-red-400 text-stone-200	text-center	 py-px	"> Data Not Found </p>
+      <ng-container *ngIf="!dataSource && noDataFlag" >
+        <p class="bg-red-400 text-stone-200	text-center	 py-px data-not-found	"> Data Not Found </p>
       </ng-container>
 
       <ng-container>
