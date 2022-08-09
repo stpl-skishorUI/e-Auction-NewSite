@@ -10,6 +10,7 @@ import { ConfirmationDialogComponent } from 'src/app/core/dialogs/confirmation-d
 import { ApiService } from 'src/app/core/services/api.service';
 import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
+import { ChangePasswordComponent } from 'src/app/partial/dialogs/change-password/change-password.component';
 
 @Component({
   selector: 'vex-toolbar',
@@ -94,6 +95,18 @@ export class ToolbarComponent {
     dialog.afterClosed().subscribe((result: any) => {
       if (result == 'Yes') {
         this.logOut();
+      }
+    })
+  }
+
+  openChangePassordDialog() {
+    const dialogRef = this.dialog.open(ChangePasswordComponent, {
+      width: this.apiService.modalSize[1], 
+      disableClose: this.apiService.disableCloseFlag,    //disableClose: true for change pwd dialog close only to click btn
+    },);
+    dialogRef.afterClosed().subscribe((result: any) => {
+      if (result == 'Yes') {
+        //this.logOut();
       }
     })
   }

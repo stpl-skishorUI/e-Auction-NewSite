@@ -51,7 +51,7 @@
     </div>
 
     <mat-menu #languageMenu="matMenu" overlapTrigger="false" xPosition="before" yPosition="below">
-      <button mat-menu-item>
+      <button mat-menu-item (click)="openChangePassordDialog()">
         <span> <mat-icon class="vex-user-menu-item__icon icon-sm" svgIcon="mat:settings"></mat-icon> Change Password</span>
       </button>
       <a mat-menu-item  routerLink="../profile">

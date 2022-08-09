@@ -78,16 +78,15 @@ const routes: Routes = [
       { path: 'live_auction_bidding', loadChildren: () => import('./partial/bidder/live-auction-bidding/live-auction-bidding.module').then(m => m.LiveAuctionBiddingModule), data: { breadcrumb: [{ title: 'Dashboard', active: true }] }, canActivate: [ExpenseGuard] },
       { path: 'account-details', loadChildren: () => import('./partial/bidder/account-details/account-details.module').then(m => m.AccountDetailsModule), data: { breadcrumb: [{ title: 'Dashboard', active: true }] }, canActivate: [ExpenseGuard] },
       { path: 'eauction-event/:id', loadChildren: () => import('./partial/bidder/eauction-event/eauction-event.module').then(m => m.EauctionEventModule), data: { breadcrumb: [{ title: 'EauctionEventModule', active: true }] }, canActivate: [ExpenseGuard] },
- 
+      { path: 'profile', loadChildren: () => import('./partial/profile/profile.module').then(m => m.ProfileModule) },
       //----------------------------------------------------------------for bidder routing end heare-----------------------------------------//
     ]
   },
   { path: 'add-bidder', loadChildren: () => import('./partial/admin/master/bidder-list/add-bidder/add-bidder.module').then(m => m.AddBidderModule) },
-  
-  { path: 'bidder-registration', loadChildren: () => import('./partial/admin/master/bidder-list/add-bidder/add-bidder.module').then(m => m.AddBidderModule), data: { breadcrumb: [{ title: 'Bidder Registration', active: true }] }},
   { path: 'bidder-registration', loadChildren: () => import('./partial/admin/master/bidder-list/add-bidder/add-bidder.module').then(m => m.AddBidderModule), data: { breadcrumb: [{ title: 'Bidder Registration', active: true }] }},
   { path: 'web-layout', loadChildren: () => import('./web/web-layout/web-layout.module').then(m => m.WebLayoutModule) },
   { path: 'document-approve', loadChildren: () => import('./partial/approver/event-approval/documents-verification/document-approve/document-approve.module').then(m => m.DocumentApproveModule) },
+
  
   {
     path: '**',
