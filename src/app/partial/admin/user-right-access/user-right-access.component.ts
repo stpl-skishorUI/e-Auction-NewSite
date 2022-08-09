@@ -1,11 +1,13 @@
 import { SelectionModel } from '@angular/cdk/collections';
-import { Component, Input, NgZone, OnInit, ViewChild } from '@angular/core';
+
+import { Component,  Input, NgZone, OnInit,  ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, UntypedFormControl } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 // import { MatSelectChange } from '@angular/material/select';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
+import { NgxSpinnerService } from 'ngx-spinner';
 import { ReplaySubject } from 'rxjs';
 import { fadeInUp400ms } from 'src/@vex/animations/fade-in-up.animation';
 import { stagger40ms } from 'src/@vex/animations/stagger.animation';
@@ -39,7 +41,7 @@ export class UserRightAccessComponent implements OnInit {
   searchCtrl = new UntypedFormControl();
   subject$: ReplaySubject<UserRightAccess[]> = new ReplaySubject<UserRightAccess[]>(1);
   userRightAccess: UserRightAccess[];
-
+  noDataFlag:boolean = false;
   filterForm: FormGroup;
   userRoleArray = [];
   userTypeArray = [];
@@ -69,6 +71,7 @@ export class UserRightAccessComponent implements OnInit {
   
 
   constructor(
+    private spinner: NgxSpinnerService,
     public dialog: MatDialog,
     private apiService: ApiService, 
     private masterService: MasterService,
@@ -78,7 +81,7 @@ export class UserRightAccessComponent implements OnInit {
     private localstorageService: LocalstorageService,
     public validatorService:ValidatorService,
     private ngZone: NgZone,
-    public configService:ConfigService
+    public configService:ConfigService,
   ) { }
 
   get visibleColumns() {
@@ -153,6 +156,7 @@ export class UserRightAccessComponent implements OnInit {
 // ........................Bind Api data to table ................................. */
 
   bindTable() {
+    this.spinner.show();
     let formValue = this.filterForm.value;
     if (this.commonService.checkDataType(formValue.projectId) == false) {
       this.commonService.snackBar('Please select project', 1)
@@ -173,14 +177,18 @@ export class UserRightAccessComponent implements OnInit {
     this.apiService.getHttp().subscribe({
       next: (res: object) => {
         if (res['statusCode'] === "200") {
+          this.spinner.hide();
           this.totalRows > 10 && this.pageNumber==1 ? this.paginator.firstPage() : '';
           this.dataSource = new MatTableDataSource(res['responseData'].responseData1);
           this.dataSource.sort = this.sort;
+          this.noDataFlag = true;
           this.totalRows = res['responseData'].responseData2[0].pageCount;
         } else {
+          this.spinner.hide();
           this.dataSource = null;         
           this.totalRows = 0;
           if (res['statusCode'] != "404") {
+            this.spinner.hide();
             this.commonService.checkDataType(res['statusMessage']) == false ? this.error.handelError(res['statusCode']) : this.commonService.snackBar(res['statusMessage'], 1);
           }
         }

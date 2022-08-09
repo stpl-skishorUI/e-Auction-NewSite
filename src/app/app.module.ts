@@ -16,6 +16,7 @@ import { MatNativeDateModule, MAT_DATE_LOCALE } from '@angular/material/core';
 import { DetailsComponent } from './partial/dialogs/details/details.component';
 import { AuctionPlotProfileComponent } from './partial/bidder/auction-plot-profile/auction-plot-profile.component';
 import { AgmCoreModule } from '@agm/core';
+import { NgxSpinnerModule } from 'ngx-spinner';
 
 @NgModule({
   declarations: [AppComponent, ConfirmationDialogComponent, SuccessDialogComponent, DetailsComponent, AuctionPlotProfileComponent],
@@ -32,7 +33,8 @@ import { AgmCoreModule } from '@agm/core';
     // Vex
     VexModule,
     PipeModule,
-    CustomLayoutModule,MatNativeDateModule
+    CustomLayoutModule,MatNativeDateModule,
+    NgxSpinnerModule
   ],
   providers: [{
     provide: MAT_DATE_LOCALE,

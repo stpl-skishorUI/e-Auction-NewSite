@@ -37,16 +37,29 @@
 tr.example-detail-row {
   height: 0 !important;
 }
-.divdisabled{    
+
+.divdisabled {
   opacity: 0.5;
   pointer-events: none;
 }
-.html p:first-child{
+
+.html p:first-child {
   margin-top: 15px !important;
 }
-.html p:last-child{
+
+.html p:last-child {
   margin-bottom: 15px !important;
 }
-.html p{
+
+.html p {
   margin-bottom: 5px !important;
+}
+
+.data-not-found {
+  padding: 9px !important;
+  margin: 5px !important;
+  color: #721c24 !important;
+  background-color: #f8d7da !important;
+  border-color: #f5c6cb !important;
+  border-radius: 2px;
 }
