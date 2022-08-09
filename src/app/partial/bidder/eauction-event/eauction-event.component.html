@@ -13,7 +13,7 @@
             <span @fadeInRight class="block">Horizontal Form Wizard</span>
         </h2>
 
-        <div @fadeInUp class="card overflow-hidden">
+        <div  class="card overflow-hidden">
             <mat-stepper labelPosition="bottom" [linear]="isLinear" #stepper (selectionChange)="tabChange($event)">
                 <mat-step [stepControl]="firstFormGroup">
     
@@ -55,7 +55,7 @@
                                     </td>
                                 </ng-container>
                                 <tr *matHeaderRowDef="visibleParDetailsColumns" mat-header-row></tr>
-                                <tr *matRowDef="let row; columns: visibleParDetailsColumns;" @fadeInUp class="hover:bg-hover trans-ease-out cursor-pointer"
+                                <tr *matRowDef="let row; columns: visibleParDetailsColumns;"  class="hover:bg-hover trans-ease-out cursor-pointer"
                                     mat-row></tr>
                             </table>
                         </div>
@@ -127,7 +127,7 @@
                                     </td>
                                 </ng-container>
                                 <tr *matHeaderRowDef="visibleDocumentDisplayColum" mat-header-row></tr>
-                                <tr *matRowDef="let row; columns: visibleDocumentDisplayColum;" @fadeInUp class="hover:bg-hover trans-ease-out cursor-pointer"
+                                <tr *matRowDef="let row; columns: visibleDocumentDisplayColum;"  class="hover:bg-hover trans-ease-out cursor-pointer"
                                     mat-row></tr>
                             </table>
                         </div>
