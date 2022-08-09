@@ -28,12 +28,7 @@
               "src/_redirects",
               "src/README.md",
               "src/CHANGELOG.md",
-              "src/.htaccess",
-              {
-                "glob": "**/*.svg",
-                "input": "node_modules/@material-design-icons/svg",
-                "output": "assets/img/icons/material-design-icons/"
-              }
+              "src/.htaccess"
             ],
             "styles": [
               "src/styles.scss",
