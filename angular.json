@@ -44,8 +44,6 @@
               "core-js",
               "dom-set",
               "dom-plane",
-              "angular-calendar/date-adapters/date-fns",
-              "calendar-utils/date-adapters/date-fns",
               "@mattlewis92/dom-autoscroller",
               "apexcharts"
             ],
