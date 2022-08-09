@@ -144,9 +144,6 @@ export class EauctionEventComponent implements OnInit {
     this.thirdFormGroup = this._formBuilder.group({
       thirdCtrl: ['', Validators.required],
     });
-    this.forthFormGroup = this._formBuilder.group({
-      forthCtrl: ['', Validators.required],
-    });
   }
 
   // .......................................  common code start here .....................//
@@ -179,7 +176,6 @@ export class EauctionEventComponent implements OnInit {
     } else if (event.selectedIndex == 3) {
       this.getByEventId('emd');
     } else if (event.selectedIndex == 4) {
-
     }
 
   }
@@ -372,7 +368,7 @@ export class EauctionEventComponent implements OnInit {
     this.apiService.setHttp('get', "lot-creation/getByEventId/" + this.eventParticipatedDetails.eventId, false, false, false, 'bidderUrl');
     this.apiService.getHttp().subscribe({
       next: (res: any) => {
-        if (res.statusCode === "200") {
+        if(res.statusCode === "200") {
           this.byTenderDetailsArray = res.responseData;
           this.addTender_EmdData(flag);
           this.byTenderDatasource = new MatTableDataSource(res.responseData);
@@ -382,7 +378,7 @@ export class EauctionEventComponent implements OnInit {
           }
         }
       },
-      error: ((error: any) => { this.errorsService.handelError(error.status) })
+      error: ((error: any) => { this.errorsService.handelError(error.status)})
     });
   }
 

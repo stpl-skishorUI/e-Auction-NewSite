@@ -30,3 +30,23 @@ title: string
 totalItem: number
 
 }
+
+export class DocumentsByCriteria {
+approvedRemark: string
+bidderId: number
+documentApproveName: string
+documentApprovedBy: true
+documentApprovedDatetime: string
+documentApprovedStatus: string
+documentDate: null | number
+documentId: number
+documentName: string
+documentNo: null | number
+documentPath: string
+eventDocumentId: number
+eventId: number
+eventParticipateId: number
+id: number
+isDocumentApproved: boolean
+isMandatory: boolean
+}

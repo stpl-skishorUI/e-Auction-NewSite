@@ -62,6 +62,12 @@ const routes: Routes = [
         data: { breadcrumb: [{ title: 'Dashboard', active: true }] },
         canActivate: [ExpenseGuard]
       },
+
+      {
+        path: 'approve-document/:id', loadChildren: () => import('./partial/approver/event-approval/documents-verification/document-approve/document-approve.module').then(m => m.DocumentApproveModule),
+        data: { breadcrumb: [{ title: 'Master', active: true }, { title: 'User Registration', active: true }] },
+        canActivate: [ExpenseGuard]
+      },
       //----------------------------------------------------------------for approver routing end heare-----------------------------------------//
 
       //----------------------------------------------------------------for bidder routing start heare-----------------------------------------//
@@ -81,6 +87,7 @@ const routes: Routes = [
   { path: 'bidder-registration', loadChildren: () => import('./partial/admin/master/bidder-list/add-bidder/add-bidder.module').then(m => m.AddBidderModule), data: { breadcrumb: [{ title: 'Bidder Registration', active: true }] }},
   { path: 'bidder-registration', loadChildren: () => import('./partial/admin/master/bidder-list/add-bidder/add-bidder.module').then(m => m.AddBidderModule), data: { breadcrumb: [{ title: 'Bidder Registration', active: true }] }},
   { path: 'web-layout', loadChildren: () => import('./web/web-layout/web-layout.module').then(m => m.WebLayoutModule) },
+  { path: 'document-approve', loadChildren: () => import('./partial/approver/event-approval/documents-verification/document-approve/document-approve.module').then(m => m.DocumentApproveModule) },
  
   {
     path: '**',

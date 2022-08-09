@@ -36,7 +36,7 @@ export class OnlineItemDetailsComponent implements OnInit {
 
   columns: TableColumn<OnlineItemDetails>[] = [
     { label: 'Sr.No', property: 'srNo', type: 'button', visible: true },
-    { label: 'Plot Number and Plot Name', property: 'itemName', type: 'text', visible: true, cssClasses: ['font-medium'] },
+    { label: 'Plot Number/Name', property: 'itemName', type: 'text', visible: true, cssClasses: ['font-medium'] },
     { label: 'Mineral', property: 'material', type: 'text', visible: true, cssClasses: ['text-secondary', 'font-medium'] },
     { label: 'Taluka / CTSO', property: 'taluka', type: 'text', visible: false , cssClasses: ['text-secondary', 'font-medium'] },
     { label: 'Village',  property: 'village', type: 'text', visible: false , cssClasses: ['text-secondary', 'font-medium'] },

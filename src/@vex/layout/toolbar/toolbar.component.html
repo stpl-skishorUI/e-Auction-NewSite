@@ -54,9 +54,9 @@
       <button mat-menu-item>
         <span> <mat-icon class="vex-user-menu-item__icon icon-sm" svgIcon="mat:settings"></mat-icon> Change Password</span>
       </button>
-      <button mat-menu-item>
+      <a mat-menu-item  routerLink="../profile">
         <span>  <mat-icon class="vex-user-menu-item__icon icon-sm" svgIcon="mat:account_circle"></mat-icon> Profile</span>
-      </button>
+      </a>
       <button mat-menu-item (click)="openLogOutDialog()">
         <span>  <mat-icon class="vex-user-menu-item__icon icon-sm" svgIcon="mat:logout"></mat-icon> Logout</span>
       </button>
