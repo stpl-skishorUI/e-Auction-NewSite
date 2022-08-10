@@ -156,13 +156,18 @@
                                     </td>
                                 </ng-container>
                                 
-                                <!-- <tr class="mat-row p-2 w-100" *matNoDataRow columns>
+                                <!-- <tr class="mat-row p-2 w-100 data-not-found" *matNoDataRow columns>
                                     <td class="alert alert-danger text-center m-2 mt-2" colspan="12">No data found </td>
                                 </tr> -->
                                 <tr *matHeaderRowDef="visibleColumns" mat-header-row></tr>
                                 <tr *matRowDef="let row; columns: visibleColumns;" @fadeInUp
                                     class="hover:bg-hover trans-ease-out cursor-pointer" mat-row></tr>
                             </table>
+
+                            <ng-container *ngIf="!dataSource && noDataFlag" >
+                                <p class="bg-red-400 text-stone-200	text-center	py-px data-not-found"> Data Not Found </p>
+                              </ng-container>
+
                             <ng-container *ngIf="totalRows>10">
                                 <mat-paginator [pageSizeOptions]="pageSizeOptions" showFirstLastButtons
                                     [pageSize]="pageSize" [length]="totalRows" (page)="pageChanged($event)"

@@ -29,6 +29,7 @@ import { EventDetail, LotCreation } from './interfaces/event-detail.model';
 import { AuctionPlotProfileComponent } from 'src/app/partial/bidder/auction-plot-profile/auction-plot-profile.component';
 import { MatDialog } from '@angular/material/dialog';
 import { SharedataService } from 'src/app/core/services/sharedata.service';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'vex-home',
@@ -116,7 +117,7 @@ export class HomeComponent implements OnInit {
   constructor(private commonService: CommonService, private masterService: MasterService, public VB: ValidatorService,
     public localstorageService: LocalstorageService, private error: ErrorsService, private staticDropdownService: StaticDropdownService, public router: Router,
     private apiService: ApiService, private fb: FormBuilder, public configService: ConfigService, private dialogService: DialogService, private datePipe: DatePipe,
-    private dialog: MatDialog ,
+    private dialog: MatDialog , private spinner: NgxSpinnerService,
     public sharedataService :SharedataService) {
   }
 
@@ -220,6 +221,7 @@ export class HomeComponent implements OnInit {
   }
 
   bindTable() {
+    this.spinner.show();
     const formValue = this.filterForm.value;
     let paramList = '?EventLevel=' + formValue.levelId + '&DistrictId=' + formValue.districtId + '&MineralId=' + formValue.mineralId + '&pageno=' + this.pageNumber + '&pagesize=' + this.configService.pageSize //+'&Status=&StartDate=1&EndDate=1'
     if (formValue.startDate && formValue.endDate) {
@@ -233,6 +235,7 @@ export class HomeComponent implements OnInit {
     this.apiService.getHttp().subscribe({
       next: (res: any) => {
         if (res['statusCode'] === "200") {
+          this.spinner.hide();
           this.tableDataArray = res['responseData'].responseData1;
           this.tableDataArray.map((ele:EventDetail,ind:number)=>{ele.srNo =((this.pageNumber + 1) * 10 + ind + 1)-20})
           this.dataSource = new MatTableDataSource(this.tableDataArray);
@@ -241,8 +244,10 @@ export class HomeComponent implements OnInit {
           this.totalRows > 10 && this.pageNumber == 1 ? this.paginator?.firstPage() : '';
           this.getTenderCount(paramList);
         } else {
+          this.spinner.hide();
           this.dataSource = null;
           if (res['statusCode'] != "404") {
+            this.spinner.hide();
             this.commonService.checkDataType(res['statusMessage']) == false ? this.error.handelError(res['statusCode']) : this.commonService.snackBar(res['statusMessage'], 1);
           }
         }

@@ -6,6 +6,7 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { ActivatedRoute, Router } from '@angular/router';
+import { NgxSpinnerService } from 'ngx-spinner';
 import { fadeInUp400ms } from 'src/@vex/animations/fade-in-up.animation';
 import { stagger40ms } from 'src/@vex/animations/stagger.animation';
 import { TableColumn } from 'src/@vex/interfaces/table-column.interface';
@@ -39,6 +40,7 @@ export class PublishEventComponent implements OnInit {
   isPublishFlag: number = 0;
   pageSizeOptions: number[] = [5, 10, 20, 50];
   pageSize = 10;
+  noDataFlag:boolean = false;
 
   columns: TableColumn<PublishEvent>[] = [
     { label: 'Sr.No', property: 'srNo', type: 'button', visible: true, cssClasses: ['text-secondary', 'font-medium'] },
@@ -67,7 +69,8 @@ export class PublishEventComponent implements OnInit {
     public StaticDropdownService: StaticDropdownService,
     private router: Router,
     private route: ActivatedRoute,
-    private dialogService:DialogService
+    private dialogService:DialogService,
+    private spinner: NgxSpinnerService,
   ) { }
 
   ngOnInit(): void {
@@ -115,6 +118,7 @@ export class PublishEventComponent implements OnInit {
   // -------------------------- Filter Form End-------------------------------//
 
   bindTable() {
+    this.spinner.show();
     let formValue = this.filterForm.value;
     const districtId = this.localstorageService.getLoggedInLocalstorageData()?.responseData;
     let paramList: string = "?DistrictId=" + districtId?.districtId + "&IsPublished=" + this.isPublishFlag + "&pageno=" + this.pageNumber + "&pagesize=" + this.pageSize;
@@ -127,14 +131,18 @@ export class PublishEventComponent implements OnInit {
     this.apiService.getHttp().subscribe({
       next: (res: object) => {
         if (res['statusCode'] === "200") {
+          this.spinner.hide();
           this.dataSource = new MatTableDataSource(res['responseData'].responseData1);
           this.totalRows = res['responseData'].responseData2[0].pageCount;
+          this.noDataFlag=true;
           (this.totalRows > 10 && this.pageNumber == 1) ? this.paginator?.firstPage() : '';
           this.dataSource.sort = this.sort;
         } else {
+          this.spinner.hide();
           this.dataSource = null;
           this.totalRows = 0;
           if (res['statusCode'] != "404") {
+            this.spinner.hide();
             this.commonService.checkDataType(res['statusMessage']) == false ? this.error.handelError(res['statusCode']) : this.commonService.snackBar(res['statusMessage'], 1);
           }
         }
