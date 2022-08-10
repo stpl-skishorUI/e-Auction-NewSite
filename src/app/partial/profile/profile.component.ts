@@ -33,7 +33,7 @@ export class ProfileComponent implements OnInit {
   getUserRegistration() {
     this.apiService.setHttp('get', "user-registration/" + this.localstorageService.userId(), false, false, false, 'masterUrl');
     this.apiService.getHttp().subscribe({
-      next: (res: any) => {
+      next: (res) => {
         if (res.statusCode === "200") {
           this.profileData = res.responseData;
         } else {
@@ -41,7 +41,7 @@ export class ProfileComponent implements OnInit {
           this.commonService.checkDataType(res.statusMessage) == false ? this.errorSerivce.handelError(res.statusCode) : this.commonService.snackBar(res.statusMessage, 1);
         }
       },
-      error: ((error: any) => { this.errorSerivce.handelError(error.status) })
+      error: ((error) => { this.errorSerivce.handelError(error.status) })
     });
   }
 
@@ -50,7 +50,7 @@ export class ProfileComponent implements OnInit {
       width: '1000px',
       data: this.profileData,
     });
-    dialogRef.afterClosed().subscribe((result: any) => {
+    dialogRef.afterClosed().subscribe((result) => {
       if (result?.statusCode == 200 && result?.formType == 'PUT') {
         this.getUserRegistration();
       }

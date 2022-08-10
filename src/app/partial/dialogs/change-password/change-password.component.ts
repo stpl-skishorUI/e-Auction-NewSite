@@ -67,7 +67,7 @@ export class ChangePasswordComponent implements OnInit {
       this.spinner.show();
       let obj = 'OldPassword=' + formData.oldPassword + '&UserName=' + this.localstorageData.responseData.userName + '&Password=' + formData.newPassword + '&MobileNo=' + this.localstorageData.responseData?.mobileNo;
       this.apiService.setHttp('put', "user-registration/UpdatePassward?" + obj, false, false, false, 'masterUrl');
-      this.apiService.getHttp().subscribe((res: any) => {
+      this.apiService.getHttp().subscribe((res) => {
         if (res.statusCode == "200") {
           this.spinner.hide();
           this.commonService.snackBar(res.statusMessage, 0);  
@@ -77,7 +77,7 @@ export class ChangePasswordComponent implements OnInit {
   
           this.commonService.checkDataType(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonService.snackBar(res.statusMessage, 1);
         }
-      }, (error: any) => {
+      }, (error) => {
         this.spinner.hide();
         this.errors.handelError(error.status);
       });
