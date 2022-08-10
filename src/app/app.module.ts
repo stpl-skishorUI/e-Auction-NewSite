@@ -17,9 +17,10 @@ import { DetailsComponent } from './partial/dialogs/details/details.component';
 import { AuctionPlotProfileComponent } from './partial/bidder/auction-plot-profile/auction-plot-profile.component';
 import { AgmCoreModule } from '@agm/core';
 import { NgxSpinnerModule } from 'ngx-spinner';
+import { ChangePasswordComponent } from './partial/dialogs/change-password/change-password.component';
 
 @NgModule({
-  declarations: [AppComponent, ConfirmationDialogComponent, SuccessDialogComponent, DetailsComponent, AuctionPlotProfileComponent],
+  declarations: [AppComponent, ConfirmationDialogComponent, SuccessDialogComponent, DetailsComponent, AuctionPlotProfileComponent, ChangePasswordComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,

@@ -32,7 +32,7 @@
                     </div>
                     <div>
                         <button class="rounded-full bg-gray-200 text-black" mat-button type="submit">
-                            <mat-icon svgIcon="mat:search"></mat-icon>
+                            <mat-icon>search</mat-icon>
                             <span>Apply</span>
                         </button>
                     </div>
@@ -44,7 +44,7 @@
                 <span class="flex-1"></span>
                 <button [matMenuTriggerFor]="columnFilterMenu" class="ml-4 flex-none" mat-icon-button
                     matTooltip="Filter Columns" type="button">
-                    <mat-icon svgIcon="mat:filter_list"></mat-icon>
+                    <mat-icon>filter_list</mat-icon>
                 </button>
             </div>
 
@@ -96,6 +96,10 @@
                 <tr *matRowDef="let row; columns: visibleColumns;" @fadeInUp
                     class="hover:bg-hover trans-ease-out cursor-pointer" mat-row></tr>
             </table>
+
+            <ng-container *ngIf="!dataSource && noDataFlag" >
+                <p class="bg-red-400 text-stone-200	text-center	py-px data-not-found"> Data Not Found </p>
+              </ng-container>
 
             <ng-container>
                 <mat-paginator [pageSizeOptions]="pageSizeOptions" showFirstLastButtons

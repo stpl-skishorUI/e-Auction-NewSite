@@ -29,7 +29,8 @@
           </div>
           <div>
             <button class="rounded-full bg-gray-200 text-black" mat-button type="submit">
-              <mat-icon class="ltr:-ml-1 rtl:-mr-1 ltr:mr-2 rtl:ml-2" svgIcon="mat:search"></mat-icon>
+              <!-- <mat-icon class="ltr:-ml-1 rtl:-mr-1 ltr:mr-2 rtl:ml-2">search</mat-icon> -->
+              <mat-icon>search</mat-icon>
               <span>APPLY</span>
             </button>
           </div>
@@ -41,11 +42,11 @@
 
         <div *ngIf="selection.hasValue()" class="mr-4 pr-4 border-r flex-none">
           <button color="primary" mat-icon-button matTooltip="Delete selected" type="button">
-            <mat-icon svgIcon="mat:delete"></mat-icon>
+            <mat-icon>delete</mat-icon>
           </button>
 
           <button color="primary" mat-icon-button matTooltip="Another action" type="button">
-            <mat-icon svgIcon="mat:folder"></mat-icon>
+            <mat-icon>folder</mat-icon>
           </button>
         </div>
 
@@ -54,12 +55,12 @@
 
         <button [matMenuTriggerFor]="columnFilterMenu" class="ml-4 flex-none" mat-icon-button
           matTooltip="Filter Columns" type="button">
-          <mat-icon svgIcon="mat:filter_list"></mat-icon>
+          <mat-icon>filter_list</mat-icon>
         </button>
 
         <button (click)="createBidder()" class="ml-4 flex-none" color="primary" mat-mini-fab matTooltip="Add Customer"
           type="button">
-          <mat-icon svgIcon="mat:add"></mat-icon>
+          <mat-icon>add</mat-icon>
         </button>
       </div>
 
@@ -111,7 +112,7 @@
               <a (click)="$event.stopPropagation()"
                 class="w-8 h-8 leading-none flex items-center justify-center ml-1 hover:bg-hover text-teal bg-teal-light"
                 mat-icon-button>
-                <mat-icon class="icon-sm" svgIcon="mat:edit" (click)="createBidder(row)"></mat-icon>
+                <mat-icon class="icon-sm" (click)="createBidder(row)">edit</mat-icon>
               </a>
 
               <!-- <a (click)="$event.stopPropagation()"

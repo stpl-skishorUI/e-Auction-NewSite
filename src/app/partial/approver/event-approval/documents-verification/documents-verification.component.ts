@@ -6,6 +6,7 @@ import { MatPaginator, PageEvent } from '@angular/material/paginator';
 // import { MatSelectChange } from '@angular/material/select';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
+import { NgxSpinnerService } from 'ngx-spinner';
  import { ReplaySubject } from 'rxjs';
 import { fadeInUp400ms } from 'src/@vex/animations/fade-in-up.animation';
 import { stagger40ms } from 'src/@vex/animations/stagger.animation';
@@ -44,6 +45,7 @@ export class DocumentsVerificationComponent implements OnInit {
   pageNumber: number = 1;
   totalRows: number;
   locFilterData:object | any;
+  noDataFlag:boolean = false;
 
   districtArray = [];
  
@@ -76,6 +78,7 @@ export class DocumentsVerificationComponent implements OnInit {
     public configService:ConfigService,
     public validatorService: ValidatorService,
     private masterService: MasterService, 
+    private spinner: NgxSpinnerService,
   ) { }
 
   ngOnInit(): void {
@@ -106,6 +109,7 @@ export class DocumentsVerificationComponent implements OnInit {
 
 
   getAllEventList() {
+    this.spinner.show();
     let formValue = this.filterForm.value;
     // formValue.fromDate = this.datePipe.transform(formValue.fromDate, 'YYYY/MM/dd');
     // formValue.toDate = this.datePipe.transform(formValue.toDate, 'YYYY/MM/dd');
@@ -120,16 +124,20 @@ export class DocumentsVerificationComponent implements OnInit {
     this.apiService.getHttp().subscribe({
       next: (res: object) => {
         if (res['statusCode'] === "200") {
+          this.spinner.hide();
           this.dataSource = new MatTableDataSource(res['responseData'].responseData1);
           this.dataSource.sort = this.sort;
+          this.noDataFlag = true;
           this.totalRows = res['responseData'].responseData2;
           this.totalRows = this.totalRows[0].pageCount;
           (this.totalRows >= 10 && this.pageNumber == 1) ? this.paginator?.firstPage() : '';
           // this.pageNumber == 1 ? this.paginator?.firstPage() : '';
         } else {
+          this.spinner.hide();
           this.dataSource = null;
           this.totalRows = 0;
           if (res['statusCode'] != "404") {
+            this.spinner.hide();
             this.commonService.checkDataType(res['statusMessage']) == false ? this.error.handelError(res['statusCode']) : this.commonService.snackBar(res['statusMessage'], 1);
           }
         }

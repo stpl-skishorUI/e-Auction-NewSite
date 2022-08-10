@@ -32,7 +32,7 @@
                 <span class="flex-1"></span>
                 <button [matMenuTriggerFor]="columnFilterMenu" class="ml-4 flex-none" mat-icon-button
                     matTooltip="Filter Columns" type="button">
-                    <mat-icon svgIcon="mat:filter_list"></mat-icon>
+                    <mat-icon>filter_list</mat-icon>
                 </button>
             </div>
 
@@ -60,14 +60,14 @@
                           class="w-8 h-8 leading-none flex items-center justify-center ml-1 hover:bg-hover text-teal bg-teal-light"
                           mat-icon-button>
                           <button (click)="updateData(row)">
-                            <mat-icon class="icon-sm" svgIcon="mat:edit"></mat-icon>
+                            <mat-icon class="icon-sm">edit</mat-icon>
                           </button>
                         </a>
                         <a (click)="$event.stopPropagation()"
                           class="w-8 h-8 leading-none flex items-center justify-center ml-1 hover:bg-hover text-red bg-red-light"
                           mat-icon-button>
                           <button (click)=" getConfirmation(row.id)">
-                            <mat-icon class="icon-sm" svgIcon="mat:delete_outline"></mat-icon>
+                            <mat-icon class="icon-sm">delete_outline</mat-icon>
                           </button>
                         </a>
                       </div>

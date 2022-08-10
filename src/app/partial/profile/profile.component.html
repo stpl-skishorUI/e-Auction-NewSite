@@ -1,0 +1,140 @@
+
+<vex-page-layout>
+
+    <vex-secondary-toolbar current="Profile"
+        class=" fixed border-0 bg-transparent drop-shadow-none top-1 z-[99] w-8/12">
+        <vex-breadcrumbs [crumbs]="['Profile']"></vex-breadcrumbs>
+    </vex-secondary-toolbar>
+
+    <vex-page-layout-content [class.px-gutter]="layoutCtrl.value === 'fullwidth'" class="-mt-6">
+        <div class="p-5">
+            <div class="card px-4 py-5">
+                <!-- <div class="profileOuter text-center mx-auto">
+                    <img src="assets/images/user.png" *ngIf="!profileData?.profilePath" alt="profile-img" class="mb-1 img-thumbnail rounded-circle shadow profileImg">
+                    <img src="{{profileData?.profilePath}}" *ngIf="profileData?.profilePath" alt="profile-img" class="mb-1 img-thumbnail rounded-circle shadow profileImg">
+
+                </div> -->
+              
+                <div class="page_heading flex items-center justify-between">
+                    <h4 class="text-[18px] text-blue-600 font-medium">
+                        {{localstorageData.roleType}} Details
+                    </h4>
+                    <div class="col-sm text-end">
+                        <button (click)="openUserRegDialog()" class="ml-4 flex-none" color="primary" mat-mini-fab
+                        matTooltip="Edit Profile" type="button">
+                        <mat-icon>edit</mat-icon>
+                      </button>
+                    </div>
+                </div>
+                <div class="container px-2  mt-6">
+                    <div class="grid grid-cols-2  py-3">
+                        <div class="flex items-center">
+        
+                            <div class="pe-3 w-52">
+                                <mat-label class="text-gray-500">Name : </mat-label>
+                            </div>
+                            <div class="text-end ">
+                                <p class="font-medium">{{profileData?.name | titlecase}}</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center ">
+        
+                            <div class="pe-3 w-52">
+                                <mat-label class="text-gray-500">UserName:</mat-label>
+                            </div>
+                            <div class="text-end">
+                                <p class="font-medium"> {{profileData?.userName | titlecase}}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2  py-3">
+                        <div class="flex items-center">
+        
+                            <div class="pe-3 w-52">
+                                <mat-label class="text-gray-500">UserRole: </mat-label>
+                            </div>
+                            <div class="text-end ">
+                                <p class="font-medium"> {{profileData?.roleType | titlecase}}  </p>
+                            </div>
+                        </div>
+                        <div class="flex items-center ">
+        
+                            <div class="pe-3 w-52">
+                                <mat-label class="text-gray-500">UserType:</mat-label>
+                            </div>
+                            <div class="text-end">
+                                <p class="font-medium">{{profileData?.userType | titlecase}}  </p>
+                            </div>
+                        </div>
+                    </div>
+        
+                    <div class="grid grid-cols-2  py-3">
+                        <div class="flex items-center">
+        
+                            <div class="pe-3 w-52">
+                                <mat-label class="text-gray-500">SubUserType: </mat-label>
+                            </div>
+                            <div class="text-end ">
+                                <p class="font-medium">{{profileData?.subUserType | titlecase}}</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center ">
+        
+                            <div class="pe-3 w-52">
+                                <mat-label class="text-gray-500">State :</mat-label>
+                            </div>
+                            <div class="text-end">
+                                <p class="font-medium">{{profileData?.state | titlecase}}</p>
+                            </div>
+                        </div>
+                    </div>
+        
+                    <div class="grid grid-cols-2 py-3">
+                        <div class="flex items-center ">
+                            <div class="pe-3 w-52">
+                                <mat-label class="text-gray-500">Designation: </mat-label>
+                            </div>
+                            <div class="text-end font-medium">
+                                <p class="font-medium">{{profileData?.designation | titlecase}} </p>
+                            </div>
+                        </div>
+                        <div class="flex items-center ">
+        
+                            <div class="pe-3 w-52">
+                                <mat-label class="text-gray-500">MobileNo: </mat-label>
+                            </div>
+                            <div class="text-end font-medium">
+                                <p class="font-medium">{{profileData?.mobileNo}}</p>
+                            </div>
+                        </div>
+        
+                    </div>
+                    <div class="grid grid-cols-2 py-3">
+        
+        
+                        <div class="flex items-center">
+                            <div class="pe-3 w-52">
+                                <mat-label class="text-gray-500">EmailId :</mat-label>
+                            </div>
+                            <div class="text-end font-medium">
+                                <p class="font-medium">{{profileData?.emailId | dash}} </p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center">
+                            <div class="pe-3 w-52">
+                                <mat-label class="text-gray-500">Address :</mat-label>
+                            </div>
+                            <div class="text-end font-medium">
+                                <p class="font-medium">{{profileData?.userAddress | titlecase}} </p>
+                            </div>
+                        </div>
+        
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </vex-page-layout-content>
+</vex-page-layout>   
+

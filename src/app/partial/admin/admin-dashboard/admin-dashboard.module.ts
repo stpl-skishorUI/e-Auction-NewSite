@@ -6,12 +6,9 @@ import { AdminDashboardComponent } from './admin-dashboard.component';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { BreadcrumbsModule } from 'src/@vex/components/breadcrumbs/breadcrumbs.module';
-import { ChartModule } from 'src/@vex/components/chart/chart.module';
+
 import { PageLayoutModule } from 'src/@vex/components/page-layout/page-layout.module';
 import { SecondaryToolbarModule } from 'src/@vex/components/secondary-toolbar/secondary-toolbar.module';
-import { WidgetAssistantModule } from 'src/@vex/components/widgets/widget-assistant/widget-assistant.module';
-import { WidgetLargeChartModule } from 'src/@vex/components/widgets/widget-large-chart/widget-large-chart.module';
-import { WidgetLargeGoalChartModule } from 'src/@vex/components/widgets/widget-large-goal-chart/widget-large-goal-chart.module';
 
 import { WidgetTableModule } from 'src/@vex/components/widgets/widget-table/widget-table.module';
 
@@ -23,13 +20,7 @@ import { WidgetTableModule } from 'src/@vex/components/widgets/widget-table/widg
   imports: [
     CommonModule,
     AdminDashboardRoutingModule,
-    ChartModule,
     MatIconModule,
-
-    WidgetLargeGoalChartModule,
-
-    WidgetAssistantModule,
-    WidgetLargeChartModule,
     WidgetTableModule,
     SecondaryToolbarModule,
     BreadcrumbsModule,

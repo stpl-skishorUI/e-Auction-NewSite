@@ -7,6 +7,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
+import { NgxSpinnerService } from 'ngx-spinner';
 import { fadeInUp400ms } from 'src/@vex/animations/fade-in-up.animation';
 import { stagger40ms } from 'src/@vex/animations/stagger.animation';
 import { TableColumn } from 'src/@vex/interfaces/table-column.interface';
@@ -48,6 +49,7 @@ export class EventListComponent implements OnInit {
   checkFormValueChange!: boolean;
   pageSize = 10;
   pageSizeOptions: number[] = [5, 10, 20, 50];
+  noDataFlag:boolean = false;
 
   columns: TableColumn<EventList>[] = [
     { label: 'srNo', property: 'srNo', type: 'button', visible: true },
@@ -75,7 +77,8 @@ export class EventListComponent implements OnInit {
     public staticDropdownService: StaticDropdownService,
     private datePipe: DatePipe,
     private localstorageService: LocalstorageService,
-    private dialogService: DialogService
+    private dialogService: DialogService,
+    private spinner: NgxSpinnerService,
   ) { }
 
   ngOnInit() {
@@ -100,7 +103,7 @@ export class EventListComponent implements OnInit {
   }
 
   getAllEventList() {
-
+    this.spinner.show();
     let formValue = this.filterForm.value;
     formValue.fromDate = this.datePipe.transform(formValue.fromDate, 'YYYY/MM/dd');
     formValue.toDate = this.datePipe.transform(formValue.toDate, 'YYYY/MM/dd');
@@ -109,15 +112,19 @@ export class EventListComponent implements OnInit {
     this.apiService.setHttp('get', "event-creation/getAll?" + obj + '&IsPublished=2', false, false, false, 'bidderUrl', true);
     this.apiService.getHttp().subscribe({
       next: (res: any) => {
+        this.spinner.hide();
         if (res.statusCode === "200") {
           this.dataSource = new MatTableDataSource(res['responseData'].responseData1);
           this.dataSource.sort = this.sort;
+          this.noDataFlag= true;  
           this.totalRows = res.responseData.responseData2?.pageCount;
           this.pageNumber == 1 ? this.paginator?.firstPage() : '';
         } else {
+          this.spinner.hide();
           this.dataSource = [];
           this.totalRows = 0;
           if (res.statusCode != "404") {
+            this.spinner.hide();
             this.commonService.checkDataType(res.statusMessage) == false ? this.error.handelError(res.statusCode) : this.commonService.snackBar(res.statusMessage, 1);
           }
         }
