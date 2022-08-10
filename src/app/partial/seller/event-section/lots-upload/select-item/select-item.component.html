@@ -3,7 +3,7 @@
         Lots / Item Upload
     </div>
     <button type="button" mat-icon-button mat-dialog-close tabindex="-1">
-        <mat-icon svgIcon="mat:close"></mat-icon>
+        <mat-icon>close</mat-icon>
     </button>
 </div>
 <mat-divider></mat-divider>
@@ -55,7 +55,7 @@
             <span class="flex-1"></span>
             <button [matMenuTriggerFor]="columnFilterMenu" class="ml-4 flex-none" mat-icon-button
                 matTooltip="Filter Columns" type="button">
-                <mat-icon svgIcon="mat:filter_list"></mat-icon>
+                <mat-icon>filter_list</mat-icon>
             </button>
         </div>
         <table @stagger [dataSource]="dataSource" class="w-full" mat-table matSort>

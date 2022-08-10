@@ -36,13 +36,13 @@
 
     <div class="px-1">
       <button (click)="openQuickpanel()" mat-icon-button type="button">
-        <mat-icon color="primary" svgIcon="mat:bookmarks"></mat-icon>
+        <mat-icon color="primary">bookmarks</mat-icon>
       </button>
     </div>
 
     <div class="px-1">
       <button [matMenuTriggerFor]="languageMenu" mat-icon-button type="button">
-        <mat-icon color="primary" svgIcon="mat:person"></mat-icon>
+        <mat-icon color="primary">person</mat-icon>
       </button>
     </div>
 
@@ -52,13 +52,13 @@
 
     <mat-menu #languageMenu="matMenu" overlapTrigger="false" xPosition="before" yPosition="below">
       <button mat-menu-item (click)="openChangePassordDialog()">
-        <span> <mat-icon class="vex-user-menu-item__icon icon-sm" svgIcon="mat:settings"></mat-icon> Change Password</span>
+        <span> <mat-icon class="vex-user-menu-item__icon icon-sm">settings</mat-icon> Change Password</span>
       </button>
       <a mat-menu-item  routerLink="../profile">
-        <span>  <mat-icon class="vex-user-menu-item__icon icon-sm" svgIcon="mat:account_circle"></mat-icon> Profile</span>
+        <span>  <mat-icon class="vex-user-menu-item__icon icon-sm">account_circle</mat-icon> Profile</span>
       </a>
       <button mat-menu-item (click)="openLogOutDialog()">
-        <span>  <mat-icon class="vex-user-menu-item__icon icon-sm" svgIcon="mat:logout"></mat-icon> Logout</span>
+        <span>  <mat-icon class="vex-user-menu-item__icon icon-sm">logout</mat-icon> Logout</span>
       </button>
       <!-- <button mat-menu-item>
         <mat-icon svgIcon="flag:united-states"></mat-icon>

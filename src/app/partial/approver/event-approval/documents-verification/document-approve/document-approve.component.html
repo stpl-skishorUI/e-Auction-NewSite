@@ -5,7 +5,7 @@
                 Approve Event
             </h4>
             <div class="col-sm text-end">
-                <mat-icon class="icon-sm" svgIcon="mat:keyboard_double_arrow_left" (click)="location.back()"></mat-icon>
+                <mat-icon class="icon-sm" (click)="location.back()">keyboard_double_arrow_left</mat-icon>
                 Back
             </div>
         </div>
@@ -177,7 +177,7 @@
                                                 (click)="viewDocument(element.documentPath,element)"
                                                 class="w-8 h-8 leading-none flex items-center justify-center ml-1 hover:bg-hover text-teal bg-teal-light"
                                                 mat-icon-button>
-                                                <mat-icon class="icon-sm" svgIcon="mat:insert_drive_file"></mat-icon>
+                                                <mat-icon class="icon-sm">insert_drive_file</mat-icon>
                                             </a>
                                             
                                     </td>
@@ -204,14 +204,14 @@
                                                 (click)="takeConfirmation('Rejected',element)"
                                                 class="w-8 h-8 leading-none flex items-center justify-center ml-1 hover:bg-hover text-teal bg-teal-light"
                                                 mat-icon-button>
-                                                <mat-icon class="icon-sm" svgIcon="mat:cancel"></mat-icon>
+                                                <mat-icon class="icon-sm">cancel</mat-icon>
                                             </a>
                                             
                                             <a matTooltip="Approve Document"
                                             [disabled]="element?.documentApprovedStatus=='Approved' || element?.documentApprovedStatus=='Rejected'" class="text-success btn-light mx-1" (click)="takeConfirmation('Approved',element)"
                                                 class="w-8 h-8 leading-none flex items-center justify-center ml-1 hover:bg-hover text-teal bg-teal-light"
                                                 mat-icon-button>
-                                                <mat-icon class="icon-sm" svgIcon="mat:check_circle"></mat-icon>
+                                                <mat-icon class="icon-sm">check_circle</mat-icon>
                                             </a>
                                         </div>
 

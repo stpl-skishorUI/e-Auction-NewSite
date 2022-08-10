@@ -49,7 +49,7 @@
           </div>
           <div>
             <button class="rounded-full bg-gray-200 text-black" mat-button type="submit" >
-              <mat-icon svgIcon="mat:search"></mat-icon>
+              <mat-icon>search</mat-icon>
               <span>Apply</span>
             </button>
           </div>
@@ -68,12 +68,12 @@
 
         <button [matMenuTriggerFor]="columnFilterMenu" class="ml-4 flex-none" mat-icon-button
           matTooltip="Filter Columns" type="button">
-          <mat-icon svgIcon="mat:filter_list"></mat-icon>
+          <mat-icon>filter_list</mat-icon>
         </button>
 
         <button (click)="userCreateUpdate()" class="ml-4 flex-none" color="primary" mat-mini-fab
           matTooltip="Add Customer" type="button">
-          <mat-icon svgIcon="mat:add"></mat-icon>
+          <mat-icon>add</mat-icon>
         </button>
       </div>
 
@@ -126,7 +126,7 @@
                 class="w-8 h-8 leading-none flex items-center justify-center ml-1 hover:bg-hover text-teal bg-teal-light"
                 mat-icon-button>
                 <button (click)="userCreateUpdate(row)">
-                  <mat-icon class="icon-sm" svgIcon="mat:edit"></mat-icon>
+                  <mat-icon class="icon-sm">edit</mat-icon>
                 </button>
 
               </a>
@@ -135,7 +135,7 @@
                 class="w-8 h-8 leading-none flex items-center justify-center ml-1 hover:bg-hover text-red bg-red-light"
                 mat-icon-button>
                 <button (click)="takeConfiramation(row,'delete')">
-                  <mat-icon class="icon-sm" svgIcon="mat:delete_outline"></mat-icon>
+                  <mat-icon class="icon-sm">delete_outline</mat-icon>
                 </button>
               </a>
             </div>
