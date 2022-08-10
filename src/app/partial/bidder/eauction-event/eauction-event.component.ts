@@ -68,6 +68,7 @@ export class EauctionEventComponent implements OnInit {
   displayEventDetails: string[] = ['SrNo', 'eventLevel', 'district', 'eventCode', 'title', 'description', 'bidSubmissionEndDate', 'bidSubmissionStartDate', 'documentApprovedStatus'];
   participatedDocListArray: any[] = [];
   checkedDataflag: boolean = false;
+  
   @ViewChild('fileInputPan', { static: false }) fileInputPan !: ElementRef;
 
 
@@ -76,7 +77,7 @@ export class EauctionEventComponent implements OnInit {
   activeflag: boolean = true;
   eventParticipateIdCheck: any;
   payNowNewArray: any[] = [];
-
+  firstActiveFlag :boolean =true;
   //--------------------------------------------------------------steper 1st colum's start heare -----------------------------------------------//
   ParticipatedDetails: MatTableDataSource<any> | null;
 
@@ -154,9 +155,14 @@ export class EauctionEventComponent implements OnInit {
       next: (res: any) => {
         if (res.statusCode === "200") {
           this.eventParticipatedDetails = res.responseData;
+          console.log(this.eventParticipatedDetails);
+          if(this.eventParticipatedDetails.documentApprovedStatus != "Approved" && this.firstActiveFlag){
+            this.firstFormGroup.controls['firstCtrl'].setValue('1'), this.myStepper.next()
+           }
+           this.firstActiveFlag =false
           this.ParticipatedDetails = new MatTableDataSource([this.eventParticipatedDetails]);
           this.ParticipatedDetails.sort = this.participatedDetailsSort
-          this.activeflag == true && this.eventParticipatedDetails.isDocumentSubmitted == true ? (this.autoActiveTab(1), this.activeflag = false) : ""
+          this.activeflag == true && this.eventParticipatedDetails.isDocumentSubmitted == true ? ( this.activeflag = false) : ""
           this.eventDocumentData();
         } else {
           this.commonService.checkDataType(res.statusMessage) == false ? this.errorsService.handelError(res.statusCode) : this.commonService.snackBar(res.statusMessage, 1);
@@ -180,25 +186,7 @@ export class EauctionEventComponent implements OnInit {
 
   }
 
-  autoActiveTab(val: number) { //send the particular tab 
-    // debugger
-    this.displayedColumns6
-    switch (val) {
-      case 1: {
-        this.firstFormGroup.controls['firstCtrl'].setValue('1');
-        this.myStepper.next()
-        break;
-      }
-      case 1: {
-        //statements; 
-        break;
-      }
-      default: {
-        //statements; 
-        break;
-      }
-    }
-  }
+  
   // .......................................  common code End here .....................//
 
   //----------------------------------------- stepper 1 and 2 same code   -------------------------------//
@@ -349,12 +337,7 @@ export class EauctionEventComponent implements OnInit {
   //-------------------------------------------stepper 1 functions end here  ---------------------------------------//
 
   // --------------------------------------------  stepper 2 function  start here--------------------------------------//
-  stepperSecoundSubmit() {
-    const moveNextStep = this.participatedDocArray.every((ele: any) => {
-      return ele.documentApprovedStatus == "Approved"
-    });
-    moveNextStep == true ? (this.secondFormGroup.controls['secondCtrl'].setValue('1'), this.myStepper.next()) : '';
-  }
+
   // --------------------------------------------  stepper 2 function  end here --------------------------------------------//
 
   //---------------  common Code  stepper 3 & stepper 4 Start Here --------------//
