@@ -108,7 +108,7 @@ export class EventListComponent implements OnInit {
     formValue.fromDate = this.datePipe.transform(formValue.fromDate, 'YYYY/MM/dd');
     formValue.toDate = this.datePipe.transform(formValue.toDate, 'YYYY/MM/dd');
     let obj = "EventLevel=" + formValue.eventLevel + "&DistrictId=" + this.localstorageData?.districtId + "&MineralId=" + 0 + "&TenderType=" + '' +
-      "&pageno=" + this.pageNumber + "&pagesize=" + 10 + "&TextSearch=" + formValue.searchtext + "&Status=" + formValue.status + "&StartDate=" + formValue.fromDate + "&EndDate=" + formValue.toDate;
+      "&pageno=" + this.pageNumber + "&pagesize=" + this.pageSize + "&TextSearch=" + formValue.searchtext + "&Status=" + formValue.status + "&StartDate=" + formValue.fromDate + "&EndDate=" + formValue.toDate;
     this.apiService.setHttp('get', "event-creation/getAll?" + obj + '&IsPublished=2', false, false, false, 'bidderUrl', true);
     this.apiService.getHttp().subscribe({
       next: (res: any) => {
@@ -117,7 +117,7 @@ export class EventListComponent implements OnInit {
           this.dataSource = new MatTableDataSource(res['responseData'].responseData1);
           this.dataSource.sort = this.sort;
           this.noDataFlag= true;  
-          this.totalRows = res.responseData.responseData2?.pageCount;
+          this.totalRows = res.responseData.responseData2[0].pageCount;
           this.pageNumber == 1 ? this.paginator?.firstPage() : '';
         } else {
           this.spinner.hide();
@@ -134,6 +134,9 @@ export class EventListComponent implements OnInit {
   }
 
   pageChanged(event: any) {
+    // if(event.pageSize !=10) this.pageSize = event.pageSize;
+    this.pageSize = event.pageSize;
+    this.commonService.removeFilerLocalStorage('pagination');
     this.pageNumber = event.pageIndex + 1;
     this.getAllEventList();
   }
