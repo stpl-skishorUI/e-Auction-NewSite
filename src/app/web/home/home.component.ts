@@ -111,6 +111,7 @@ export class HomeComponent implements OnInit {
   tabCountFlag!: string;
   tenderCountData: any;
   bidderLogFlag: boolean = false;
+  noDataFlag:boolean=false;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   tabs: any = [{ count: '' }, { count: '' }]
@@ -240,6 +241,7 @@ export class HomeComponent implements OnInit {
           this.tableDataArray.map((ele:EventDetail,ind:number)=>{ele.srNo =((this.pageNumber + 1) * 10 + ind + 1)-20})
           this.dataSource = new MatTableDataSource(this.tableDataArray);
           this.dataSource.sort = this.sort;
+          this.noDataFlag=true;
           this.totalRows = res.responseData.responseData2[0].pageCount;
           this.totalRows > 10 && this.pageNumber == 1 ? this.paginator?.firstPage() : '';
           this.getTenderCount(paramList);

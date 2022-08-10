@@ -229,6 +229,11 @@
         <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></tr>
 
       </table>
+
+      <ng-container *ngIf="!dataSource && noDataFlag" >
+        <p class="bg-red-400 text-stone-200	text-center	 py-px data-not-found	"> Data Not Found </p>
+      </ng-container>
+      
       <ng-container *ngIf="totalRows > 10">
         <mat-paginator [pageSizeOptions]="pageSizeOptions" [pageSize]="pageSize" (page)="pageChanged($event)"
         class="sticky left-0"></mat-paginator>
