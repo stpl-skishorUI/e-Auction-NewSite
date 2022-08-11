@@ -8,7 +8,7 @@
         <h2 class="title mb-4 flex items-center">
             <span @scaleIn
                 class="w-10 h-10 rounded-full text-primary mr-3 flex items-center justify-center bg-primary/10">
-                <mat-icon class="icon-sm" svgIcon="mat:description"></mat-icon>
+                <mat-icon class="icon-sm">description</mat-icon>
             </span>
             <span @fadeInRight class="block">Horizontal Form Wizard</span>
         </h2>
@@ -23,7 +23,7 @@
                                 <span class="flex-1"></span>
                                 <button [matMenuTriggerFor]="columnFilterMenu" class="ml-4 flex-none" mat-icon-button
                                 matTooltip="Filter Columns" type="button">
-                                <mat-icon svgIcon="mat:filter_list"></mat-icon>
+                                <mat-icon>filter_list</mat-icon>
                                 </button>
                             </div>
                         <ng-template matStepLabel>Upload Documents</ng-template>
@@ -102,7 +102,7 @@
                                         <div class="d-flex align-items-center">
                                             <ng-template #docNotUploaded class="flex items-center">
                                                 <a type="button" class="w-8 h-8 leading-none flex items-center justify-center ml-1 hover:bg-hover text-pink-600 bg-pink-100" mat-icon-button>
-                                                    <label><mat-icon class="icon-sm" svgIcon="mat:cloud_download"></mat-icon>
+                                                    <label><mat-icon class="icon-sm">cloud_download</mat-icon>
                                                         <input type="file" style="display: none"
                                                             (change)="documentUpload($event,element)" #fileInputPan>
                                                     </label>
