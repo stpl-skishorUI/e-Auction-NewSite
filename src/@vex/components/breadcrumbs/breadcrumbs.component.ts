@@ -7,7 +7,7 @@ import { trackByValue } from '../../utils/track-by';
     <div class="flex items-center">
       <vex-breadcrumb>
         <a [routerLink]="['/']">
-          <mat-icon svgIcon="mat:home" class="icon-sm"></mat-icon>
+          <mat-icon class="icon-sm">home</mat-icon>
         </a>
       </vex-breadcrumb>
       <ng-container *ngFor="let crumb of crumbs; trackBy: trackByValue">

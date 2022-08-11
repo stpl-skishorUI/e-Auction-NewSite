@@ -29,7 +29,7 @@
           <mat-icon>filter_list</mat-icon>
         </button>
 
-        <button (click)="createPage()" class="ml-4 flex-none" color="primary" mat-mini-fab matTooltip="Add Customer"
+        <button (click)="createPage()" class="ml-4 flex-none" color="primary" mat-mini-fab matTooltip="Add Page"
           type="button">
           <mat-icon>add</mat-icon>
         </button>
@@ -56,14 +56,14 @@
           <td *matCellDef="let row" class="w-10 text-secondary" mat-cell>
             <div class="flex">
               <a (click)="$event.stopPropagation()"
-                class="w-8 h-8 leading-none flex items-center justify-center ml-1 hover:bg-hover text-teal bg-teal-light"
+                class="w-8 h-8 leading-none flex items-center justify-center ml-1 hover:bg-hover text-teal bg-teal-light" matTooltip="Edit Page"
                 mat-icon-button>
                 <button (click)="createPage(row)">
                   <mat-icon class="icon-sm">edit</mat-icon>
                 </button>
               </a>
               <a (click)="$event.stopPropagation()"
-                class="w-8 h-8 leading-none flex items-center justify-center ml-1 hover:bg-hover text-red bg-red-light"
+                class="w-8 h-8 leading-none flex items-center justify-center ml-1 hover:bg-hover text-red bg-red-light" matTooltip="Delete Page"
                 mat-icon-button>
                 <button (click)="deleteRecord(row.pageId)">
                   <mat-icon class="icon-sm">delete_outline</mat-icon>

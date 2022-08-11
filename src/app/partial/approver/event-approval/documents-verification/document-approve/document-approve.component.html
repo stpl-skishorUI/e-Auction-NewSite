@@ -141,8 +141,13 @@
                         <td *matCellDef="let row" class="w-10 text-secondary" mat-cell>
                             <a class="w-8 h-8 leading-none flex items-center justify-center ml-1 hover:bg-hover text-teal bg-teal-light rounded-full"
                                 (click)="(expandedElement = expandedElement === row ? null : row);expandEventrDetails(row.id) ">
-                                <mat-icon>expand_more</mat-icon>
+                                <mat-icon *ngIf="expandedElement !==  row">keyboard_arrow_down</mat-icon>
+                                <mat-icon *ngIf="expandedElement === row">keyboard_arrow_up</mat-icon>
                             </a>
+                            <!-- <button mat-icon-button aria-label="expand row" (click)="(expandedElement = expandedElement === row ? null : row);expandEventrDetails(row.id); $event.stopPropagation()">
+                                <mat-icon *ngIf="expandedElement !==  row">keyboard_arrow_down</mat-icon>
+                                <mat-icon *ngIf="expandedElement === row">keyboard_arrow_up</mat-icon>
+                              </button> -->
                         </td>
                     </ng-container>
     
