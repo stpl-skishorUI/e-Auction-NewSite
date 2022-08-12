@@ -1,1 +1,91 @@
-<p>account-details works!</p>
+
+<vex-page-layout>
+
+    <vex-secondary-toolbar current="Account Details" class=" fixed border-0 bg-transparent drop-shadow-none top-1 z-[99] w-8/12">
+      <vex-breadcrumbs [crumbs]="['Account Details Access']"></vex-breadcrumbs>
+    </vex-secondary-toolbar>
+  
+    <vex-page-layout-content>
+        <div class="flex items-center justify-end">
+            <mat-icon class="icon-sm">keyboard_double_arrow_left</mat-icon>
+            <span>Back</span>
+        </div>
+      <div class="card p-3 my-1">
+        <div class="card-body m-2">
+            <div class="card-text grid grid-cols-3 gap-4">
+                <div class="col-span-2 card-text border-2 border-slate-300 rounded p-2">
+                    <div class="flex flex-row">
+                        <div class="basis-1/4">
+                            Beneficially Name :
+                        </div>
+                        <div class="basis-1/4">
+                            Amol Pawar
+                        </div>
+                    </div>
+                    <div class="flex flex-row">
+                        <div class="basis-1/4">
+                            Account No :
+                        </div>
+                        <div class="basis-1/4">
+                            123456789010
+                        </div>
+                    </div>
+                    <div class="flex flex-row">
+                        <div class="basis-1/4">
+                            IFSC Code :
+                        </div>
+                        <div class="basis-1/4">
+                           MAH-14021
+                        </div>
+                    </div>
+                    <div class="flex flex-row">
+                        <div class="basis-1/4">
+                            Bank Name :
+                        </div>
+                        <div class="basis-1/4">
+                           Bank Of Maharashtra
+                        </div>
+                    </div>
+                </div>
+                <div class="border-2 border-slate-300  rounded text-center">
+                   <p>Wallet Balance</p>
+                   <p class="text-2xl text-sky-800 font-bold">1,00,000</p>
+                </div>
+            </div>
+            <div class="card-text my-4">
+                <div>
+                    <p class="text-xl text-sky-800">Bank Statement</p>
+                </div>
+                <div class="grid grid-cols-4 gap-4 my-4">
+                    <div>
+                        <mat-form-field class="example-full-width" appearance="outline">
+                            <mat-label>From date</mat-label>
+                            <input matInput [matDatepicker]="picker1">
+                            <mat-hint>MM/DD/YYYY</mat-hint>
+                            <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                            <mat-datepicker #picker1></mat-datepicker>
+                        </mat-form-field>
+                    </div>
+                    <div>
+                        <mat-form-field class="example-full-width" appearance="outline">
+                            <mat-label>To date</mat-label>
+                            <input matInput [matDatepicker]="picker2">
+                            <mat-hint>MM/DD/YYYY</mat-hint>
+                            <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                            <mat-datepicker #picker2></mat-datepicker>
+                        </mat-form-field>
+                    </div>
+                    <div>
+                        <button mat-raised-button color="primary">
+                            Search
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card-body  m-2">
+            <p class="text-xl text-sky-800">Table</p>
+        </div>
+      </div>
+    </vex-page-layout-content>
+  </vex-page-layout>

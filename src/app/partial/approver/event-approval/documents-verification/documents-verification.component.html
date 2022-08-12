@@ -7,9 +7,9 @@
 
     <vex-page-layout-content [class.px-gutter]="layoutCtrl.value === 'fullwidth'" class="-mt-6">
         <form [formGroup]="filterForm" (ngSubmit)="onSubmit()">
-            <div class="my-3 card p-3 border-0 shadow-none">
+            <div class="card p-3 my-3 border-0 shadow-none">
                 <div class="flex flex-row justify-between">
-                    <div class="grid grid-cols-5 gap-4 mr-3">
+                    <div class="grid grid-cols-3 gap-4 mr-3">
                         <mat-form-field [appearance]=configService.matFormField>
                             <mat-label>Event Level</mat-label>
                             <mat-select formControlName="eventLevel">
@@ -25,7 +25,7 @@
                             </mat-select>
                         </mat-form-field>
                         <mat-form-field [appearance]=configService.matFormField>
-                            <mat-label>Event ID.</mat-label>
+                            <mat-label>Event ID</mat-label>
                             <input matInput formControlName="searchText" autocomplete="off"
                                 (keyup)="validatorService.removeSpaceAtBegining($event)" autocomplete="off">
                         </mat-form-field>
@@ -110,8 +110,7 @@
 
         </div>
     </vex-page-layout-content>
-
-    <vex-page-layout>
+<vex-page-layout>
 
         <mat-menu #columnFilterMenu="matMenu" xPosition="before" yPosition="below">
             <button (click)="toggleColumnVisibility(column, $event)" *ngFor="let column of columns"
