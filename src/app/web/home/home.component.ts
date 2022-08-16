@@ -56,7 +56,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 
 export class HomeComponent implements OnInit {
   columns: TableColumn<EventDetail>[] = [
-    { label: 'srNo', property: 'srNo', type: 'text', visible: true },
+    { label: 'Sr. No.', property: 'srNo', type: 'text', visible: true },
     { label: 'Event Level', property: 'eventLevel', type: 'text', visible: true },
     { label: 'District/ SDO/ Tehsil', property: 'district', type: 'text', visible: true, cssClasses: ['text-secondary', 'font-medium'] },
     { label: 'Event Id', property: 'eventCode', type: 'text', visible: false, cssClasses:['text-secondary', 'font-medium'] },
@@ -68,7 +68,7 @@ export class HomeComponent implements OnInit {
   ];
 
   eventDetailsColumns:TableColumn<LotCreation>[]=[
-    { label: 'srNo', property: 'srNo', type: 'button', visible: true },
+    { label: 'Sr. No.', property: 'srNo', type: 'button', visible: true },
     { label: 'Item Number And Name', property: 'itemName', type: 'text', visible: true, cssClasses: ['text-secondary', 'font-medium'] },
     { label: 'Mineral', property: 'material', type: 'text', visible: true, cssClasses: ['text-secondary', 'font-medium'] },
     { label: 'Taluka / CTSO	', property: 'taluka', type: 'text', visible: true, cssClasses: ['text-secondary', 'font-medium'] },
