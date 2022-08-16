@@ -6,17 +6,15 @@
       <h2 class="vex-sidenav-toolbar__headline flex-auto">{{ title$ | async }}</h2>
       <button (click)="toggleCollapse()" *ngIf="showCollapsePin$ | async"
         class="w-8 h-8 -mr-2 leading-none flex-none hidden lg:block" mat-icon-button type="button">
-        <mat-icon *ngIf="!collapsed" class="text-[0.875rem] w-[0.875rem] h-[0.875rem]"
-          svgIcon="mat:radio_button_checked"></mat-icon>
-        <mat-icon *ngIf="collapsed" class="text-[0.875rem] w-[0.875rem] h-[0.875rem]"
-          svgIcon="mat:radio_button_unchecked"></mat-icon>
+        <mat-icon *ngIf="!collapsed" class="text-[0.875rem] w-[0.875rem] h-[0.875rem]">radio_button_checked</mat-icon>
+        <mat-icon *ngIf="collapsed" class="text-[0.875rem] w-[0.875rem] h-[0.875rem]">radio_button_unchecked</mat-icon>
       </button>
     </div>
 
 
     <div class="vex-sidenav-search__container">
       <div class="vex-sidenav-search relative" matRipple matRippleColor="var(--sidenav-item-ripple-color)">
-        <mat-icon class="flex-none vex-sidenav-search__icon" svgIcon="mat:search"></mat-icon>
+        <mat-icon class="flex-none vex-sidenav-search__icon">search</mat-icon>
         <div class="flex-auto vex-sidenav-search__placeholder py-1 text-sm">
           <input type="text" [formControl]="searchFilter" placeholder="Search..."
             class="bg-transparent outline-none border-none" required>

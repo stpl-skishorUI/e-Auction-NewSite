@@ -156,6 +156,7 @@ export class UserRegistrationComponent implements OnInit,OnDestroy {
           this.totalRows > 10 && this.pageNumber == 1 ? this.paginator?.firstPage() : '';
         } else {
           this.spinner.hide();
+          this.totalRows = 0;
           this.dataSource = null;
           if (res['statusCode'] != "404") {
             this.spinner.hide();

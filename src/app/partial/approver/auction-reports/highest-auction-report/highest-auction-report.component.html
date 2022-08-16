@@ -1,21 +1,21 @@
 <vex-page-layout>
 
-    <vex-secondary-toolbar current="Disposal Auction Event Report"
-        class=" fixed border-0 bg-transparent drop-shadow-none top-1 z-[99] w-8/12">
+    <vex-secondary-toolbar current="Disposal Auction Event Report" class=" fixed border-0 bg-transparent drop-shadow-none top-1 z-[99] w-8/12">
         <vex-breadcrumbs [crumbs]="['Disposal Auction Event Report']"></vex-breadcrumbs>
     </vex-secondary-toolbar>
 
-<vex-page-layout-content  class="-mt-6">
-
-
-    <div class="p-3">
-        <div class="card overflow-hidden p-3">
+    <vex-page-layout-content>
+        <div class="flex items-center justify-end">
+            <mat-icon class="icon-sm">keyboard_double_arrow_left</mat-icon>
+            <span>Back</span>
+        </div>
+        <div class="card p-3 my-1">
             <div class="px-4">
                 <div class="flex gap-x-6 py-3">
                     <div class="flex items-center gap-x-5">
                         <div>Enter Event ID</div>
                         <div>
-                            <mat-form-field appearance="outline" class="">
+                            <mat-form-field appearance="outline" class="w-48">
                                 <mat-label>Event ID</mat-label>
                                 <mat-select>
                                     <mat-option>None</mat-option>
@@ -35,7 +35,6 @@
                                     <mat-option>None</mat-option>
                                     <mat-option value="option1">Yes</mat-option>
                                     <mat-option value="option2">No</mat-option>
-
                                 </mat-select>
                             </mat-form-field>
                         </div>
@@ -43,9 +42,9 @@
                 </div>
                 <div class="">
                     <div>
-                        <h4 class="text-blue-600 font-medium text-[18px] py-4">Check/Uncheck to Remove/Add Fields
-                            From/To
-                            Report</h4>
+                        <h4 class="text-blue-600 font-medium text-[18px] py-4">
+                            Check/Uncheck to Remove/Add Fields From/To Report
+                        </h4>
                     </div>
                     <div class="flex gap-x-56">
                         <div class="grid grid-rows-10">
@@ -58,18 +57,32 @@
                             <mat-checkbox [checked]="true" color="primary">Total Reserve Price</mat-checkbox>
                             <mat-checkbox [checked]="false" color="primary">Max. Bid Amount</mat-checkbox>
                             <mat-checkbox [checked]="true" color="primary">Total Max. Bid Amount</mat-checkbox>
-
                         </div>
                         <div class="grid grid-rows-10">
-                            <mat-checkbox [checked]="false" color="primary">Highest Bid v/s Reserve Price (%)
+                            <mat-checkbox [checked]="false" color="primary">
+                                Highest Bid v/s Reserve Price (%)
                             </mat-checkbox>
-                            <mat-checkbox [checked]="true" color="primary">Bidder Name(1)</mat-checkbox>
-                            <mat-checkbox [checked]="true" color="primary">Second Highest Bid</mat-checkbox>
-                            <mat-checkbox [checked]="false" color="primary">Bidder Name(2)</mat-checkbox>
-                            <mat-checkbox [checked]="true" color="primary">Third Highest Bid</mat-checkbox>
-                            <mat-checkbox [checked]="false" color="primary">Bidder Name(3)</mat-checkbox>
-                            <mat-checkbox [checked]="true" color="primary">EMD</mat-checkbox>
-                            <mat-checkbox [checked]="false" color="primary">End Time</mat-checkbox>
+                            <mat-checkbox [checked]="true" color="primary">
+                                Bidder Name(1)
+                            </mat-checkbox>
+                            <mat-checkbox [checked]="true" color="primary">
+                                Second Highest Bid
+                            </mat-checkbox>
+                            <mat-checkbox [checked]="false" color="primary">
+                                Bidder Name(2)
+                            </mat-checkbox>
+                            <mat-checkbox [checked]="true" color="primary">
+                                Third Highest Bid
+                            </mat-checkbox>
+                            <mat-checkbox [checked]="false" color="primary">
+                                Bidder Name(3)
+                            </mat-checkbox>
+                            <mat-checkbox [checked]="true" color="primary">
+                                EMD
+                            </mat-checkbox>
+                            <mat-checkbox [checked]="false" color="primary">
+                                End Time
+                            </mat-checkbox>
                         </div>
                     </div>
                 </div>
@@ -82,13 +95,9 @@
                             <mat-radio-button class="mx-10" value="1">Yes</mat-radio-button>
                             <mat-radio-button value="2">No</mat-radio-button>
                         </mat-radio-group>
-
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-
-</vex-page-layout-content>
-
+    </vex-page-layout-content>
 </vex-page-layout>

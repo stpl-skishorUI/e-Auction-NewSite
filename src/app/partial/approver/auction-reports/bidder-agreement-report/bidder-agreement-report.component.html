@@ -6,33 +6,37 @@
     </vex-secondary-toolbar>
   
     <vex-page-layout-content>
-      <div class="card p-3">
-        <div class="card-body">
-            <div class="flex flex-row items-center justify-between">
-                <div class="basis-1/2 ">
-                    <div class="">
-                        <mat-form-field appearance="outline" class="">
-                            <mat-label>Event End Date</mat-label>
-                            <input [matDatepicker]="datepickerReff" matInput>
-                            <mat-datepicker-toggle [for]="datepickerReff" matSuffix></mat-datepicker-toggle>
-                            <mat-datepicker #datepickerReff></mat-datepicker>
-                        </mat-form-field>
+        <div class="flex items-center justify-end">
+            <mat-icon class="icon-sm">keyboard_double_arrow_left</mat-icon>
+            <span>Back</span>
+        </div>
+        <div class="card p-2 my-1">
+            <div class="card-body">
+                <div class="flex flex-row items-center justify-between">
+                    <div class="basis-1/2 ">
+                        <div class="">
+                            <mat-form-field appearance="outline" class="">
+                                <mat-label>Search By Date</mat-label>
+                                <input [matDatepicker]="datepickerReff" matInput>
+                                <mat-datepicker-toggle [for]="datepickerReff" matSuffix></mat-datepicker-toggle>
+                                <mat-datepicker #datepickerReff></mat-datepicker>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="basis-1/2">
+                        <div class="flex items-center justify-end">
+                            <button mat-raised-button color="primary">
+                                 <span class="mx-2">Search</span>
+                            </button>
+                        </div>
                     </div>
                 </div>
-                <div class="basis-1/2">
-                    <div class="flex items-center justify-end">
-                        <button mat-raised-button color="primary">
-                             <span class="mx-2">Search</span>
-                        </button>
-                    </div>
+        
+                <div class="mt-5">
+                    <p class="text-xl text-sky-700 "> Table </p>
                 </div>
-            </div>
-    
-            <div class="mt-5">
-                <p class="text-xl text-sky-700 "> Table </p>
             </div>
         </div>
-      </div>
     </vex-page-layout-content>
 </vex-page-layout>
 

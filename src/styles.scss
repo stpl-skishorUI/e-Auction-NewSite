@@ -31,7 +31,6 @@
 
 .example-element-detail {
   overflow: hidden;
-  display: flex;
 }
 
 tr.example-detail-row {
@@ -62,4 +61,10 @@ tr.example-detail-row {
   background-color: #f8d7da !important;
   border-color: #f5c6cb !important;
   border-radius: 2px;
+}
+body,
+vex-web-layout,
+vex-page-layout{
+  height: 100vh !important;
+  overflow-y: auto !important;
 }

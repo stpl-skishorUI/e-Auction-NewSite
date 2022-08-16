@@ -56,7 +56,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 
 export class HomeComponent implements OnInit {
   columns: TableColumn<EventDetail>[] = [
-    { label: 'srNo', property: 'srNo', type: 'text', visible: true },
+    { label: 'Sr. No.', property: 'srNo', type: 'text', visible: true },
     { label: 'Event Level', property: 'eventLevel', type: 'text', visible: true },
     { label: 'District/ SDO/ Tehsil', property: 'district', type: 'text', visible: true, cssClasses: ['text-secondary', 'font-medium'] },
     { label: 'Event Id', property: 'eventCode', type: 'text', visible: false, cssClasses:['text-secondary', 'font-medium'] },
@@ -68,7 +68,7 @@ export class HomeComponent implements OnInit {
   ];
 
   eventDetailsColumns:TableColumn<LotCreation>[]=[
-    { label: 'srNo', property: 'srNo', type: 'button', visible: true },
+    { label: 'Sr. No.', property: 'srNo', type: 'button', visible: true },
     { label: 'Item Number And Name', property: 'itemName', type: 'text', visible: true, cssClasses: ['text-secondary', 'font-medium'] },
     { label: 'Mineral', property: 'material', type: 'text', visible: true, cssClasses: ['text-secondary', 'font-medium'] },
     { label: 'Taluka / CTSO	', property: 'taluka', type: 'text', visible: true, cssClasses: ['text-secondary', 'font-medium'] },
@@ -111,6 +111,7 @@ export class HomeComponent implements OnInit {
   tabCountFlag!: string;
   tenderCountData: any;
   bidderLogFlag: boolean = false;
+  noDataFlag:boolean=false;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   tabs: any = [{ count: '' }, { count: '' }]
@@ -240,6 +241,7 @@ export class HomeComponent implements OnInit {
           this.tableDataArray.map((ele:EventDetail,ind:number)=>{ele.srNo =((this.pageNumber + 1) * 10 + ind + 1)-20})
           this.dataSource = new MatTableDataSource(this.tableDataArray);
           this.dataSource.sort = this.sort;
+          this.noDataFlag=true;
           this.totalRows = res.responseData.responseData2[0].pageCount;
           this.totalRows > 10 && this.pageNumber == 1 ? this.paginator?.firstPage() : '';
           this.getTenderCount(paramList);
