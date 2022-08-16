@@ -84,46 +84,43 @@
                                         [ngClass]="{
                                             'bg-green-light text-green': element?.documentApprovedStatus =='Approved',
                                             'bg-cyan-light text-cyan': element?.documentApprovedStatus=='Rejected',
-                                            'bg-amber-light text-amber': element?.documentApprovedStatus == 'Pending' ||  element?.documentApprovedStatus == null}">
-                                        {{element?.documentApprovedStatus?element.documentApprovedStatus:"Pending"}}</span>
+                                            'bg-amber-light text-amber': element?.documentApprovedStatus == 'Pending'}">
+                                        {{element?.documentApprovedStatus?element.documentApprovedStatus:"Document Not Uploaded"}}</span>
                                     </td>
                                 </ng-container>
 
                                 <ng-container matColumnDef="Upload">
                                     <th mat-header-cell *matHeaderCellDef> Upload </th>
                                     <td mat-cell *matCellDef="let element">
-                                        <span
-                                            *ngIf="(documentUploadedFlag  || element?.documentPath != null || element?.documentPath != 'rejected'  )else docNotUploaded">
-                                            <span class="rounded bg-green-light text-green">Document Uploaded</span>
-                                            <span class="pt-1"><i class="fa fa-file-alt fa-lg text-primary mx-2"
-                                                    (click)="viewDocument(element.documentPath)"></i></span>
-                                        </span>
-
-                                        <div class="d-flex align-items-center">
-                                            <ng-template #docNotUploaded class="flex items-center">
-                                                <a type="button" class="w-8 h-8 leading-none flex items-center justify-center ml-1 hover:bg-hover text-pink-600 bg-pink-100" mat-icon-button>
-                                                    <label><mat-icon class="icon-sm" svgIcon="mat:cloud_download"></mat-icon>
-                                                        <input type="file" style="display: none"
-                                                            (change)="documentUpload($event,element)" #fileInputPan>
-                                                    </label>
+                                        <div class="flex">
+                                        <a *ngIf="element?.documentApprovedStatus=='Rejected' || element?.documentApprovedStatus=='' || element?.documentApprovedStatus==null || element?.documentApprovedStatus=='Pending'" type="button" class="w-8 h-8 leading-none flex items-center justify-center ml-1 hover:bg-hover text-pink-600 bg-pink-100" mat-icon-button>
+                                            <label><mat-icon class="icon-sm">cloud_download</mat-icon>
+                                                <input type="file" style="display: none"
+                                                    (change)="documentUpload($event,element);" #fileInputPan>
+                                            </label>
+                                        </a>
+                                        <a (click)="viewDocument(element.documentPath)" *ngIf="element?.documentApprovedStatus=='Rejected' ||  element?.documentApprovedStatus=='Approved'"
+                                        class="w-8 h-8 leading-none rounded-full flex items-center justify-center ml-1 hover:bg-hover text-teal bg-teal-light">
+                                        <mat-icon matTooltip="View">view_headline</mat-icon>
+                                        </a>
+                                        
+                                        <ng-container *ngFor="let document of participatedDocListArray">
+                                            <span class="text-left flex" *ngIf="document.flag && element.documentId == document.docTypeId">
+                                                <a (click)="viewDocument(document.docPath)"
+                                                    class="w-8 h-8 leading-none rounded-full flex items-center justify-center ml-1 hover:bg-hover text-teal bg-teal-light">
+                                                    <mat-icon matTooltip="View">view_headline</mat-icon>
+                                                   
                                                 </a>
-                                                <ng-container *ngFor="let document of participatedDocListArray">
-                                                    <span class="text-left" *ngIf="document.flag && element.documentId == document.docTypeId">
-                                                        <a (click)="viewDocument(document.docPath)"
-                                                            class="w-8 h-8 leading-none rounded-full flex items-center justify-center ml-1 hover:bg-hover text-teal bg-teal-light">
-                                                            <mat-icon matTooltip="View">view_headline</mat-icon>
-                                                        </a>
-                                                
-                                                        <button (click)="deleteDocument(element.documentId)"
-                                                            class="w-8 h-8 leading-none rounded-full flex items-center justify-center ml-1 hover:bg-hover text-red bg-red-light">
-                                                            <mat-icon matTooltip="Delete Uploaded Document">
-                                                                delete_forever
-                                                            </mat-icon>
-                                                        </button>
-                                                    </span>
-                                                </ng-container>
-                                            </ng-template>
-                                        </div>
+                                        
+                                                <button (click)="deleteDocument(element.documentId)"
+                                                    class="w-8 h-8 leading-none rounded-full flex items-center justify-center ml-1 hover:bg-hover text-red bg-red-light">
+                                                    <mat-icon matTooltip="Delete Uploaded Document">
+                                                        delete_forever
+                                                    </mat-icon>
+                                                </button>
+                                            </span>
+                                        </ng-container>
+                                    </div>
                                     </td>
                                 </ng-container>
                                 <tr *matHeaderRowDef="visibleDocumentDisplayColum" mat-header-row></tr>

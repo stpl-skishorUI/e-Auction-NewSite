@@ -77,7 +77,7 @@ export class EauctionEventComponent implements OnInit {
   activeflag: boolean = true;
   eventParticipateIdCheck: any;
   payNowNewArray: any[] = [];
-  firstActiveFlag :boolean =true;
+  firstActiveFlag :boolean;
   //--------------------------------------------------------------steper 1st colum's start heare -----------------------------------------------//
   ParticipatedDetails: MatTableDataSource<any> | null;
 
@@ -155,11 +155,10 @@ export class EauctionEventComponent implements OnInit {
       next: (res: any) => {
         if (res.statusCode === "200") {
           this.eventParticipatedDetails = res.responseData;
-          console.log(this.eventParticipatedDetails);
-          if(this.eventParticipatedDetails.documentApprovedStatus != "Approved" && this.firstActiveFlag){
+          this.eventParticipatedDetails.documentApprovedStatus == "Approved" ? this.firstActiveFlag = true:this.firstActiveFlag = false;
+          if(this.eventParticipatedDetails.documentApprovedStatus == "Approved" && this.firstActiveFlag){
             this.firstFormGroup.controls['firstCtrl'].setValue('1'), this.myStepper.next()
            }
-           this.firstActiveFlag =false
           this.ParticipatedDetails = new MatTableDataSource([this.eventParticipatedDetails]);
           this.ParticipatedDetails.sort = this.participatedDetailsSort
           this.activeflag == true && this.eventParticipatedDetails.isDocumentSubmitted == true ? ( this.activeflag = false) : ""
@@ -286,7 +285,6 @@ export class EauctionEventComponent implements OnInit {
           this.participatedDocListArray.push(tempObj);
         }
       })
-
       if (this.participatedDocListArray.length == this.participatedDocArray.length) {
         this.firstFormGroup.controls['firstCtrl'].setValue('1');
         this.isLinear = true;
@@ -316,7 +314,8 @@ export class EauctionEventComponent implements OnInit {
       }
       uploadDocumentArray.push(obj)
     })
- 
+    console.log(uploadDocumentArray);
+    return
     this.apiService.setHttp('Post', "event-participate/UploadDocument", false, uploadDocumentArray, false, 'bidderUrl');
     this.apiService.getHttp().subscribe({
       next: (res: any) => {
